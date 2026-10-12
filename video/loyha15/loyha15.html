@@ -160,7 +160,7 @@ window.seek = async (t) => {
   words('K1', t, 8.0, 10.0); words('K2', t, 8.5, 10.05); words('K3', t, 9.0, 10.1);
   words('P1', t, 10.25, 11.0); words('P2', t, 10.55, 11.05);
   // counter steps on whole video frames so motion-blur subframes never mix two digits
-  const tf = Math.floor(t * 30 + 1e-6) / 30;
+  const tf = Math.round(t * 30) / 30;
   $('num').textContent = Math.round(100 * io(seg(tf, 10.3, 10.95)));
 
   // ---- logo: ink point inside the disc, wordmark, tagline
