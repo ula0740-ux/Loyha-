@@ -1,0 +1,6 @@
+video/*/sub/
+video/*/sub_draft/
+video/*/probe/
+video/*/out/*
+!video/*/out/final.mp4
+__pycache__/

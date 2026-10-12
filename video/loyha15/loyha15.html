@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Loyha 15s</title>
+<style>
+  html, body { margin: 0; background: #000; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b0b0c;
+    font-family: "Inter Display", "Inter", sans-serif; color: #f5f5f2; }
+  #cam { position: absolute; inset: 0; transform-origin: 540px 960px; z-index: 1; }
+  .abs { position: absolute; }
+  .line { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
+  .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 0.04em 0.08em; margin-bottom: -0.08em; }
+  .w { display: inline-block; will-change: transform; }
+  .t1 { font-size: 112px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; }
+  .acc { color: #cdf24f; }
+  #shape { z-index: 3; box-sizing: border-box; }
+  #card { position: absolute; left: 0; top: 0; z-index: 4; }
+  .row { position: absolute; left: 64px; display: flex; align-items: center; gap: 30px; font-size: 64px; font-weight: 500; letter-spacing: -0.02em; }
+  .box { width: 64px; height: 64px; border-radius: 18px; border: 4px solid #3a3a3f; box-sizing: border-box; position: relative; }
+  .box svg { position: absolute; left: -4px; top: -4px; }
+  #flood { z-index: 6; background: #cdf24f; color: #0b0b0c; }
+  .big { font-size: 230px; font-weight: 700; letter-spacing: -0.05em; line-height: 1; }
+  #logo { z-index: 7; }
+  #hud { position: fixed; right: 8px; top: 8px; font: 12px monospace; color: #888; z-index: 99; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="cam">
+    <div id="shape" class="abs"></div>
+    <div id="card">
+      <div class="line t1" id="hdr" style="font-size:52px;font-weight:600;color:#8a8a90;text-align:left;width:auto"><span class="m"><span class="w">Loyiha rejasi</span></span></div>
+      <div class="row" id="r0"><div class="box"></div><span>Gʻoya</span></div>
+      <div class="row" id="r1"><div class="box"></div><span>Dizayn</span></div>
+      <div class="row" id="r2"><div class="box"></div><span>Harakat</span></div>
+      <div class="abs" id="track" style="height:14px;border-radius:7px;background:#26262a"><div id="bar" style="height:14px;border-radius:7px;background:#cdf24f;width:0"></div></div>
+    </div>
+    <div class="line t1" id="L1" style="top:1080px"><span class="m"><span class="w">Har</span></span> <span class="m"><span class="w">bir</span></span> <span class="m"><span class="w">gʻoya</span></span></div>
+    <div class="line t1" id="L2" style="top:1060px"><span class="m"><span class="w">bitta</span></span> <span class="m"><span class="w">nuqtadan</span></span></div>
+    <div class="line t1" id="L3" style="top:1190px"><span class="m"><span class="w acc">boshlanadi</span></span></div>
+    <div id="flood" class="abs" style="left:0;top:0;width:1080px;height:1920px">
+      <div class="line big" id="K1" style="top:610px"><span class="m"><span class="w">Kod</span></span></div>
+      <div class="line big" id="K2" style="top:850px"><span class="m"><span class="w">bilan</span></span></div>
+      <div class="line big" id="K3" style="top:1090px"><span class="m"><span class="w">harakat.</span></span></div>
+      <div class="line big" id="P1" style="top:700px;font-size:300px"><span class="m"><span class="w" id="pct">0%</span></span></div>
+      <div class="line big" id="P2" style="top:1010px;font-size:150px;font-weight:600"><span class="m"><span class="w">kod.</span></span></div>
+    </div>
+    <div id="logo" class="abs" style="left:0;top:0;width:1080px;height:1920px">
+      <div id="dot2" class="abs" style="background:#0b0b0c;border-radius:50%"></div>
+      <div class="line" id="W1" style="top:1000px;font-size:170px;font-weight:700;letter-spacing:-0.05em"><span class="m"><span class="w">Loyha</span></span></div>
+      <div class="line" id="W2" style="top:1200px;font-size:58px;font-weight:500;color:#8a8a90;letter-spacing:-0.01em"><span class="m"><span class="w">Gʻoyadan</span></span> <span class="m"><span class="w">videogacha.</span></span></div>
+    </div>
+  </div>
+</div>
+<div id="hud" style="display:none"></div>
+<script>
+const T = 15, BEAT = 0.5, LIME = [205, 242, 79], CARD = [20, 20, 23];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const io = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const out = x => 1 - Math.pow(1 - clamp(x), 3);
+const inn = x => Math.pow(clamp(x), 3);
+const lerp = (a, b, k) => a + (b - a) * k;
+// closed-form spring step response (frequency f in Hz, damping ratio z)
+const sp = (t, f = 2.2, z = 0.78) => {
+  if (t <= 0) return 0;
+  const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+};
+const mix = (a, b, k) => `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], k))).join(',')})`;
+const $ = id => document.getElementById(id);
+
+// masked word rise: in on a spring with a small rotation, out upward with an accelerating ease
+function words(id, t, tin, tout = 99, stag = 0.055) {
+  const ws = $(id).querySelectorAll('.w');
+  ws.forEach((w, i) => {
+    const p = sp(t - tin - i * stag, 2.3, 0.8);
+    const q = inn(seg(t, tout + i * 0.04, tout + i * 0.04 + 0.32));
+    w.style.transform = `translateY(${(1 - p) * 110 - q * 115}%) rotate(${(1 - p) * 7}deg)`;
+  });
+  $(id).style.visibility = (t >= tin && t < tout + 0.5) ? 'inherit' : 'hidden';
+}
+
+const CHECK = '<svg width="64" height="64" viewBox="0 0 64 64"><rect x="0" y="0" width="64" height="64" rx="18" fill="#cdf24f"/><path d="M18 33 L28 43 L47 22" fill="none" stroke="#0b0b0c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="48"/></svg>';
+document.querySelectorAll('.box').forEach(b => b.innerHTML = CHECK);
+const CORNER = Math.max(...[[0, 0], [1080, 0], [0, 1920], [1080, 1920]].map(([x, y]) => Math.hypot(x - 540, y - 960))) * 1.05;
+
+window.seek = async (t) => {
+  // camera: beat punches, bigger per bar after the drop, slow drift on the end card
+  let z = 1;
+  for (let b = 0; b <= t; b += BEAT) {
+    const after = b >= 8 && b < 11;
+    const k = after ? (Math.abs(b % 2) < 1e-6 ? 0.03 : 0.012) : (b < 7.6 ? 0.006 : 0);
+    z += k * Math.exp(-(t - b) * 7);
+  }
+  z *= 1 + 0.035 * io(seg(t, 11.6, 15));
+  $('cam').style.transform = `scale(${z})`;
+
+  // ---- the shape: dot -> pill -> card
+  const sh = $('shape');
+  const d = sp(t - 0.15, 2.0, 0.75);
+  let pulse = 0;
+  for (let b = 0.5; b < 2 && b <= t; b += BEAT) pulse += 8 * Math.exp(-(t - b) * 9);
+  const pill = sp(t - 2.0, 1.5, 0.82), card = sp(t - 4.0, 1.3, 0.84), fill = io(seg(t, 4.0, 4.45));
+  const W = lerp(lerp(56 * d + pulse, 720, pill), 820, card);
+  const H = lerp(56 * d + pulse * (1 - pill), 820, card);
+  const cy = lerp(860, 940, card);
+  sh.style.width = W + 'px'; sh.style.height = H + 'px';
+  sh.style.left = (540 - W / 2) + 'px'; sh.style.top = (cy - H / 2) + 'px';
+  sh.style.borderRadius = lerp(Math.min(W, H) / 2, 52, card) + 'px';
+  sh.style.background = mix(LIME, CARD, fill);
+  sh.style.border = `${4 * fill}px solid rgba(205,242,79,${0.55 * fill})`;
+  sh.style.visibility = t < 8.05 ? 'inherit' : 'hidden';
+
+  // ---- card contents (local to the card box)
+  const cx0 = 540 - 410, cy0 = 940 - 410;
+  const cd = $('card');
+  cd.style.visibility = (t > 4.2 && t < 8.05) ? 'inherit' : 'hidden';
+  $('hdr').style.left = (cx0 + 64) + 'px'; $('hdr').style.top = (cy0 + 60) + 'px';
+  words('hdr', t, 4.35);
+  ['r0', 'r1', 'r2'].forEach((id, i) => {
+    const p = sp(t - (4.6 + i * 0.4), 2.2, 0.8), r = $(id);
+    r.style.left = (cx0 + 64 + (1 - p) * 60) + 'px';
+    r.style.top = (cy0 + 210 + i * 150) + 'px';
+    r.style.opacity = clamp(p * 1.4);
+    const c = seg(t, 5.75 + i * 0.5, 5.75 + i * 0.5 + 0.28);
+    const svg = r.querySelector('svg');
+    svg.querySelector('rect').style.opacity = out(c * 1.6);
+    svg.querySelector('path').style.strokeDashoffset = 48 * (1 - out(c));
+    svg.style.transform = `scale(${1 + 0.12 * Math.sin(Math.PI * c)})`;
+    r.querySelector('span').style.color = c > 0.5 ? '#f5f5f2' : '#c9c9cc';
+  });
+  const tr = $('track');
+  tr.style.left = (cx0 + 64) + 'px'; tr.style.top = (cy0 + 700) + 'px'; tr.style.width = '692px';
+  tr.style.opacity = clamp(sp(t - 5.4, 2, 0.8));
+  let prog = 0;
+  for (let i = 0; i < 3; i++) prog += sp(t - (5.85 + i * 0.5), 2.0, 0.82) / 3;
+  $('bar').style.width = (692 * prog) + 'px';
+
+  // ---- opening lines
+  words('L1', t, 0.4, 1.95);
+  words('L2', t, 2.3, 3.95);
+  words('L3', t, 2.8, 3.97);
+
+  // ---- flood: out of the card on the drop, contracts into the logo disc
+  const fo = io(seg(t, 7.68, 8.0)), fc = io(seg(t, 11.1, 11.55));
+  const R = t < 11.1 ? CORNER * fo : lerp(CORNER, 110, fc);
+  const fx = 540, fy = t < 11.1 ? 940 : lerp(940, 820, fc);
+  const fl = $('flood');
+  fl.style.clipPath = `circle(${Math.max(0, R)}px at ${fx}px ${fy}px)`;
+  fl.style.visibility = t >= 7.68 ? 'inherit' : 'hidden';
+  words('K1', t, 8.0, 10.0); words('K2', t, 8.5, 10.05); words('K3', t, 9.0, 10.1);
+  words('P1', t, 10.25, 11.0); words('P2', t, 10.55, 11.05);
+  $('pct').textContent = Math.round(100 * io(seg(t, 10.3, 10.95))) + '%';
+
+  // ---- logo: ink point inside the disc, wordmark, tagline
+  const dd = sp(t - 11.5, 2.2, 0.78);
+  const dr = 34 * dd;
+  const d2 = $('dot2');
+  d2.style.width = d2.style.height = (2 * dr) + 'px';
+  d2.style.left = (540 + 26 * dd - dr) + 'px'; d2.style.top = (820 - 26 * dd - dr) + 'px';
+  d2.style.visibility = t > 11.5 ? 'inherit' : 'hidden';
+  words('W1', t, 11.8); words('W2', t, 12.3, 99, 0.08);
+
+  $('hud').textContent = t.toFixed(2) + 's';
+};
+
+// preview controls: Space play/pause, arrows step one frame, R replay
+let now = 0, playing = false, last = 0;
+const tick = ts => { if (playing) { now += (ts - last) / 1000; if (now >= T) now = 0; window.seek(now); } last = ts; requestAnimationFrame(tick); };
+addEventListener('keydown', e => {
+  if (e.code === 'Space') playing = !playing;
+  if (e.code === 'ArrowRight') { playing = false; now = Math.min(T, now + 1 / 30); window.seek(now); }
+  if (e.code === 'ArrowLeft') { playing = false; now = Math.max(0, now - 1 / 30); window.seek(now); }
+  if (e.code === 'KeyR') { now = 0; playing = true; }
+});
+document.fonts.ready.then(() => { window.seek(0); window.ready = true; if (!navigator.webdriver) { $("hud").style.display = "block"; requestAnimationFrame(tick); } });
+</script>
+</body>
+</html>
