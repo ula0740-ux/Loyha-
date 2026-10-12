@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion Studio</title>
+<style>
+  :root { --bg:#0e0e10; --card:#17171a; --line:#2a2a2f; --fg:#f2f2ef; --mut:#8a8a92; --acc:#cdf24f; --bad:#ff7a6b; --warn:#f5c451; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 Inter, system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; display:grid; gap:16px; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { main { grid-template-columns: 1.2fr 1fr; } }
+  h1 { font-size: 22px; margin: 0 0 4px; letter-spacing:-0.02em; } .sub { color:var(--mut); margin:0 0 8px; }
+  header { grid-column: 1 / -1; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: .06em; color: var(--mut); margin: 0 0 12px; }
+  label { display:block; font-size:13px; color:var(--mut); margin: 12px 0 6px; }
+  textarea, select, input[type=text] { width:100%; background:#0f0f12; color:var(--fg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; }
+  textarea { min-height: 150px; resize: vertical; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .seg button { background:transparent; color:var(--mut); border:0; padding:8px 14px; font:inherit; cursor:pointer; }
+  .seg button.on { background:var(--acc); color:#0b0b0c; font-weight:600; }
+  .btn { background:var(--acc); color:#0b0b0c; border:0; border-radius:10px; padding:12px 18px; font:600 15px Inter, sans-serif; cursor:pointer; }
+  .btn.ghost { background:transparent; color:var(--fg); border:1px solid var(--line); font-weight:500; padding:8px 12px; font-size:13px; }
+  .btn:disabled { opacity:.5; cursor:default; }
+  .badge { font-size:12px; padding:2px 8px; border-radius:99px; border:1px solid var(--line); white-space:nowrap; }
+  .ok { color:var(--acc); border-color: color-mix(in srgb, var(--acc) 40%, transparent); }
+  .bad { color:var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+  .unk { color:var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+  .note { font-size:13px; color:var(--mut); margin-top:8px; }
+  .prov { border-top:1px solid var(--line); padding:10px 0; } .prov:first-of-type { border-top:0; }
+  .prov b { font-weight:600; } code { background:#0f0f12; padding:1px 6px; border-radius:6px; font-size:12px; }
+  progress { width:100%; height:10px; accent-color: var(--acc); }
+  video { width:100%; border-radius:10px; background:#000; margin-top:12px; max-height: 70vh; }
+  #err { color: var(--bad); white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Motion Studio</h1>
+    <p class="sub">Matn → ovoz → Remotion animatsiya → MP4. Har bir qator bitta sahna.</p>
+  </header>
+
+  <section>
+    <h2>1. Matn</h2>
+    <label>Til</label>
+    <div class="seg" id="lang">
+      <button data-v="uz" class="on">Oʻzbekcha</button><button data-v="ru">Ruscha</button><button data-v="en">Inglizcha</button>
+    </div>
+    <div id="scriptRow">
+      <label>Yozuv (ekranda koʻrinadigan)</label>
+      <div class="row">
+        <div class="seg" id="script"><button data-v="latin" class="on">Lotin</button><button data-v="cyrillic">Kirill</button></div>
+        <button class="btn ghost" id="convert" type="button">Matnni shu yozuvga oʻgirish</button>
+      </div>
+    </div>
+    <label for="text">Sahnalar (har qatorda bittadan)</label>
+    <textarea id="text">Har bir gʻoya bitta nuqtadan boshlanadi.
+Kod bilan harakat.
+Gʻoyadan videogacha.</textarea>
+
+    <h2 style="margin-top:20px">2. Ovoz</h2>
+    <label>Jinsi</label>
+    <div class="seg" id="gender"><button data-v="female" class="on">Ayol</button><button data-v="male">Erkak</button></div>
+    <label for="voice">Ovoz</label>
+    <select id="voice"></select>
+    <div class="note" id="voiceNote"></div>
+
+    <h2 style="margin-top:20px">3. Video</h2>
+    <label>Format</label>
+    <div class="seg" id="format"><button data-v="9:16" class="on">9:16</button><button data-v="16:9">16:9</button><button data-v="1:1">1:1</button></div>
+    <div class="row">
+      <div style="flex:1;min-width:180px"><label for="title">Sarlavha (ixtiyoriy)</label><input type="text" id="title" value="Loyha"></div>
+      <div><label for="accent">Asosiy rang</label><input type="color" id="accent" value="#cdf24f" style="height:42px;width:64px;border:0;background:none"></div>
+    </div>
+    <div style="margin-top:16px"><button class="btn" id="go">Video yaratish</button></div>
+    <div id="job" style="margin-top:12px" hidden>
+      <div id="stage" class="note"></div>
+      <progress id="bar" max="1" value="0"></progress>
+      <div id="err"></div>
+      <video id="out" controls hidden></video>
+      <div id="dl" class="note"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>TTS xizmatlari</h2>
+    <div id="providers" class="note">Yuklanmoqda…</div>
+    <p class="note">“Tekshirildi” belgisi faqat <code>npm run verify-tts</code> shu ovoz bilan haqiqiy nutq yaratganda qoʻyiladi. Kalitlar <code>.env</code> faylida saqlanadi (README ga qarang).</p>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { lang: 'uz', script: 'latin', gender: 'female', format: '9:16' };
+let groups = [];
+
+function seg(id, key, onChange) {
+  $(id).addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    [...$(id).children].forEach((x) => x.classList.toggle('on', x === b));
+    state[key] = b.dataset.v; onChange && onChange();
+  });
+}
+seg('lang', 'lang', () => { $('scriptRow').hidden = state.lang !== 'uz'; fillVoices(); });
+seg('script', 'script');
+seg('gender', 'gender', fillVoices);
+seg('format', 'format');
+
+function statusBadge(v) {
+  if (!v.status) return ['?', 'tekshirilmagan', 'unk'];
+  return v.status.ok ? ['✓', 'tekshirildi', 'ok'] : ['✗', 'ishlamadi', 'bad'];
+}
+
+function fillVoices() {
+  const sel = $('voice'); sel.innerHTML = '';
+  const list = [];
+  for (const g of groups) for (const v of g.voices) if (v.lang === state.lang && v.gender === state.gender) list.push({ g, v });
+  // verified voices first
+  list.sort((a, b) => (b.v.status?.ok ? 1 : 0) - (a.v.status?.ok ? 1 : 0));
+  for (const { g, v } of list) {
+    const [icon, word] = statusBadge(v);
+    const o = document.createElement('option');
+    o.value = v.key; o.textContent = `${icon} ${v.label} — ${g.label} (${word})`;
+    sel.appendChild(o);
+  }
+  if (!list.length) { const o = document.createElement('option'); o.textContent = 'Bu til/jins uchun ulangan ovoz yoʻq'; o.disabled = true; sel.appendChild(o); }
+  voiceNote();
+}
+
+function voiceNote() {
+  const key = $('voice').value; let html = '';
+  for (const g of groups) for (const v of g.voices) if (v.key === key) {
+    const s = v.status;
+    if (!s) html = '<span class="badge unk">tekshirilmagan</span> Bu ovoz hali sinovdan oʻtmagan — ishlashi kafolatlanmaydi.';
+    else if (s.ok) html = `<span class="badge ok">tekshirildi</span> ${new Date(s.testedAt).toLocaleString()} · <a href="/${s.sample}" target="_blank" style="color:var(--acc)">namunani eshitish</a>` + (g.id === 'espeak' ? '<br>eSpeak — bepul va oflayn, lekin ovozi robotga oʻxshaydi.' : '');
+    else html = `<span class="badge bad">ishlamadi</span> ${s.error}`;
+  }
+  $('voiceNote').innerHTML = html;
+}
+$('voice').addEventListener('change', voiceNote);
+
+async function loadVoices() {
+  groups = await (await fetch('/api/voices')).json();
+  $('providers').innerHTML = groups.map((g) => {
+    const verified = g.voices.filter((v) => v.status?.ok).length;
+    const failed = g.voices.filter((v) => v.status && !v.status.ok);
+    const st = !g.ok ? `<span class="badge bad">ulanmagan</span>`
+      : verified ? `<span class="badge ok">${verified}/${g.voices.length} ovoz tekshirildi</span>`
+      : failed.length ? `<span class="badge bad">sinovda ishlamadi</span><div class="note">${failed[0].status.error}</div>`
+      : `<span class="badge unk">tekshirilmagan</span>`;
+    const need = [g.env.length ? 'Kalitlar: ' + g.env.map((e) => `<code>${e}</code>`).join(' ') : '', g.hosts.length ? 'Tarmoq: ' + g.hosts.map((h) => `<code>${h}</code>`).join(' ') : ''].filter(Boolean).join('<br>');
+    return `<div class="prov"><b>${g.label}</b> ${st}${g.reason ? `<div class="note">${g.reason}</div>` : ''}${need ? `<div class="note">${need}</div>` : ''}</div>`;
+  }).join('');
+  fillVoices();
+}
+
+$('convert').addEventListener('click', async () => {
+  const r = await (await fetch('/api/transliterate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: $('text').value, to: state.script }) })).json();
+  $('text').value = r.text;
+});
+
+$('go').addEventListener('click', async () => {
+  const scenes = $('text').value.split('\n').map((s) => s.trim()).filter(Boolean);
+  $('job').hidden = false; $('err').textContent = ''; $('out').hidden = true; $('dl').innerHTML = ''; $('go').disabled = true;
+  const body = { scenes, voice: $('voice').value, format: state.format, title: $('title').value, theme: { accent: $('accent').value } };
+  const r = await fetch('/api/render', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json();
+  if (!r.ok) { $('err').textContent = j.error; $('go').disabled = false; return; }
+  const poll = async () => {
+    const s = await (await fetch('/api/jobs/' + j.id)).json();
+    $('stage').textContent = s.stage; $('bar').value = s.progress;
+    if (s.state === 'done') {
+      $('out').src = s.file; $('out').hidden = false; $('go').disabled = false;
+      const est = (s.timing || []).includes('estimated');
+      $('dl').innerHTML = `<a class="btn ghost" href="${s.file}" download>MP4 ni yuklab olish</a>` + (est ? '<div class="note">Soʻz vaqtlari taxminiy (bu ovoz soʻz chegaralarini bermaydi); sahna va ovoz vaqti aniq.</div>' : '');
+    } else if (s.state === 'error') { $('err').textContent = s.error; $('go').disabled = false; }
+    else setTimeout(poll, 700);
+  };
+  poll();
+});
+
+loadVoices();
+</script>
+</body>
+</html>

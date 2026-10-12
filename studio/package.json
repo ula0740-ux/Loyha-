@@ -1,0 +1,35 @@
+{
+  "name": "uz-motion-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Remotion + React motion graphics studio with Uzbek (Latin/Cyrillic), Russian and English text-to-speech",
+  "scripts": {
+    "start": "tsx server/index.ts",
+    "studio": "remotion studio src/index.ts",
+    "verify-tts": "tsx scripts/verify-tts.ts",
+    "render-demo": "tsx scripts/render-demo.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "tsx tests/e2e-sync.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.535",
+    "@remotion/cli": "^4.0.535",
+    "@remotion/renderer": "^4.0.535",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.535",
+    "undici": "^6.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.1",
+    "@types/react": "^18.3.12",
+    "playwright": "^1.56.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
