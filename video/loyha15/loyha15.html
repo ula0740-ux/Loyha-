@@ -28,7 +28,7 @@
 <body>
 <div id="stage">
   <div id="cam">
-    <div id="shape" class="abs"></div>
+    <div id="shape" class="abs"><div id="hole" class="abs" style="background:#141417"></div></div>
     <div id="card">
       <div class="line t1" id="hdr" style="font-size:52px;font-weight:600;color:#8a8a90;text-align:left;width:auto"><span class="m"><span class="w">Loyiha rejasi</span></span></div>
       <div class="row" id="r0"><div class="box"></div><span>Gʻoya</span></div>
@@ -43,7 +43,7 @@
       <div class="line big" id="K1" style="top:610px"><span class="m"><span class="w">Kod</span></span></div>
       <div class="line big" id="K2" style="top:850px"><span class="m"><span class="w">bilan</span></span></div>
       <div class="line big" id="K3" style="top:1090px"><span class="m"><span class="w">harakat.</span></span></div>
-      <div class="line big" id="P1" style="top:700px;font-size:300px"><span class="m"><span class="w" id="pct">0%</span></span></div>
+      <div class="line big" id="P1" style="top:700px;font-size:300px"><span class="m"><span class="w" id="pct"><span id="num" style="display:inline-block;width:1.62em;text-align:right;font-variant-numeric:tabular-nums">0</span>%</span></span></div>
       <div class="line big" id="P2" style="top:1010px;font-size:150px;font-weight:600"><span class="m"><span class="w">kod.</span></span></div>
     </div>
     <div id="logo" class="abs" style="left:0;top:0;width:1080px;height:1920px">
@@ -109,8 +109,15 @@ window.seek = async (t) => {
   sh.style.width = W + 'px'; sh.style.height = H + 'px';
   sh.style.left = (540 - W / 2) + 'px'; sh.style.top = (cy - H / 2) + 'px';
   sh.style.borderRadius = lerp(Math.min(W, H) / 2, 52, card) + 'px';
-  sh.style.background = mix(LIME, CARD, fill);
-  sh.style.border = `${4 * fill}px solid rgba(205,242,79,${0.55 * fill})`;
+
+  // hollow the lime shape from the inside: a dark rounded hole grows until only a 4px outline is left
+  const rad = lerp(Math.min(W, H) / 2, 52, card);
+  const ring = lerp(Math.min(W, H) / 2, 4, fill);
+  const ho = $('hole');
+  ho.style.inset = ring + 'px';
+  ho.style.borderRadius = Math.max(22, rad - ring * 0.4) + 'px';
+  ho.style.visibility = t >= 4.0 ? 'inherit' : 'hidden';
+  sh.style.background = `rgba(205,242,79,${t < 4.0 ? 1 : lerp(1, 0.55, io(seg(t, 4.25, 4.55)))})`;
   sh.style.visibility = t < 8.05 ? 'inherit' : 'hidden';
 
   // ---- card contents (local to the card box)
@@ -140,8 +147,8 @@ window.seek = async (t) => {
 
   // ---- opening lines
   words('L1', t, 0.4, 1.95);
-  words('L2', t, 2.3, 3.95);
-  words('L3', t, 2.8, 3.97);
+  words('L2', t, 2.3, 3.65);
+  words('L3', t, 2.8, 3.68);
 
   // ---- flood: out of the card on the drop, contracts into the logo disc
   const fo = io(seg(t, 7.68, 8.0)), fc = io(seg(t, 11.1, 11.55));
@@ -152,7 +159,9 @@ window.seek = async (t) => {
   fl.style.visibility = t >= 7.68 ? 'inherit' : 'hidden';
   words('K1', t, 8.0, 10.0); words('K2', t, 8.5, 10.05); words('K3', t, 9.0, 10.1);
   words('P1', t, 10.25, 11.0); words('P2', t, 10.55, 11.05);
-  $('pct').textContent = Math.round(100 * io(seg(t, 10.3, 10.95))) + '%';
+  // counter steps on whole video frames so motion-blur subframes never mix two digits
+  const tf = Math.floor(t * 30 + 1e-6) / 30;
+  $('num').textContent = Math.round(100 * io(seg(tf, 10.3, 10.95)));
 
   // ---- logo: ink point inside the disc, wordmark, tagline
   const dd = sp(t - 11.5, 2.2, 0.78);
