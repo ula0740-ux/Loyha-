@@ -131,3 +131,8 @@ test('variant F (chosen by ear): pause after ADM, sentence-final deep x ends wit
   assert.equal(prepareUzbek('Jizzax xodimlariga xayr.', 'latin', { entries: {} }).tts, 'Jizzakh khodimlariga khayr.', 'only a word ending in x gets "!"');
   assert.equal(prepareUzbek('Jizzax, xodim.', 'latin', { entries: {} }, { xAsKh: false }).tts, 'Jizzax, xodim.');
 });
+
+test('yoʻ is й + ў, not ё (yoʻl, yoʻq, yoʻnalish)', () => {
+  assert.equal(latToCyr("yo‘l yo'q Yo‘nalish yoz"), 'йўл йўқ Йўналиш ёз');
+  assert.equal(cyrToLat('йўл йўқ Йўналиш ёз'), 'yoʻl yoʻq Yoʻnalish yoz');
+});
