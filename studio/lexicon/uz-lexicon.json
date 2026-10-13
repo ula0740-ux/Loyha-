@@ -10,9 +10,10 @@
         "cyrillic": "АДМ"
       },
       "prefer": "latin",
-      "status": "candidate",
-      "notes": "eleven_v4: 'ADM' -> 'adiyam'; 'A-de-em' -> 'ADM' (STT). Oʻzbekcha harf nomlari bilan.",
-      "kind": "abbr"
+      "status": "approved",
+      "notes": "eleven_v4: 'ADM' -> 'adiyam'. Foydalanuvchi quloq bilan tanlagan (F varianti, 2026-10-13): 'A-de-em, Jizzakh!' — 'A-de-em' va undan keyin qisqa pauza.",
+      "kind": "abbr",
+      "pauseAfter": true
     },
     "aj": {
       "original": "AJ",
@@ -126,7 +127,7 @@
       "prefer": "latin",
       "status": "approved",
       "score": 1.0,
-      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-10-13): eleven_v4 + language_code uz, ovozga 'Jizzakh' (x -> kh avtomatik). Avvalgi v3 sinovlari: 'Jizzax' -> 'jezaks'.",
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-10-13): eleven_v4 + language_code uz, ovozga 'Jizzakh' (x -> kh avtomatik). Avvalgi v3 sinovlari: 'Jizzax' -> 'jezaks'. Gap oxirida: 'Jizzakh!' (F varianti, foydalanuvchi tanlagan); nuqta bilan 'jizzaq'/'zzkh' boʻlib qolgan.",
       "kind": "word",
       "testedAt": "2026-10-13"
     },

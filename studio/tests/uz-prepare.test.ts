@@ -124,3 +124,10 @@ test('deep x is spoken as kh (written text unchanged); h is never touched', () =
   // foreign words are left as written
   assert.equal(prepareUzbek('Head of xodimlar', 'latin', { entries: {} }).tts, 'Head of khodimlar.');
 });
+
+test('variant F (chosen by ear): pause after ADM, sentence-final deep x ends with "!"', () => {
+  const lex = { entries: { adm: { original: 'ADM', latin: 'ADM', cyrillic: 'АДМ', spoken: { latin: 'A-de-em' }, prefer: 'latin', kind: 'abbr', pauseAfter: true, status: 'approved' } } } as const;
+  assert.equal(prepareUzbek('ADM Jizzax. Hisobot tayyor.', 'latin', lex as never).tts, 'A-de-em, Jizzakh! Hisobot tayyor.');
+  assert.equal(prepareUzbek('Jizzax xodimlariga xayr.', 'latin', { entries: {} }).tts, 'Jizzakh khodimlariga khayr.', 'only a word ending in x gets "!"');
+  assert.equal(prepareUzbek('Jizzax, xodim.', 'latin', { entries: {} }, { xAsKh: false }).tts, 'Jizzax, xodim.');
+});

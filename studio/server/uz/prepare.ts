@@ -112,7 +112,12 @@ export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexi
     if (script === 'latin' && xAsKh && via !== 'keep') spoken = xToKh(spoken);
     tokens.push({ text: core, lang, out: spoken, via });
     outNorm.push(lead + norm + trail);
-    outTts.push(lead + spoken + trail);
+    // the user's choice by ear (variant F, 2026-10-13): "A-de-em, Jizzakh!" — a short pause after an abbreviation
+    // marked pauseAfter, and a sentence-final deep x ends with "!" so the model does not swallow the kh into "q"
+    let ttsTrail = trail;
+    if (entry?.pauseAfter && !trail) ttsTrail = ',';
+    if (script === 'latin' && xAsKh && /kh$/i.test(spoken) && trail === '.') ttsTrail = '!';
+    outTts.push(lead + spoken + ttsTrail);
   }
 
   const normalized = outNorm.join('');

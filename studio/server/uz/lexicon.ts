@@ -15,6 +15,8 @@ export interface LexEntry {
   /** word: an Uzbek word; its spoken form may only add hyphens/spaces (letters never change).
    *  term: a foreign term replaced by its Uzbek equivalent. abbr: an abbreviation read in words. */
   kind?: 'word' | 'term' | 'abbr';
+  /** speak a short pause (comma) after this word when no punctuation follows, e.g. "A-de-em, Jizzakh!" */
+  pauseAfter?: boolean;
   status: 'approved' | 'candidate';
   score?: number; // best STT similarity 0..1 when tested
   testedAt?: string;

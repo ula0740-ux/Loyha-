@@ -16,6 +16,12 @@ Talk to the user in Uzbek. Code is in `studio/server/uz/`, the lexicon is `studi
 - **The user's choice by ear (2026-10-13): in the spoken form, x becomes "kh"** ("Jizzax xodimlariga xayr" → "Jizzakh khodimlariga khayr") on `eleven_v4` with `language_code: "uz"`. `prepareUzbek` does this automatically (`xToKh`; `UZ_X_KH=0` turns it off). The written text and captions keep x. Never send a plain "h" for x.
 - Keep oʻ, gʻ, sh, ch and ng exactly as written. Syllable breaks never split a digraph.
 
+- **Variant F (the user's choice by ear, 2026-10-13): "A-de-em, Jizzakh!"**
+  - A word whose spoken form ends in the deep x ("…kh") gets "!" instead of "." at the end of a sentence. With a full stop, the model swallowed the final kh ("jizzaq", "ji zzkh").
+  - An abbreviation marked `pauseAfter` in the lexicon (ADM) gets a comma, i.e. a short pause, when no punctuation follows it.
+  - `prepareUzbek` does both automatically; the written text and captions are unchanged.
+- **Never cut a word out of one take and splice it into another.** It was tried: the user heard "ji zzkh" (the vowel lost, the fricative cut). Fix pronunciation with the text form and by regenerating, not with audio surgery.
+
 ## 2. Preparing the text (`prepareUzbek`, always)
 - Spelling is normalised (apostrophes go to ʻ/ʼ, Cyrillic goes to Latin).
 - Numbers, percentages, dates and ranges become words.

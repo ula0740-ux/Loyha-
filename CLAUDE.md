@@ -5,6 +5,7 @@
   - **Uzbek Latin script only.** No English or Russian respelling, and no English letter names.
   - x = deep throat x (never "eks"), h = soft h (never dropped). **x and h are never swapped.** oʻ, gʻ, sh, ch and ng are kept.
   - **The user's choice by ear: model `eleven_v4` + `language_code: uz`, and x becomes "kh" in the spoken form** ("Jizzakh khodimlariga khayr"). The written text keeps x. On v4, always pass the neighbouring sentences as `previous_text`/`next_text`.
+  - **Variant F (chosen by ear): "A-de-em, Jizzakh!".** A word ending in x gets "!" instead of "." at the end of a sentence, and ADM gets a pause (comma) after it. `prepareUzbek` does this automatically. Never splice words between takes.
   - Always send text through `prepareUzbek`. It turns numbers and abbreviations into words, replaces English terms with Uzbek equivalents from the lexicon, and adds punctuation for pauses.
   - Never change or drop a word's letters. Fix mispronunciations in `studio/lexicon/uz-lexicon.json`; only syllable hyphens are allowed, checked with `sameLetters`.
   - Send only the parameters the model supports (`ttsBody`/`MODEL_CAPS`).

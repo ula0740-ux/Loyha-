@@ -88,6 +88,7 @@ Fayllar:
 **Qoidalar:**
 - ElevenLabs'ga faqat **oʻzbek lotin** yozuvidagi matn yuboriladi. Kirillcha kiritilgan matn lotinga oʻgiriladi. Soʻzlar inglizcha yoki ruscha talaffuzga moslab yozilmaydi.
 - **x ovozga "kh" boʻlib boradi.** Foydalanuvchi 6 xil variantni tinglab, shu usulni tanlagan: `eleven_v4` + `language_code: uz`, masalan "Jizzax xodimlariga xayr" → "Jizzakh khodimlariga khayr". Yozuv va subtitrda x oʻzgarmaydi. Bu qoidani `UZ_X_KH=0` bilan oʻchirish mumkin.
+- **F usuli (foydalanuvchi quloq bilan tanlagan): "A-de-em, Jizzakh!".** x bilan tugaydigan soʻz gap oxirida kelsa, nuqta oʻrniga undov bilan yuboriladi, aks holda model x ni yutib yuboradi ("jizzaq"). ADM dan keyin qisqa pauza (vergul) qoʻyiladi. Bularning hammasi avtomatik; yozilgan matn oʻzgarmaydi.
 - **x** chuqur boʻgʻiz tovushi boʻlib, "eks" deb oʻqilmaydi. **h** yumshoq h boʻlib, tushirib qoldirilmaydi. Bu ikki harf hech qachon bir-biriga almashtirilmaydi. Oʻ, gʻ, sh, ch va ng harflari saqlanadi.
 - Sonlar, sanalar, foizlar va oraliqlar soʻz bilan yoziladi. Qisqartmalar va inglizcha atamalar lugʻatdagi oʻzbekcha muqobiliga almashtiriladi: IT → "axborot texnologiyalari", online → "onlayn". Katta harfli "IT" almashtiriladi, oddiy "it" soʻzi esa oʻzgarmaydi.
 - Pauza tinish belgilari orqali beriladi: har bir qator va gap tinish belgisi bilan tugaydi.
