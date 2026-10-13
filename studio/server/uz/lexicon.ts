@@ -12,6 +12,9 @@ export interface LexEntry {
   cyrillic: string;
   spoken: { latin?: string; cyrillic?: string };
   prefer: UzScript;
+  /** word: an Uzbek word; its spoken form may only add hyphens/spaces (letters never change).
+   *  term: a foreign term replaced by its Uzbek equivalent. abbr: an abbreviation read in words. */
+  kind?: 'word' | 'term' | 'abbr';
   status: 'approved' | 'candidate';
   score?: number; // best STT similarity 0..1 when tested
   testedAt?: string;
@@ -59,4 +62,10 @@ export function upsert(lex: Lexicon, word: string, patch: Partial<LexEntry> = {}
   e.spoken = { ...(prev?.spoken ?? { latin, cyrillic }), ...(patch.spoken ?? {}) };
   lex.entries[key] = e;
   return e;
+}
+
+/** Same letters in the same order, ignoring hyphens, spaces, case and apostrophe variants ("Jiz-zax" = "Jizzax"). */
+export function sameLetters(a: string, b: string): boolean {
+  const f = (s: string) => normalizeLatin(detectScript(s) === 'cyrillic' ? cyrToLat(s) : s).toLowerCase().replace(/[^\p{L}ʻʼ]/gu, '').replace(/ʼ/g, '');
+  return f(a) === f(b);
 }

@@ -3,7 +3,7 @@
 import { cyrToLat, normalizeLatin } from '../../src/lib/uzbek.ts';
 import { prepareUzbek, type Prepared } from './prepare.ts';
 import { expandNumbers } from './numbers.ts';
-import { lexKey, loadLexicon, saveLexicon, upsert, type Lexicon, type UzScript } from './lexicon.ts';
+import { lexKey, loadLexicon, saveLexicon, sameLetters, upsert, type Lexicon, type UzScript } from './lexicon.ts';
 
 export const API = 'https://api.elevenlabs.io';
 export const DEFAULT_MODEL = process.env.ELEVENLABS_MODEL || 'eleven_v3';
@@ -12,16 +12,31 @@ export const STT_MODEL = 'scribe_v1';
 
 /**
  * Only parameters the model accepted in a live test are sent (2026-10-13, this account):
- * language_code "uz" -> accepted by eleven_v4; rejected (400 unsupported_language) by eleven_v3,
- * eleven_multilingual_v2, eleven_flash_v2_5, eleven_turbo_v2_5. Unknown models get no language_code.
+ * - language_code "uz": accepted by eleven_v4; 400 unsupported_language on eleven_v3, eleven_multilingual_v2,
+ *   eleven_flash_v2_5, eleven_turbo_v2_5.
+ * - previous_text/next_text (context between sentences): eleven_v4, eleven_multilingual_v2; 400 on eleven_v3.
+ * - seed: accepted by eleven_v3, eleven_v4, eleven_multilingual_v2.
+ * Unknown models get none of these.
  */
-export const MODEL_CAPS: Record<string, { uzLanguageCode: boolean }> = {
-  eleven_v4: { uzLanguageCode: true },
-  eleven_v3: { uzLanguageCode: false },
-  eleven_multilingual_v2: { uzLanguageCode: false },
-  eleven_flash_v2_5: { uzLanguageCode: false },
-  eleven_turbo_v2_5: { uzLanguageCode: false },
+export interface ModelCaps { uzLanguageCode: boolean; contextText: boolean; seed: boolean }
+export const MODEL_CAPS: Record<string, ModelCaps> = {
+  eleven_v4: { uzLanguageCode: true, contextText: true, seed: true },
+  eleven_v3: { uzLanguageCode: false, contextText: false, seed: true },
+  eleven_multilingual_v2: { uzLanguageCode: false, contextText: true, seed: true },
+  eleven_flash_v2_5: { uzLanguageCode: false, contextText: false, seed: false },
+  eleven_turbo_v2_5: { uzLanguageCode: false, contextText: false, seed: false },
 };
+
+/** Request body with only the parameters `model` supports. */
+export function ttsBody(text: string, model: string, o: { seed?: number; previousText?: string; nextText?: string } = {}) {
+  const caps = MODEL_CAPS[model];
+  const body: Record<string, unknown> = { text, model_id: model };
+  if (caps?.uzLanguageCode) body.language_code = 'uz';
+  if (caps?.seed && o.seed !== undefined) body.seed = o.seed;
+  if (caps?.contextText && o.previousText) body.previous_text = o.previousText;
+  if (caps?.contextText && o.nextText) body.next_text = o.nextText;
+  return body;
+}
 
 const key = () => {
   const k = process.env.ELEVENLABS_API_KEY?.trim();
@@ -31,11 +46,11 @@ const key = () => {
 
 export interface Synth { mp3: Buffer; words: { text: string; start: number; end: number }[] }
 
-export async function synth(text: string, opts: { voice?: string; model?: string; seed?: number } = {}): Promise<Synth> {
+export interface SynthOpts { voice?: string; model?: string; seed?: number; previousText?: string; nextText?: string }
+
+export async function synth(text: string, opts: SynthOpts = {}): Promise<Synth> {
   const model = opts.model || DEFAULT_MODEL;
-  const body: Record<string, unknown> = { text, model_id: model };
-  if (MODEL_CAPS[model]?.uzLanguageCode) body.language_code = 'uz';
-  if (opts.seed !== undefined) body.seed = opts.seed;
+  const body = ttsBody(text, model, opts);
   const res = await fetch(`${API}/v1/text-to-speech/${opts.voice || DEFAULT_VOICE}/with-timestamps?output_format=mp3_44100_128`, {
     method: 'POST', headers: { 'xi-api-key': key(), 'Content-Type': 'application/json' }, body: JSON.stringify(body),
   });
@@ -70,7 +85,8 @@ export async function transcribe(mp3: Buffer): Promise<string> {
 export function normForCompare(s: string): string {
   const lat = expandNumbers(/[Ѐ-ӿ]/.test(s) ? cyrToLat(s) : s).text; // STT writes "2026", the reference has words
   // "kh" is how STT romanises х; Uzbek Latin writes x (k+h never meet inside a native Uzbek word)
-  return normalizeLatin(lat).toLowerCase().replace(/kh/g, 'x').replace(/[ʻʼ'‘’`]/g, "'").replace(/[^\p{L}\p{N}' ]+/gu, ' ').replace(/\s+/g, ' ').trim();
+  // a syllable break from the lexicon ("Jiz-zax") is the same word as "Jizzax"
+  return normalizeLatin(lat).toLowerCase().replace(/kh/g, 'x').replace(/(\p{L})-(?=\p{L})/gu, '$1').replace(/[ʻʼ'‘’`]/g, "'").replace(/[^\p{L}\p{N}' ]+/gu, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function lev<T>(a: T[], b: T[], eq: (x: T, y: T) => boolean = (x, y) => x === y) {
@@ -104,56 +120,77 @@ export function score(expected: string, heardRaw: string): Score {
 export interface VariantResult { script: UzScript; prepared: Prepared; tts: string; score: Score; mp3: Buffer; words: Synth['words'] }
 
 /**
- * Synthesize the text in Latin and in Cyrillic, transcribe both, and rank them against the spoken
- * reference (the Latin-prepared text). The automatic ear is approximate: a human listen confirms.
+ * Synthesize the prepared text (Latin; several takes if asked), transcribe each take and rank them against the
+ * spoken reference. The automatic ear is approximate: a human listen confirms.
  */
-export async function testVariants(text: string, opts: { voice?: string; model?: string; scripts?: UzScript[]; lex?: Lexicon } = {}): Promise<VariantResult[]> {
+export async function testVariants(text: string, opts: { voice?: string; model?: string; scripts?: UzScript[]; lex?: Lexicon; takes?: number } = {}): Promise<VariantResult[]> {
   const lex = opts.lex ?? (await loadLexicon());
   const reference = prepareUzbek(text, 'latin', lex).tts;
   const out: VariantResult[] = [];
-  for (const script of opts.scripts ?? (['latin', 'cyrillic'] as UzScript[])) {
-    const prepared = prepareUzbek(text, script, lex);
-    const s = await synth(prepared.tts, opts);
-    const heard = await transcribe(s.mp3);
-    out.push({ script, prepared, tts: prepared.tts, score: score(reference, heard), mp3: s.mp3, words: s.words });
-  }
+  // project rule: Latin only. Cyrillic can still be compared on request (--script cyrillic).
+  for (const script of opts.scripts ?? (['latin'] as UzScript[]))
+    for (let k = 0; k < (opts.takes ?? 1); k++) {
+      const prepared = prepareUzbek(text, script, lex);
+      const s = await synth(prepared.tts, opts);
+      const heard = await transcribe(s.mp3);
+      out.push({ script, prepared, tts: prepared.tts, score: score(reference, heard), mp3: s.mp3, words: s.words });
+    }
   return out.sort((a, b) => b.score.similarity - a.score.similarity || (a.script === 'latin' ? -1 : 1));
 }
 
+/** Latin spellings with the same letters and one syllable break: "Jizzax" -> "Jiz-zax", "Ji-zzax", ... */
+export function syllableForms(word: string): string[] {
+  const out: string[] = [];
+  const V = /[aeiouAEIOU]/;
+  for (let i = 1; i < word.length - 1; i++) {
+    const a = word[i - 1], b = word[i];
+    if (/[ʻʼ']/.test(b) || /[ʻʼ']/.test(a)) continue;
+    if (/^(sh|ch|ng)$/i.test(a + b)) continue; // never split a digraph
+    // break between two consonants, or before a consonant that follows a vowel
+    if ((!V.test(a) && !V.test(b) && /\p{L}/u.test(a) && /\p{L}/u.test(b)) || (V.test(a) && !V.test(b) && V.test(word[i + 1] ?? ''))) out.push(word.slice(0, i) + '-' + word.slice(i));
+  }
+  return out;
+}
+
 /**
- * Re-test a single mis-read word: every candidate spelling (Latin, Cyrillic, current lexicon form, extra
- * forms you pass) is spoken in a carrier sentence and scored. The best one is saved as a lexicon candidate.
+ * Re-test a single mis-read word. Candidates are Latin only and keep every letter (the plain word, syllable
+ * breaks, the current lexicon form and extra forms you pass); each is spoken `takes` times in a carrier sentence
+ * and scored by the STT ear. The best one is saved as a lexicon candidate.
  */
-export async function fixWord(word: string, opts: { voice?: string; model?: string; extra?: string[]; save?: boolean } = {}) {
+export async function fixWord(word: string, opts: { voice?: string; model?: string; extra?: string[]; save?: boolean; takes?: number } = {}) {
   const lex = await loadLexicon();
   const k = lexKey(word);
   const prev = lex.entries[k];
   const latin = /[Ѐ-ӿ]/.test(word) ? cyrToLat(word) : normalizeLatin(word);
-  const base = upsert(structuredClone(lex), word);
-  const cands = [...new Set([base.latin, base.cyrillic, prev?.spoken?.latin, prev?.spoken?.cyrillic, ...(opts.extra ?? [])].filter(Boolean) as string[])];
-  const results: { form: string; similarity: number; heard: string }[] = [];
-  for (const form of cands) {
-    const carrierLat = `Bu soʻz ${latin} deb oʻqiladi.`;
-    const sent = /[Ѐ-ӿ]/.test(form) ? `Бу сўз ${form} деб ўқилади.` : `Bu soʻz ${form} deb oʻqiladi.`;
-    const s = await synth(sent, opts);
-    const heard = await transcribe(s.mp3);
-    const sc = score(carrierLat, heard);
-    const target = normForCompare(latin);
-    const wordHit = sc.problems.every((p) => p.expected !== target) ? 1 : 0;
-    results.push({ form, similarity: sc.similarity * 0.5 + wordHit * 0.5, heard: sc.heard });
+  const cands = [...new Set([latin, prev?.spoken?.latin, ...syllableForms(latin), ...(opts.extra ?? [])].filter(Boolean) as string[])]
+    .filter((f) => !/[Ѐ-ӿ]/.test(f));
+  const rejected = cands.filter((f) => !sameLetters(f, latin) && prev?.kind !== 'term' && prev?.kind !== 'abbr');
+  const results: { form: string; similarity: number; heard: string[] }[] = [];
+  const target = normForCompare(latin);
+  for (const form of cands.filter((f) => !rejected.includes(f))) {
+    let sum = 0;
+    const heard: string[] = [];
+    for (let t = 0; t < (opts.takes ?? 2); t++) {
+      const s = await synth(`${form}. Bu soʻz ${form} deb oʻqiladi.`, opts);
+      const sc = score(`${latin}. Bu soʻz ${latin} deb oʻqiladi.`, await transcribe(s.mp3));
+      const hits = sc.problems.filter((p) => p.expected === target).length;
+      sum += sc.similarity * 0.4 + (1 - hits / 2) * 0.6;
+      heard.push(sc.heard);
+    }
+    results.push({ form, similarity: sum / (opts.takes ?? 2), heard });
   }
-  results.sort((a, b) => b.similarity - a.similarity);
+  results.sort((a, b) => b.similarity - a.similarity || a.form.length - b.form.length);
   const best = results[0];
   if (opts.save !== false && best) {
-    const isCyr = /[Ѐ-ӿ]/.test(best.form);
     upsert(lex, word, {
-      spoken: { ...(prev?.spoken ?? {}), [isCyr ? 'cyrillic' : 'latin']: best.form },
-      prefer: isCyr ? 'cyrillic' : 'latin',
+      spoken: { ...(prev?.spoken ?? {}), latin: best.form },
+      prefer: 'latin',
+      kind: prev?.kind ?? 'word',
       status: prev?.status === 'approved' ? 'approved' : 'candidate',
       score: +best.similarity.toFixed(3),
       testedAt: new Date().toISOString(),
     });
     await saveLexicon(lex);
   }
-  return { word, results };
+  return { word, results, rejected };
 }

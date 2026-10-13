@@ -1,5 +1,5 @@
 {
-  "_about": "Oʻzbekcha talaffuz lugʻati. key = lotin yozuvidagi kichik harfli kalit. spoken = TTS ga yuboriladigan shakl (lotin va/yoki kirill). prefer = qaysi yozuvdagi spoken ishlatiladi. status: approved (quloq bilan tasdiqlangan) | candidate (STT testi yoki taxmin). x va h hech qachon almashtirilmaydi.",
+  "_about": "Oʻzbekcha talaffuz lugʻati (faqat lotin yozuvi). key = kichik harfli lotin kalit. spoken.latin = TTS ga yuboriladigan shakl. kind: word (oʻzbekcha soʻz — harflari oʻzgarmaydi, faqat boʻgʻin chizigʻi qoʻshilishi mumkin), term (chet atama — oʻzbekcha muqobili), abbr (qisqartma — soʻz bilan). status: approved (quloq bilan tasdiqlangan) | candidate (STT testi). x va h hech qachon almashtirilmaydi.",
   "entries": {
     "adm": {
       "original": "ADM",
@@ -11,7 +11,8 @@
       },
       "prefer": "latin",
       "status": "approved",
-      "notes": "Foydalanuvchi videoda 'ADM' oʻqilishini maʼqul koʻrgan."
+      "notes": "Foydalanuvchi videoda 'ADM' oʻqilishini maʼqul koʻrgan.",
+      "kind": "abbr"
     },
     "aj": {
       "original": "AJ",
@@ -23,55 +24,173 @@
       },
       "prefer": "latin",
       "status": "candidate",
-      "notes": "Kompaniya turi qisqartmasi toʻliq aytiladi."
+      "notes": "Kompaniya turi qisqartmasi toʻliq aytiladi.",
+      "kind": "abbr"
+    },
+    "axborot": {
+      "original": "Axborot",
+      "latin": "Axborot",
+      "cyrillic": "Ахборот",
+      "spoken": {
+        "latin": "Ax-borot",
+        "cyrillic": "Ахборот"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "word",
+      "score": 1,
+      "testedAt": "2026-10-13T06:53:59.516Z",
+      "notes": "eleven_v3: 'Axborot' gap boshida 'aksborot' (3 dan 2); 'Ax-borot' 3/3 toʻgʻri. eleven_v4 da ikkalasi ham yomon."
+    },
+    "deadline": {
+      "original": "deadline",
+      "latin": "deadline",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "muddat"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "design": {
+      "original": "design",
+      "latin": "design",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "dizayn"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "engineer": {
+      "original": "engineer",
+      "latin": "engineer",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "muhandis"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "feedback": {
+      "original": "feedback",
+      "latin": "feedback",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "fikr-mulohaza"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
     },
     "hr": {
       "original": "HR",
       "latin": "HR",
       "cyrillic": "HR",
       "spoken": {
-        "latin": "eych-ar",
-        "cyrillic": "эйч-ар"
+        "latin": "xodimlar bilan ishlash",
+        "cyrillic": "ходимлар билан ишлаш"
       },
       "prefer": "latin",
       "status": "candidate",
-      "notes": "Inglizcha qisqartma, oʻzbek nutqida 'eych-ar' deb aytiladi."
+      "notes": "Inglizcha HR (human resources) oʻrniga oʻzbekcha muqobil.",
+      "kind": "term"
     },
     "it": {
       "original": "IT",
       "latin": "IT",
       "cyrillic": "IT",
       "spoken": {
-        "latin": "ay-ti",
-        "cyrillic": "ай-ти"
+        "latin": "axborot texnologiyalari",
+        "cyrillic": "ахборот технологиялари"
       },
       "prefer": "latin",
-      "status": "candidate"
+      "status": "candidate",
+      "kind": "term",
+      "notes": "IT oʻrniga oʻzbekcha muqobil."
     },
     "jizzax": {
       "original": "Jizzax",
       "latin": "Jizzax",
       "cyrillic": "Жиззах",
       "spoken": {
-        "latin": "Jizzax",
+        "latin": "Jiz-zax",
         "cyrillic": "Жиззах"
       },
-      "prefer": "cyrillic",
+      "prefer": "latin",
       "status": "candidate",
-      "notes": "Lotincha 'x' ni model inglizcha 'ks' deb oʻqigan (2026-10-13 foydalanuvchi eshitgan). Kirill 'х' chuqur x tovushini beradi. STT testi (eleven_v3, Sarah): Жиззах 100%, Jizzax -> 'jizax'.",
-      "score": 1,
-      "testedAt": "2026-10-13T06:39:15.803Z"
+      "score": 1.0,
+      "notes": "eleven_v3 (Sarah), STT: gap ichida 'ADM Jizzax' 1/8 toʻgʻri (jezaks, jazax, jazaks); 'ADM Jiz-zax' 4/4 toʻgʻri (film intro/outro, carrier). Harflar oʻzgarmagan — faqat boʻgʻin chizigʻi. eleven_v4 dan ham yaxshiroq.",
+      "kind": "word",
+      "testedAt": "2026-10-13"
+    },
+    "manager": {
+      "original": "manager",
+      "latin": "manager",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "menejer"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "onboarding": {
+      "original": "onboarding",
+      "latin": "onboarding",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "moslashtirish"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "online": {
+      "original": "online",
+      "latin": "online",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "onlayn"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
     },
     "r&d": {
       "original": "R&D",
       "latin": "R&D",
       "cyrillic": "R&D",
       "spoken": {
-        "latin": "ar-end-di",
-        "cyrillic": "ар-энд-ди"
+        "latin": "ilmiy-tadqiqot ishlari",
+        "cyrillic": "илмий-тадқиқот ишлари"
       },
       "prefer": "latin",
-      "status": "candidate"
+      "status": "candidate",
+      "kind": "term",
+      "notes": "R&D oʻrniga oʻzbekcha muqobil."
+    },
+    "team": {
+      "original": "team",
+      "latin": "team",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "jamoa"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
     },
     "zaxira": {
       "original": "Zaxira",
@@ -85,7 +204,8 @@
       "status": "candidate",
       "score": 0.481,
       "testedAt": "2026-10-13T06:39:10.563Z",
-      "notes": "Ikkala yozuvda ham STT 'zahira' deb yozgan (48%) — STT qulogʻining xatosi boʻlishi mumkin; ADM filmida toʻliq gapda toʻgʻri eshitildi (97.8%). Quloq bilan tekshiring."
+      "notes": "Ikkala yozuvda ham STT 'zahira' deb yozgan (48%) — STT qulogʻining xatosi boʻlishi mumkin; ADM filmida toʻliq gapda toʻgʻri eshitildi (97.8%). Quloq bilan tekshiring.",
+      "kind": "word"
     }
   }
 }

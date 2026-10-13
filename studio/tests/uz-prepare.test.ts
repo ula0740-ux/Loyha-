@@ -6,7 +6,8 @@ import { prepareUzbek, wordLang } from '../server/uz/prepare.ts';
 import type { Lexicon } from '../server/uz/lexicon.ts';
 
 const LEX: Lexicon = { entries: {
-  jizzax: { original: 'Jizzax', latin: 'Jizzax', cyrillic: 'Жиззах', spoken: { latin: 'Jizzax', cyrillic: 'Жиззах' }, prefer: 'cyrillic', status: 'candidate' },
+  jizzax: { original: 'Jizzax', latin: 'Jizzax', cyrillic: 'Жиззах', spoken: { latin: 'Jiz-zax', cyrillic: 'Жиззах' }, prefer: 'latin', kind: 'word', status: 'candidate' },
+  it: { original: 'IT', latin: 'IT', cyrillic: '', spoken: { latin: 'axborot texnologiyalari' }, prefer: 'latin', kind: 'term', status: 'candidate' },
   adm: { original: 'ADM', latin: 'ADM', cyrillic: 'АДМ', spoken: { latin: 'ADM', cyrillic: 'АДМ' }, prefer: 'latin', status: 'approved' },
 } };
 
@@ -55,18 +56,19 @@ test('word language detection', () => {
   assert.equal(wordLang('Head'), 'en');
 });
 
-test('Latin text: Uzbek words kept Latin, lexicon word uses its tested Cyrillic form, numbers spoken', () => {
+test('Latin text: lexicon word uses its tested Latin form (same letters), numbers spoken', () => {
   const p = prepareUzbek('ADM Jizzax: 685 nafar xodim, 80,1%.', 'latin', LEX);
   assert.equal(p.original, 'ADM Jizzax: 685 nafar xodim, 80,1%.');
-  assert.equal(p.tts, 'ADM Жиззах: olti yuz sakson besh nafar xodim, sakson butun oʻndan bir foiz.');
+  assert.equal(p.tts, 'ADM Jiz-zax: olti yuz sakson besh nafar xodim, sakson butun oʻndan bir foiz.');
+  assert.ok(!/[Ѐ-ӿ]/.test(p.tts), 'Latin only');
   assert.ok(p.tts.includes('xodim'), 'x must stay x');
 });
 
 test('Cyrillic target: mixed input is normalised to one script, original kept', () => {
   const p = prepareUzbek('2026-йил hisoboti: Жиззах xodimlari', 'cyrillic', LEX);
   assert.equal(p.original, '2026-йил hisoboti: Жиззах xodimlari');
-  assert.equal(p.normalized, '2026-йил ҳисоботи: Жиззах ходимлари');
-  assert.equal(p.tts, 'икки минг йигирма олтинчи йил ҳисоботи: Жиззах ходимлари');
+  assert.equal(p.normalized, '2026-йил ҳисоботи: Жиззах ходимлари.');
+  assert.equal(p.tts, 'Икки минг йигирма олтинчи йил ҳисоботи: Жиззах ходимлари.');
 });
 
 test('Russian words are kept as written and reported', () => {
@@ -76,13 +78,38 @@ test('Russian words are kept as written and reported', () => {
 });
 
 test('abbreviations vs capitalised words', () => {
-  const p = prepareUzbek('KST XODIM', 'latin', { version: 1, entries: {} } as never);
-  assert.equal(p.tts, 'ka es te XODIM');
+  const p = prepareUzbek('KST XODIM', 'latin', { entries: {} });
+  assert.equal(p.tts, 'Ka es te XODIM.');
+  assert.equal(prepareUzbek('UX', 'latin', { entries: {} }).tts, 'U xa.', 'x is "xa", never "iks"');
+});
+
+test('ALL-CAPS terms only replace ALL-CAPS text (Uzbek "it" stays)', () => {
+  assert.equal(prepareUzbek('IT boʻlimi va it', 'latin', LEX).tts, 'Axborot texnologiyalari boʻlimi va it.');
+});
+
+test('Cyrillic input becomes Latin; punctuation gives pauses', () => {
+  assert.equal(prepareUzbek('Жиззах ходимлари\nҲисобот тайёр', undefined, LEX).tts, 'Jiz-zax xodimlari. Hisobot tayyor.');
+});
+
+test('lexicon spoken forms keep the letters; syllable forms never split digraphs', async () => {
+  const { sameLetters } = await import('../server/uz/lexicon.ts');
+  const { syllableForms } = await import('../server/uz/eleven.ts');
+  assert.ok(sameLetters('Jiz-zax', 'Jizzax'));
+  assert.ok(!sameLetters('Jizzah', 'Jizzax'), 'x -> h is a different word');
+  assert.ok(!sameLetters('Jizax', 'Jizzax'), 'a dropped letter is rejected');
+  assert.deepEqual(syllableForms('Jizzax'), ['Jiz-zax']);
+  for (const f of syllableForms('oshxona choynak')) assert.ok(!/s-h|c-h|n-g/.test(f), f);
+});
+
+test('sentences split for partial re-generation', async () => {
+  const { splitSentences } = await import('../server/uz/segments.ts');
+  assert.deepEqual(splitSentences('Birinchi gap. Ikkinchi gap!\nUchinchi'), ['Birinchi gap.', 'Ikkinchi gap!', 'Uchinchi.']);
 });
 
 test('score finds mis-heard words', async () => {
   const { score, normForCompare } = await import('../server/uz/eleven.ts');
   assert.equal(normForCompare('Oʻzbekiston, Жиззах!'), "o'zbekiston jizzax");
+  assert.equal(normForCompare('Jiz-zax'), 'jizzax');
   const s = score('ADM Jizzax xodim', 'adm jizzaks xodim');
   assert.deepEqual(s.problems, [{ expected: 'jizzax', heard: 'jizzaks' }]);
   assert.ok(s.similarity > 0.8 && s.similarity < 1);

@@ -3,7 +3,6 @@
 import '../../studio/server/net.ts';
 import { prepareUzbek } from '../../studio/server/uz/prepare.ts';
 import { synth, transcribe, score } from '../../studio/server/uz/eleven.ts';
-import type { UzScript } from '../../studio/server/uz/lexicon.ts';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -21,19 +20,25 @@ let timing: Record<string, { duration: number; words: { text: string; start: num
 if (only.length) timing = JSON.parse(await readFile(HERE + 'audio/timing.json', 'utf8'));
 for (const line of cfg.lines) {
   if (only.length && !only.includes(line.id)) continue;
-  // text stays in correct literary spelling; prepareUzbek applies the tested lexicon (Jizzax -> Жиззах) and numbers
-  const prep = prepareUzbek(line.text, (process.env.UZ_SCRIPT as UzScript) || cfg.script || 'latin');
-  const s = await synth(prep.tts, { voice, model: cfg.model });
+  // text stays in correct literary spelling; prepareUzbek (Uzbek Latin only) applies the tested lexicon and numbers
+  const prep = prepareUzbek(line.text, 'latin');
+  const shown = line.text.split(/\s+/).filter(Boolean);
+  // automatic ear: each take is transcribed (STT) and compared; up to ATTEMPTS takes, the best one is kept (CHECK=0 skips)
+  const attempts = process.env.CHECK === '0' ? 1 : Number(process.env.ATTEMPTS || 4);
+  let best: { s: Awaited<ReturnType<typeof synth>>; sc?: ReturnType<typeof score> } | null = null;
+  for (let k = 0; k < attempts; k++) {
+    const s = await synth(prep.tts, { voice, model: cfg.model });
+    const sc = process.env.CHECK === '0' ? undefined : score(prep.tts, await transcribe(s.mp3));
+    if (sc) console.log(`  ${line.id} #${k + 1}: STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);
+    if (!best || (sc && best.sc && sc.similarity > best.sc.similarity)) best = { s, sc };
+    if (!sc || (sc.similarity >= 0.97 && !sc.problems.some((p) => /x/.test(p.expected)))) break;
+  }
+  const s = best!.s;
   const mp3 = `${HERE}audio/${line.id}.mp3`;
   await writeFile(mp3, s.mp3);
-  const shown = line.text.split(/\s+/).filter(Boolean);
   // keep the written words in timing.json (film.html addresses words by index)
   const words = s.words.length === shown.length ? s.words.map((w, i) => ({ ...w, text: shown[i] })) : s.words;
-  // automatic ear: Speech-to-Text of the take, compared with the intended text (CHECK=0 skips it)
-  if (process.env.CHECK !== '0') {
-    const sc = score(prepareUzbek(line.text, 'latin').tts, await transcribe(s.mp3));
-    console.log(`  ${line.id}: ${prep.tts}\n  STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);
-  }
+  console.log(`  ${line.id}: ${prep.tts}`);
   const { stdout } = await run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mp3]);
   timing[line.id] = { duration: Number(stdout), words };
   console.log(`✓ ${line.id} ${Number(stdout).toFixed(2)}s  ${words.length}/${shown.length} soʻz`);

@@ -1,6 +1,6 @@
 {
  "intro": {
-  "duration": 4.205714,
+  "duration": 4.284082,
   "words": [
    {
     "text": "ADM",
@@ -9,38 +9,38 @@
    },
    {
     "text": "Jizzax.",
-    "start": 0.56,
-    "end": 1.28
+    "start": 0.6,
+    "end": 1.36
    },
    {
     "text": "Ikki",
-    "start": 1.493,
-    "end": 2.04
+    "start": 1.6,
+    "end": 2.24
    },
    {
     "text": "ming",
-    "start": 2.064,
-    "end": 2.16
+    "start": 2.272,
+    "end": 2.4
    },
    {
     "text": "yigirma",
-    "start": 2.24,
-    "end": 2.56
+    "start": 2.48,
+    "end": 2.8
    },
    {
     "text": "oltinchi",
-    "start": 2.64,
-    "end": 3.12
+    "start": 2.84,
+    "end": 3.2
    },
    {
     "text": "yil",
-    "start": 3.16,
-    "end": 3.28
+    "start": 3.24,
+    "end": 3.36
    },
    {
     "text": "hisoboti.",
-    "start": 3.34,
-    "end": 4.16
+    "start": 3.42,
+    "end": 4.24
    }
   ]
  },
@@ -380,7 +380,7 @@
   ]
  },
  "outro": {
-  "duration": 4.675918,
+  "duration": 5.564082,
   "words": [
    {
     "text": "Shaffof",
@@ -390,27 +390,27 @@
    {
     "text": "jarayon.",
     "start": 0.46,
-    "end": 1.24
+    "end": 1.52
    },
    {
     "text": "Barqaror",
-    "start": 1.31,
-    "end": 1.76
+    "start": 1.62,
+    "end": 2.24
    },
    {
     "text": "jamoa.",
-    "start": 1.84,
-    "end": 2.48
+    "start": 2.3,
+    "end": 2.88
    },
    {
     "text": "ADM",
-    "start": 2.72,
-    "end": 3.44
+    "start": 3.14,
+    "end": 3.92
    },
    {
     "text": "Jizzax.",
-    "start": 3.56,
-    "end": 4.24
+    "start": 4.08,
+    "end": 5.52
    }
   ]
  }

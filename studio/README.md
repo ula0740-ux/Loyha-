@@ -73,28 +73,43 @@ Funksiya: `textToSpeechMp3(matn, "chiqish.mp3", { voiceId?, modelId?, languageCo
 - `npm test`: internetsiz unit testlar (fetch soxtalashtirilgan). Ular kalit faqat sarlavhada yuborilishini, xatolarda koʻrinmasligini, MP3 tekshiruvini va 401/tarmoq xatolarini sinaydi.
 - `npm run test:elevenlabs ["matn"]`: haqiqiy API bilan sinov. Avval kalit va tarmoqni tekshiradi (`/v1/voices`), keyin oʻzbekcha MP3 yaratadi (`out/elevenlabs-test.mp3`) va uni ffprobe bilan tekshiradi. Oʻzbekcha talaffuz sifatini faylni tinglab, oʻzingiz baholaysiz.
 
-## Oʻzbekcha talaffuz tizimi (lotin + kirill)
+## Oʻzbekcha talaffuz tizimi (faqat lotin yozuvi)
 
-Fayllar: `server/uz/prepare.ts` (matnni tayyorlash), `server/uz/numbers.ts` (sonlar), `server/uz/lexicon.ts` va `lexicon/uz-lexicon.json` (talaffuz lugʻati), `server/uz/eleven.ts` (TTS, STT va A/B test), `scripts/uz.ts` (buyruqlar).
+**Maqsad:** ravon, tabiiy va aniq adabiy oʻzbekcha ovoz. Barcha qoidalar `.claude/skills/uzbek-tts/SKILL.md` va `CLAUDE.md` fayllarida doimiy saqlangan.
 
-**Doimiy qoidalar:**
-- **x = х** (chuqur x) va **h = ҳ** (yumshoq h). Bu ikki harf hech qachon bir-biriga almashtirilmaydi va tushirib qoldirilmaydi. Matn doim toʻgʻri adabiy imloda yoziladi.
-- Harflar bittaga-bitta mos keladi: oʻ=ў, gʻ=ғ, q=қ, sh=ш, ch=ч, ng=нг, sʼh=сҳ.
-- Lotincha x ni model inglizcha "eks" deb oʻqisa, imloni oʻzgartirib boʻlmaydi. Uning oʻrniga soʻz lugʻatga kirill shakli bilan yoziladi. Misol: Jizzax → `Жиззах` (STT testi: 100%).
-- Aralash matnda har bir soʻzning tili aniqlanadi. Oʻzbekcha soʻzlar bitta tanlangan yozuvga oʻtkaziladi, ruscha va inglizcha soʻzlar oʻzgarmaydi, asl matn alohida saqlanadi.
-- Sonlar, foizlar, sanalar, oraliqlar va qisqartmalar soʻz bilan yoziladi. Misollar: 2026-yil → "ikki ming yigirma oltinchi yil", 80,1% → "sakson butun oʻndan bir foiz", 5–7 → "beshdan yettigacha".
-- API ga faqat model tekshiruvda qabul qilgan parametrlar yuboriladi. `language_code: "uz"` ni faqat `eleven_v4` qabul qiladi. `eleven_v3` va boshqa modellar 400 qaytaradi, shuning uchun ularga bu parametr yuborilmaydi. Standart model: `eleven_v3` (testda eng yaxshisi).
+Fayllar:
+- `server/uz/prepare.ts`: matnni tayyorlash;
+- `server/uz/numbers.ts`: sonlarni soʻz bilan yozish;
+- `server/uz/lexicon.ts` va `lexicon/uz-lexicon.json`: talaffuz lugʻati;
+- `server/uz/eleven.ts`: TTS, STT, model imkoniyatlari;
+- `server/uz/segments.ts`: gapma-gap yaratish va qayta yaratish;
+- `scripts/uz.ts`: buyruqlar.
+
+**Qoidalar:**
+- ElevenLabs'ga faqat **oʻzbek lotin** yozuvidagi matn yuboriladi. Kirillcha kiritilgan matn lotinga oʻgiriladi. Soʻzlar inglizcha yoki ruscha talaffuzga moslab yozilmaydi.
+- **x** chuqur x tovushi boʻlib, "eks" deb oʻqilmaydi. **h** yumshoq h boʻlib, tushirib qoldirilmaydi. Bu ikki harf hech qachon bir-biriga almashtirilmaydi. Oʻ, gʻ, sh, ch va ng harflari saqlanadi.
+- Sonlar, sanalar, foizlar va oraliqlar soʻz bilan yoziladi. Qisqartmalar va inglizcha atamalar lugʻatdagi oʻzbekcha muqobiliga almashtiriladi: IT → "axborot texnologiyalari", online → "onlayn". Katta harfli "IT" almashtiriladi, oddiy "it" soʻzi esa oʻzgarmaydi.
+- Pauza tinish belgilari orqali beriladi: har bir qator va gap tinish belgisi bilan tugaydi.
+- Soʻzning harflari oʻzgartirilmaydi va olib tashlanmaydi. Lugʻatda faqat boʻgʻin chizigʻi qoʻshish mumkin: "Jiz-zax", "Ax-borot". Bu shakllar testda toʻgʻri oʻqildi.
+- Model: `eleven_v3`, testda eng yaxshi natija bergan. API ga faqat model qabul qiladigan parametrlar yuboriladi:
+  - `language_code: uz` faqat `eleven_v4` uchun (u bilan natija yomonroq chiqdi);
+  - `previous_text`/`next_text` v3 da yoʻq;
+  - `seed` v3 da bor.
+- Pronunciation dictionary: hozirgi kalitda `pronunciation_dictionaries_write` ruxsati yoʻq. Mahalliy lugʻat xuddi shu vazifani bajaradi va har qanday model bilan ishlaydi.
 
 **Buyruqlar** (`studio/` ichida):
 ```
-npm run uz -- prepare "ADM Jizzax 2026-yil"            # TTS ga nima ketishini koʻrsatadi (internetsiz)
-npm run uz -- test "matn" [--model eleven_v4]          # lotin va kirillni ovozlab, STT bilan solishtiradi
-npm run uz -- say "matn" out/a.mp3 [--min 0.9]         # eng yaxshi yozuvni tanlab MP3 yozadi + .json hisobot
-npm run uz -- word Jizzax [--extra "Жиззах,..."]       # notoʻgʻri oʻqilgan soʻzni qayta sinab, lugʻatga yozadi
-npm run uz -- lexicon list | add | approve | remove    # lugʻatni boshqarish
-npm run uz -- stt fayl.mp3 "kutilgan matn"            # tayyor faylni tekshirish
+npm run uz -- prepare "ADM Jizzax 2026-yil"             # TTS ga nima ketishini koʻrsatadi (internetsiz)
+npm run uz -- make "matn" out/a.mp3 [--file matn.txt]   # gapma-gap yaratadi, har gapni STT bilan tekshiradi
+npm run uz -- redo out/a.json 2,4                       # faqat 2- va 4-gaplarni qayta yaratadi
+npm run uz -- word Jizzax [--takes 3]                   # muammoli soʻzni sinab, eng yaxshi shaklni lugʻatga yozadi
+npm run uz -- test "matn" [--takes 2]                   # tez sinov
+npm run uz -- lexicon list | add | approve | remove     # lugʻatni boshqarish
+npm run uz -- stt fayl.mp3 "kutilgan matn"             # tayyor faylni tekshirish
 ```
-STT orqali beriladigan baho taxminiy, chunki "eshituvchi" ham xato qilishi mumkin. Lugʻatdagi `candidate` shakllar quloq bilan tinglanib, `approve` buyrugʻi bilan tasdiqlanadi. Studiyada ElevenLabs bilan oʻzbekcha ovoz tanlansa, matn avtomatik shu tizimdan oʻtadi (yozuvni `UZ_SCRIPT=cyrillic` bilan tanlash mumkin). Subtitrda esa yozilgan asl soʻzlar koʻrinadi.
+`make` buyrugʻi har bir gapni alohida keshlaydi va STT orqali tekshiradi. Natija 97% dan past chiqsa, gap qayta yaratiladi va eng yaxshi urinish saqlanadi. Lugʻat yoki matn oʻzgarsa, faqat oʻzgargan gaplar qayta yaratiladi.
+
+STT bahosi taxminiy. Masalan, "bazasida" soʻzini "bozasida" deb yozadi, chunki bu oʻzbekcha yumaloq "a" tovushi. Shuning uchun lugʻatdagi `candidate` shakllar quloq bilan tinglanib, `approve` buyrugʻi bilan tasdiqlanadi. Studiyada ElevenLabs bilan oʻzbekcha ovoz tanlansa, matn avtomatik shu tizimdan oʻtadi, subtitrda esa yozilgan asl soʻzlar koʻrinadi.
 
 ## Sinxronlash qanday ishlaydi
 

@@ -67,7 +67,8 @@ export async function findVoice(key: string): Promise<{ provider: Provider; voic
  * Synthesize one scene. Uzbek text is sent in the script the voice reads correctly; the returned word
  * timings are mapped back onto the words as the user wrote them (transliteration keeps word count).
  */
-const uzScript = () => (process.env.UZ_SCRIPT === 'cyrillic' ? 'cyrillic' : 'latin') as UzScript;
+// project rule: Uzbek TTS text is Latin only (.claude/skills/uzbek-tts)
+const uzScript = (): UzScript => 'latin';
 
 export async function speak(text: string, voiceKey: string, outBase: string): Promise<SynthResult> {
   const { provider, voice } = await findVoice(voiceKey);

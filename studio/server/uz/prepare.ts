@@ -1,5 +1,6 @@
 // Prepare Uzbek text (Latin, Cyrillic or mixed) for natural literary pronunciation by a TTS model.
-// Rules (kept permanently, see CLAUDE.md):
+// Rules (kept permanently, see CLAUDE.md and .claude/skills/uzbek-tts):
+//  - TTS text is Uzbek Latin only (Cyrillic input is converted to Latin); no English/Russian respelling.
 //  - x = х (deep x) and h = ҳ (soft h) are distinct letters: never swapped, never dropped, never respelled as "ks".
 //  - oʻ = ў, gʻ = ғ, q = қ, sh = ш, ch = ч, ng = нг: handled by the script converter, one letter for one letter.
 //  - Uzbek words are normalised to ONE chosen script; foreign words (Russian, English) are left as written.
@@ -27,7 +28,18 @@ const UZ_LAT = /(oʻ|gʻ|o'|g'|o‘|g‘|sh|ch|ng|q|x)/i;
 const EN_HINT = /(w|c(?!h)|th|ee|oo|tion|ph)/i;
 const EN_WORDS = new Set(['of', 'the', 'and', 'for', 'head', 'engineer', 'manager', 'team', 'design', 'motion', 'video', 'online', 'standard']);
 // Uzbek names of Latin letters, used to spell unknown abbreviations ("KSt" -> "ka es te")
-const LETTER: Record<string, string> = { a: 'a', b: 'be', c: 'se', d: 'de', e: 'e', f: 'ef', g: 'ge', h: 'ha', i: 'i', j: 'je', k: 'ka', l: 'el', m: 'em', n: 'en', o: 'o', p: 'pe', q: 'qu', r: 'er', s: 'es', t: 'te', u: 'u', v: 've', w: 'dabl-yu', x: 'iks', y: 'ye', z: 'ze' };
+// (x is "xa", never English "iks")
+const LETTER: Record<string, string> = { a: 'a', b: 'be', c: 'se', d: 'de', e: 'e', f: 'ef', g: 'ge', h: 'ha', i: 'i', j: 'je', k: 'ka', l: 'el', m: 'em', n: 'en', o: 'o', p: 'pe', q: 'qa', r: 'er', s: 'es', t: 'te', u: 'u', v: 've', w: 've', x: 'xa', y: 'ye', z: 'ze' };
+
+/** Natural pauses come from punctuation: every line and the whole text end with a sentence mark. */
+export function addPauses(text: string): string {
+  return text
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => (/[.!?…:;,]$/.test(l) ? l : l + '.'))
+    .join(' ');
+}
 
 /** Classify one word: Uzbek, Russian or English (heuristic, documented in README). */
 export function wordLang(w: string): Lang {
@@ -55,12 +67,12 @@ const toScript = (w: string, script: UzScript) => {
 };
 
 /**
- * Prepare `text` for TTS in `script`. Lexicon entries win; their `prefer` script is used for that word even
- * inside a sentence of the other script (e.g. "Жиззах" inside Latin text), because that form was tested.
+ * Prepare `text` for TTS (Latin by default; the project rule is Latin only). Lexicon entries win: their tested
+ * spoken form is used (e.g. "Jizzax" -> "Jiz-zax": same letters, a syllable break the model reads correctly).
  */
-export function prepareUzbek(text: string, script: UzScript, lex: Lexicon = loadLexiconSync()): Prepared {
+export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexicon = loadLexiconSync()): Prepared {
   const warnings: string[] = [];
-  const parts = text.split(/(\s+)/);
+  const parts = addPauses(text).split(/(\s+)/);
   const tokens: Token[] = [];
   const outNorm: string[] = [];
   const outTts: string[] = [];
@@ -70,14 +82,17 @@ export function prepareUzbek(text: string, script: UzScript, lex: Lexicon = load
     const m = part.match(/^([^\p{L}\p{N}&]*)(.*?)([^\p{L}\p{N}&ʻʼ'‘’`]*)$/u)!;
     const [, lead, core, trail] = m;
     const key = lexKey(core);
-    const entry = key ? lex.entries[key] : undefined;
+    const hit = key ? lex.entries[key] : undefined;
+    // an ALL-CAPS lexicon entry (IT, HR) only matches ALL-CAPS text: Uzbek "it" (dog) is not "IT"
+    const entry = hit && /^[^a-zʻ]*[A-Z][^a-z]*$/.test(hit.original) && core !== core.toUpperCase() ? undefined : hit;
     const lang = wordLang(core);
     let norm = core, spoken = core, via: Token['via'] = 'keep';
 
     if (entry) {
       norm = script === 'cyrillic' ? entry.cyrillic : entry.latin;
-      spoken = entry.spoken[entry.prefer] ?? entry.spoken[script] ?? norm;
+      spoken = entry.spoken[script] ?? norm;
       via = 'lexicon';
+      if ((entry.kind === 'term' || entry.kind === 'abbr') && spoken !== core) warnings.push(`ℹ ${core} → ${spoken} (lugʻatdagi oʻzbekcha shakl)`);
     } else if (isAbbr(core)) {
       spoken = core.toLowerCase().split('').map((c) => LETTER[c] ?? c).join(' ');
       via = 'abbr';
@@ -90,7 +105,7 @@ export function prepareUzbek(text: string, script: UzScript, lex: Lexicon = load
     }
     // a word with Latin x read in Latin script is the classic "eks" risk: flag it unless the lexicon decided
     if (!entry && via === 'script' && script === 'latin' && /x/i.test(spoken)) {
-      warnings.push(`"${core}": lotincha x — kirill varianti bilan solishtirib tekshiring (npm run uz -- test).`);
+      warnings.push(`"${core}": x harfli soʻz — eshitib tekshiring; "eks" deb oʻqilsa: npm run uz -- word ${core}`);
     }
     tokens.push({ text: core, lang, out: spoken, via });
     outNorm.push(lead + norm + trail);
@@ -100,6 +115,8 @@ export function prepareUzbek(text: string, script: UzScript, lex: Lexicon = load
   const normalized = outNorm.join('');
   const num = expandNumbers(outTts.join(''));
   let tts = num.text;
-  if (script === 'cyrillic') tts = tts.replace(/[A-Za-zʻʼ]+/g, (w) => (wordLang(w) === 'uz' && !Object.values(lex.entries).some((e) => e.spoken.latin === w && e.prefer === 'latin') ? latToCyr(w) : w));
-  return { original: text, script, normalized, tts: tts.replace(/\s+/g, ' ').trim(), tokens, numbers: num.changes, warnings };
+  if (script === 'cyrillic') tts = tts.replace(/[A-Za-zʻʼ]+/g, (w) => (wordLang(w) === 'uz' ? latToCyr(w) : w));
+  // a sentence starts with a capital letter, also when it starts with a spelled-out number
+  tts = tts.replace(/\s+/g, ' ').trim().replace(/(^|[.!?…]\s+)(\p{Ll})/gu, (_, a: string, b: string) => a + b.toUpperCase());
+  return { original: text, script, normalized, tts, tokens, numbers: num.changes, warnings };
 }
