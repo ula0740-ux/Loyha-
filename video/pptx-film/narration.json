@@ -2,12 +2,34 @@
   "voice": "EXAVITQu4vr4xnSDxMaL",
   "model": "eleven_v3",
   "lines": [
-    { "id": "intro", "text": "ADM Jizzax. Ikki ming yigirma oltinchi yil hisoboti." },
-    { "id": "hire", "text": "Yil davomida sakkiz yuz ellik besh nafar xodimni ishga olish rejalashtirildi. Olti yuz sakson besh nafari ishga qabul qilindi." },
-    { "id": "adapt", "text": "Bir yuz oʻttiz ikki nafar yangi xodim moslashtirish dasturidan oʻtdi." },
-    { "id": "reserve", "text": "Zaxira bazasida yigirma sakkizta lavozim boʻyicha bir yuz yetmish ikki nafar nomzod tayyor." },
-    { "id": "leave", "text": "Ishdan ketishning asosiy sababi — oylik maosh. Bu toʻqson olti foizni tashkil etadi." },
-    { "id": "standards", "text": "Eng muhimi: ikki yangi korporativ standart tasdiqlandi." },
-    { "id": "outro", "text": "Shaffof jarayon. Barqaror jamoa. ADM Jizzax." }
-  ]
+    {
+      "id": "intro",
+      "text": "ADM Jizzah. Ikki ming yigirma oltinchi yil hisoboti."
+    },
+    {
+      "id": "hire",
+      "text": "Yil davomida sakkiz yuz ellik besh nafar hodimni ishga olish rejalashtirildi. Olti yuz sakson besh nafari ishga qabul qilindi."
+    },
+    {
+      "id": "adapt",
+      "text": "Bir yuz oʻttiz ikki nafar yangi hodim moslashtirish dasturidan oʻtdi."
+    },
+    {
+      "id": "reserve",
+      "text": "Zahira bazasida yigirma sakkizta lavozim boʻyicha bir yuz yetmish ikki nafar nomzod tayyor."
+    },
+    {
+      "id": "leave",
+      "text": "Ishdan ketishning asosiy sababi — oylik maosh. Bu toʻqson olti foizni tashkil etadi."
+    },
+    {
+      "id": "standards",
+      "text": "Eng muhimi: ikki yangi korporativ standart tasdiqlandi."
+    },
+    {
+      "id": "outro",
+      "text": "Shaffof jarayon. Barqaror jamoa. ADM Jizzah."
+    }
+  ],
+  "note": "TTS uchun fonetik yozuv: 'x' harfini model 'ks' deb o'qiydi, shuning uchun 'h' ishlatilgan (Jizzah, hodim). Ekrandagi yozuv o'zgarmaydi."
 }

@@ -5,7 +5,7 @@
 <title>ADM Jizzax HR 2026</title>
 <style>
   html, body { margin: 0; background: #000; }
-  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b1020;
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #050507;
     font-family: "Inter Display", Inter, sans-serif; color: #fff; }
   #cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
   .layer { position: absolute; inset: 0; overflow: hidden; }
@@ -23,7 +23,7 @@
 <div id="hud"></div>
 <script>
 // ---------- palette (ADM brand from the deck + the reference film's red/blue energy)
-const C = { ink: '#0b1020', navy: '#16224a', deep: '#011c49', red: '#e8262d', steel: '#9BACCA', light: '#EEF1F7', mute: '#5E6678', blue: '#3f5bff', white: '#ffffff' };
+const C = { black: '#050507', ink: '#0b1020', navy: '#16224a', deep: '#011c49', red: '#e8262d', steel: '#9BACCA', light: '#EEF1F7', mute: '#5E6678', blue: '#3f5bff', white: '#ffffff' };
 
 // ---------- math
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -59,16 +59,42 @@ function rise(L, t, tin, tout = 1e9, stag = .06) {
 function tag(parent, text, bg, fg) { const d = el(parent, 'div', { background: bg, color: fg }, text); d.className = 'tag'; return d; }
 function tagShow(d, t, tin, tout) { const p = sp(t - tin, 2.4, .8), q = inn(seg(t, tout, tout + .25)); d.style.transform = `translateX(${(1 - p) * -120 - q * 140}px)`; d.style.opacity = clamp(p * 2) * (1 - q); }
 
+// ---------- black-stage FX: drifting dot grid + slow colour glows (gives depth on black)
+function fx(L, c1, c2) {
+  const grid = el(L, 'div', { position: 'absolute', inset: '-120px', backgroundImage: 'radial-gradient(rgba(255,255,255,.09) 2px, transparent 2.6px)', backgroundSize: '60px 60px' });
+  const g1 = el(L, 'div', { position: 'absolute', width: '1400px', height: '1400px', borderRadius: '50%', background: `radial-gradient(circle, ${c1} 0%, transparent 62%)`, opacity: .55 });
+  const g2 = el(L, 'div', { position: 'absolute', width: '1200px', height: '1200px', borderRadius: '50%', background: `radial-gradient(circle, ${c2} 0%, transparent 62%)`, opacity: .4 });
+  return t => {
+    grid.style.transform = `translate(${(t * 9) % 60}px, ${(t * 14) % 60}px)`;
+    g1.style.transform = `translate(${-500 + Math.sin(t * .35) * 260}px, ${-300 + Math.cos(t * .27) * 220}px)`;
+    g2.style.transform = `translate(${300 + Math.cos(t * .31) * 240}px, ${900 + Math.sin(t * .23) * 260}px)`;
+  };
+}
+/** huge outlined number behind the content */
+function ghost(L, text, top, size = 560) {
+  const g = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: top + 'px', textAlign: 'center', font: `900 ${size}px/1 "Inter Display"`, color: 'transparent', WebkitTextStroke: '3px rgba(155,172,202,.16)', letterSpacing: '-.05em', whiteSpace: 'nowrap' }, text);
+  return (t, t0) => { const k = sp(t - t0, 1.2, .9); g.style.opacity = k; g.style.transform = `translateY(${(1 - k) * 120 - (t - t0) * 6}px) scale(${1.08 - .08 * k})`; };
+}
+/** a light band that sweeps across a text element once (background-clip text) */
+function sheenify(e, base) { Object.assign(e.style, { backgroundImage: `linear-gradient(100deg, ${base} 42%, #ffffff 50%, ${base} 58%)`, backgroundSize: '300% 100%', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }); }
+function sheen(e, t, t0) { const k = io(seg(t, t0, t0 + .7)); e.style.backgroundPosition = `${100 - 100 * k}% 0`; }
+// red ring riding the edge of a circular reveal (on black the reveal itself would be invisible)
+function edgeRing() { return el(cam, 'div', { position: 'absolute', borderRadius: '50%', border: '10px solid #e8262d', zIndex: 60, boxSizing: 'border-box' }); }
+
 // ---------- timeline (built from the narration by timeline.py)
 let TL, S, T;
 const W = (id, i) => S[id].words[i].t;
 
 // ---------- reveal transitions: each scene's layer opens over the previous one
-function revealCircle(L, t, t0, cx, cy, dur = .5) {
+function revealCircle(L, t, t0, cx, cy, dur = .5, ring = null) {
   const R = Math.max(...[[0, 0], [1080, 0], [0, 1920], [1080, 1920]].map(([x, y]) => Math.hypot(x - cx, y - cy))) * 1.04;
   const k = io(seg(t, t0, t0 + dur));
   L.style.clipPath = k >= 1 ? 'none' : `circle(${R * k}px at ${cx}px ${cy}px)`;
   L.style.visibility = t >= t0 ? 'inherit' : 'hidden';
+  if (ring) {
+    const r = R * k + 5, on = k > 0 && k < 1;
+    Object.assign(ring.style, { left: (cx - r) + 'px', top: (cy - r) + 'px', width: 2 * r + 'px', height: 2 * r + 'px', visibility: on ? 'inherit' : 'hidden', borderWidth: (6 + 14 * Math.sin(Math.PI * k)) + 'px' });
+  }
 }
 // three skewed brand bands (red / steel / navy) sweep across; the new scene follows the last band
 const bands = [];
@@ -94,13 +120,16 @@ let scenes = [];
 function build() {
   // ---------------- S0 intro: dot -> line -> red flood -> ADM / JIZZAX -> 2026 rolls -> photo
   {
-    const L = layer(C.ink);
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(232,38,45,.45)', 'rgba(63,91,255,.35)');
+    const ghostY = ghost(L, '2026', 690, 520);
     const dot = el(L, 'div', { position: 'absolute', background: C.white, borderRadius: '99px' });
     const red = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', background: C.red });
+    const stripes = [0, 1, 2].map(i => el(L, 'div', { position: 'absolute', width: '900px', height: (i === 1 ? 30 : 70) + 'px', background: i === 1 ? C.white : C.red, transform: 'rotate(-28deg)', transformOrigin: '0 0', zIndex: 2 }));
     const photoWrap = el(L, 'div', { position: 'absolute', left: 0, top: 0, width: '1080px', height: '1920px' });
     const photo = el(photoWrap, 'img', { position: 'absolute', left: '-40px', top: '1080px', width: '1160px', height: '928px', objectFit: 'cover' });
     photo.src = 'assets/hero.png';
-    const adm = line(L, 'ADM', { top: '250px', font: '900 330px/1 "Inter Display"', letterSpacing: '-.02em', zIndex: 3 });
+    const adm = line(L, 'ADM', { top: '250px', font: '900 330px/1 "Inter Display"', letterSpacing: '-.02em', zIndex: 3, color: C.red });
     const jz = line(L, 'J I Z Z A X', { top: '590px', font: '700 92px/1 "Inter Display"', letterSpacing: '.1em', zIndex: 3 });
     const yr = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '730px', height: '300px', display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 3 });
     const digits = [2, 0, 2, 6].map(() => { const box = el(yr, 'div', { width: '190px', height: '300px', overflow: 'hidden', position: 'relative' }); const col = el(box, 'div', { position: 'absolute', left: 0, top: 0, width: '190px', font: '900 300px/300px "Inter Display"', textAlign: 'center', color: C.white }); col.innerHTML = [...Array(20)].map((_, i) => `<div>${i % 10}</div>`).join(''); return col; });
@@ -113,9 +142,17 @@ function build() {
       dot.style.width = W0 + 'px'; dot.style.height = (26 * d) + 'px';
       dot.style.left = (540 - W0 / 2) + 'px'; dot.style.top = (960 - 13 * d) + 'px';
       dot.style.visibility = t < 1.3 ? 'inherit' : 'hidden';
-      const H = lerp(14, 1920, fl);
-      red.style.top = (960 - H / 2) + 'px'; red.style.height = H + 'px';
+      // the line flashes red, then settles as the underline between ADM and JIZZAX
+      F(t);
+      const up = io(seg(t, .95, 1.35));
+      const H = lerp(14, 18, up), Y = lerp(960, 575, up), Wd = lerp(860, 620, up) * (1 - .0 * up);
+      red.style.top = (Y - H / 2) + 'px'; red.style.height = H + 'px'; red.style.width = Wd + 'px'; red.style.left = (540 - Wd / 2) + 'px'; red.style.borderRadius = '9px';
       red.style.visibility = t >= .95 ? 'inherit' : 'hidden';
+      ghostY(t, W('intro', 2));
+      stripes.forEach((st, i) => {
+        const k = io(seg(t, W('intro', 2) - .1 + i * .08, W('intro', 2) + .6 + i * .08));
+        st.style.left = (lerp(1250, 620, k) + i * 70) + 'px'; st.style.top = (lerp(1700, 1270, k) + i * 60) + 'px';
+      });
       rise(adm, t, W('intro', 0), 1e9, .08);
       rise(jz, t, W('intro', 1), 1e9, .03);
       // year rolls in digit by digit while "ikki ming yigirma oltinchi" is spoken
@@ -137,7 +174,10 @@ function build() {
 
   // ---------------- S1 hire: ring progress 685 / 855, monthly bars
   {
-    const L = layer(C.navy);
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(63,91,255,.40)', 'rgba(232,38,45,.30)');
+    const gh = ghost(L, '855', 560, 600);
+    const ring1 = edgeRing();
     const tg = tag(L, '01 · ISHGA QABUL', C.red, C.white);
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('width', 1080); svg.setAttribute('height', 1920); svg.style.position = 'absolute'; L.appendChild(svg);
@@ -147,7 +187,7 @@ function build() {
     const track = mk('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: 'rgba(155,172,202,.22)', 'stroke-width': 44 });
     const arc = mk('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: C.red, 'stroke-width': 44, 'stroke-linecap': 'round', transform: `rotate(-90 ${CX} ${CY})`, 'stroke-dasharray': `0 ${2 * Math.PI * R}` });
     const plan = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '600px', textAlign: 'center', font: '700 46px "Inter Display"', color: C.steel, letterSpacing: '.08em' }, 'REJA: <span class="num" id="plan">855</span>');
-    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '670px', textAlign: 'center', font: '900 230px/1 "Inter Display"', letterSpacing: '-.03em' }); big.className = 'num';
+    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '670px', textAlign: 'center', font: '900 230px/1 "Inter Display"', letterSpacing: '-.03em' }); big.className = 'num'; sheenify(big, C.white);
     const lbl = line(L, 'ISHGA OLINDI', { top: '905px', font: '700 44px "Inter Display"', letterSpacing: '.12em', color: C.white });
     const pct = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1215px', textAlign: 'center', font: '900 150px/1 "Inter Display"' }, '80,1<span style="font-size:.55em">%</span>');
     const pctL = line(L, 'REJA BAJARILDI', { top: '1375px', font: '700 40px "Inter Display"', letterSpacing: '.14em', color: C.steel });
@@ -165,8 +205,11 @@ function build() {
     const legend = el(L, 'div', { position: 'absolute', left: '80px', top: '1430px', font: '600 26px Inter', color: C.steel }, '<span style="color:#9BACCA">■</span> Reja &nbsp; <span style="color:#e8262d">■</span> Bajarildi &nbsp; · oyma-oy, nafar');
     scenes.push(t => {
       const s = S.hire;
-      revealCircle(L, t, s.start - .25, 540, 960, .55);
+      revealCircle(L, t, s.start - .25, 540, 960, .55, ring1);
       if (t > S.adapt.start + .6) L.style.visibility = 'hidden';
+      F(t); gh(t, s.start + .2);
+      L.style.transform = `scale(${1 + .03 * seg(t, s.start, s.end)})`;
+      sheen(big, t, W('hire', 11) + 1.6);
       tagShow(tg, t, s.start + .25, S.adapt.start - .2);
       const rot = (t - s.start) * 14;
       rings.forEach((r, i) => { const k = sp(t - s.start - .1 - i * .08, 1.6, .8); r.setAttribute('transform', `rotate(${(i % 2 ? -1 : 1) * rot * (1 + i * .3)} ${CX} ${CY})`); r.setAttribute('r', [390, 430, 470][i] * (0.6 + .4 * k)); r.setAttribute('opacity', .5 * k); });
@@ -196,24 +239,30 @@ function build() {
 
   // ---------------- S2 adapt: light scene, 132 + three stage pillars
   {
-    const L = layer(C.light); L.style.color = C.navy;
-    const tg = tag(L, '02 · MOSLASHTIRISH', C.navy, C.white);
-    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '300px', textAlign: 'center', font: '900 300px/1 "Inter Display"', letterSpacing: '-.04em', color: C.navy }); big.className = 'num';
-    const l1 = line(L, 'yangi xodim', { top: '620px', font: '700 70px "Inter Display"', color: C.navy });
-    const l2 = line(L, 'moslashtirish dasturidan oʻtdi', { top: '715px', font: '500 46px "Inter Display"', color: C.mute });
-    const data = [['1-hafta', 44, C.navy], ['1 oy', 51, C.red], ['2 oy', 37, C.steel]];
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(155,172,202,.30)', 'rgba(232,38,45,.30)');
+    const gh = ghost(L, '132', 250, 620);
+    const ring2 = edgeRing();
+    const tg = tag(L, '02 · MOSLASHTIRISH', C.white, C.black);
+    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '300px', textAlign: 'center', font: '900 300px/1 "Inter Display"', letterSpacing: '-.04em' }); big.className = 'num'; sheenify(big, C.white);
+    const l1 = line(L, 'yangi xodim', { top: '620px', font: '700 70px "Inter Display"', color: C.white });
+    const l2 = line(L, 'moslashtirish dasturidan oʻtdi', { top: '715px', font: '500 46px "Inter Display"', color: C.steel });
+    const data = [['1-hafta', 44, C.white], ['1 oy', 51, C.red], ['2 oy', 37, C.steel]];
     const cols = data.map(([lab, v, c], i) => {
       const x = 140 + i * 290;
       const bar = el(L, 'div', { position: 'absolute', left: x + 'px', width: '220px', bottom: '330px', background: c, borderRadius: '30px 30px 8px 8px' });
-      const val = el(L, 'div', { position: 'absolute', left: x + 'px', width: '220px', textAlign: 'center', font: '900 92px "Inter Display"', color: c === C.steel ? C.navy : c }, String(v));
-      const cap = el(L, 'div', { position: 'absolute', left: (x - 20) + 'px', width: '260px', bottom: '250px', textAlign: 'center', font: '700 40px "Inter Display"', color: C.navy }, lab);
+      const val = el(L, 'div', { position: 'absolute', left: x + 'px', width: '220px', textAlign: 'center', font: '900 92px "Inter Display"', color: c }, String(v));
+      const cap = el(L, 'div', { position: 'absolute', left: (x - 20) + 'px', width: '260px', bottom: '250px', textAlign: 'center', font: '700 40px "Inter Display"', color: C.white }, lab);
       return { bar, val, cap, v };
     });
-    const note = el(L, 'div', { position: 'absolute', left: '80px', right: '80px', bottom: '140px', textAlign: 'center', font: '500 34px Inter', color: C.mute }, 'Moslashtirish davrida ishdan ketganlar: <b style="color:#16224a">7 nafar</b>');
+    const note = el(L, 'div', { position: 'absolute', left: '80px', right: '80px', bottom: '140px', textAlign: 'center', font: '500 34px Inter', color: C.steel }, 'Moslashtirish davrida ishdan ketganlar: <b style="color:#fff">7 nafar</b>');
     scenes.push(t => {
       const s = S.adapt;
-      revealCircle(L, t, s.start - .25, 540, 790, .55);
+      revealCircle(L, t, s.start - .25, 540, 790, .55, ring2);
       if (t > S.reserve.start + .8) L.style.visibility = 'hidden';
+      F(t); gh(t, s.start + .2);
+      L.style.transform = `scale(${1 + .03 * seg(t, s.start, s.end)})`;
+      sheen(big, t, s.vo + .9);
       tagShow(tg, t, s.start + .2, S.reserve.start - .2);
       const k = io(seg(fq(t), s.vo - .1, s.vo + .9));
       big.textContent = fmt(132 * k); big.style.opacity = clamp((t - s.vo + .2) * 5);
@@ -234,9 +283,10 @@ function build() {
 
   // ---------------- S3 reserve: 172 dots fly into a grid, coloured by direction
   {
-    const L = layer(C.ink);
-    const tg = tag(L, '03 · ZAXIRA BAZASI', C.white, C.ink);
-    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '250px', textAlign: 'center', font: '900 240px/1 "Inter Display"', letterSpacing: '-.04em' }); big.className = 'num';
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(63,91,255,.40)', 'rgba(232,38,45,.35)');
+    const tg = tag(L, '03 · ZAXIRA BAZASI', C.white, C.black);
+    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '250px', textAlign: 'center', font: '900 240px/1 "Inter Display"', letterSpacing: '-.04em' }); big.className = 'num'; sheenify(big, C.white);
     const nm = line(L, 'NOMZOD', { top: '495px', font: '800 56px "Inter Display"', letterSpacing: '.2em' });
     const pos = el(L, 'div', { position: 'absolute', left: '50%', top: '590px', transform: 'translateX(-50%)', background: C.red, borderRadius: '99px', padding: '12px 30px', font: '800 40px "Inter Display"', whiteSpace: 'nowrap' }, '28 ta lavozim');
     const groups = [['Muhandislik', 50, C.red], ['Texnik xizmat', 43, C.white], ['IT va raqamli', 31, C.blue], ['Yordamchi', 26, C.steel], ['Boshqa', 22, C.mute]];
@@ -253,6 +303,7 @@ function build() {
       const s = S.reserve;
       const rb = revealBands(L, t, s.start - .45);
       if (t > S.leave.start + .7) L.style.visibility = 'hidden';
+      F(t); sheen(big, t, W('reserve', 6) + 1.1);
       tagShow(tg, t, s.start + .3, S.leave.start - .2);
       const go = s.start + .2;
       const suck = io(seg(t, S.leave.start - .55, S.leave.start + .05)); // dots pulled into the centre before the next scene
@@ -273,24 +324,30 @@ function build() {
 
   // ---------------- S4 leave: red, OYLIK / MAOSH chunky type, 96% slam + bar
   {
-    const L = layer(C.red);
-    const tg = tag(L, '04 · ISHDAN KETISH', C.ink, C.white);
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(232,38,45,.55)', 'rgba(232,38,45,.25)');
+    const gh = ghost(L, '96', 900, 760);
+    const ring4 = edgeRing();
+    const tg = tag(L, '04 · ISHDAN KETISH', C.red, C.white);
     const as = line(L, 'ASOSIY SABAB', { top: '330px', font: '700 54px "Inter Display"', letterSpacing: '.18em', color: 'rgba(255,255,255,.8)' });
     const o1 = line(L, 'OYLIK', { top: '420px', font: '900 228px/1 "Inter Display"', letterSpacing: '-.03em' });
     const o2 = line(L, 'MAOSH', { top: '650px', font: '900 228px/1 "Inter Display"', letterSpacing: '-.03em' });
-    const dotM = el(L, 'div', { position: 'absolute', width: '58px', height: '58px', borderRadius: '50%', background: C.ink, left: '900px', top: '812px' });
+    const dotM = el(L, 'div', { position: 'absolute', width: '58px', height: '58px', borderRadius: '50%', background: C.red, left: '900px', top: '812px' });
     // a row of people-dots that leave one by one while "ishdan ketishning asosiy sababi" is spoken
     const ppl = [...Array(10)].map((_, i) => el(L, 'div', { position: 'absolute', width: '64px', height: '64px', borderRadius: '50%', background: C.white, left: (135 + i * 84) + 'px', top: '640px' }));
-    const p96 = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1010px', textAlign: 'center', font: '900 380px/1 "Inter Display"', color: C.ink, letterSpacing: '-.05em' }, '96%');
-    const track = el(L, 'div', { position: 'absolute', left: '90px', width: '900px', top: '1440px', height: '34px', borderRadius: '99px', background: 'rgba(255,255,255,.35)', overflow: 'hidden' });
-    const fill = el(track, 'div', { height: '100%', width: '0', background: C.white, borderRadius: '99px' });
+    const p96 = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1010px', textAlign: 'center', font: '900 380px/1 "Inter Display"', letterSpacing: '-.05em' }, '96%'); sheenify(p96, C.red);
+    const track = el(L, 'div', { position: 'absolute', left: '90px', width: '900px', top: '1440px', height: '34px', borderRadius: '99px', background: 'rgba(255,255,255,.14)', overflow: 'hidden' });
+    const fill = el(track, 'div', { height: '100%', width: '0', background: C.red, borderRadius: '99px' });
     const cap = el(L, 'div', { position: 'absolute', left: '90px', top: '1500px', font: '700 38px "Inter Display"' }, 'Oylik maosh yetishmasligi');
     const rest = el(L, 'div', { position: 'absolute', left: '90px', top: '1580px', width: '900px', font: '500 30px Inter', color: 'rgba(255,255,255,.85)', lineHeight: '1.7' },
       'Boshqa ish topgani — 1%<br>Ishga kelmagani — 1%<br>Sogʻligʻi toʻgʻri kelmagani — 1%');
     scenes.push(t => {
       const s = S.leave;
-      revealCircle(L, t, s.start - .2, 540, 1100, .5);
+      revealCircle(L, t, s.start - .2, 540, 1100, .5, ring4);
       if (t > S.standards.start + .8) L.style.visibility = 'hidden';
+      F(t); gh(t, W('leave', 8));
+      L.style.transform = `scale(${1 + .03 * seg(t, s.start, s.end)})`;
+      sheen(p96, t, W('leave', 8) + .35);
       tagShow(tg, t, s.start + .2, S.standards.start - .2);
       rise(as, t, W('leave', 0), 1e9, .05);
       ppl.forEach((d, i) => {
@@ -298,7 +355,7 @@ function build() {
         const k = sp(t - tin, 2.4, .7), q = inn(seg(t, tout, tout + .45)), gone = seg(t, W('leave', 5) - .3, W('leave', 5));
         d.style.transform = `translateY(${(1 - k) * 80 + q * 260}px) scale(${k * (1 - .4 * q)})`;
         d.style.opacity = (i % 3 === 1 ? 1 - q : 1 - .7 * q) * (1 - gone);
-        d.style.background = i === 4 || i === 7 ? C.ink : C.white;
+        d.style.background = i === 4 || i === 7 ? C.red : C.white;
       });
       rise(o1, t, W('leave', 5));
       rise(o2, t, W('leave', 6));
@@ -314,7 +371,8 @@ function build() {
 
   // ---------------- S5 standards: two documents fly in, red seal slams "TASDIQLANDI"
   {
-    const L = layer(C.navy);
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(63,91,255,.35)', 'rgba(232,38,45,.35)');
     const tg = tag(L, '05 · NORMATIV ASOS', C.red, C.white);
     const head = line(L, 'IKKI MUHIM STANDART', { top: '290px', font: '900 80px/1 "Inter Display"', letterSpacing: '-.01em' });
     const card = (code, title, d1, d2) => {
@@ -336,6 +394,7 @@ function build() {
       const s = S.standards;
       const rb = revealBands(L, t, s.start - .45);
       if (t > S.outro.start + .8) L.style.visibility = 'hidden';
+      F(t);
       tagShow(tg, t, s.start + .25, S.outro.start - .2);
       rise(head, t, s.vo, S.outro.start - .3, .07);
       const fly = io(seg(t, S.outro.start - .5, S.outro.start + .1));
@@ -355,17 +414,20 @@ function build() {
 
   // ---------------- S6 outro: rings, two short slogans, logo lockup
   {
-    const L = layer(C.deep);
+    const L = layer(C.black);
+    const F = fx(L, 'rgba(232,38,45,.35)', 'rgba(63,91,255,.35)');
+    const ring6 = edgeRing();
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('width', 1080); svg.setAttribute('height', 1920); svg.style.position = 'absolute'; L.appendChild(svg);
     const rings = [...Array(6)].map((_, i) => { const e = document.createElementNS(svgNS, 'circle'); e.setAttribute('cx', 540); e.setAttribute('cy', 900); e.setAttribute('fill', 'none'); e.setAttribute('stroke', [C.red, C.steel, C.white][i % 3]); e.setAttribute('stroke-width', 3); svg.appendChild(e); return e; });
     const a = line(L, 'SHAFFOF JARAYON.', { top: '840px', font: '900 94px/1 "Inter Display"', letterSpacing: '-.02em' });
     const b = line(L, 'BARQAROR JAMOA.', { top: '840px', font: '900 94px/1 "Inter Display"', letterSpacing: '-.02em', color: C.red });
-    const logo = el(L, 'img', { position: 'absolute', left: '240px', top: '640px', width: '600px', height: '471px', borderRadius: '24px' }); logo.src = 'assets/logo.png';
+    const logo = el(L, 'img', { position: 'absolute', left: '240px', top: '640px', width: '600px', height: '471px', borderRadius: '28px', boxShadow: '0 0 0 2px rgba(232,38,45,.6), 0 30px 120px rgba(232,38,45,.35)' }); logo.src = 'assets/logo.png';
     const sub = line(L, '2026 · HR FAOLIYATI', { top: '1190px', font: '700 44px "Inter Display"', letterSpacing: '.16em', color: C.steel });
     scenes.push(t => {
       const s = S.outro;
-      revealCircle(L, t, s.start - .25, 540, 900, .55);
+      revealCircle(L, t, s.start - .25, 540, 900, .55, ring6);
+      F(t);
       rings.forEach((r, i) => {
         const ph = ((((t - s.start) * .35 + i / 6) % 1) + 1) % 1;
         r.setAttribute('r', 120 + ph * 1100); r.setAttribute('opacity', (1 - ph) * .45 * clamp((t - s.start) * 2));

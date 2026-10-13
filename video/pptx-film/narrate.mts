@@ -12,8 +12,12 @@ const cfg = JSON.parse(await readFile(HERE + 'narration.json', 'utf8'));
 const voice = process.env.VOICE || cfg.voice;
 await mkdir(HERE + 'audio', { recursive: true });
 
-const timing: Record<string, { duration: number; words: { text: string; start: number; end: number }[] }> = {};
+// ONLY=id1,id2 re-records just those lines and keeps the rest of timing.json
+const only = (process.env.ONLY || '').split(',').filter(Boolean);
+let timing: Record<string, { duration: number; words: { text: string; start: number; end: number }[] }> = {};
+if (only.length) timing = JSON.parse(await readFile(HERE + 'audio/timing.json', 'utf8'));
 for (const line of cfg.lines) {
+  if (only.length && !only.includes(line.id)) continue;
   const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice}/with-timestamps?output_format=mp3_44100_128`, {
     method: 'POST',
     headers: { 'xi-api-key': process.env.ELEVENLABS_API_KEY!, 'Content-Type': 'application/json' },
