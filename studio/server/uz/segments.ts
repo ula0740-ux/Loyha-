@@ -7,7 +7,7 @@ import { existsSync } from 'node:fs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { dirname, join, resolve } from 'node:path';
-import { prepareUzbek, addPauses } from './prepare.ts';
+import { prepareUzbek, addPauses, spokenReference } from './prepare.ts';
 import { synth, transcribe, score, DEFAULT_MODEL, DEFAULT_VOICE, MODEL_CAPS, type Score } from './eleven.ts';
 import { loadLexicon } from './lexicon.ts';
 
@@ -67,7 +67,7 @@ export async function makeNarration(text: string, out: string, o: MakeOpts = {})
     for (let k = 0; k < (o.check === false ? 1 : o.attempts ?? 3); k++) {
       takes++;
       const s = await synth(tts, { voice, model, ...ctx });
-      const sc = o.check === false ? undefined : score(tts, await transcribe(s.mp3));
+      const sc = o.check === false ? undefined : score(spokenReference(sentence), await transcribe(s.mp3));
       if (!best || (sc && best.sc && sc.similarity > best.sc.similarity)) best = { mp3: s.mp3, sc };
       if (!sc || sc.similarity >= (o.min ?? 0.97)) break;
     }

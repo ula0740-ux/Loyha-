@@ -12,7 +12,8 @@ Talk to the user in Uzbek. Code is in `studio/server/uz/`, the lexicon is `studi
 ## 1. Language and pronunciation
 - Text sent to TTS is **Uzbek Latin only**. Cyrillic input is converted to Latin. Never send Cyrillic, and never respell words to imitate English or Russian pronunciation.
 - Do not let the model read Uzbek words as English letter names. Abbreviations use Uzbek letter names (x = "xa", q = "qa"), or better, their lexicon expansion.
-- **x** is the deep Uzbek x and must never come out as "eks". **h** is the soft h and must never be dropped. **x and h are never swapped** ("Jizzah", "hodim" are wrong spellings).
+- **x** is the deep Uzbek (throat) x and must never come out as "eks". **h** is the soft h and must never be dropped. **x and h are never swapped** ("Jizzah", "hodim" are wrong spellings).
+- **The user's choice by ear (2026-10-13): in the spoken form, x becomes "kh"** ("Jizzax xodimlariga xayr" → "Jizzakh khodimlariga khayr") on `eleven_v4` with `language_code: "uz"`. `prepareUzbek` does this automatically (`xToKh`; `UZ_X_KH=0` turns it off). The written text and captions keep x. Never send a plain "h" for x.
 - Keep oʻ, gʻ, sh, ch and ng exactly as written. Syllable breaks never split a digraph.
 
 ## 2. Preparing the text (`prepareUzbek`, always)
@@ -23,7 +24,9 @@ Talk to the user in Uzbek. Code is in `studio/server/uz/`, the lexicon is `studi
 - Never change or remove a word's letters on your own. A lexicon `word` entry may only add a syllable hyphen (`sameLetters` enforces this). For example, "Jiz-zax" and "Ax-borot" were tested and are read correctly.
 
 ## 3. ElevenLabs
-- Model `eleven_v3`, the default, gave the best Uzbek in our STT tests. `eleven_v4` accepts `language_code: "uz"` but scored worse (ADM → "adiyam", Axborot → "aksborot").
+- Default model: **`eleven_v4`** with `language_code: "uz"` plus x → kh. The user picked this by ear from 6 variants (v3/v4/multilingual_v2 × x/kh/Cyrillic). STT had rated plain-x v3 as "correct", but the user heard "eks". **The user's ear decides; STT is only a helper.**
+- On v4, always send the neighbouring sentences as `previous_text`/`next_text`. Without them, short lines ("Shaffof jarayon. Barqaror jamoa.") can come out with a Persian accent; STT then writes Arabic script. `segments.ts` and `narrate.mts` already do this.
+- ADM on v4: "ADM" is read as "adiyam". The lexicon form "A-de-em" is heard as "ADM".
 - Only send parameters the model accepts. `ttsBody()` and `MODEL_CAPS` encode the tested facts:
   - `language_code` → v4 only;
   - `previous_text`/`next_text` → v4 and multilingual_v2, not v3;
@@ -39,8 +42,10 @@ Talk to the user in Uzbek. Code is in `studio/server/uz/`, the lexicon is `studi
   - it writes `out/a.json` with each sentence's score and problems.
 - `npm run uz -- redo out/a.json 2,4` regenerates only those sentences. After a lexicon fix, `make` also regenerates only the sentences whose prepared text changed.
 - `npm run uz -- word Soʻz [--takes 3]` tests the plain word plus syllable forms in a carrier sentence and saves the best as a `candidate`. The user listens, then `lexicon approve`.
-- Known artefacts of the STT ear, which are not errors: the rounded a (bazasida → "bozasida") and a final f heard as "v".
-- Films: `video/pptx-film/narrate.mts` follows the same pattern (prepareUzbek; up to 4 takes per line with an STT check; `ONLY=id` re-records single lines).
+- The STT reference is `spokenReference(text)`: the plain written words, numbers in words, x as x. Lexicon spellings ("A-de-em", "Jizzakh") therefore do not count as errors.
+- Known artefacts of the STT ear, which are not errors: the rounded a (bazasida → "bozasida"), a final f heard as "v", Zaxira → "zahira", and a final kh sometimes written as "q".
+- Films: `video/pptx-film/narrate.mts` follows the same pattern (prepareUzbek with x→kh; context sentences; up to 4 takes per line with an STT check; `ONLY=id` re-records single lines).
+- When the user says a sound is still wrong, do not trust STT. Generate a few clearly labelled variants (model × spelling) of their exact sentence, send them, and let the user choose. Then make that choice the default and record it here.
 
 ## Secrets
 Never print or commit `ELEVENLABS_API_KEY`. It comes only from the environment or `studio/.env` (gitignored).

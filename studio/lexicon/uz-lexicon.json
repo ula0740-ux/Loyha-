@@ -1,17 +1,17 @@
 {
-  "_about": "Oʻzbekcha talaffuz lugʻati (faqat lotin yozuvi). key = kichik harfli lotin kalit. spoken.latin = TTS ga yuboriladigan shakl. kind: word (oʻzbekcha soʻz — harflari oʻzgarmaydi, faqat boʻgʻin chizigʻi qoʻshilishi mumkin), term (chet atama — oʻzbekcha muqobili), abbr (qisqartma — soʻz bilan). status: approved (quloq bilan tasdiqlangan) | candidate (STT testi). x va h hech qachon almashtirilmaydi.",
+  "_about": "Oʻzbekcha talaffuz lugʻati (faqat lotin yozuvi). key = kichik harfli lotin kalit. spoken.latin = TTS ga yuboriladigan shakl. kind: word (oʻzbekcha soʻz — harflari oʻzgarmaydi, faqat boʻgʻin chizigʻi qoʻshilishi mumkin), term (chet atama — oʻzbekcha muqobili), abbr (qisqartma — soʻz bilan). status: approved (quloq bilan tasdiqlangan) | candidate (STT testi). x va h hech qachon almashtirilmaydi. Ovozga yuborishda x avtomatik 'kh' boʻladi (chuqur boʻgʻiz x; yozuv oʻzgarmaydi).",
   "entries": {
     "adm": {
       "original": "ADM",
       "latin": "ADM",
       "cyrillic": "АДМ",
       "spoken": {
-        "latin": "ADM",
+        "latin": "A-de-em",
         "cyrillic": "АДМ"
       },
       "prefer": "latin",
-      "status": "approved",
-      "notes": "Foydalanuvchi videoda 'ADM' oʻqilishini maʼqul koʻrgan.",
+      "status": "candidate",
+      "notes": "eleven_v4: 'ADM' -> 'adiyam'; 'A-de-em' -> 'ADM' (STT). Oʻzbekcha harf nomlari bilan.",
       "kind": "abbr"
     },
     "aj": {
@@ -32,15 +32,14 @@
       "latin": "Axborot",
       "cyrillic": "Ахборот",
       "spoken": {
-        "latin": "Ax-borot",
-        "cyrillic": "Ахборот"
+        "latin": "Axborot"
       },
       "prefer": "latin",
       "status": "candidate",
       "kind": "word",
       "score": 1,
       "testedAt": "2026-10-13T06:53:59.516Z",
-      "notes": "eleven_v3: 'Axborot' gap boshida 'aksborot' (3 dan 2); 'Ax-borot' 3/3 toʻgʻri. eleven_v4 da ikkalasi ham yomon."
+      "notes": "eleven_v4 da x -> kh bilan 'Akhborot' deb yuboriladi. v3 da 'Ax-borot' sinalgan edi."
     },
     "deadline": {
       "original": "deadline",
@@ -121,13 +120,13 @@
       "latin": "Jizzax",
       "cyrillic": "Жиззах",
       "spoken": {
-        "latin": "Jiz-zax",
+        "latin": "Jizzax",
         "cyrillic": "Жиззах"
       },
       "prefer": "latin",
-      "status": "candidate",
+      "status": "approved",
       "score": 1.0,
-      "notes": "eleven_v3 (Sarah), STT: gap ichida 'ADM Jizzax' 1/8 toʻgʻri (jezaks, jazax, jazaks); 'ADM Jiz-zax' 4/4 toʻgʻri (film intro/outro, carrier). Harflar oʻzgarmagan — faqat boʻgʻin chizigʻi. eleven_v4 dan ham yaxshiroq.",
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-10-13): eleven_v4 + language_code uz, ovozga 'Jizzakh' (x -> kh avtomatik). Avvalgi v3 sinovlari: 'Jizzax' -> 'jezaks'.",
       "kind": "word",
       "testedAt": "2026-10-13"
     },

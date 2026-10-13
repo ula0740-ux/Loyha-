@@ -1,6 +1,6 @@
 {
   "voice": "EXAVITQu4vr4xnSDxMaL",
-  "model": "eleven_v3",
+  "model": "eleven_v4",
   "lines": [
     {
       "id": "intro",

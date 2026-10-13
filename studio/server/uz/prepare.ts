@@ -31,6 +31,9 @@ const EN_WORDS = new Set(['of', 'the', 'and', 'for', 'head', 'engineer', 'manage
 // (x is "xa", never English "iks")
 const LETTER: Record<string, string> = { a: 'a', b: 'be', c: 'se', d: 'de', e: 'e', f: 'ef', g: 'ge', h: 'ha', i: 'i', j: 'je', k: 'ka', l: 'el', m: 'em', n: 'en', o: 'o', p: 'pe', q: 'qa', r: 'er', s: 'es', t: 'te', u: 'u', v: 've', w: 've', x: 'xa', y: 'ye', z: 'ze' };
 
+/** Spoken form of the Uzbek deep x for the TTS model: x -> kh, X -> Kh (KH in an all-caps word). */
+export const xToKh = (w: string) => w.replace(/x/g, 'kh').replace(/X(?=[A-Z]|$)/g, 'KH').replace(/X/g, 'Kh');
+
 /** Natural pauses come from punctuation: every line and the whole text end with a sentence mark. */
 export function addPauses(text: string): string {
   return text
@@ -70,7 +73,8 @@ const toScript = (w: string, script: UzScript) => {
  * Prepare `text` for TTS (Latin by default; the project rule is Latin only). Lexicon entries win: their tested
  * spoken form is used (e.g. "Jizzax" -> "Jiz-zax": same letters, a syllable break the model reads correctly).
  */
-export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexicon = loadLexiconSync()): Prepared {
+export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexicon = loadLexiconSync(), opts: { xAsKh?: boolean; keepAbbr?: boolean } = {}): Prepared {
+  const xAsKh = opts.xAsKh ?? process.env.UZ_X_KH !== '0';
   const warnings: string[] = [];
   const parts = addPauses(text).split(/(\s+)/);
   const tokens: Token[] = [];
@@ -93,7 +97,7 @@ export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexi
       spoken = entry.spoken[script] ?? norm;
       via = 'lexicon';
       if ((entry.kind === 'term' || entry.kind === 'abbr') && spoken !== core) warnings.push(`ℹ ${core} → ${spoken} (lugʻatdagi oʻzbekcha shakl)`);
-    } else if (isAbbr(core)) {
+    } else if (isAbbr(core) && !opts.keepAbbr) {
       spoken = core.toLowerCase().split('').map((c) => LETTER[c] ?? c).join(' ');
       via = 'abbr';
       warnings.push(`Lugʻatda yoʻq qisqartma harflab oʻqiladi: ${core} → ${spoken} (npm run uz -- lexicon add ${core} ...)`);
@@ -103,10 +107,9 @@ export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexi
     } else if (lang === 'ru' || lang === 'en') {
       warnings.push(`Oʻzbekcha boʻlmagan soʻz oʻzgarishsiz qoldi (${lang}): ${core}`);
     }
-    // a word with Latin x read in Latin script is the classic "eks" risk: flag it unless the lexicon decided
-    if (!entry && via === 'script' && script === 'latin' && /x/i.test(spoken)) {
-      warnings.push(`"${core}": x harfli soʻz — eshitib tekshiring; "eks" deb oʻqilsa: npm run uz -- word ${core}`);
-    }
+    // deep x: the model reads Latin "x" as "eks"; "kh" gives the throat sound (chosen by ear by the user, 2026-10-13,
+    // eleven_v4 + language_code uz). Spoken form only; the written text keeps x. x is never turned into h.
+    if (script === 'latin' && xAsKh && via !== 'keep') spoken = xToKh(spoken);
     tokens.push({ text: core, lang, out: spoken, via });
     outNorm.push(lead + norm + trail);
     outTts.push(lead + spoken + trail);
@@ -119,4 +122,10 @@ export function prepareUzbek(text: string, script: UzScript = 'latin', lex: Lexi
   // a sentence starts with a capital letter, also when it starts with a spelled-out number
   tts = tts.replace(/\s+/g, ' ').trim().replace(/(^|[.!?…]\s+)(\p{Ll})/gu, (_, a: string, b: string) => a + b.toUpperCase());
   return { original: text, script, normalized, tts, tokens, numbers: num.changes, warnings };
+}
+
+/** What a listener should hear, written plainly: Latin, numbers in words, abbreviations as written, x as x.
+ *  Used as the STT reference so lexicon spellings ("A-de-em", "Jizzakh") are not counted as errors. */
+export function spokenReference(text: string): string {
+  return prepareUzbek(text, 'latin', { entries: {} }, { xAsKh: false, keepAbbr: true }).tts;
 }

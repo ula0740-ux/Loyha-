@@ -59,9 +59,9 @@ test('word language detection', () => {
 test('Latin text: lexicon word uses its tested Latin form (same letters), numbers spoken', () => {
   const p = prepareUzbek('ADM Jizzax: 685 nafar xodim, 80,1%.', 'latin', LEX);
   assert.equal(p.original, 'ADM Jizzax: 685 nafar xodim, 80,1%.');
-  assert.equal(p.tts, 'ADM Jiz-zax: olti yuz sakson besh nafar xodim, sakson butun oʻndan bir foiz.');
+  assert.equal(p.tts, 'ADM Jiz-zakh: olti yuz sakson besh nafar khodim, sakson butun oʻndan bir foiz.');
   assert.ok(!/[Ѐ-ӿ]/.test(p.tts), 'Latin only');
-  assert.ok(p.tts.includes('xodim'), 'x must stay x');
+  assert.ok(p.tts.includes('khodim'), 'x is spoken as kh, never h');
 });
 
 test('Cyrillic target: mixed input is normalised to one script, original kept', () => {
@@ -79,16 +79,16 @@ test('Russian words are kept as written and reported', () => {
 
 test('abbreviations vs capitalised words', () => {
   const p = prepareUzbek('KST XODIM', 'latin', { entries: {} });
-  assert.equal(p.tts, 'Ka es te XODIM.');
-  assert.equal(prepareUzbek('UX', 'latin', { entries: {} }).tts, 'U xa.', 'x is "xa", never "iks"');
+  assert.equal(p.tts, 'Ka es te KHODIM.');
+  assert.equal(prepareUzbek('UX', 'latin', { entries: {} }).tts, 'U kha.', 'x is "xa" (spoken kha), never "iks"');
 });
 
 test('ALL-CAPS terms only replace ALL-CAPS text (Uzbek "it" stays)', () => {
-  assert.equal(prepareUzbek('IT boʻlimi va it', 'latin', LEX).tts, 'Axborot texnologiyalari boʻlimi va it.');
+  assert.equal(prepareUzbek('IT boʻlimi va it', 'latin', LEX).tts, 'Akhborot tekhnologiyalari boʻlimi va it.');
 });
 
 test('Cyrillic input becomes Latin; punctuation gives pauses', () => {
-  assert.equal(prepareUzbek('Жиззах ходимлари\nҲисобот тайёр', undefined, LEX).tts, 'Jiz-zax xodimlari. Hisobot tayyor.');
+  assert.equal(prepareUzbek('Жиззах ходимлари\nҲисобот тайёр', undefined, LEX).tts, 'Jiz-zakh khodimlari. Hisobot tayyor.');
 });
 
 test('lexicon spoken forms keep the letters; syllable forms never split digraphs', async () => {
@@ -114,4 +114,13 @@ test('score finds mis-heard words', async () => {
   assert.deepEqual(s.problems, [{ expected: 'jizzax', heard: 'jizzaks' }]);
   assert.ok(s.similarity > 0.8 && s.similarity < 1);
   assert.equal(score('bir ikki', 'bir ikki').similarity, 1);
+});
+
+test('deep x is spoken as kh (written text unchanged); h is never touched', () => {
+  const p = prepareUzbek('Jizzax xodimlariga xayr, mahalla, Xorazm', 'latin', { entries: {} });
+  assert.equal(p.original, 'Jizzax xodimlariga xayr, mahalla, Xorazm');
+  assert.equal(p.tts, 'Jizzakh khodimlariga khayr, mahalla, Khorazm.');
+  assert.equal(prepareUzbek('xayr', 'latin', { entries: {} }, { xAsKh: false }).tts, 'Xayr.');
+  // foreign words are left as written
+  assert.equal(prepareUzbek('Head of xodimlar', 'latin', { entries: {} }).tts, 'Head of khodimlar.');
 });

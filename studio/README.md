@@ -87,12 +87,13 @@ Fayllar:
 
 **Qoidalar:**
 - ElevenLabs'ga faqat **oʻzbek lotin** yozuvidagi matn yuboriladi. Kirillcha kiritilgan matn lotinga oʻgiriladi. Soʻzlar inglizcha yoki ruscha talaffuzga moslab yozilmaydi.
-- **x** chuqur x tovushi boʻlib, "eks" deb oʻqilmaydi. **h** yumshoq h boʻlib, tushirib qoldirilmaydi. Bu ikki harf hech qachon bir-biriga almashtirilmaydi. Oʻ, gʻ, sh, ch va ng harflari saqlanadi.
+- **x ovozga "kh" boʻlib boradi.** Foydalanuvchi 6 xil variantni tinglab, shu usulni tanlagan: `eleven_v4` + `language_code: uz`, masalan "Jizzax xodimlariga xayr" → "Jizzakh khodimlariga khayr". Yozuv va subtitrda x oʻzgarmaydi. Bu qoidani `UZ_X_KH=0` bilan oʻchirish mumkin.
+- **x** chuqur boʻgʻiz tovushi boʻlib, "eks" deb oʻqilmaydi. **h** yumshoq h boʻlib, tushirib qoldirilmaydi. Bu ikki harf hech qachon bir-biriga almashtirilmaydi. Oʻ, gʻ, sh, ch va ng harflari saqlanadi.
 - Sonlar, sanalar, foizlar va oraliqlar soʻz bilan yoziladi. Qisqartmalar va inglizcha atamalar lugʻatdagi oʻzbekcha muqobiliga almashtiriladi: IT → "axborot texnologiyalari", online → "onlayn". Katta harfli "IT" almashtiriladi, oddiy "it" soʻzi esa oʻzgarmaydi.
 - Pauza tinish belgilari orqali beriladi: har bir qator va gap tinish belgisi bilan tugaydi.
 - Soʻzning harflari oʻzgartirilmaydi va olib tashlanmaydi. Lugʻatda faqat boʻgʻin chizigʻi qoʻshish mumkin: "Jiz-zax", "Ax-borot". Bu shakllar testda toʻgʻri oʻqildi.
-- Model: `eleven_v3`, testda eng yaxshi natija bergan. API ga faqat model qabul qiladigan parametrlar yuboriladi:
-  - `language_code: uz` faqat `eleven_v4` uchun (u bilan natija yomonroq chiqdi);
+- Model: `eleven_v4` (`language_code: uz` bilan). Unga qoʻshni gaplar `previous_text`/`next_text` sifatida beriladi, aks holda qisqa gaplar forscha talaffuzga oʻxshab qolishi mumkin. ADM qisqartmasi "A-de-em" shaklida yuboriladi. API ga faqat model qabul qiladigan parametrlar yuboriladi:
+  - `language_code: uz` faqat `eleven_v4` uchun;
   - `previous_text`/`next_text` v3 da yoʻq;
   - `seed` v3 da bor.
 - Pronunciation dictionary: hozirgi kalitda `pronunciation_dictionaries_write` ruxsati yoʻq. Mahalliy lugʻat xuddi shu vazifani bajaradi va har qanday model bilan ishlaydi.

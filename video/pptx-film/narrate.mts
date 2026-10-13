@@ -1,7 +1,7 @@
 // ElevenLabs narration with character timestamps -> audio/<id>.mp3 + audio/timing.json (word start/end per line).
 // run from studio/: npx tsx ../video/pptx-film/narrate.mts   (needs ELEVENLABS_API_KEY)
 import '../../studio/server/net.ts';
-import { prepareUzbek } from '../../studio/server/uz/prepare.ts';
+import { prepareUzbek, spokenReference } from '../../studio/server/uz/prepare.ts';
 import { synth, transcribe, score } from '../../studio/server/uz/eleven.ts';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
@@ -27,8 +27,12 @@ for (const line of cfg.lines) {
   const attempts = process.env.CHECK === '0' ? 1 : Number(process.env.ATTEMPTS || 4);
   let best: { s: Awaited<ReturnType<typeof synth>>; sc?: ReturnType<typeof score> } | null = null;
   for (let k = 0; k < attempts; k++) {
-    const s = await synth(prep.tts, { voice, model: cfg.model });
-    const sc = process.env.CHECK === '0' ? undefined : score(prep.tts, await transcribe(s.mp3));
+    // neighbouring lines as context (previous_text/next_text; sent only to models that accept it, e.g. eleven_v4):
+    // without it eleven_v4 sometimes gives a short line a Persian accent
+    const idx = cfg.lines.indexOf(line);
+    const ctx = { previousText: cfg.lines[idx - 1] && prepareUzbek(cfg.lines[idx - 1].text).tts, nextText: cfg.lines[idx + 1] && prepareUzbek(cfg.lines[idx + 1].text).tts };
+    const s = await synth(prep.tts, { voice, model: cfg.model, ...ctx });
+    const sc = process.env.CHECK === '0' ? undefined : score(spokenReference(line.text), await transcribe(s.mp3));
     if (sc) console.log(`  ${line.id} #${k + 1}: STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);
     if (!best || (sc && best.sc && sc.similarity > best.sc.similarity)) best = { s, sc };
     if (!sc || (sc.similarity >= 0.97 && !sc.problems.some((p) => /x/.test(p.expected)))) break;

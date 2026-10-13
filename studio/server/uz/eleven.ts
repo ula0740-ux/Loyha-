@@ -1,12 +1,13 @@
 // ElevenLabs for Uzbek: model capabilities, synthesis with timestamps, Speech-to-Text check,
 // Latin vs Cyrillic A/B testing and re-generation of mis-read words.
 import { cyrToLat, normalizeLatin } from '../../src/lib/uzbek.ts';
-import { prepareUzbek, type Prepared } from './prepare.ts';
+import { prepareUzbek, spokenReference, xToKh, type Prepared } from './prepare.ts';
 import { expandNumbers } from './numbers.ts';
 import { lexKey, loadLexicon, saveLexicon, sameLetters, upsert, type Lexicon, type UzScript } from './lexicon.ts';
 
 export const API = 'https://api.elevenlabs.io';
-export const DEFAULT_MODEL = process.env.ELEVENLABS_MODEL || 'eleven_v3';
+// eleven_v4 + language_code uz + x spoken as "kh": chosen by ear by the user (2026-10-13)
+export const DEFAULT_MODEL = process.env.ELEVENLABS_MODEL || 'eleven_v4';
 export const DEFAULT_VOICE = process.env.ELEVENLABS_VOICE_FEMALE || 'EXAVITQu4vr4xnSDxMaL';
 export const STT_MODEL = 'scribe_v1';
 
@@ -125,7 +126,7 @@ export interface VariantResult { script: UzScript; prepared: Prepared; tts: stri
  */
 export async function testVariants(text: string, opts: { voice?: string; model?: string; scripts?: UzScript[]; lex?: Lexicon; takes?: number } = {}): Promise<VariantResult[]> {
   const lex = opts.lex ?? (await loadLexicon());
-  const reference = prepareUzbek(text, 'latin', lex).tts;
+  const reference = spokenReference(text);
   const out: VariantResult[] = [];
   // project rule: Latin only. Cyrillic can still be compared on request (--script cyrillic).
   for (const script of opts.scripts ?? (['latin'] as UzScript[]))
@@ -171,7 +172,8 @@ export async function fixWord(word: string, opts: { voice?: string; model?: stri
     let sum = 0;
     const heard: string[] = [];
     for (let t = 0; t < (opts.takes ?? 2); t++) {
-      const s = await synth(`${form}. Bu soʻz ${form} deb oʻqiladi.`, opts);
+      const say = xToKh(form);
+      const s = await synth(`${say}. Bu soʻz ${say} deb oʻqiladi.`, opts);
       const sc = score(`${latin}. Bu soʻz ${latin} deb oʻqiladi.`, await transcribe(s.mp3));
       const hits = sc.problems.filter((p) => p.expected === target).length;
       sum += sc.similarity * 0.4 + (1 - hits / 2) * 0.6;

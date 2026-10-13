@@ -9,7 +9,7 @@
 //   npm run uz -- stt fayl.mp3 ["kutilgan matn"]                   tayyor faylni tekshiradi
 import '../server/net.ts';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { prepareUzbek } from '../server/uz/prepare.ts';
+import { prepareUzbek, spokenReference } from '../server/uz/prepare.ts';
 import { testVariants, fixWord, transcribe, score, DEFAULT_MODEL } from '../server/uz/eleven.ts';
 import { makeNarration, redoNarration, type NarrationReport } from '../server/uz/segments.ts';
 import { lexKey, loadLexicon, saveLexicon, sameLetters, upsert, type LexEntry, type UzScript } from '../server/uz/lexicon.ts';
@@ -95,7 +95,7 @@ async function main() {
     case 'stt': {
       const heard = await transcribe(await readFile(a1));
       console.log('eshitildi:', heard);
-      if (a2) { const s = score(prepareUzbek(a2).tts, heard); console.log('oʻxshashlik', pct(s.similarity), s.problems); }
+      if (a2) { const s = score(spokenReference(a2), heard); console.log('oʻxshashlik', pct(s.similarity), s.problems); }
       break;
     }
     default:
