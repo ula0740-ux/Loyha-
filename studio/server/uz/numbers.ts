@@ -64,7 +64,8 @@ export function expandNumbers(text: string): { text: string; changes: Expansion[
   rep(/\b(\d+)\s*[–—]\s*(\d+)\b/g, 'oraliq', (_, a, b) => `${dan(cardinal(+a))} ${gacha(cardinal(+b))}`);
   const SUF = 'yil|yilgi|hafta|oy|kun|son|sinf|bosqich|chorak|qism|sahna|oʻrin|daraja|toifa';
   const SUF_CYR = 'йил|йилги|ҳафта|ой|кун|сон|синф|босқич|чорак|қисм|саҳна|ўрин|даража|тоифа';
-  rep(new RegExp(`(\\d+)-(${SUF}|${SUF_CYR})(?![\\p{L}])`, 'giu'), 'tartib', (_, n, w) => `${ordinal(+n)} ${w}`);
+  // the word may carry a case ending: 2026-yilda -> ikki ming yigirma oltinchi yilda
+  rep(new RegExp(`(\\d+)-((?:${SUF}|${SUF_CYR})[\\p{L}ʻʼ']*)`, 'giu'), 'tartib', (_, n, w) => `${ordinal(+n)} ${w}`);
   rep(/\b(\d+(?:[.,]\d+)?)\s*%/g, 'foiz', (_, n) => `${decimal(n)} foiz`);
   rep(/\b(\d{1,3}(?: \d{3})+)\b/g, 'son', (n) => cardinal(Number(n.replace(/ /g, ''))));
   rep(/\b(\d+[.,]\d+)\b/g, 'kasr', (n) => decimal(n));

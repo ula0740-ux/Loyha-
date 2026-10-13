@@ -136,3 +136,9 @@ test('yoʻ is й + ў, not ё (yoʻl, yoʻq, yoʻnalish)', () => {
   assert.equal(latToCyr("yo‘l yo'q Yo‘nalish yoz"), 'йўл йўқ Йўналиш ёз');
   assert.equal(cyrToLat('йўл йўқ Йўналиш ёз'), 'yoʻl yoʻq Yoʻnalish yoz');
 });
+
+test('ordinal before a word with a case ending (2026-yilda, 3-sinfga)', () => {
+  assert.equal(expandNumbers('2026-yilda').text, 'ikki ming yigirma oltinchi yilda');
+  assert.equal(expandNumbers('3-sinfga').text, 'uchinchi sinfga');
+  assert.equal(expandNumbers('2026-йилда').text, 'ikki ming yigirma oltinchi йилда');
+});
