@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "tsx tests/e2e-sync.ts",
     "test:elevenlabs": "tsx scripts/test-elevenlabs.ts",
-    "say": "tsx scripts/say-uz.ts"
+    "say": "tsx scripts/say-uz.ts",
+    "uz": "tsx scripts/uz.ts"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.71.0",

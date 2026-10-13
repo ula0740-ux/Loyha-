@@ -2,6 +2,7 @@ import { writeFile } from 'node:fs/promises';
 import type { Lang, Provider, Voice, WordTiming } from './types.ts';
 import { durationOf, toWav } from './audio.ts';
 import { fetchOk } from '../net.ts';
+import { DEFAULT_MODEL, MODEL_CAPS } from '../uz/eleven.ts';
 
 // ElevenLabs (paid, API key). Multilingual model with character timestamps -> exact word timings.
 // The user picks the female/male voice ids in .env. Uzbek quality must be checked with `npm run verify-tts`.
@@ -26,11 +27,14 @@ export const elevenlabs: Provider = {
     return out;
   },
   async synth(text, voice, outBase) {
-    const model = process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2';
+    const model = DEFAULT_MODEL; // ELEVENLABS_MODEL or eleven_v3 (best Uzbek in the STT test, 2026-10-13)
+    const body: Record<string, unknown> = { text, model_id: model };
+    // only send what the model accepts: language_code "uz" works on eleven_v4 only
+    if (voice.lang === 'uz' && MODEL_CAPS[model]?.uzLanguageCode) body.language_code = 'uz';
     const res = await fetchOk(`https://api.elevenlabs.io/v1/text-to-speech/${voice.voiceId}/with-timestamps?output_format=mp3_44100_128`, {
       method: 'POST',
       headers: { 'xi-api-key': process.env.ELEVENLABS_API_KEY!, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, model_id: model }),
+      body: JSON.stringify(body),
     });
     const j = (await res.json()) as {
       audio_base64: string;

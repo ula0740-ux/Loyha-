@@ -4,19 +4,19 @@
   "lines": [
     {
       "id": "intro",
-      "text": "ADM Jizzah. Ikki ming yigirma oltinchi yil hisoboti."
+      "text": "ADM Jizzax. Ikki ming yigirma oltinchi yil hisoboti."
     },
     {
       "id": "hire",
-      "text": "Yil davomida sakkiz yuz ellik besh nafar hodimni ishga olish rejalashtirildi. Olti yuz sakson besh nafari ishga qabul qilindi."
+      "text": "Yil davomida sakkiz yuz ellik besh nafar xodimni ishga olish rejalashtirildi. Olti yuz sakson besh nafari ishga qabul qilindi."
     },
     {
       "id": "adapt",
-      "text": "Bir yuz oʻttiz ikki nafar yangi hodim moslashtirish dasturidan oʻtdi."
+      "text": "Bir yuz oʻttiz ikki nafar yangi xodim moslashtirish dasturidan oʻtdi."
     },
     {
       "id": "reserve",
-      "text": "Zahira bazasida yigirma sakkizta lavozim boʻyicha bir yuz yetmish ikki nafar nomzod tayyor."
+      "text": "Zaxira bazasida yigirma sakkizta lavozim boʻyicha bir yuz yetmish ikki nafar nomzod tayyor."
     },
     {
       "id": "leave",
@@ -28,8 +28,8 @@
     },
     {
       "id": "outro",
-      "text": "Shaffof jarayon. Barqaror jamoa. ADM Jizzah."
+      "text": "Shaffof jarayon. Barqaror jamoa. ADM Jizzax."
     }
   ],
-  "note": "TTS uchun fonetik yozuv: 'x' harfini model 'ks' deb o'qiydi, shuning uchun 'h' ishlatilgan (Jizzah, hodim). Ekrandagi yozuv o'zgarmaydi."
+  "note": "Matn toʻgʻri adabiy imloda yoziladi (x va h almashtirilmaydi). TTS uchun studio/server/uz/prepare.ts (lugʻat: studio/lexicon/uz-lexicon.json) ishlatiladi: masalan Jizzax -> 'Жиззах' (STT testi 100%)."
 }

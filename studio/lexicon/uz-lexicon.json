@@ -1,0 +1,91 @@
+{
+  "_about": "Oʻzbekcha talaffuz lugʻati. key = lotin yozuvidagi kichik harfli kalit. spoken = TTS ga yuboriladigan shakl (lotin va/yoki kirill). prefer = qaysi yozuvdagi spoken ishlatiladi. status: approved (quloq bilan tasdiqlangan) | candidate (STT testi yoki taxmin). x va h hech qachon almashtirilmaydi.",
+  "entries": {
+    "adm": {
+      "original": "ADM",
+      "latin": "ADM",
+      "cyrillic": "АДМ",
+      "spoken": {
+        "latin": "ADM",
+        "cyrillic": "АДМ"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "notes": "Foydalanuvchi videoda 'ADM' oʻqilishini maʼqul koʻrgan."
+    },
+    "aj": {
+      "original": "AJ",
+      "latin": "AJ",
+      "cyrillic": "АЖ",
+      "spoken": {
+        "latin": "aksiyadorlik jamiyati",
+        "cyrillic": "акциядорлик жамияти"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "notes": "Kompaniya turi qisqartmasi toʻliq aytiladi."
+    },
+    "hr": {
+      "original": "HR",
+      "latin": "HR",
+      "cyrillic": "HR",
+      "spoken": {
+        "latin": "eych-ar",
+        "cyrillic": "эйч-ар"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "notes": "Inglizcha qisqartma, oʻzbek nutqida 'eych-ar' deb aytiladi."
+    },
+    "it": {
+      "original": "IT",
+      "latin": "IT",
+      "cyrillic": "IT",
+      "spoken": {
+        "latin": "ay-ti",
+        "cyrillic": "ай-ти"
+      },
+      "prefer": "latin",
+      "status": "candidate"
+    },
+    "jizzax": {
+      "original": "Jizzax",
+      "latin": "Jizzax",
+      "cyrillic": "Жиззах",
+      "spoken": {
+        "latin": "Jizzax",
+        "cyrillic": "Жиззах"
+      },
+      "prefer": "cyrillic",
+      "status": "candidate",
+      "notes": "Lotincha 'x' ni model inglizcha 'ks' deb oʻqigan (2026-10-13 foydalanuvchi eshitgan). Kirill 'х' chuqur x tovushini beradi. STT testi (eleven_v3, Sarah): Жиззах 100%, Jizzax -> 'jizax'.",
+      "score": 1,
+      "testedAt": "2026-10-13T06:39:15.803Z"
+    },
+    "r&d": {
+      "original": "R&D",
+      "latin": "R&D",
+      "cyrillic": "R&D",
+      "spoken": {
+        "latin": "ar-end-di",
+        "cyrillic": "ар-энд-ди"
+      },
+      "prefer": "latin",
+      "status": "candidate"
+    },
+    "zaxira": {
+      "original": "Zaxira",
+      "latin": "Zaxira",
+      "cyrillic": "Захира",
+      "spoken": {
+        "latin": "Zaxira",
+        "cyrillic": "Захира"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "score": 0.481,
+      "testedAt": "2026-10-13T06:39:10.563Z",
+      "notes": "Ikkala yozuvda ham STT 'zahira' deb yozgan (48%) — STT qulogʻining xatosi boʻlishi mumkin; ADM filmida toʻliq gapda toʻgʻri eshitildi (97.8%). Quloq bilan tekshiring."
+    }
+  }
+}

@@ -1,51 +1,51 @@
 {
  "intro": {
-  "duration": 3.866122,
+  "duration": 4.205714,
   "words": [
    {
     "text": "ADM",
     "start": 0,
-    "end": 0.4
+    "end": 0.48
    },
    {
-    "text": "Jizzah.",
-    "start": 0.48,
-    "end": 0.96
+    "text": "Jizzax.",
+    "start": 0.56,
+    "end": 1.28
    },
    {
     "text": "Ikki",
-    "start": 1.147,
-    "end": 1.68
+    "start": 1.493,
+    "end": 2.04
    },
    {
     "text": "ming",
-    "start": 1.76,
-    "end": 2.08
+    "start": 2.064,
+    "end": 2.16
    },
    {
     "text": "yigirma",
-    "start": 2.12,
-    "end": 2.48
+    "start": 2.24,
+    "end": 2.56
    },
    {
     "text": "oltinchi",
-    "start": 2.52,
-    "end": 2.88
+    "start": 2.64,
+    "end": 3.12
    },
    {
     "text": "yil",
-    "start": 2.92,
-    "end": 3.04
+    "start": 3.16,
+    "end": 3.28
    },
    {
     "text": "hisoboti.",
-    "start": 3.08,
-    "end": 3.84
+    "start": 3.34,
+    "end": 4.16
    }
   ]
  },
  "hire": {
-  "duration": 7.810612,
+  "duration": 7.706122,
   "words": [
    {
     "text": "Yil",
@@ -59,17 +59,17 @@
    },
    {
     "text": "sakkiz",
-    "start": 0.88,
+    "start": 0.92,
     "end": 1.36
    },
    {
     "text": "yuz",
     "start": 1.44,
-    "end": 1.6
+    "end": 1.68
    },
    {
     "text": "ellik",
-    "start": 1.66,
+    "start": 1.72,
     "end": 1.92
    },
    {
@@ -83,8 +83,8 @@
     "end": 2.48
    },
    {
-    "text": "hodimni",
-    "start": 2.54,
+    "text": "xodimni",
+    "start": 2.52,
     "end": 2.96
    },
    {
@@ -95,177 +95,177 @@
    {
     "text": "olish",
     "start": 3.32,
-    "end": 3.52
+    "end": 3.6
    },
    {
     "text": "rejalashtirildi.",
-    "start": 3.6,
+    "start": 3.627,
     "end": 4.88
    },
    {
     "text": "Olti",
     "start": 4.96,
-    "end": 5.16
+    "end": 5.2
    },
    {
     "text": "yuz",
-    "start": 5.18,
-    "end": 5.36
+    "start": 5.24,
+    "end": 5.4
    },
    {
     "text": "sakson",
-    "start": 5.4,
-    "end": 5.68
+    "start": 5.43,
+    "end": 5.76
    },
    {
     "text": "besh",
-    "start": 5.72,
+    "start": 5.8,
     "end": 5.92
    },
    {
     "text": "nafari",
-    "start": 5.96,
+    "start": 6,
     "end": 6.32
    },
    {
     "text": "ishga",
-    "start": 6.4,
+    "start": 6.373,
     "end": 6.72
    },
    {
     "text": "qabul",
-    "start": 6.8,
-    "end": 7.04
+    "start": 6.76,
+    "end": 6.96
    },
    {
     "text": "qilindi.",
-    "start": 7.12,
-    "end": 7.76
+    "start": 7,
+    "end": 7.68
    }
   ]
  },
  "adapt": {
-  "duration": 4.04898,
+  "duration": 4.597551,
   "words": [
    {
     "text": "Bir",
     "start": 0,
-    "end": 0.16
+    "end": 0.08
    },
    {
     "text": "yuz",
-    "start": 0.2,
-    "end": 0.32
+    "start": 0.12,
+    "end": 0.24
    },
    {
     "text": "oʻttiz",
-    "start": 0.36,
-    "end": 0.56
+    "start": 0.28,
+    "end": 0.48
    },
    {
     "text": "ikki",
-    "start": 0.613,
-    "end": 0.8
+    "start": 0.533,
+    "end": 0.72
    },
    {
     "text": "nafar",
-    "start": 0.84,
-    "end": 1.12
+    "start": 0.76,
+    "end": 1.04
    },
    {
     "text": "yangi",
-    "start": 1.184,
-    "end": 1.52
+    "start": 1.104,
+    "end": 1.44
    },
    {
-    "text": "hodim",
-    "start": 1.58,
+    "text": "xodim",
+    "start": 1.48,
     "end": 1.84
    },
    {
     "text": "moslashtirish",
-    "start": 1.92,
-    "end": 2.56
+    "start": 1.98,
+    "end": 2.88
    },
    {
     "text": "dasturidan",
-    "start": 2.64,
-    "end": 3.28
+    "start": 2.92,
+    "end": 3.52
    },
    {
     "text": "oʻtdi.",
-    "start": 3.3,
-    "end": 4
+    "start": 3.56,
+    "end": 4.56
    }
   ]
  },
  "reserve": {
-  "duration": 5.485714,
+  "duration": 5.799184,
   "words": [
    {
-    "text": "Zahira",
+    "text": "Zaxira",
     "start": 0,
-    "end": 0.4
+    "end": 0.48
    },
    {
     "text": "bazasida",
-    "start": 0.46,
-    "end": 0.96
+    "start": 0.54,
+    "end": 1.04
    },
    {
     "text": "yigirma",
-    "start": 1.2,
-    "end": 1.76
+    "start": 1.28,
+    "end": 1.84
    },
    {
     "text": "sakkizta",
-    "start": 1.8,
-    "end": 2.16
+    "start": 1.88,
+    "end": 2.32
    },
    {
     "text": "lavozim",
-    "start": 2.2,
-    "end": 2.64
+    "start": 2.36,
+    "end": 2.72
    },
    {
     "text": "boʻyicha",
-    "start": 2.667,
-    "end": 3.04
+    "start": 2.773,
+    "end": 3.12
    },
    {
     "text": "bir",
-    "start": 3.08,
-    "end": 3.2
-   },
-   {
-    "text": "yuz",
-    "start": 3.24,
+    "start": 3.18,
     "end": 3.36
    },
    {
-    "text": "yetmish",
+    "text": "yuz",
     "start": 3.44,
-    "end": 3.76
+    "end": 3.6
    },
    {
-    "text": "ikki",
-    "start": 3.813,
+    "text": "yetmish",
+    "start": 3.68,
     "end": 4
    },
    {
+    "text": "ikki",
+    "start": 4.053,
+    "end": 4.24
+   },
+   {
     "text": "nafar",
-    "start": 4.04,
-    "end": 4.32
+    "start": 4.28,
+    "end": 4.56
    },
    {
     "text": "nomzod",
-    "start": 4.38,
-    "end": 4.72
+    "start": 4.64,
+    "end": 5.04
    },
    {
     "text": "tayyor.",
-    "start": 4.8,
-    "end": 5.44
+    "start": 5.1,
+    "end": 5.76
    }
   ]
  },
@@ -380,7 +380,7 @@
   ]
  },
  "outro": {
-  "duration": 4.519184,
+  "duration": 4.675918,
   "words": [
    {
     "text": "Shaffof",
@@ -390,27 +390,27 @@
    {
     "text": "jarayon.",
     "start": 0.46,
-    "end": 1.4
+    "end": 1.24
    },
    {
     "text": "Barqaror",
-    "start": 1.47,
-    "end": 2
+    "start": 1.31,
+    "end": 1.76
    },
    {
     "text": "jamoa.",
-    "start": 2.06,
-    "end": 2.64
+    "start": 1.84,
+    "end": 2.48
    },
    {
     "text": "ADM",
-    "start": 2.9,
-    "end": 3.68
+    "start": 2.72,
+    "end": 3.44
    },
    {
-    "text": "Jizzah.",
-    "start": 3.76,
-    "end": 4.48
+    "text": "Jizzax.",
+    "start": 3.56,
+    "end": 4.24
    }
   ]
  }

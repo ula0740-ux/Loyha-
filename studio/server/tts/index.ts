@@ -8,6 +8,8 @@ import { azure } from './azure.ts';
 import { google } from './google.ts';
 import { elevenlabs } from './elevenlabs.ts';
 import { toScript } from '../../src/lib/uzbek.ts';
+import { prepareUzbek } from '../uz/prepare.ts';
+import type { UzScript } from '../uz/lexicon.ts';
 import { estimateWords, speechBounds } from './audio.ts';
 
 export const PROVIDERS: Provider[] = [espeak, edge, azure, google, elevenlabs];
@@ -65,14 +67,25 @@ export async function findVoice(key: string): Promise<{ provider: Provider; voic
  * Synthesize one scene. Uzbek text is sent in the script the voice reads correctly; the returned word
  * timings are mapped back onto the words as the user wrote them (transliteration keeps word count).
  */
+const uzScript = () => (process.env.UZ_SCRIPT === 'cyrillic' ? 'cyrillic' : 'latin') as UzScript;
+
 export async function speak(text: string, voiceKey: string, outBase: string): Promise<SynthResult> {
   const { provider, voice } = await findVoice(voiceKey);
   let spoken = text;
-  if (voice.lang === 'uz' && voice.uzInput && voice.uzInput !== 'any') spoken = toScript(text, voice.uzInput);
+  // ElevenLabs + Uzbek: full preparation (one script, lexicon, numbers -> words; x/h never touched)
+  const uzPrep = voice.lang === 'uz' && provider.id === 'elevenlabs';
+  if (uzPrep) spoken = prepareUzbek(text, uzScript()).tts;
+  else if (voice.lang === 'uz' && voice.uzInput && voice.uzInput !== 'any') spoken = toScript(text, voice.uzInput);
   const r = await provider.synth(spoken, voice, outBase);
   const shown = text.split(/\s+/).filter(Boolean);
   let words: WordTiming[];
+  const groups = uzPrep ? shown.map((w) => prepareUzbek(w, uzScript()).tts.split(/\s+/).filter(Boolean).length) : [];
   if (r.words.length === shown.length) words = r.words.map((w, i) => ({ ...w, text: shown[i] }));
+  else if (uzPrep && groups.reduce((a, b) => a + b, 0) === r.words.length) {
+    // "2026-yil" was spoken as 4 words: its timing spans all of them
+    let k = 0;
+    words = shown.map((text, i) => { const g = r.words.slice(k, (k += groups[i])); return { text, start: g[0]?.start ?? 0, end: g[g.length - 1]?.end ?? 0 }; });
+  }
   else {
     const b = await speechBounds(r.wavPath);
     words = estimateWords(text, b.start, b.end);

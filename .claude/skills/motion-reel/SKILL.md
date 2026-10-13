@@ -43,6 +43,8 @@ Cheap motion eases A→B on a fixed curve; expensive motion has mass. Use closed
 - Refactor prompt: "Replace every easing curve with closed-form springs from lib/motion.js. Tiny overshoot on UI, none on type. Any value with more than one target uses track()."
 
 ## Sound
+Uzbek voice-over: follow `.claude/skills/uzbek-tts/SKILL.md`.
+
 If a track is supplied, measure it (beats.py). If not, synthesize on the same timeline as the picture (sfx.mjs voices: click, pop, thump, whoosh; extend with kick/hat/pad as needed). Hits on the measured beat grid, loudness -14 LUFS.
 
 ## Effort

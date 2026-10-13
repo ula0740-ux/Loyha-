@@ -37,6 +37,8 @@ export function cyrToLat(text: string): string {
     const nextUpper = !!next && isUpper(next) && /[Ѐ-ӿ]/.test(next);
     const atWordStart = !/[Ѐ-ӿa-z]/i.test(prev);
     let rep: string | undefined;
+    // с + ҳ is two sounds (Исҳоқ -> Isʼhoq), not the digraph sh
+    if (lo === 'ҳ' && prev === 'с') { out += TUTUQ + matchCase(ch, 'h', nextUpper); continue; }
     if (lo === 'е') rep = atWordStart || VOWELS_CYR.includes(prev) ? 'ye' : 'e';
     else if (lo === 'ц') rep = atWordStart || !VOWELS_CYR.includes(prev) ? 's' : 'ts';
     else rep = map[lo];
@@ -67,6 +69,8 @@ export function latToCyr(input: string): string {
       continue;
     }
     const ch = text[i], lo = ch.toLowerCase();
+    // sʼh: the apostrophe only separates s and h in Latin; Cyrillic needs no sign (Isʼhoq -> Исҳоқ)
+    if (ch === TUTUQ && /[sS]/.test(prev) && /[hH]/.test(text[i + 1] ?? '')) { i += 1; continue; }
     let rep = single[lo];
     if (lo === 'e' && atWordStart) rep = 'э';
     out += rep === undefined ? ch : isUpper(ch) ? rep.toUpperCase() : rep;
