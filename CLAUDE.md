@@ -5,6 +5,7 @@
   - `motion-design`: code-only motion-design pipeline (seek(t) HTML, Playwright render, ffmpeg, music and SFX, QA).
   - `motion-reel`: product reels and showreels (springs, beat grid, critique loop).
   - `uzbek-tts`: Uzbek ElevenLabs voice-over. It covers the approved settings, the lexicon, the STT check, and the document → MP3 summary workflow.
+- **Plugin `hyperframes@hyperframes`** (heygen-com/hyperframes, Apache-2.0): makes videos from HTML. Its skills include `hyperframes`, `music-to-video`, `motion-graphics`, `general-video`, `embedded-captions` and `product-launch-video`, and its CLI runs as `npx hyperframes`. It is declared in `.claude/settings.json`, so new sessions install it automatically. Needs Node.js 22+ and FFmpeg.
 - Finished work lives in the repo:
   - `video/pptx-film/ADM_HR_2026_v5.mp4`: the approved film;
   - `audio/IMTQ/`: a 5-minute summary of the Ichki mehnat tartibi qoidalari.
