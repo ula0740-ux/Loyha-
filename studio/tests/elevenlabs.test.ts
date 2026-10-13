@@ -67,3 +67,9 @@ test('Uzbek apostrophes are normalised, Cyrillic kept', () => {
   assert.equal(prepareText("  O'zbekiston  "), 'Oʻzbekiston');
   assert.equal(prepareText('Ўзбекистон'), 'Ўзбекистон');
 });
+
+test('restricted key (TTS only) still passes the connection check', async () => {
+  const body = '{"detail":{"status":"missing_permissions","message":"missing the permission voices_read"}}';
+  const r = await checkConnection(mockFetch(401, body, {}));
+  assert.equal(r.restricted, true);
+});

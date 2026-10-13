@@ -6,6 +6,7 @@ import { dirname } from 'node:path';
 import { normalizeLatin, detectScript } from '../../src/lib/uzbek.ts';
 
 export const ELEVENLABS_API = 'https://api.elevenlabs.io';
+export const DEFAULT_VOICE = 'JBFqnCBsd6RMkjVDRZzb';
 
 export interface Mp3Options {
   /** ElevenLabs voice id. Defaults to ELEVENLABS_VOICE_FEMALE, then ELEVENLABS_VOICE_MALE. */
@@ -57,8 +58,8 @@ export function prepareText(text: string): string {
  */
 export async function textToSpeechMp3(text: string, outFile: string, opts: Mp3Options = {}): Promise<number> {
   const key = getApiKey();
-  const voiceId = opts.voiceId || process.env.ELEVENLABS_VOICE_FEMALE || process.env.ELEVENLABS_VOICE_MALE;
-  if (!voiceId) throw new ElevenLabsError('Ovoz ID kerak: voiceId bering yoki .env ga ELEVENLABS_VOICE_FEMALE yozing.');
+  // falls back to ElevenLabs' default premade voice (the one in their quickstart) when none is configured
+  const voiceId = opts.voiceId || process.env.ELEVENLABS_VOICE_FEMALE || process.env.ELEVENLABS_VOICE_MALE || DEFAULT_VOICE;
   if (!text.trim()) throw new ElevenLabsError('Matn boʻsh.');
 
   const body: Record<string, unknown> = {
@@ -91,7 +92,7 @@ export async function textToSpeechMp3(text: string, outFile: string, opts: Mp3Op
 }
 
 /** Cheap authenticated call to check the key and network without spending characters. */
-export async function checkConnection(fetchImpl: typeof fetch = fetch): Promise<{ voices: { voice_id: string; name: string; labels?: Record<string, string> }[] }> {
+export async function checkConnection(fetchImpl: typeof fetch = fetch): Promise<{ voices: { voice_id: string; name: string; labels?: Record<string, string> }[]; restricted?: boolean }> {
   const key = getApiKey();
   let res: Response;
   try {
@@ -99,6 +100,11 @@ export async function checkConnection(fetchImpl: typeof fetch = fetch): Promise<
   } catch (e) {
     throw new ElevenLabsError(`api.elevenlabs.io ga ulanib boʻlmadi (internet yoki tarmoq ruxsati): ${(e as Error).message}`);
   }
-  if (!res.ok) throw new ElevenLabsError(explain(res.status, await res.text()), res.status);
+  if (!res.ok) {
+    const body = await res.text();
+    // A restricted key (e.g. Text to Speech only) is still a valid, authenticated key.
+    if (res.status === 401 && body.includes('missing_permissions')) return { voices: [], restricted: true };
+    throw new ElevenLabsError(explain(res.status, body), res.status);
+  }
   return (await res.json()) as { voices: { voice_id: string; name: string }[] };
 }

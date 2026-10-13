@@ -11,8 +11,10 @@ const out = 'out/elevenlabs-test.mp3';
 
 try {
   console.log('1) Kalit va tarmoq tekshirilmoqda…');
-  const { voices } = await checkConnection();
-  console.log(`   ✓ Ulanish bor. Hisobingizda ${voices.length} ta ovoz.`);
+  const { voices, restricted } = await checkConnection();
+  console.log(restricted
+    ? '   ✓ Ulanish bor. Kalit cheklangan (ovozlar roʻyxatini oʻqish ruxsati yoʻq) — TTS uchun bu yetarli.'
+    : `   ✓ Ulanish bor. Hisobingizda ${voices.length} ta ovoz.`);
   console.log('2) Oʻzbekcha MP3 yaratilmoqda…');
   const bytes = await textToSpeechMp3(text, out);
   const { stdout } = await run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration:stream=codec_name', '-of', 'csv=p=0', out]);
