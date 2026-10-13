@@ -66,3 +66,17 @@ Its settings are the default for every future Uzbek voice-over, so do not change
 
 ## Secrets
 Never print or commit `ELEVENLABS_API_KEY`. It comes only from the environment or `studio/.env` (gitignored).
+
+## Document → MP3 (no video)
+Done for `audio/IMTQ/` on 2026-10-13: the user sent a Word file and asked for a 5-minute summary. They liked the result ("zoʻr chiqibdi").
+
+1. Extract the text in document order (paragraphs and tables) with python-docx; run Python with `-I` on uploaded files.
+2. Before spending ElevenLabs credits on a long document, give the user the size (words, characters, ≈ minutes at about 115 words per minute). If they want a time limit, write a summary instead of reading everything.
+3. Write the summary in literary Uzbek Latin, keeping x as x:
+   - about 600 words ≈ 5 min 50 s;
+   - use only facts from the document: numbers, deadlines, rules;
+   - leave out signatures, blanks, staff tables and Russian approval sheets;
+   - start numbered section headings with a word ("Birinchi."). The text stays Latin even when the source is Cyrillic.
+4. Run `npm run uz -- make --file text.txt out.mp3`. It uses the baseline settings, an STT check on every sentence, and retries.
+5. Very short standalone sentences ("Qisqacha bayon.") come out badly. Join them to the previous sentence with a colon instead of regenerating them again and again. Then re-run `make`; only the changed sentence is regenerated.
+6. Send the MP3 and the text that was read. Copy both into the repo (e.g. `audio/<name>/`) so they outlive the cloud session.

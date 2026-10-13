@@ -1,6 +1,13 @@
 # Loyha — motion-design videos with Uzbek narration
 
 - Talk to the user in **Uzbek**.
+- **Project skills (`.claude/skills/`, kept in this repo; the user asked never to forget them):**
+  - `motion-design`: code-only motion-design pipeline (seek(t) HTML, Playwright render, ffmpeg, music and SFX, QA).
+  - `motion-reel`: product reels and showreels (springs, beat grid, critique loop).
+  - `uzbek-tts`: Uzbek ElevenLabs voice-over. It covers the approved settings, the lexicon, the STT check, and the document → MP3 summary workflow.
+- Finished work lives in the repo:
+  - `video/pptx-film/ADM_HR_2026_v5.mp4`: the approved film;
+  - `audio/IMTQ/`: a 5-minute summary of the Ichki mehnat tartibi qoidalari.
 - Uzbek voice-over (ElevenLabs): always follow `.claude/skills/uzbek-tts/SKILL.md`. The goal is fluent, natural and accurate literary Uzbek. In short:
   - **Uzbek Latin script only.** No English or Russian respelling, and no English letter names.
   - x = deep throat x (never "eks"), h = soft h (never dropped). **x and h are never swapped.** oʻ, gʻ, sh, ch and ng are kept.
