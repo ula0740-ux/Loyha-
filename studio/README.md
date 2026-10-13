@@ -50,6 +50,29 @@ Bulut muhitida (Claude Code on the web) xizmat manzilini **Network access → Al
 - Azure uchun: `<region>.tts.speech.microsoft.com`
 - ElevenLabs uchun: `api.elevenlabs.io`
 
+## ElevenLabs (tabiiy ovoz, MP3)
+
+Funksiya: `textToSpeechMp3(matn, "chiqish.mp3", { voiceId?, modelId?, languageCode? })`, fayli `server/tts/elevenlabsMp3.ts`.
+
+- API kalit **faqat** `ELEVENLABS_API_KEY` muhit oʻzgaruvchisidan yoki `studio/.env` faylidan oʻqiladi. U kodga yozilmaydi, logga chiqmaydi va xato xabarlariga tushmaydi.
+- `.env` fayli `.gitignore` da, shuning uchun GitHub'ga yuklanmaydi. Buni `git check-ignore -v studio/.env` buyrugʻi bilan tekshirish mumkin.
+
+**Sozlash (oʻz kompyuteringizda):**
+1. elevenlabs.io → Profile → **API Keys** boʻlimida kalit yarating.
+2. **Voice Library** dan ovoz tanlang va uning **Voice ID** sini nusxalang.
+3. `studio/.env` faylini toʻldiring:
+   ```
+   ELEVENLABS_API_KEY=...
+   ELEVENLABS_VOICE_FEMALE=...
+   ELEVENLABS_VOICE_MALE=...
+   ```
+
+**Bulut sessiyasida (Claude Code on the web):** kalitni chatga yozmang. Uni environment sozlamalariga kiriting: **Edit → Network secrets** yoki **environment variables**. Oʻsha yerda **Allowed domains** roʻyxatiga `api.elevenlabs.io` ni qoʻshing. Sozlamalar faqat yangi sessiyada kuchga kiradi.
+
+**Testlar:**
+- `npm test`: internetsiz unit testlar (fetch soxtalashtirilgan). Ular kalit faqat sarlavhada yuborilishini, xatolarda koʻrinmasligini, MP3 tekshiruvini va 401/tarmoq xatolarini sinaydi.
+- `npm run test:elevenlabs ["matn"]`: haqiqiy API bilan sinov. Avval kalit va tarmoqni tekshiradi (`/v1/voices`), keyin oʻzbekcha MP3 yaratadi (`out/elevenlabs-test.mp3`) va uni ffprobe bilan tekshiradi. Oʻzbekcha talaffuz sifatini faylni tinglab, oʻzingiz baholaysiz.
+
 ## Sinxronlash qanday ishlaydi
 
 1. Har bir qator alohida sahna boʻladi va alohida ovozlashtiriladi.

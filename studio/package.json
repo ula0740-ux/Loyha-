@@ -11,7 +11,8 @@
     "render-demo": "tsx scripts/render-demo.ts",
     "test": "node --import tsx --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "tsx tests/e2e-sync.ts"
+    "test:e2e": "tsx tests/e2e-sync.ts",
+    "test:elevenlabs": "tsx scripts/test-elevenlabs.ts"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.535",
