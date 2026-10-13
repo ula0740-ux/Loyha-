@@ -10,6 +10,9 @@
 - **Emil Kowalski skills** (emilkowalski/skills, MIT; 15 markdown-only skills): `animate`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `animation-performance`, `animation-vocabulary`, `apple-design`, `emil-design-eng`, `break-ui`, `mobile-native`, `prototype`, `pick-ui-library`, `ask-sonner`, `animate-expo` and `write-swift`. Use them for the motion timing, easing and polish of web/UI animation.
 - **Impeccable** (pbakaus/impeccable, Apache-2.0): the `impeccable` skill, run as `/impeccable init|audit|polish|critique|...`, for frontend and UI design quality. It was installed from GitHub with `npx skills add pbakaus/impeccable`, because `impeccable.style` is blocked by this environment's network. Its engine downloads from GitHub releases on first run. Hooks are not installed, so run `impeccable detect` by hand after UI changes.
 - **Plugin `hyperframes@hyperframes`** (heygen-com/hyperframes, Apache-2.0): makes videos from HTML. Its skills include `hyperframes`, `music-to-video`, `motion-graphics`, `general-video`, `embedded-captions` and `product-launch-video`, and its CLI runs as `npx hyperframes`. It is declared in `.claude/settings.json`, so new sessions install it automatically. Needs Node.js 22+ and FFmpeg.
+- **Fonts** (`assets/fonts/`, Google Fonts, OFL): Inter (captions/UI), Montserrat (headings), Unbounded (hook titles), Manrope, Onest, Oswald (numbers), Rubik, Playfair Display (premium), Space Grotesk (tech), JetBrains Mono (code).
+  - Uzbek text: only **Inter, Montserrat, Onest and Oswald** have every Uzbek Latin and Cyrillic letter. The coverage table and the workarounds are in `assets/fonts/README.md`.
+  - HTML: `fonts.css`. System install in a new session: `sh assets/fonts/install.sh`.
 - Finished work lives in the repo:
   - `video/pptx-film/ADM_HR_2026_v5.mp4`: the approved film;
   - `audio/IMTQ/`: a 5-minute summary of the Ichki mehnat tartibi qoidalari.
