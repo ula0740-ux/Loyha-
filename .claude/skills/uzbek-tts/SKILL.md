@@ -9,6 +9,17 @@ description: Natural literary Uzbek voice-over (Uzbek Latin script) for motion-d
 
 Talk to the user in Uzbek. Code is in `studio/server/uz/`, the lexicon is `studio/lexicon/uz-lexicon.json`, and the CLI is `studio/scripts/uz.ts` (`npm run uz -- …` from `studio/`). Before changing anything, read the existing integration (`server/uz/eleven.ts`, `server/tts/elevenlabs*.ts`) and improve it without breaking it. Run `npx tsc --noEmit && npm test` before committing.
 
+## Approved baseline
+On 2026-10-13 the user approved `video/pptx-film/ADM_HR_2026_v5.mp4`: "precise and genuine Uzbek on all counts, speak like this from now on".
+
+Its settings are the default for every future Uzbek voice-over, so do not change them without the user's approval:
+- `eleven_v4` with `language_code: "uz"` and voice Sarah;
+- x → kh;
+- variant F ("A-de-em, Jizzakh!");
+- context sentences on every call;
+- the STT check;
+- the lexicon.
+
 ## 1. Language and pronunciation
 - Text sent to TTS is **Uzbek Latin only**. Cyrillic input is converted to Latin. Never send Cyrillic, and never respell words to imitate English or Russian pronunciation.
 - Do not let the model read Uzbek words as English letter names. Abbreviations use Uzbek letter names (x = "xa", q = "qa"), or better, their lexicon expansion.

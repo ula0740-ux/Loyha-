@@ -11,6 +11,7 @@
   - Send only the parameters the model supports (`ttsBody`/`MODEL_CAPS`).
   - STT is only a helper; the user's ear is the final judge. If a sound is disputed, send labelled variants and let the user choose.
   - Check every sentence with STT (`npm run uz -- make`). Regenerate only the bad sentences (`npm run uz -- redo`), and test problem words with `npm run uz -- word`.
+- **Approved baseline (2026-10-13):** the user approved `ADM_HR_2026_v5.mp4` as genuine Uzbek. Keep its settings for every future video unless the user approves a change.
 - Before changing the ElevenLabs integration, read the existing code and improve it without breaking it.
 - Secrets: `ELEVENLABS_API_KEY` comes only from the environment or `studio/.env`. Never write it in code, print it, or commit it.
 - Do not break existing features: run `cd studio && npx tsc --noEmit && npm test` before committing.
