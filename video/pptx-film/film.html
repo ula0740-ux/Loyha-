@@ -35,6 +35,8 @@ const lerp = (a, b, k) => a + (b - a) * k;
 const sp = (t, f = 2.2, z = .78) => { if (t <= 0) return 0; const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z); return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + z * w / wd * Math.sin(wd * t)); };
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 const fmt = n => String(Math.round(n));
+// counters read the time snapped to the video frame, so motion-blur subframes never mix two numbers
+const fq = t => Math.round(t * 30) / 30;
 
 // ---------- DOM helpers
 const cam = document.getElementById('cam');
@@ -173,7 +175,7 @@ function build() {
       const a = .801 * io(seg(t, W('hire', 11), W('hire', 11) + 1.6));
       arc.setAttribute('stroke-dasharray', `${2 * Math.PI * R * a} ${2 * Math.PI * R}`);
       plan.style.opacity = clamp(sp(t - W('hire', 2), 2, .8)); plan.style.transform = `translateY(${(1 - sp(t - W('hire', 2), 2, .8)) * 30}px)`;
-      const n = 685 * io(seg(t, W('hire', 11), W('hire', 11) + 1.6));
+      const n = 685 * io(seg(fq(t), W('hire', 11), W('hire', 11) + 1.6));
       big.textContent = t < W('hire', 11) ? '0' : fmt(n);
       big.style.opacity = clamp((t - W('hire', 11) + .15) * 6);
       big.style.transform = `scale(${.85 + .15 * sp(t - W('hire', 11), 2, .7)})`;
@@ -213,7 +215,7 @@ function build() {
       revealCircle(L, t, s.start - .25, 540, 790, .55);
       if (t > S.reserve.start + .8) L.style.visibility = 'hidden';
       tagShow(tg, t, s.start + .2, S.reserve.start - .2);
-      const k = io(seg(t, s.vo - .1, s.vo + .9));
+      const k = io(seg(fq(t), s.vo - .1, s.vo + .9));
       big.textContent = fmt(132 * k); big.style.opacity = clamp((t - s.vo + .2) * 5);
       big.style.transform = `translateY(${(1 - sp(t - s.vo + .2, 2, .8)) * 60}px)`;
       rise(l1, t, W('adapt', 5));
@@ -261,7 +263,7 @@ function build() {
         o.d.style.transform = `translate(${x - 20}px, ${y - 20}px) scale(${(1 - suck * .6)})`;
       });
       const nb = W('reserve', 6);
-      big.textContent = fmt(172 * io(seg(t, nb, nb + 1.1))); big.style.opacity = clamp((t - nb + .1) * 6);
+      big.textContent = fmt(172 * io(seg(fq(t), nb, nb + 1.1))); big.style.opacity = clamp((t - nb + .1) * 6);
       rise(nm, t, nb + .4);
       const pk = sp(t - W('reserve', 2), 2.2, .7);
       pos.style.transform = `translateX(-50%) scale(${pk})`;
@@ -277,6 +279,8 @@ function build() {
     const o1 = line(L, 'OYLIK', { top: '420px', font: '900 228px/1 "Inter Display"', letterSpacing: '-.03em' });
     const o2 = line(L, 'MAOSH', { top: '650px', font: '900 228px/1 "Inter Display"', letterSpacing: '-.03em' });
     const dotM = el(L, 'div', { position: 'absolute', width: '58px', height: '58px', borderRadius: '50%', background: C.ink, left: '900px', top: '812px' });
+    // a row of people-dots that leave one by one while "ishdan ketishning asosiy sababi" is spoken
+    const ppl = [...Array(10)].map((_, i) => el(L, 'div', { position: 'absolute', width: '64px', height: '64px', borderRadius: '50%', background: C.white, left: (135 + i * 84) + 'px', top: '640px' }));
     const p96 = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1010px', textAlign: 'center', font: '900 380px/1 "Inter Display"', color: C.ink, letterSpacing: '-.05em' }, '96%');
     const track = el(L, 'div', { position: 'absolute', left: '90px', width: '900px', top: '1440px', height: '34px', borderRadius: '99px', background: 'rgba(255,255,255,.35)', overflow: 'hidden' });
     const fill = el(track, 'div', { height: '100%', width: '0', background: C.white, borderRadius: '99px' });
@@ -288,7 +292,14 @@ function build() {
       revealCircle(L, t, s.start - .2, 540, 1100, .5);
       if (t > S.standards.start + .8) L.style.visibility = 'hidden';
       tagShow(tg, t, s.start + .2, S.standards.start - .2);
-      rise(as, t, W('leave', 2), 1e9, .05);
+      rise(as, t, W('leave', 0), 1e9, .05);
+      ppl.forEach((d, i) => {
+        const tin = s.start + .25 + i * .04, tout = W('leave', 1) + i * .12;
+        const k = sp(t - tin, 2.4, .7), q = inn(seg(t, tout, tout + .45)), gone = seg(t, W('leave', 5) - .3, W('leave', 5));
+        d.style.transform = `translateY(${(1 - k) * 80 + q * 260}px) scale(${k * (1 - .4 * q)})`;
+        d.style.opacity = (i % 3 === 1 ? 1 - q : 1 - .7 * q) * (1 - gone);
+        d.style.background = i === 4 || i === 7 ? C.ink : C.white;
+      });
       rise(o1, t, W('leave', 5));
       rise(o2, t, W('leave', 6));
       dotM.style.transform = `scale(${sp(t - W('leave', 6) - .25, 2.6, .55)})`;
