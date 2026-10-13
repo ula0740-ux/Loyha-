@@ -12,9 +12,11 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
     "test:e2e": "tsx tests/e2e-sync.ts",
-    "test:elevenlabs": "tsx scripts/test-elevenlabs.ts"
+    "test:elevenlabs": "tsx scripts/test-elevenlabs.ts",
+    "say": "tsx scripts/say-uz.ts"
   },
   "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.71.0",
     "@remotion/bundler": "^4.0.535",
     "@remotion/cli": "^4.0.535",
     "@remotion/renderer": "^4.0.535",
