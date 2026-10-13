@@ -6,3 +6,13 @@ video/*/out/*
 __pycache__/
 .env
 **/.env
+video/pptx-film/deck/
+video/pptx-film/ref/
+video/pptx-film/assets/*_view.png
+video/pptx-film/assets/lv.png
+video/pptx-film/assets/both.png
+video/pptx-film/assets/i?s.png
+video/pptx-film/assets/logo_crop.png
+video/pptx-film/assets/logo2*.png
+video/pptx-film/assets/building.png
+video/pptx-film/assets/image*

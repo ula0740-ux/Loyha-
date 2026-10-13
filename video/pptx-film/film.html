@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>ADM Jizzax HR 2026</title>
+<style>
+  html, body { margin: 0; background: #000; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0b1020;
+    font-family: "Inter Display", Inter, sans-serif; color: #fff; }
+  #cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+  .layer { position: absolute; inset: 0; overflow: hidden; }
+  .abs { position: absolute; }
+  .m { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 .03em .06em; margin-bottom: -.06em; }
+  .w { display: inline-block; }
+  .c { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
+  .tag { position: absolute; left: 80px; top: 150px; font: 700 34px "Inter Display", Inter; letter-spacing: .14em; padding: 14px 26px; border-radius: 99px; }
+  .num { font-variant-numeric: tabular-nums; }
+  #hud { position: fixed; right: 8px; top: 8px; font: 12px monospace; color: #888; display: none; }
+</style>
+</head>
+<body>
+<div id="stage"><div id="cam"></div></div>
+<div id="hud"></div>
+<script>
+// ---------- palette (ADM brand from the deck + the reference film's red/blue energy)
+const C = { ink: '#0b1020', navy: '#16224a', deep: '#011c49', red: '#e8262d', steel: '#9BACCA', light: '#EEF1F7', mute: '#5E6678', blue: '#3f5bff', white: '#ffffff' };
+
+// ---------- math
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const io = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const out = x => 1 - Math.pow(1 - clamp(x), 3);
+const inn = x => Math.pow(clamp(x), 3);
+const lerp = (a, b, k) => a + (b - a) * k;
+const sp = (t, f = 2.2, z = .78) => { if (t <= 0) return 0; const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z); return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + z * w / wd * Math.sin(wd * t)); };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = n => String(Math.round(n));
+
+// ---------- DOM helpers
+const cam = document.getElementById('cam');
+function el(parent, tag, css = {}, html = '') { const e = document.createElement(tag); Object.assign(e.style, css); if (html) e.innerHTML = html; parent.appendChild(e); return e; }
+let zc = 0;
+function layer(bg) { const l = el(cam, 'div'); l.className = 'layer'; l.style.background = bg; l.style.zIndex = ++zc; return l; } // own stacking context per scene
+/** masked word line: returns {root, words[]} */
+function line(parent, text, css) {
+  const r = el(parent, 'div', css); r.className = 'c';
+  const ws = text.split(' ').map((w, i) => { const m = el(r, 'span'); m.className = 'm'; const s = el(m, 'span', {}, w); s.className = 'w'; if (i) r.insertBefore(document.createTextNode(' '), m); return s; });
+  return { root: r, words: ws };
+}
+function rise(L, t, tin, tout = 1e9, stag = .06) {
+  L.words.forEach((w, i) => {
+    const p = sp(t - tin - i * stag, 2.3, .8), q = inn(seg(t, tout + i * .03, tout + i * .03 + .3));
+    w.style.transform = `translateY(${(1 - p) * 112 - q * 115}%) rotate(${(1 - p) * 5}deg)`;
+  });
+  L.root.style.visibility = t >= tin - .01 && t < tout + .6 ? 'inherit' : 'hidden';
+}
+function tag(parent, text, bg, fg) { const d = el(parent, 'div', { background: bg, color: fg }, text); d.className = 'tag'; return d; }
+function tagShow(d, t, tin, tout) { const p = sp(t - tin, 2.4, .8), q = inn(seg(t, tout, tout + .25)); d.style.transform = `translateX(${(1 - p) * -120 - q * 140}px)`; d.style.opacity = clamp(p * 2) * (1 - q); }
+
+// ---------- timeline (built from the narration by timeline.py)
+let TL, S, T;
+const W = (id, i) => S[id].words[i].t;
+
+// ---------- reveal transitions: each scene's layer opens over the previous one
+function revealCircle(L, t, t0, cx, cy, dur = .5) {
+  const R = Math.max(...[[0, 0], [1080, 0], [0, 1920], [1080, 1920]].map(([x, y]) => Math.hypot(x - cx, y - cy))) * 1.04;
+  const k = io(seg(t, t0, t0 + dur));
+  L.style.clipPath = k >= 1 ? 'none' : `circle(${R * k}px at ${cx}px ${cy}px)`;
+  L.style.visibility = t >= t0 ? 'inherit' : 'hidden';
+}
+// three skewed brand bands (red / steel / navy) sweep across; the new scene follows the last band
+const bands = [];
+function makeBands() { for (const c of [C.red, C.steel, C.white]) { const b = el(cam, 'div', { position: 'absolute', top: '-200px', height: '2320px', width: '520px', background: c, transform: 'skewX(-14deg)', zIndex: 50 }); bands.push(b); } }
+function revealBands(L, t, t0, dur = .75) {
+  const k = seg(t, t0, t0 + dur);
+  const edge = lerp(-700, 1080 + 900, io(k));
+  L.style.clipPath = k >= 1 ? 'none' : `polygon(0 0, ${edge - 380}px 0, ${edge - 900}px 1920px, 0 1920px)`;
+  L.style.visibility = t >= t0 ? 'inherit' : 'hidden';
+  return { k, edge };
+}
+function drawBands(t, list) {
+  bands.forEach(b => b.style.visibility = 'hidden');
+  for (const t0 of list) {
+    const k = seg(t, t0, t0 + .75); if (k <= 0 || k >= 1) continue;
+    const edge = lerp(-700, 1080 + 900, io(k));
+    bands.forEach((b, i) => { b.style.visibility = 'inherit'; b.style.left = (edge - 380 - i * 170) + 'px'; b.style.width = (i === 2 ? 120 : 190) + 'px'; });
+  }
+}
+
+// =====================================================================================
+let scenes = [];
+function build() {
+  // ---------------- S0 intro: dot -> line -> red flood -> ADM / JIZZAX -> 2026 rolls -> photo
+  {
+    const L = layer(C.ink);
+    const dot = el(L, 'div', { position: 'absolute', background: C.white, borderRadius: '99px' });
+    const red = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', background: C.red });
+    const photoWrap = el(L, 'div', { position: 'absolute', left: 0, top: 0, width: '1080px', height: '1920px' });
+    const photo = el(photoWrap, 'img', { position: 'absolute', left: '-40px', top: '1080px', width: '1160px', height: '928px', objectFit: 'cover' });
+    photo.src = 'assets/hero.png';
+    const adm = line(L, 'ADM', { top: '250px', font: '900 330px/1 "Inter Display"', letterSpacing: '-.02em', zIndex: 3 });
+    const jz = line(L, 'J I Z Z A X', { top: '590px', font: '700 92px/1 "Inter Display"', letterSpacing: '.1em', zIndex: 3 });
+    const yr = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '730px', height: '300px', display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 3 });
+    const digits = [2, 0, 2, 6].map(() => { const box = el(yr, 'div', { width: '190px', height: '300px', overflow: 'hidden', position: 'relative' }); const col = el(box, 'div', { position: 'absolute', left: 0, top: 0, width: '190px', font: '900 300px/300px "Inter Display"', textAlign: 'center', color: C.white }); col.innerHTML = [...Array(20)].map((_, i) => `<div>${i % 10}</div>`).join(''); return col; });
+    const hr = line(L, 'HR FAOLIYATI HISOBOTI', { top: '1050px', font: '800 74px/1 "Inter Display"', letterSpacing: '.02em', zIndex: 3 });
+    scenes.push(t => {
+      const s = S.intro;
+      L.style.visibility = t < S.hire.start + .6 ? 'inherit' : 'hidden';
+      const d = sp(t - .1, 2.4, .7), ln = sp(t - .5, 1.8, .85);
+      const W0 = lerp(26 * d, 860, ln), fl = io(seg(t, .95, 1.3));
+      dot.style.width = W0 + 'px'; dot.style.height = (26 * d) + 'px';
+      dot.style.left = (540 - W0 / 2) + 'px'; dot.style.top = (960 - 13 * d) + 'px';
+      dot.style.visibility = t < 1.3 ? 'inherit' : 'hidden';
+      const H = lerp(14, 1920, fl);
+      red.style.top = (960 - H / 2) + 'px'; red.style.height = H + 'px';
+      red.style.visibility = t >= .95 ? 'inherit' : 'hidden';
+      rise(adm, t, W('intro', 0), 1e9, .08);
+      rise(jz, t, W('intro', 1), 1e9, .03);
+      // year rolls in digit by digit while "ikki ming yigirma oltinchi" is spoken
+      const yt = W('intro', 2);
+      digits.forEach((col, i) => {
+        const target = [2, 0, 2, 6][i] + 10;
+        const k = out(seg(t, yt + i * .22, yt + i * .22 + .9));
+        col.style.top = (-lerp(0, target, k) * 300) + 'px';
+        col.parentNode.style.opacity = t > yt + i * .22 ? 1 : 0;
+      });
+      rise(hr, t, W('intro', 7), 1e9, .07);
+      // photo rises from the bottom with a diagonal brand edge
+      const pk = io(seg(t, W('intro', 2) - .2, W('intro', 2) + .7));
+      const y0 = lerp(1920, 1180, pk);
+      photoWrap.style.clipPath = `polygon(0 ${y0 + 120}px, 1080px ${y0}px, 1080px 1920px, 0 1920px)`;
+      photo.style.transform = `scale(${1.12 - .08 * pk + .03 * seg(t, s.vo, s.end)})`;
+    });
+  }
+
+  // ---------------- S1 hire: ring progress 685 / 855, monthly bars
+  {
+    const L = layer(C.navy);
+    const tg = tag(L, '01 · ISHGA QABUL', C.red, C.white);
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('width', 1080); svg.setAttribute('height', 1920); svg.style.position = 'absolute'; L.appendChild(svg);
+    const mk = (n, a) => { const e = document.createElementNS(svgNS, n); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+    const CX = 540, CY = 790, R = 300;
+    const rings = [[390, C.steel, '6 18'], [430, C.red, '60 40'], [470, C.white, '2 14']].map(([r, c, d]) => mk('circle', { cx: CX, cy: CY, r, fill: 'none', stroke: c, 'stroke-width': 4, 'stroke-dasharray': d, opacity: .5 }));
+    const track = mk('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: 'rgba(155,172,202,.22)', 'stroke-width': 44 });
+    const arc = mk('circle', { cx: CX, cy: CY, r: R, fill: 'none', stroke: C.red, 'stroke-width': 44, 'stroke-linecap': 'round', transform: `rotate(-90 ${CX} ${CY})`, 'stroke-dasharray': `0 ${2 * Math.PI * R}` });
+    const plan = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '600px', textAlign: 'center', font: '700 46px "Inter Display"', color: C.steel, letterSpacing: '.08em' }, 'REJA: <span class="num" id="plan">855</span>');
+    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '670px', textAlign: 'center', font: '900 230px/1 "Inter Display"', letterSpacing: '-.03em' }); big.className = 'num';
+    const lbl = line(L, 'ISHGA OLINDI', { top: '905px', font: '700 44px "Inter Display"', letterSpacing: '.12em', color: C.white });
+    const pct = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1215px', textAlign: 'center', font: '900 150px/1 "Inter Display"' }, '80,1<span style="font-size:.55em">%</span>');
+    const pctL = line(L, 'REJA BAJARILDI', { top: '1375px', font: '700 40px "Inter Display"', letterSpacing: '.14em', color: C.steel });
+    // monthly plan vs done
+    const M = ['Yan','Fev','Mar','Apr','May','Iyn','Iyl','Avg','Sen','Okt','Noy','Dek'];
+    const P = [108,130,119,120,87,11,84,80,34,73,4,4], D = [114,103,91,89,54,0,77,77,31,49,0,0];
+    const chart = el(L, 'div', { position: 'absolute', left: '80px', top: '1480px', width: '920px', height: '330px' });
+    const bars = M.map((m, i) => {
+      const x = i * (920 / 12);
+      const p = el(chart, 'div', { position: 'absolute', bottom: '46px', left: (x + 10) + 'px', width: '26px', background: C.steel, borderRadius: '6px 6px 0 0' });
+      const d = el(chart, 'div', { position: 'absolute', bottom: '46px', left: (x + 38) + 'px', width: '26px', background: C.red, borderRadius: '6px 6px 0 0' });
+      el(chart, 'div', { position: 'absolute', bottom: 0, left: x + 'px', width: '76px', textAlign: 'center', font: '600 24px Inter', color: C.steel }, m);
+      return { p, d };
+    });
+    const legend = el(L, 'div', { position: 'absolute', left: '80px', top: '1430px', font: '600 26px Inter', color: C.steel }, '<span style="color:#9BACCA">■</span> Reja &nbsp; <span style="color:#e8262d">■</span> Bajarildi &nbsp; · oyma-oy, nafar');
+    scenes.push(t => {
+      const s = S.hire;
+      revealCircle(L, t, s.start - .25, 540, 960, .55);
+      if (t > S.adapt.start + .6) L.style.visibility = 'hidden';
+      tagShow(tg, t, s.start + .25, S.adapt.start - .2);
+      const rot = (t - s.start) * 14;
+      rings.forEach((r, i) => { const k = sp(t - s.start - .1 - i * .08, 1.6, .8); r.setAttribute('transform', `rotate(${(i % 2 ? -1 : 1) * rot * (1 + i * .3)} ${CX} ${CY})`); r.setAttribute('r', [390, 430, 470][i] * (0.6 + .4 * k)); r.setAttribute('opacity', .5 * k); });
+      const tk = sp(t - s.start - .2, 1.8, .85);
+      track.setAttribute('r', R * tk);
+      const a = .801 * io(seg(t, W('hire', 11), W('hire', 11) + 1.6));
+      arc.setAttribute('stroke-dasharray', `${2 * Math.PI * R * a} ${2 * Math.PI * R}`);
+      plan.style.opacity = clamp(sp(t - W('hire', 2), 2, .8)); plan.style.transform = `translateY(${(1 - sp(t - W('hire', 2), 2, .8)) * 30}px)`;
+      const n = 685 * io(seg(t, W('hire', 11), W('hire', 11) + 1.6));
+      big.textContent = t < W('hire', 11) ? '0' : fmt(n);
+      big.style.opacity = clamp((t - W('hire', 11) + .15) * 6);
+      big.style.transform = `scale(${.85 + .15 * sp(t - W('hire', 11), 2, .7)})`;
+      rise(lbl, t, W('hire', 11) + .2);
+      const pk = sp(t - (W('hire', 11) + 1.7), 2.4, .62);
+      pct.style.transform = `scale(${.4 + .6 * pk})`; pct.style.opacity = clamp(pk * 3);
+      pct.style.color = C.white;
+      rise(pctL, t, W('hire', 11) + 1.85);
+      // bars grow from "yil davomida", plan first then done
+      bars.forEach((b, i) => {
+        const kp = sp(t - (s.vo + .1 + i * .07), 1.8, .82), kd = sp(t - (W('hire', 10) + i * .07), 1.8, .82);
+        b.p.style.height = (P[i] / 130 * 240 * kp) + 'px';
+        b.d.style.height = (D[i] / 130 * 240 * kd) + 'px';
+      });
+      legend.style.opacity = clamp((t - s.vo) * 3);
+    });
+  }
+
+  // ---------------- S2 adapt: light scene, 132 + three stage pillars
+  {
+    const L = layer(C.light); L.style.color = C.navy;
+    const tg = tag(L, '02 · MOSLASHTIRISH', C.navy, C.white);
+    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '300px', textAlign: 'center', font: '900 300px/1 "Inter Display"', letterSpacing: '-.04em', color: C.navy }); big.className = 'num';
+    const l1 = line(L, 'yangi xodim', { top: '620px', font: '700 70px "Inter Display"', color: C.navy });
+    const l2 = line(L, 'moslashtirish dasturidan oʻtdi', { top: '715px', font: '500 46px "Inter Display"', color: C.mute });
+    const data = [['1-hafta', 44, C.navy], ['1 oy', 51, C.red], ['2 oy', 37, C.steel]];
+    const cols = data.map(([lab, v, c], i) => {
+      const x = 140 + i * 290;
+      const bar = el(L, 'div', { position: 'absolute', left: x + 'px', width: '220px', bottom: '330px', background: c, borderRadius: '30px 30px 8px 8px' });
+      const val = el(L, 'div', { position: 'absolute', left: x + 'px', width: '220px', textAlign: 'center', font: '900 92px "Inter Display"', color: c === C.steel ? C.navy : c }, String(v));
+      const cap = el(L, 'div', { position: 'absolute', left: (x - 20) + 'px', width: '260px', bottom: '250px', textAlign: 'center', font: '700 40px "Inter Display"', color: C.navy }, lab);
+      return { bar, val, cap, v };
+    });
+    const note = el(L, 'div', { position: 'absolute', left: '80px', right: '80px', bottom: '140px', textAlign: 'center', font: '500 34px Inter', color: C.mute }, 'Moslashtirish davrida ishdan ketganlar: <b style="color:#16224a">7 nafar</b>');
+    scenes.push(t => {
+      const s = S.adapt;
+      revealCircle(L, t, s.start - .25, 540, 790, .55);
+      if (t > S.reserve.start + .8) L.style.visibility = 'hidden';
+      tagShow(tg, t, s.start + .2, S.reserve.start - .2);
+      const k = io(seg(t, s.vo - .1, s.vo + .9));
+      big.textContent = fmt(132 * k); big.style.opacity = clamp((t - s.vo + .2) * 5);
+      big.style.transform = `translateY(${(1 - sp(t - s.vo + .2, 2, .8)) * 60}px)`;
+      rise(l1, t, W('adapt', 5));
+      rise(l2, t, W('adapt', 7), 1e9, .05);
+      cols.forEach((c, i) => {
+        const g = sp(t - (W('adapt', 7) + .1 + i * .18), 1.7, .78);
+        const h = c.v / 51 * 560 * g;
+        c.bar.style.height = h + 'px';
+        c.val.style.top = (1920 - 330 - h - 110) + 'px';
+        c.val.style.opacity = clamp(g * 2);
+        c.cap.style.opacity = clamp(g * 2);
+      });
+      note.style.opacity = clamp((t - s.voEnd) * 3);
+    });
+  }
+
+  // ---------------- S3 reserve: 172 dots fly into a grid, coloured by direction
+  {
+    const L = layer(C.ink);
+    const tg = tag(L, '03 · ZAXIRA BAZASI', C.white, C.ink);
+    const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '250px', textAlign: 'center', font: '900 240px/1 "Inter Display"', letterSpacing: '-.04em' }); big.className = 'num';
+    const nm = line(L, 'NOMZOD', { top: '495px', font: '800 56px "Inter Display"', letterSpacing: '.2em' });
+    const pos = el(L, 'div', { position: 'absolute', left: '50%', top: '590px', transform: 'translateX(-50%)', background: C.red, borderRadius: '99px', padding: '12px 30px', font: '800 40px "Inter Display"', whiteSpace: 'nowrap' }, '28 ta lavozim');
+    const groups = [['Muhandislik', 50, C.red], ['Texnik xizmat', 43, C.white], ['IT va raqamli', 31, C.blue], ['Yordamchi', 26, C.steel], ['Boshqa', 22, C.mute]];
+    const colors = []; groups.forEach(([, n, c]) => { for (let i = 0; i < n; i++) colors.push(c); });
+    const r = rng(7), cols = 12, sx = 64, x0 = 540 - (cols - 1) * sx / 2, y0 = 760;
+    const dots = colors.map((c, i) => {
+      const d = el(L, 'div', { position: 'absolute', width: '40px', height: '40px', borderRadius: '50%', background: c });
+      const a = r() * Math.PI * 2, rr = 900 + r() * 500;
+      return { d, gx: x0 + (i % cols) * sx, gy: y0 + Math.floor(i / cols) * sx, sx: 540 + Math.cos(a) * rr, sy: 1100 + Math.sin(a) * rr, delay: r() * .9 + (i / colors.length) * .9 };
+    });
+    const legend = el(L, 'div', { position: 'absolute', left: '90px', top: '1720px', width: '900px', display: 'flex', flexWrap: 'wrap', gap: '14px 34px', font: '600 30px Inter', color: '#d5dae5' },
+      groups.map(([n, v, c]) => `<span><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:${c};vertical-align:-3px;margin-right:10px"></span>${n} ${v}</span>`).join(''));
+    scenes.push(t => {
+      const s = S.reserve;
+      const rb = revealBands(L, t, s.start - .45);
+      if (t > S.leave.start + .7) L.style.visibility = 'hidden';
+      tagShow(tg, t, s.start + .3, S.leave.start - .2);
+      const go = s.start + .2;
+      const suck = io(seg(t, S.leave.start - .55, S.leave.start + .05)); // dots pulled into the centre before the next scene
+      dots.forEach(o => {
+        const k = sp(t - go - o.delay, 1.3, .8);
+        let x = lerp(o.sx, o.gx, k), y = lerp(o.sy, o.gy, k);
+        x = lerp(x, 540, suck); y = lerp(y, 1100, suck);
+        o.d.style.transform = `translate(${x - 20}px, ${y - 20}px) scale(${(1 - suck * .6)})`;
+      });
+      const nb = W('reserve', 6);
+      big.textContent = fmt(172 * io(seg(t, nb, nb + 1.1))); big.style.opacity = clamp((t - nb + .1) * 6);
+      rise(nm, t, nb + .4);
+      const pk = sp(t - W('reserve', 2), 2.2, .7);
+      pos.style.transform = `translateX(-50%) scale(${pk})`;
+      legend.style.opacity = clamp((t - W('reserve', 11)) * 3) * (1 - suck);
+    });
+  }
+
+  // ---------------- S4 leave: red, OYLIK / MAOSH chunky type, 96% slam + bar
+  {
+    const L = layer(C.red);
+    const tg = tag(L, '04 · ISHDAN KETISH', C.ink, C.white);
+    const as = line(L, 'ASOSIY SABAB', { top: '330px', font: '700 54px "Inter Display"', letterSpacing: '.18em', color: 'rgba(255,255,255,.8)' });
+    const o1 = line(L, 'OYLIK', { top: '420px', font: '900 228px/1 "Inter Display"', letterSpacing: '-.03em' });
+    const o2 = line(L, 'MAOSH', { top: '650px', font: '900 228px/1 "Inter Display"', letterSpacing: '-.03em' });
+    const dotM = el(L, 'div', { position: 'absolute', width: '58px', height: '58px', borderRadius: '50%', background: C.ink, left: '900px', top: '812px' });
+    const p96 = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1010px', textAlign: 'center', font: '900 380px/1 "Inter Display"', color: C.ink, letterSpacing: '-.05em' }, '96%');
+    const track = el(L, 'div', { position: 'absolute', left: '90px', width: '900px', top: '1440px', height: '34px', borderRadius: '99px', background: 'rgba(255,255,255,.35)', overflow: 'hidden' });
+    const fill = el(track, 'div', { height: '100%', width: '0', background: C.white, borderRadius: '99px' });
+    const cap = el(L, 'div', { position: 'absolute', left: '90px', top: '1500px', font: '700 38px "Inter Display"' }, 'Oylik maosh yetishmasligi');
+    const rest = el(L, 'div', { position: 'absolute', left: '90px', top: '1580px', width: '900px', font: '500 30px Inter', color: 'rgba(255,255,255,.85)', lineHeight: '1.7' },
+      'Boshqa ish topgani — 1%<br>Ishga kelmagani — 1%<br>Sogʻligʻi toʻgʻri kelmagani — 1%');
+    scenes.push(t => {
+      const s = S.leave;
+      revealCircle(L, t, s.start - .2, 540, 1100, .5);
+      if (t > S.standards.start + .8) L.style.visibility = 'hidden';
+      tagShow(tg, t, s.start + .2, S.standards.start - .2);
+      rise(as, t, W('leave', 2), 1e9, .05);
+      rise(o1, t, W('leave', 5));
+      rise(o2, t, W('leave', 6));
+      dotM.style.transform = `scale(${sp(t - W('leave', 6) - .25, 2.6, .55)})`;
+      const k = sp(t - W('leave', 8), 2.6, .6);
+      p96.style.transform = `scale(${2.2 - 1.2 * k})`; p96.style.opacity = clamp((t - W('leave', 8)) * 8);
+      const f = io(seg(t, W('leave', 8) + .2, W('leave', 8) + 1.3));
+      fill.style.width = (96 * f) + '%';
+      track.style.opacity = cap.style.opacity = clamp((t - W('leave', 8)) * 4);
+      rest.style.opacity = clamp((t - W('leave', 11)) * 3);
+    });
+  }
+
+  // ---------------- S5 standards: two documents fly in, red seal slams "TASDIQLANDI"
+  {
+    const L = layer(C.navy);
+    const tg = tag(L, '05 · NORMATIV ASOS', C.red, C.white);
+    const head = line(L, 'IKKI MUHIM STANDART', { top: '290px', font: '900 80px/1 "Inter Display"', letterSpacing: '-.01em' });
+    const card = (code, title, d1, d2) => {
+      const c = el(L, 'div', { position: 'absolute', left: '110px', width: '860px', height: '440px', background: C.white, color: C.navy, borderRadius: '28px', boxShadow: '0 40px 80px rgba(0,0,0,.35)', padding: '44px 52px', boxSizing: 'border-box', fontFamily: 'Inter' });
+      c.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><span style="font:900 44px 'Inter Display';color:${C.red}">ADM</span><span style="font:700 30px Inter;color:#2b6cd8">Standart</span></div>
+        <div style="margin-top:28px;font:600 30px Inter;color:${C.mute}">${code}</div>
+        <div style="margin-top:12px;font:800 46px/1.15 'Inter Display'">${title}</div>
+        <div style="display:flex;gap:30px;margin-top:26px;font:500 24px Inter;color:${C.mute}">
+          <div>Kategoriya<br><b style="font-size:34px;color:${C.navy}">“C”</b></div><div>Nashr<br><b style="font-size:34px;color:${C.navy}">1</b></div>
+          <div>Nashr sanasi<br><b style="font-size:34px;color:${C.navy}">${d1}</b></div><div>Amal qilish<br><b style="font-size:34px;color:${C.navy}">${d2}</b></div></div>`;
+      return c;
+    };
+    const A = card('KSt-205000-006:2026', 'Xodimlarni ishga qabul<br>qilish tartibi', '03.09.2026', '02.09.2029');
+    const B = card('KSt-205000-020:2026', 'Xodimlarni<br>moslashtirish tartibi', '09.09.2026', '08.09.2029');
+    const seal = el(L, 'div', { position: 'absolute', left: '560px', top: '1250px', width: '420px', height: '420px', borderRadius: '50%', border: `14px solid ${C.red}`, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: C.red, background: 'rgba(232,38,45,.08)' },
+      `<svg width="120" height="120" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="${C.red}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="font:900 46px 'Inter Display';letter-spacing:.02em">TASDIQLANDI</div><div style="font:700 26px Inter;margin-top:6px">“ADM JIZZAKH” AJ</div>`);
+    const shock = el(L, 'div', { position: 'absolute', borderRadius: '50%', border: `6px solid ${C.white}` });
+    scenes.push(t => {
+      const s = S.standards;
+      const rb = revealBands(L, t, s.start - .45);
+      if (t > S.outro.start + .8) L.style.visibility = 'hidden';
+      tagShow(tg, t, s.start + .25, S.outro.start - .2);
+      rise(head, t, s.vo, S.outro.start - .3, .07);
+      const fly = io(seg(t, S.outro.start - .5, S.outro.start + .1));
+      const ka = sp(t - W('standards', 2), 1.7, .75), kb = sp(t - W('standards', 4), 1.7, .75);
+      A.style.transform = `translate(${(1 - ka) * -1500 - fly * 1400}px, 440px) rotate(${-4 + (1 - ka) * -10}deg)`;
+      B.style.transform = `translate(${(1 - kb) * 1500 + fly * 1400}px, 940px) rotate(${3 + (1 - kb) * 10}deg)`;
+      const ts = W('standards', 6);
+      const k = clamp((t - ts + .12) / .12), land = sp(t - ts, 2.8, .55);
+      const sc = t < ts ? lerp(2.6, 1, inn(k)) : 1 + .06 * (1 - land);
+      seal.style.transform = `scale(${sc * (1 - fly)}) rotate(-10deg)`;
+      seal.style.opacity = clamp((t - ts + .12) * 8);
+      const sh = seg(t, ts, ts + .7);
+      const sr = 250 + 420 * out(sh);
+      Object.assign(shock.style, { left: (770 - sr) + 'px', top: (1460 - sr) + 'px', width: (2 * sr) + 'px', height: (2 * sr) + 'px', opacity: (1 - sh) * (sh > 0 ? .8 : 0) });
+    });
+  }
+
+  // ---------------- S6 outro: rings, two short slogans, logo lockup
+  {
+    const L = layer(C.deep);
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('width', 1080); svg.setAttribute('height', 1920); svg.style.position = 'absolute'; L.appendChild(svg);
+    const rings = [...Array(6)].map((_, i) => { const e = document.createElementNS(svgNS, 'circle'); e.setAttribute('cx', 540); e.setAttribute('cy', 900); e.setAttribute('fill', 'none'); e.setAttribute('stroke', [C.red, C.steel, C.white][i % 3]); e.setAttribute('stroke-width', 3); svg.appendChild(e); return e; });
+    const a = line(L, 'SHAFFOF JARAYON.', { top: '840px', font: '900 94px/1 "Inter Display"', letterSpacing: '-.02em' });
+    const b = line(L, 'BARQAROR JAMOA.', { top: '840px', font: '900 94px/1 "Inter Display"', letterSpacing: '-.02em', color: C.red });
+    const logo = el(L, 'img', { position: 'absolute', left: '240px', top: '640px', width: '600px', height: '471px', borderRadius: '24px' }); logo.src = 'assets/logo.png';
+    const sub = line(L, '2026 · HR FAOLIYATI', { top: '1190px', font: '700 44px "Inter Display"', letterSpacing: '.16em', color: C.steel });
+    scenes.push(t => {
+      const s = S.outro;
+      revealCircle(L, t, s.start - .25, 540, 900, .55);
+      rings.forEach((r, i) => {
+        const ph = ((((t - s.start) * .35 + i / 6) % 1) + 1) % 1;
+        r.setAttribute('r', 120 + ph * 1100); r.setAttribute('opacity', (1 - ph) * .45 * clamp((t - s.start) * 2));
+        r.setAttribute('stroke-dasharray', i % 2 ? '14 22' : '80 40');
+      });
+      rise(a, t, W('outro', 0), W('outro', 2) - .3);
+      rise(b, t, W('outro', 2), W('outro', 4) - .35);
+      const lk = sp(t - W('outro', 4) + .05, 1.9, .72);
+      logo.style.opacity = clamp(lk * 2);
+      logo.style.transform = `scale(${.7 + .3 * lk + .025 * seg(t, W('outro', 4), T)})`;
+      rise(sub, t, W('outro', 5));
+    });
+  }
+  makeBands();
+}
+
+// camera: tiny punches on key beats
+let PUNCH = [];
+window.seek = async (t) => {
+  let z = 1;
+  for (const [pt, a] of PUNCH) if (t >= pt) z += a * Math.exp(-(t - pt) * 6);
+  // stamp shake
+  const ts = W('standards', 6), sh = t > ts && t < ts + .35 ? (1 - (t - ts) / .35) * 10 : 0;
+  cam.style.transform = `translate(${Math.sin(t * 90) * sh}px, ${Math.cos(t * 77) * sh}px) scale(${z})`;
+  scenes.forEach(f => f(t));
+  drawBands(t, [S.reserve.start - .45, S.standards.start - .45]);
+  document.getElementById('hud').textContent = t.toFixed(2);
+};
+
+fetch('audio/timeline.json').then(r => r.json()).then(async tl => {
+  TL = tl; S = tl.scenes; T = tl.total;
+  PUNCH = [[W('hire', 11) + 1.6, .02], [W('leave', 8), .04], [W('standards', 6), .05], [W('outro', 4), .02]];
+  build();
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  window.seek(0);
+  window.T = T;
+  window.ready = true;
+  if (!navigator.webdriver) {
+    document.getElementById('hud').style.display = 'block';
+    let now = 0, last = 0, play = false;
+    const tick = ts => { if (play) { now = (now + (ts - last) / 1000) % T; window.seek(now); } last = ts; requestAnimationFrame(tick); };
+    addEventListener('keydown', e => { if (e.code === 'Space') play = !play; if (e.code === 'ArrowRight') window.seek(now += 1 / 30); if (e.code === 'ArrowLeft') window.seek(now -= 1 / 30); });
+    requestAnimationFrame(tick);
+  }
+});
+</script>
+</body>
+</html>
