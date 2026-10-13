@@ -1,0 +1,211 @@
+{
+  "_about": "Oʻzbekcha talaffuz lugʻati (faqat lotin yozuvi). key = kichik harfli lotin kalit. spoken.latin = TTS ga yuboriladigan shakl. kind: word (oʻzbekcha soʻz — harflari oʻzgarmaydi, faqat boʻgʻin chizigʻi qoʻshilishi mumkin), term (chet atama — oʻzbekcha muqobili), abbr (qisqartma — soʻz bilan). status: approved (quloq bilan tasdiqlangan) | candidate (STT testi). x va h hech qachon almashtirilmaydi. Ovozga yuborishda x avtomatik 'kh' boʻladi (chuqur boʻgʻiz x; yozuv oʻzgarmaydi).",
+  "entries": {
+    "adm": {
+      "original": "ADM",
+      "latin": "ADM",
+      "cyrillic": "АДМ",
+      "spoken": {
+        "latin": "A-de-em",
+        "cyrillic": "АДМ"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "notes": "eleven_v4: 'ADM' -> 'adiyam'. Foydalanuvchi quloq bilan tanlagan (F varianti, 2026-10-13): 'A-de-em, Jizzakh!' — 'A-de-em' va undan keyin qisqa pauza.",
+      "kind": "abbr",
+      "pauseAfter": true
+    },
+    "aj": {
+      "original": "AJ",
+      "latin": "AJ",
+      "cyrillic": "АЖ",
+      "spoken": {
+        "latin": "aksiyadorlik jamiyati",
+        "cyrillic": "акциядорлик жамияти"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "notes": "Kompaniya turi qisqartmasi toʻliq aytiladi.",
+      "kind": "abbr"
+    },
+    "axborot": {
+      "original": "Axborot",
+      "latin": "Axborot",
+      "cyrillic": "Ахборот",
+      "spoken": {
+        "latin": "Axborot"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "word",
+      "score": 1,
+      "testedAt": "2026-10-13T06:53:59.516Z",
+      "notes": "eleven_v4 da x -> kh bilan 'Akhborot' deb yuboriladi. v3 da 'Ax-borot' sinalgan edi."
+    },
+    "deadline": {
+      "original": "deadline",
+      "latin": "deadline",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "muddat"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "design": {
+      "original": "design",
+      "latin": "design",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "dizayn"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "engineer": {
+      "original": "engineer",
+      "latin": "engineer",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "muhandis"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "feedback": {
+      "original": "feedback",
+      "latin": "feedback",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "fikr-mulohaza"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "hr": {
+      "original": "HR",
+      "latin": "HR",
+      "cyrillic": "HR",
+      "spoken": {
+        "latin": "xodimlar bilan ishlash",
+        "cyrillic": "ходимлар билан ишлаш"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "notes": "Inglizcha HR (human resources) oʻrniga oʻzbekcha muqobil.",
+      "kind": "term"
+    },
+    "it": {
+      "original": "IT",
+      "latin": "IT",
+      "cyrillic": "IT",
+      "spoken": {
+        "latin": "axborot texnologiyalari",
+        "cyrillic": "ахборот технологиялари"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "term",
+      "notes": "IT oʻrniga oʻzbekcha muqobil."
+    },
+    "jizzax": {
+      "original": "Jizzax",
+      "latin": "Jizzax",
+      "cyrillic": "Жиззах",
+      "spoken": {
+        "latin": "Jizzax",
+        "cyrillic": "Жиззах"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "score": 1.0,
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-10-13): eleven_v4 + language_code uz, ovozga 'Jizzakh' (x -> kh avtomatik). Avvalgi v3 sinovlari: 'Jizzax' -> 'jezaks'. Gap oxirida: 'Jizzakh!' (F varianti, foydalanuvchi tanlagan); nuqta bilan 'jizzaq'/'zzkh' boʻlib qolgan.",
+      "kind": "word",
+      "testedAt": "2026-10-13"
+    },
+    "manager": {
+      "original": "manager",
+      "latin": "manager",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "menejer"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "onboarding": {
+      "original": "onboarding",
+      "latin": "onboarding",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "moslashtirish"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "online": {
+      "original": "online",
+      "latin": "online",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "onlayn"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "r&d": {
+      "original": "R&D",
+      "latin": "R&D",
+      "cyrillic": "R&D",
+      "spoken": {
+        "latin": "ilmiy-tadqiqot ishlari",
+        "cyrillic": "илмий-тадқиқот ишлари"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "term",
+      "notes": "R&D oʻrniga oʻzbekcha muqobil."
+    },
+    "team": {
+      "original": "team",
+      "latin": "team",
+      "cyrillic": "",
+      "spoken": {
+        "latin": "jamoa"
+      },
+      "kind": "term",
+      "status": "candidate",
+      "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
+      "prefer": "latin"
+    },
+    "zaxira": {
+      "original": "Zaxira",
+      "latin": "Zaxira",
+      "cyrillic": "Захира",
+      "spoken": {
+        "latin": "Zaxira",
+        "cyrillic": "Захира"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "score": 0.481,
+      "testedAt": "2026-10-13T06:39:10.563Z",
+      "notes": "Ikkala yozuvda ham STT 'zahira' deb yozgan (48%) — STT qulogʻining xatosi boʻlishi mumkin; ADM filmida toʻliq gapda toʻgʻri eshitildi (97.8%). Quloq bilan tekshiring.",
+      "kind": "word"
+    }
+  }
+}

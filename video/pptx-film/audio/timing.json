@@ -1,0 +1,417 @@
+{
+ "intro": {
+  "duration": 4.362449,
+  "words": [
+   {
+    "text": "ADM",
+    "start": 0,
+    "end": 0.8
+   },
+   {
+    "text": "Jizzax.",
+    "start": 0.96,
+    "end": 1.8
+   },
+   {
+    "text": "Ikki",
+    "start": 2,
+    "end": 2.16
+   },
+   {
+    "text": "ming",
+    "start": 2.24,
+    "end": 2.4
+   },
+   {
+    "text": "yigirma",
+    "start": 2.453,
+    "end": 2.72
+   },
+   {
+    "text": "oltinchi",
+    "start": 2.84,
+    "end": 3.12
+   },
+   {
+    "text": "yil",
+    "start": 3.2,
+    "end": 3.36
+   },
+   {
+    "text": "hisoboti.",
+    "start": 3.44,
+    "end": 4.32
+   }
+  ]
+ },
+ "hire": {
+  "duration": 8.907755,
+  "words": [
+   {
+    "text": "Yil",
+    "start": 0,
+    "end": 0.24
+   },
+   {
+    "text": "davomida",
+    "start": 0.28,
+    "end": 1.04
+   },
+   {
+    "text": "sakkiz",
+    "start": 1.12,
+    "end": 1.52
+   },
+   {
+    "text": "yuz",
+    "start": 1.573,
+    "end": 1.68
+   },
+   {
+    "text": "ellik",
+    "start": 1.76,
+    "end": 2.08
+   },
+   {
+    "text": "besh",
+    "start": 2.12,
+    "end": 2.32
+   },
+   {
+    "text": "nafar",
+    "start": 2.4,
+    "end": 2.64
+   },
+   {
+    "text": "xodimni",
+    "start": 2.72,
+    "end": 3.28
+   },
+   {
+    "text": "ishga",
+    "start": 3.36,
+    "end": 3.68
+   },
+   {
+    "text": "olish",
+    "start": 3.76,
+    "end": 4
+   },
+   {
+    "text": "rejalashtirildi.",
+    "start": 4.08,
+    "end": 5.56
+   },
+   {
+    "text": "Olti",
+    "start": 5.6,
+    "end": 5.88
+   },
+   {
+    "text": "yuz",
+    "start": 5.92,
+    "end": 6.08
+   },
+   {
+    "text": "sakson",
+    "start": 6.12,
+    "end": 6.48
+   },
+   {
+    "text": "besh",
+    "start": 6.52,
+    "end": 6.72
+   },
+   {
+    "text": "nafari",
+    "start": 6.8,
+    "end": 7.28
+   },
+   {
+    "text": "ishga",
+    "start": 7.36,
+    "end": 7.6
+   },
+   {
+    "text": "qabul",
+    "start": 7.68,
+    "end": 7.92
+   },
+   {
+    "text": "qilindi.",
+    "start": 8,
+    "end": 8.96
+   }
+  ]
+ },
+ "adapt": {
+  "duration": 4.832653,
+  "words": [
+   {
+    "text": "Bir",
+    "start": 0,
+    "end": 0.16
+   },
+   {
+    "text": "yuz",
+    "start": 0.2,
+    "end": 0.32
+   },
+   {
+    "text": "oʻttiz",
+    "start": 0.48,
+    "end": 0.72
+   },
+   {
+    "text": "ikki",
+    "start": 0.8,
+    "end": 1.04
+   },
+   {
+    "text": "nafar",
+    "start": 1.12,
+    "end": 1.6
+   },
+   {
+    "text": "yangi",
+    "start": 1.68,
+    "end": 2
+   },
+   {
+    "text": "xodim",
+    "start": 2.04,
+    "end": 2.4
+   },
+   {
+    "text": "moslashtirish",
+    "start": 2.52,
+    "end": 3.04
+   },
+   {
+    "text": "dasturidan",
+    "start": 3.12,
+    "end": 3.68
+   },
+   {
+    "text": "oʻtdi.",
+    "start": 3.76,
+    "end": 4.8
+   }
+  ]
+ },
+ "reserve": {
+  "duration": 6.347755,
+  "words": [
+   {
+    "text": "Zaxira",
+    "start": 0,
+    "end": 0.4
+   },
+   {
+    "text": "bazasida",
+    "start": 0.48,
+    "end": 1.2
+   },
+   {
+    "text": "yigirma",
+    "start": 1.28,
+    "end": 1.6
+   },
+   {
+    "text": "sakkizta",
+    "start": 1.68,
+    "end": 2.16
+   },
+   {
+    "text": "lavozim",
+    "start": 2.28,
+    "end": 2.64
+   },
+   {
+    "text": "boʻyicha",
+    "start": 2.72,
+    "end": 3.36
+   },
+   {
+    "text": "bir",
+    "start": 3.44,
+    "end": 3.52
+   },
+   {
+    "text": "yuz",
+    "start": 3.6,
+    "end": 3.76
+   },
+   {
+    "text": "yetmish",
+    "start": 3.84,
+    "end": 4.16
+   },
+   {
+    "text": "ikki",
+    "start": 4.28,
+    "end": 4.4
+   },
+   {
+    "text": "nafar",
+    "start": 4.48,
+    "end": 4.8
+   },
+   {
+    "text": "nomzod",
+    "start": 4.88,
+    "end": 5.28
+   },
+   {
+    "text": "tayyor.",
+    "start": 5.36,
+    "end": 6.32
+   }
+  ]
+ },
+ "leave": {
+  "duration": 6.347755,
+  "words": [
+   {
+    "text": "Ishdan",
+    "start": 0,
+    "end": 0.32
+   },
+   {
+    "text": "ketishning",
+    "start": 0.4,
+    "end": 0.88
+   },
+   {
+    "text": "asosiy",
+    "start": 0.96,
+    "end": 1.44
+   },
+   {
+    "text": "sababi",
+    "start": 1.52,
+    "end": 2.16
+   },
+   {
+    "text": "—",
+    "start": 2.187,
+    "end": 2.213
+   },
+   {
+    "text": "oylik",
+    "start": 2.24,
+    "end": 2.56
+   },
+   {
+    "text": "maosh.",
+    "start": 2.64,
+    "end": 3.6
+   },
+   {
+    "text": "Bu",
+    "start": 3.76,
+    "end": 3.92
+   },
+   {
+    "text": "toʻqson",
+    "start": 3.96,
+    "end": 4.32
+   },
+   {
+    "text": "olti",
+    "start": 4.4,
+    "end": 4.64
+   },
+   {
+    "text": "foizni",
+    "start": 4.72,
+    "end": 5.12
+   },
+   {
+    "text": "tashkil",
+    "start": 5.16,
+    "end": 5.44
+   },
+   {
+    "text": "etadi.",
+    "start": 5.52,
+    "end": 6.4
+   }
+  ]
+ },
+ "standards": {
+  "duration": 4.362449,
+  "words": [
+   {
+    "text": "Eng",
+    "start": 0,
+    "end": 0.24
+   },
+   {
+    "text": "muhimi:",
+    "start": 0.28,
+    "end": 1.12
+   },
+   {
+    "text": "ikki",
+    "start": 1.28,
+    "end": 1.44
+   },
+   {
+    "text": "yangi",
+    "start": 1.52,
+    "end": 1.84
+   },
+   {
+    "text": "korporativ",
+    "start": 1.92,
+    "end": 2.48
+   },
+   {
+    "text": "standart",
+    "start": 2.56,
+    "end": 3.04
+   },
+   {
+    "text": "tasdiqlandi.",
+    "start": 3.12,
+    "end": 4.32
+   }
+  ]
+ },
+ "outro": {
+  "duration": 4.832653,
+  "words": [
+   {
+    "text": "Shaffof",
+    "start": 0,
+    "end": 0.48
+   },
+   {
+    "text": "jarayon.",
+    "start": 0.56,
+    "end": 1.52
+   },
+   {
+    "text": "Barqaror",
+    "start": 1.64,
+    "end": 2.08
+   },
+   {
+    "text": "jamoa.",
+    "start": 2.2,
+    "end": 3.12
+   },
+   {
+    "text": "ADM",
+    "start": 3.16,
+    "end": 4
+   },
+   {
+    "text": "Jizzax.",
+    "start": 4.04,
+    "end": 4.88
+   }
+  ]
+ }
+}

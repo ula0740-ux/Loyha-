@@ -1,0 +1,10 @@
+Reference: ./refs/launch.mp4 (and ./refs/frames/*.png)
+1. Extract one frame every 0.5s with ffmpeg. Study them.
+2. Write ./docs/style_guide.md: palette (hex), type (family, weight, tracking), shot lengths, transition types, camera moves, texture/grain, how text enters and exits.
+3. Write ./docs/shotlist.md for a [DURATION]s video about [SUBJECT] in THAT style. Take the grammar of the reference, never its content, logos or characters.
+4. Show me both files. Wait for my OK before any code.
+
+# A frame: attach one frame, say what to take (palette, type, grain) and what not to take (subject).
+# A video: ask for frame extraction + a shot-by-shot pacing description before code.
+# A library: a folder of your own images; write style_guide.md from it first. Nobody else can copy it.
+# Specify the look and constraints, not the library, unless you need a framework for reuse.
