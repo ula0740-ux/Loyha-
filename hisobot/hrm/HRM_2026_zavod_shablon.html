@@ -538,6 +538,12 @@ h1 em,h2 em{font-style:normal;background:linear-gradient(95deg,var(--amber),var(
 .ph.ev figcaption{text-align:center}
 .doc img{max-height:100%;max-width:100%;object-fit:contain;border-radius:10px;background:#fff;box-shadow:0 30px 70px -20px rgba(0,0,0,.9),0 0 50px -15px rgba(46,168,255,.5)}
 .doc{height:100%}
+.stk{position:absolute;right:calc(var(--u)*1);bottom:calc(var(--u)*.9);pointer-events:none;opacity:.85;
+  filter:drop-shadow(0 0 14px rgba(46,168,255,.35)) drop-shadow(0 0 22px rgba(255,122,26,.25));animation:stkf 5s ease-in-out infinite}
+.stk::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,rgba(46,168,255,.16),transparent 70%);z-index:-1}
+.stk svg{width:100%;height:100%;display:block}
+@keyframes stkf{50%{transform:translateY(-6px) rotate(-3deg)}}
+@media (prefers-reduced-motion:reduce){.stk{animation:none}}
 
 </style>
 </head>
@@ -556,6 +562,7 @@ h1 em,h2 em{font-style:normal;background:linear-gradient(95deg,var(--amber),var(
     <symbol id="arr" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="stkG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fe1ff"/><stop offset="1" stop-color="#ff7a1a"/></linearGradient></defs></svg>
 
 <div class="progress" aria-hidden="true"><i id="progressFill"></i></div>
 
@@ -1229,12 +1236,70 @@ h1 em,h2 em{font-style:normal;background:linear-gradient(95deg,var(--amber),var(
     Array.prototype.forEach.call(document.querySelectorAll('.dwrap'), function(w){
       var k = 1; w.style.setProperty('--k', k);
       if (narrow.matches) return;
-      while ((w.scrollHeight > w.clientHeight + 1 || w.scrollWidth > w.clientWidth + 1) && k > 0.5){ k -= 0.025; w.style.setProperty('--k', k.toFixed(3)); }
+      var over = function(){ return w.scrollHeight > w.clientHeight + 1 || w.scrollWidth > w.clientWidth + 1; };
+      if (over()) { while (over() && k > 0.5){ k -= 0.025; w.style.setProperty('--k', k.toFixed(3)); } }
+      else {
+        /* sparse slide: grow the content until it fills the slide, then step back one notch */
+
+      }
     });
   }
-  fitAll();
-  var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(fitAll, 150); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+  /* ===== decorative stickers for empty card space (chosen by the card's own wording) ===== */
+  var ICONS = {
+    paper: '<path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5M9 12h8M9 16h8M9 8h3"/>',
+    laptop: '<rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M2 19h20M9 9l2 2 4-4"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    coins: '<ellipse cx="9" cy="7" rx="6" ry="2.6"/><path d="M3 7v4c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6V7"/><path d="M9 13.6v3c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6v-4c0-1.4-2.7-2.6-6-2.6"/>',
+    shield: '<path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+    monitor: '<rect x="3" y="3" width="18" height="12" rx="1.5"/><path d="M8 21h8M12 15v6"/><path d="M8 9h3M13 9h3"/>',
+    rocket: '<path d="M12 2c4 2 6 6 6 11l-3 3H9l-3-3c0-5 2-9 6-11z"/><circle cx="12" cy="9" r="2"/><path d="M9 16l-2 5 5-2 5 2-2-5"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/><circle cx="17" cy="9" r="2.6"/><path d="M17 13.5c2.8 0 5 2.3 5 5.5"/>',
+    cap: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5M22 9v6"/>',
+    chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/><path d="M16 7h4v4"/>',
+    gavel: '<path d="M14 4l6 6M11 7l6 6M12.5 5.5l-6 6 3 3 6-6"/><path d="M8 13L3 18l2 2 5-5M13 21h8"/>',
+    star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    hand: '<path d="M2 12l4-4 4 2 3-2 4 3 5-1"/><path d="M6 8l-4 4 6 6c1 1 2.5 1 3.5 0l5-5"/><path d="M10 15l2 2M12.5 13l2 2"/>',
+    bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+    medal: '<circle cx="12" cy="15" r="5"/><path d="M8.5 11L5 3h5l2 5 2-5h5l-3.5 8"/><path d="M12 13v4"/>',
+    stairs: '<path d="M3 20h5v-5h5v-5h5V5h3"/><path d="M14 3h7v7"/>',
+    table: '<rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 9h18M3 14h18M9 4v16M15 4v16"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/><circle cx="12" cy="12" r="7"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/><path d="M12 12l7-7M16 5h3v3"/>',
+    calendar: '<rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4M8 14h3M13 14h3M8 17h3"/>'
+  };
+  var RULES = [
+    [/кейинги босқич/i, 'rocket'], [/kpi|самарадор|hpv|динамика/i, 'chart'], [/штат жадвали/i, 'table'], [/инженер/i, 'gear'], [/мастер/i, 'medal'],
+    [/эркак|аёл|амалда/i, 'users'], [/ўртача ёш/i, 'calendar'], [/имконияти|бола парвариши/i, 'hand'], [/touch|киоск/i, 'monitor'], [/қоғоз/i, 'paper'], [/электрон|онлайн|бот/i, 'laptop'],
+    [/вақт|соат|муддат|кун/i, 'clock'], [/харажат|сўм|маош|тўлов|сумма/i, 'coins'], [/назорат|шаффоф|хавфсиз/i, 'shield'],
+    [/таклиф/i, 'bulb'], [/ўқит|академия|компетенц|дарс|давомат/i, 'cap'], [/kpi|самарадор|hpv|динамика/i, 'chart'],
+    [/интизом|жазо|талон|муштлашув|масъулиятсиз/i, 'gavel'], [/тадбир|маданият|рағбат/i, 'star'], [/адаптация|мослаш/i, 'hand'],
+    [/грейд|даража|карьера|зинапоя/i, 'stairs'], [/стандарт|тасдиқ|қоида|ҳужжат|ариза/i, 'paper'], [/сабаб|хулоса/i, 'target'],
+    [/ой|йил|сентябр|октябр/i, 'calendar'], [/ходим|нафар|лавозим|бўлим/i, 'users'], [/жадвал|рўйхат/i, 'table']
+  ];
+  function pickIcon(text){ for (var r = 0; r < RULES.length; r++) if (RULES[r][0].test(text)) return RULES[r][1]; return 'gear'; }
+  function placeStickers(){
+    Array.prototype.forEach.call(document.querySelectorAll('.stk'), function(s){ s.remove(); });
+    if (narrow.matches) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.dwrap .card, .dwrap .kpi'), function(c, n){
+      var kids = Array.prototype.filter.call(c.children, function(k){ return !k.classList.contains('stk'); });
+      if (!kids.length) return;
+      var top = c.getBoundingClientRect().top, used = 0;
+      kids.forEach(function(k){ used = Math.max(used, k.getBoundingClientRect().bottom - top); });
+      var cs = getComputedStyle(c), free = c.clientHeight - used - parseFloat(cs.paddingBottom);
+      var size = Math.min(free - 8, c.clientWidth * 0.42, 170);
+      if (size < 44) return;
+      var h = c.querySelector('h3'), key = pickIcon((h ? h.textContent + ' ' : '') + c.textContent);
+      var d = document.createElement('div');
+      d.className = 'stk'; d.setAttribute('aria-hidden', 'true');
+      d.style.width = d.style.height = size + 'px';
+      d.style.animationDelay = (-(n % 5) * 0.8) + 's';
+      d.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="url(#stkG)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">' + ICONS[key] + '</svg>';
+      c.appendChild(d);
+    });
+  }
+  fitAll(); placeStickers();
+  var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ fitAll(); placeStickers(); }, 150); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ fitAll(); placeStickers(); });
   $('fsBtn').addEventListener('click', function(){
     var d = document, el = d.documentElement;
     if (d.fullscreenElement || d.webkitFullscreenElement) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
