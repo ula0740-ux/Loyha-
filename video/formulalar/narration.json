@@ -8,56 +8,64 @@
     },
     {
       "id": "intro",
-      "text": "Bugun ishlab chiqarishning yettita asosiy formulasini oddiy tilda tushuntiramiz."
+      "text": "Bugun ishlab chiqarishning yettita asosiy koʻrsatkichini birma-bir, misollar bilan tushuntiramiz."
     },
     {
       "id": "tt1",
-      "text": "Birinchisi — {TT}, yaʼni {Takt Time} — takt vaqti. Bu xaridor talabiga asosan bitta avtomobil ishlab chiqarishga sarflanadigan vaqt. Uni topish uchun liniyaning toza ishlash vaqtini xaridor talabiga boʻlamiz."
+      "text": "Birinchisi — {Takt Time}, yaʼni takt vaqti. Takt soʻzi ritm, maromni bildiradi. Takt vaqti xaridor talabini oʻz vaqtida bajarish uchun bitta avtomobil qancha vaqtda ishlab chiqarilishi kerakligini koʻrsatadi."
     },
     {
       "id": "tt2",
-      "text": "450 daqiqani 40 ta avtomobilga boʻlsak, 11,25 daqiqa chiqadi. Bu 675 soniya."
+      "text": "Formula: liniyaning toza yurish vaqtini xaridor talabiga boʻlamiz. Misol: liniyaning toza yurish vaqti 450 daqiqa, xaridor talabi esa 40 ta avtomobil."
     },
     {
       "id": "tt3",
-      "text": "Demak, xaridor talabini bajarish uchun har 675 soniyada bitta avtomobil tayyor boʻlishi kerak."
+      "text": "450 ni 40 ga boʻlsak, 11,25 daqiqa chiqadi. Uni 60 ga koʻpaytirib, soniyaga oʻtkazamiz: 675 soniya. Demak, har 675 soniyada liniyadan bitta avtomobil chiqishi kerak."
+    },
+    {
+      "id": "up",
+      "text": "Endi {Uptime} tushunchasi. {Uptime} — liniya ish vaqtining qancha qismida haqiqatda ishlab turganini foizda koʻrsatadi. Toʻxtashlar va nosozliklar bu ulushni kamaytiradi. Bizning misolda {Uptime} 85 foiz."
     },
     {
       "id": "att1",
-      "text": "Ammo liniya hech qachon yuz foiz ishlamaydi. Shuning uchun {ATT}, yaʼni {Actual Takt Time} — haqiqiy takt vaqtini hisoblaymiz."
+      "text": "Shuning uchun ikkinchi koʻrsatkich — {Actual Takt Time}, yaʼni haqiqiy takt vaqti. U rejani bajarish uchun bitta avtomobilni ishlab chiqarishga ajratilgan haqiqiy vaqtni koʻrsatadi."
     },
     {
       "id": "att2",
-      "text": "675 soniyani {Uptime}, yaʼni liniyaning ishlash ulushiga koʻpaytiramiz: 85 foiz. Natija: 574 soniya. Bu rejani bajarish uchun bitta avtomobilga beriladigan vaqt."
+      "text": "Formula: takt vaqtini {Uptime} ga koʻpaytirib, 100 ga boʻlamiz. 675 ni 85 ga koʻpaytirib, 100 ga boʻlsak, 574 soniya chiqadi. Yaʼni toʻxtashlarni hisobga olsak, har bir avtomobilga 574 soniya qoladi."
     },
     {
       "id": "jph1",
-      "text": "Endi {JPH}, yaʼni {Jobs Per Hour}. Bu liniyaning bir soatda ishlab chiqaradigan avtomobillar soni. Bir soatdagi 3600 soniyani takt vaqtiga boʻlamiz."
+      "text": "Uchinchi va toʻrtinchi koʻrsatkichlar — {Jobs Per Hour}, yaʼni liniyaning bir soatlik ishlab chiqarish quvvati. U bir soatda nechta avtomobil ishlab chiqarilishini koʻrsatadi. Bir soatda 3600 soniya bor."
     },
     {
       "id": "jph2",
-      "text": "Netto: 3600 ni 675 soniyaga boʻlsak, soatiga 5,3 ta avtomobil. Bu xaridor talabiga mos quvvat."
+      "text": "Netto quvvat xaridor talabiga mos keladi: 3600 ni takt vaqtiga, yaʼni 675 ga boʻlamiz. Natija: soatiga 5,3 ta avtomobil."
     },
     {
       "id": "jph3",
-      "text": "Brutto: 3600 ni 574 soniyaga boʻlsak, soatiga 6,3 ta avtomobil. Bu rejani bajarish uchun kerakli quvvat."
+      "text": "Brutto quvvat esa xaridor istagini toʻxtashlar bilan birga bajarish uchun kerak: 3600 ni haqiqiy takt vaqtiga, yaʼni 574 ga boʻlamiz. Natija: soatiga 6,3 ta avtomobil."
     },
     {
-      "id": "over",
-      "text": "{Overspeed} — ortiqcha tezlik. U liniya rejaga koʻra qanchalik samarali yurishini foizda koʻrsatadi. 675 dan 574 ni ayirib, 574 ga boʻlamiz: 17,6 foiz."
+      "id": "over1",
+      "text": "Beshinchisi — {Overspeed}, yaʼni ortiqcha tezlik. U rejani bajarish uchun liniya qancha foiz tezroq yurishi kerakligini, yaʼni samarali yurish foizini koʻrsatadi."
+    },
+    {
+      "id": "over2",
+      "text": "Formula: takt vaqtidan haqiqiy takt vaqtini ayirib, haqiqiy takt vaqtiga boʻlamiz. 675 dan 574 ni ayirsak, 101 chiqadi. 101 ni 574 ga boʻlsak, 17,6 foiz. Demak, liniya 17,6 foiz tezroq yurishi kerak."
     },
     {
       "id": "ct",
-      "text": "{CT}, yaʼni {Cycle Time} — sikl vaqti. Bu bitta jarayonga sarflangan vaqt."
+      "text": "Oltinchisi — {Cycle Time}, yaʼni sikl vaqti. Bu bitta jarayonga, yaʼni ish oʻrnidagi bitta amalga sarflangan vaqt, soniyada. Masalan, ishchi bitta amalni 60 soniyada bajarsa, sikl vaqti 60 soniya."
     },
     {
       "id": "rwt",
-      "text": "{RWT}, yaʼni {Real Work Time} — real ish vaqti. Bu sikl vaqtidan ishchining yurishga ketgan vaqtini olib tashlaganda qolgan sof ish vaqti."
+      "text": "Yettinchisi — {Real Work Time}, yaʼni real ish vaqti. Sikl vaqtidan ishchining yurishga ketgan vaqtlarini olib tashlasak, sof ish vaqti qoladi. Masalan, 60 soniyadan 12 soniya yurish olib tashlansa, real ish vaqti 48 soniya."
     },
     {
       "id": "outro",
-      "text": "Takt — bu liniyaning yurak urishi. Formulalarni bilsangiz, reja bajariladi. ADM Jizzax."
+      "text": "Takt vaqti, haqiqiy takt vaqti, soatlik quvvat, ortiqcha tezlik, sikl vaqti va real ish vaqti. Shu formulalar bilan liniya rejasi aniq hisoblanadi. ADM Jizzax."
     }
   ],
-  "note": "{...} ichidagi inglizcha atamalar inglizcha oʻqiladi (foydalanuvchi tanlovi, 2026-10-14); qolgan matn prepareUzbek orqali."
+  "note": "v3: qisqartmalar aytilmaydi, toʻliq inglizcha nomi aytiladi; {...} ichidagi inglizcha atamalar inglizcha oʻqiladi (foydalanuvchi tanlovi, 2026-10-14)."
 }

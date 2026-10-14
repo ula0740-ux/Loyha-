@@ -5,14 +5,14 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 timing = json.loads((HERE / "audio/timing.json").read_text())
-ORDER = ["hook", "intro", "tt1", "tt2", "tt3", "att1", "att2", "jph1", "jph2", "jph3", "over", "ct", "rwt", "outro"]
-LEAD = {"hook": 1.0, "tt1": 1.1, "att1": 1.0, "jph1": 1.1, "over": 1.0, "ct": 1.1, "outro": 1.0}
-TAIL = {"outro": 3.0, "intro": 0.4, "tt3": 0.6, "att2": 0.7, "jph3": 0.7, "over": 0.8, "rwt": 0.7}
+ORDER = ["hook", "intro", "tt1", "tt2", "tt3", "up", "att1", "att2", "jph1", "jph2", "jph3", "over1", "over2", "ct", "rwt", "outro"]
+LEAD = {"hook": 1.0}
+TAIL = {"outro": 3.2}
 
 cur, scenes = 0.0, {}
 for sid in ORDER:
     t = timing[sid]
-    lead, tail = LEAD.get(sid, 0.35), TAIL.get(sid, 0.35)
+    lead, tail = LEAD.get(sid, 1.0), TAIL.get(sid, 0.3)
     vo = cur + lead
     end = vo + t["duration"] + tail
     scenes[sid] = {
