@@ -90,7 +90,7 @@
   ]
  },
  "tt1": {
-  "duration": 8.829388,
+  "duration": 16.117551,
   "words": [
    {
     "text": "Birinchisi",
@@ -103,64 +103,139 @@
     "end": 1.16
    },
    {
-    "text": "te",
+    "text": "TT,",
     "start": 1.2,
-    "end": 1.44
-   },
-   {
-    "text": "te,",
-    "start": 2,
-    "end": 2.72
+    "end": 2.56
    },
    {
     "text": "yaʼni",
-    "start": 2.8,
-    "end": 3.36
+    "start": 2.64,
+    "end": 3.2
+   },
+   {
+    "text": "Takt",
+    "start": 3.28,
+    "end": 3.6
+   },
+   {
+    "text": "Time",
+    "start": 3.68,
+    "end": 4.4
+   },
+   {
+    "text": "—",
+    "start": 4.427,
+    "end": 4.453
    },
    {
     "text": "takt",
-    "start": 3.44,
-    "end": 3.76
+    "start": 4.48,
+    "end": 4.72
    },
    {
     "text": "vaqti.",
-    "start": 3.84,
-    "end": 4.88
-   },
-   {
-    "text": "Liniyaning",
-    "start": 4.96,
-    "end": 5.52
-   },
-   {
-    "text": "toza",
-    "start": 5.6,
+    "start": 4.8,
     "end": 5.84
    },
    {
-    "text": "ishlash",
-    "start": 5.92,
-    "end": 6.24
+    "text": "Bu",
+    "start": 6,
+    "end": 6.16
    },
    {
-    "text": "vaqtini",
-    "start": 6.32,
-    "end": 6.8
-   },
-   {
-    "text": "kharidor",
-    "start": 6.84,
-    "end": 7.28
+    "text": "xaridor",
+    "start": 6.24,
+    "end": 6.64
    },
    {
     "text": "talabiga",
-    "start": 7.36,
-    "end": 7.76
+    "start": 6.72,
+    "end": 7.12
+   },
+   {
+    "text": "asosan",
+    "start": 7.2,
+    "end": 7.84
+   },
+   {
+    "text": "bitta",
+    "start": 7.92,
+    "end": 8.16
+   },
+   {
+    "text": "avtomobil",
+    "start": 8.24,
+    "end": 8.72
+   },
+   {
+    "text": "ishlab",
+    "start": 8.8,
+    "end": 9.04
+   },
+   {
+    "text": "chiqarishga",
+    "start": 9.12,
+    "end": 9.6
+   },
+   {
+    "text": "sarflanadigan",
+    "start": 9.68,
+    "end": 10.4
+   },
+   {
+    "text": "vaqt.",
+    "start": 10.52,
+    "end": 11.24
+   },
+   {
+    "text": "Uni",
+    "start": 11.28,
+    "end": 11.44
+   },
+   {
+    "text": "topish",
+    "start": 11.56,
+    "end": 11.76
+   },
+   {
+    "text": "uchun",
+    "start": 11.84,
+    "end": 12.24
+   },
+   {
+    "text": "liniyaning",
+    "start": 12.32,
+    "end": 12.88
+   },
+   {
+    "text": "toza",
+    "start": 13,
+    "end": 13.2
+   },
+   {
+    "text": "ishlash",
+    "start": 13.28,
+    "end": 13.6
+   },
+   {
+    "text": "vaqtini",
+    "start": 13.68,
+    "end": 14.16
+   },
+   {
+    "text": "xaridor",
+    "start": 14.213,
+    "end": 14.64
+   },
+   {
+    "text": "talabiga",
+    "start": 14.72,
+    "end": 15.04
    },
    {
     "text": "boʻlamiz.",
-    "start": 7.84,
-    "end": 8.8
+    "start": 15.12,
+    "end": 16.16
    }
   ]
  },
@@ -365,97 +440,107 @@
   ]
  },
  "att1": {
-  "duration": 8.672653,
+  "duration": 10.370612,
   "words": [
    {
     "text": "Ammo",
     "start": 0,
-    "end": 0.24
+    "end": 0.32
    },
    {
     "text": "liniya",
-    "start": 0.32,
-    "end": 0.8
+    "start": 0.4,
+    "end": 0.96
    },
    {
     "text": "hech",
-    "start": 0.88,
-    "end": 1.12
+    "start": 1.08,
+    "end": 1.28
    },
    {
     "text": "qachon",
-    "start": 1.2,
-    "end": 1.6
+    "start": 1.32,
+    "end": 1.68
    },
    {
     "text": "yuz",
-    "start": 1.68,
-    "end": 1.92
+    "start": 1.76,
+    "end": 2
    },
    {
     "text": "foiz",
-    "start": 2,
-    "end": 2.24
+    "start": 2.08,
+    "end": 2.32
    },
    {
     "text": "ishlamaydi.",
-    "start": 2.32,
-    "end": 3.4
+    "start": 2.4,
+    "end": 3.467
    },
    {
     "text": "Shuning",
-    "start": 3.44,
-    "end": 3.68
+    "start": 3.493,
+    "end": 3.76
    },
    {
     "text": "uchun",
-    "start": 3.8,
+    "start": 3.84,
     "end": 4.24
    },
    {
-    "text": "a",
+    "text": "ATT,",
     "start": 4.32,
-    "end": 4.48
-   },
-   {
-    "text": "te",
-    "start": 4.56,
-    "end": 4.72
-   },
-   {
-    "text": "te,",
-    "start": 4.8,
-    "end": 5.36
+    "end": 5.24
    },
    {
     "text": "yaʼni",
-    "start": 5.44,
-    "end": 6
+    "start": 5.28,
+    "end": 5.92
+   },
+   {
+    "text": "Actual",
+    "start": 6,
+    "end": 6.4
+   },
+   {
+    "text": "Takt",
+    "start": 6.48,
+    "end": 6.8
+   },
+   {
+    "text": "Time",
+    "start": 6.88,
+    "end": 7.6
+   },
+   {
+    "text": "—",
+    "start": 7.627,
+    "end": 7.653
    },
    {
     "text": "haqiqiy",
-    "start": 6.08,
-    "end": 6.72
+    "start": 7.68,
+    "end": 8.24
    },
    {
     "text": "takt",
-    "start": 6.76,
-    "end": 7.04
+    "start": 8.32,
+    "end": 8.56
    },
    {
     "text": "vaqtini",
-    "start": 7.12,
-    "end": 7.44
+    "start": 8.64,
+    "end": 8.96
    },
    {
     "text": "hisoblaymiz.",
-    "start": 7.52,
-    "end": 8.72
+    "start": 9.04,
+    "end": 10.4
    }
   ]
  },
  "att2": {
-  "duration": 14.445714,
+  "duration": 14.367347,
   "words": [
    {
     "text": "Olti",
@@ -465,227 +550,262 @@
    {
     "text": "yuz",
     "start": 0.32,
-    "end": 0.48
+    "end": 0.4
    },
    {
     "text": "yetmish",
-    "start": 0.56,
-    "end": 0.88
+    "start": 0.48,
+    "end": 0.8
    },
    {
     "text": "besh",
-    "start": 0.92,
+    "start": 0.88,
     "end": 1.12
    },
    {
     "text": "soniyani",
-    "start": 1.2,
+    "start": 1.24,
     "end": 1.84
    },
    {
-    "text": "liniyaning",
-    "start": 2,
-    "end": 2.56
-   },
-   {
-    "text": "ishlash",
-    "start": 2.68,
-    "end": 2.96
-   },
-   {
-    "text": "ulushiga,",
-    "start": 3.04,
-    "end": 3.8
+    "text": "Uptime,",
+    "start": 1.92,
+    "end": 2.72
    },
    {
     "text": "yaʼni",
-    "start": 3.84,
-    "end": 4.48
+    "start": 2.8,
+    "end": 3.28
+   },
+   {
+    "text": "liniyaning",
+    "start": 3.4,
+    "end": 3.84
+   },
+   {
+    "text": "ishlash",
+    "start": 3.96,
+    "end": 4.24
+   },
+   {
+    "text": "ulushiga",
+    "start": 4.32,
+    "end": 4.72
+   },
+   {
+    "text": "koʻpaytiramiz:",
+    "start": 4.8,
+    "end": 5.84
    },
    {
     "text": "sakson",
-    "start": 4.56,
-    "end": 4.96
+    "start": 5.88,
+    "end": 6.24
    },
    {
     "text": "besh",
-    "start": 5,
-    "end": 5.2
+    "start": 6.28,
+    "end": 6.48
    },
    {
-    "text": "foizga",
-    "start": 5.28,
-    "end": 5.68
-   },
-   {
-    "text": "koʻpaytiramiz.",
-    "start": 5.76,
-    "end": 6.92
+    "text": "foiz.",
+    "start": 6.6,
+    "end": 7.36
    },
    {
     "text": "Natija:",
-    "start": 6.96,
-    "end": 7.88
+    "start": 7.44,
+    "end": 8.24
    },
    {
     "text": "besh",
-    "start": 7.92,
-    "end": 8.16
+    "start": 8.32,
+    "end": 8.56
    },
    {
     "text": "yuz",
-    "start": 8.24,
-    "end": 8.4
+    "start": 8.6,
+    "end": 8.72
    },
    {
     "text": "yetmish",
-    "start": 8.52,
-    "end": 8.8
+    "start": 8.8,
+    "end": 9.12
    },
    {
     "text": "toʻrt",
-    "start": 8.88,
-    "end": 9.04
+    "start": 9.2,
+    "end": 9.36
    },
    {
     "text": "soniya.",
-    "start": 9.12,
-    "end": 10.12
+    "start": 9.44,
+    "end": 10.347
    },
    {
-    "text": "Rejani",
-    "start": 10.16,
-    "end": 10.56
+    "text": "Bu",
+    "start": 10.373,
+    "end": 10.4
+   },
+   {
+    "text": "rejani",
+    "start": 10.48,
+    "end": 10.88
    },
    {
     "text": "bajarish",
-    "start": 10.6,
-    "end": 11.04
+    "start": 10.92,
+    "end": 11.28
    },
    {
     "text": "uchun",
-    "start": 11.12,
-    "end": 11.52
+    "start": 11.36,
+    "end": 11.76
    },
    {
     "text": "bitta",
-    "start": 11.56,
-    "end": 11.84
+    "start": 11.867,
+    "end": 12.08
    },
    {
     "text": "avtomobilga",
-    "start": 11.92,
-    "end": 12.64
+    "start": 12.16,
+    "end": 12.72
    },
    {
-    "text": "shuncha",
-    "start": 12.72,
-    "end": 13.12
-   },
-   {
-    "text": "vaqt",
-    "start": 13.2,
+    "text": "beriladigan",
+    "start": 12.8,
     "end": 13.44
    },
    {
-    "text": "beriladi.",
-    "start": 13.52,
-    "end": 14.48
+    "text": "vaqt.",
+    "start": 13.56,
+    "end": 14.4
    }
   ]
  },
  "jph1": {
-  "duration": 7.810612,
+  "duration": 12.59102,
   "words": [
    {
     "text": "Endi",
     "start": 0,
-    "end": 0.32
+    "end": 0.56
+   },
+   {
+    "text": "JPH,",
+    "start": 0.72,
+    "end": 1.92
+   },
+   {
+    "text": "yaʼni",
+    "start": 2,
+    "end": 2.56
+   },
+   {
+    "text": "Jobs",
+    "start": 2.64,
+    "end": 2.96
+   },
+   {
+    "text": "Per",
+    "start": 3.04,
+    "end": 3.2
+   },
+   {
+    "text": "Hour.",
+    "start": 3.36,
+    "end": 4.16
+   },
+   {
+    "text": "Bu",
+    "start": 4.24,
+    "end": 4.32
    },
    {
     "text": "liniyaning",
-    "start": 0.4,
-    "end": 0.96
+    "start": 4.4,
+    "end": 5.04
    },
    {
-    "text": "soatlik",
-    "start": 1.04,
-    "end": 1.44
-   },
-   {
-    "text": "quvvati",
-    "start": 1.52,
-    "end": 2
-   },
-   {
-    "text": "—",
-    "start": 2.4,
-    "end": 2.44
-   },
-   {
-    "text": "je",
-    "start": 2.48,
-    "end": 2.64
-   },
-   {
-    "text": "pe",
-    "start": 2.72,
-    "end": 2.8
-   },
-   {
-    "text": "ha.",
-    "start": 2.88,
-    "end": 3.52
-   },
-   {
-    "text": "Bir",
-    "start": 3.56,
-    "end": 3.68
-   },
-   {
-    "text": "soatdagi",
-    "start": 3.76,
-    "end": 4.4
-   },
-   {
-    "text": "uch",
-    "start": 4.48,
-    "end": 4.64
-   },
-   {
-    "text": "ming",
-    "start": 4.76,
-    "end": 4.88
-   },
-   {
-    "text": "olti",
-    "start": 4.96,
+    "text": "bir",
+    "start": 5.12,
     "end": 5.2
    },
    {
+    "text": "soatda",
+    "start": 5.28,
+    "end": 5.68
+   },
+   {
+    "text": "ishlab",
+    "start": 5.76,
+    "end": 6
+   },
+   {
+    "text": "chiqaradigan",
+    "start": 6.04,
+    "end": 6.64
+   },
+   {
+    "text": "avtomobillar",
+    "start": 6.72,
+    "end": 7.44
+   },
+   {
+    "text": "soni.",
+    "start": 7.52,
+    "end": 8.36
+   },
+   {
+    "text": "Bir",
+    "start": 8.4,
+    "end": 8.48
+   },
+   {
+    "text": "soatdagi",
+    "start": 8.56,
+    "end": 9.2
+   },
+   {
+    "text": "uch",
+    "start": 9.28,
+    "end": 9.44
+   },
+   {
+    "text": "ming",
+    "start": 9.56,
+    "end": 9.68
+   },
+   {
+    "text": "olti",
+    "start": 9.76,
+    "end": 9.96
+   },
+   {
     "text": "yuz",
-    "start": 5.24,
-    "end": 5.36
+    "start": 10,
+    "end": 10.16
    },
    {
     "text": "soniyani",
-    "start": 5.48,
-    "end": 6.08
+    "start": 10.24,
+    "end": 10.96
    },
    {
     "text": "takt",
-    "start": 6.16,
-    "end": 6.4
+    "start": 11,
+    "end": 11.28
    },
    {
     "text": "vaqtiga",
-    "start": 6.48,
-    "end": 6.8
+    "start": 11.36,
+    "end": 11.68
    },
    {
     "text": "boʻlamiz.",
-    "start": 6.84,
-    "end": 7.84
+    "start": 11.72,
+    "end": 12.64
    }
   ]
  },
@@ -945,312 +1065,367 @@
   ]
  },
  "over": {
-  "duration": 14.106122,
+  "duration": 16.195918,
   "words": [
    {
-    "text": "Ortiqcha",
+    "text": "Overspeed",
     "start": 0,
-    "end": 0.48
+    "end": 0.8
    },
    {
-    "text": "tezlik",
-    "start": 0.56,
-    "end": 0.88
+    "text": "—",
+    "start": 1.2,
+    "end": 1.24
    },
    {
-    "text": "esa",
-    "start": 0.96,
-    "end": 1.36
+    "text": "ortiqcha",
+    "start": 1.28,
+    "end": 1.76
+   },
+   {
+    "text": "tezlik.",
+    "start": 1.84,
+    "end": 2.8
+   },
+   {
+    "text": "U",
+    "start": 2.88,
+    "end": 3.04
    },
    {
     "text": "liniya",
-    "start": 1.52,
-    "end": 1.84
+    "start": 3.2,
+    "end": 3.52
    },
    {
     "text": "rejaga",
-    "start": 1.92,
-    "end": 2.24
+    "start": 3.6,
+    "end": 4
    },
    {
     "text": "koʻra",
-    "start": 2.32,
-    "end": 2.64
+    "start": 4.08,
+    "end": 4.4
    },
    {
     "text": "qanchalik",
-    "start": 2.68,
-    "end": 3.12
+    "start": 4.48,
+    "end": 4.96
    },
    {
     "text": "samarali",
-    "start": 3.2,
-    "end": 3.68
+    "start": 5.04,
+    "end": 5.52
    },
    {
     "text": "yurishini",
-    "start": 3.76,
-    "end": 4.16
+    "start": 5.6,
+    "end": 6.16
+   },
+   {
+    "text": "foizda",
+    "start": 6.24,
+    "end": 6.64
    },
    {
     "text": "koʻrsatadi.",
-    "start": 4.2,
-    "end": 5.4
+    "start": 6.72,
+    "end": 7.88
    },
    {
     "text": "Olti",
-    "start": 5.44,
-    "end": 5.68
+    "start": 7.92,
+    "end": 8.12
    },
    {
     "text": "yuz",
-    "start": 5.72,
-    "end": 5.84
-   },
-   {
-    "text": "yetmish",
-    "start": 5.92,
-    "end": 6.24
-   },
-   {
-    "text": "besh",
-    "start": 6.28,
-    "end": 6.48
-   },
-   {
-    "text": "dan",
-    "start": 6.72,
-    "end": 6.96
-   },
-   {
-    "text": "besh",
-    "start": 7,
-    "end": 7.2
-   },
-   {
-    "text": "yuz",
-    "start": 7.24,
-    "end": 7.36
-   },
-   {
-    "text": "yetmish",
-    "start": 7.44,
-    "end": 7.68
-   },
-   {
-    "text": "toʻrt",
-    "start": 7.76,
-    "end": 7.96
-   },
-   {
-    "text": "ni",
-    "start": 8,
-    "end": 8.08
-   },
-   {
-    "text": "ayirib,",
     "start": 8.16,
+    "end": 8.32
+   },
+   {
+    "text": "yetmish",
+    "start": 8.4,
+    "end": 8.64
+   },
+   {
+    "text": "besh",
+    "start": 8.68,
     "end": 8.88
    },
    {
-    "text": "besh",
-    "start": 8.92,
-    "end": 9.12
-   },
-   {
-    "text": "yuz",
-    "start": 9.16,
+    "text": "dan",
+    "start": 9.08,
     "end": 9.28
    },
    {
-    "text": "yetmish",
+    "text": "besh",
     "start": 9.36,
-    "end": 9.6
+    "end": 9.52
+   },
+   {
+    "text": "yuz",
+    "start": 9.6,
+    "end": 9.76
+   },
+   {
+    "text": "yetmish",
+    "start": 9.84,
+    "end": 10.08
    },
    {
     "text": "toʻrt",
-    "start": 9.68,
-    "end": 9.84
+    "start": 10.16,
+    "end": 10.32
+   },
+   {
+    "text": "ni",
+    "start": 10.4,
+    "end": 10.48
+   },
+   {
+    "text": "ayirib,",
+    "start": 10.56,
+    "end": 11.24
+   },
+   {
+    "text": "besh",
+    "start": 11.28,
+    "end": 11.44
+   },
+   {
+    "text": "yuz",
+    "start": 11.52,
+    "end": 11.68
+   },
+   {
+    "text": "yetmish",
+    "start": 11.76,
+    "end": 12
+   },
+   {
+    "text": "toʻrt",
+    "start": 12.04,
+    "end": 12.24
    },
    {
     "text": "ga",
-    "start": 9.92,
-    "end": 10
-   },
-   {
-    "text": "boʻlamiz:",
-    "start": 10.04,
-    "end": 10.92
-   },
-   {
-    "text": "oʻn",
-    "start": 10.96,
-    "end": 11.08
-   },
-   {
-    "text": "yetti",
-    "start": 11.12,
-    "end": 11.36
-   },
-   {
-    "text": "butun",
-    "start": 11.44,
-    "end": 11.84
-   },
-   {
-    "text": "oʻndan",
-    "start": 11.92,
+    "start": 12.28,
     "end": 12.32
    },
    {
-    "text": "olti",
+    "text": "boʻlamiz:",
     "start": 12.4,
-    "end": 12.64
+    "end": 13.28
+   },
+   {
+    "text": "oʻn",
+    "start": 13.32,
+    "end": 13.44
+   },
+   {
+    "text": "yetti",
+    "start": 13.52,
+    "end": 13.76
+   },
+   {
+    "text": "butun",
+    "start": 13.84,
+    "end": 14.24
+   },
+   {
+    "text": "oʻndan",
+    "start": 14.32,
+    "end": 14.72
+   },
+   {
+    "text": "olti",
+    "start": 14.8,
+    "end": 15.08
    },
    {
     "text": "foiz.",
-    "start": 12.72,
-    "end": 14.08
+    "start": 15.12,
+    "end": 16.16
    }
   ]
  },
  "ct": {
-  "duration": 5.250612,
+  "duration": 7.157551,
   "words": [
    {
-    "text": "Se",
+    "text": "CT,",
     "start": 0,
-    "end": 0.16
+    "end": 0.96
    },
    {
-    "text": "te",
-    "start": 0.32,
-    "end": 0.56
+    "text": "yaʼni",
+    "start": 1.04,
+    "end": 1.44
    },
    {
-    "text": "—",
-    "start": 0.88,
-    "end": 0.92
+    "text": "Cycle",
+    "start": 1.68,
+    "end": 2
    },
    {
-    "text": "sikl",
-    "start": 0.96,
-    "end": 1.28
-   },
-   {
-    "text": "vaqti.",
-    "start": 1.36,
-    "end": 2.24
-   },
-   {
-    "text": "Bu",
-    "start": 2.32,
+    "text": "Time",
+    "start": 2.08,
     "end": 2.48
    },
    {
-    "text": "bitta",
-    "start": 2.72,
-    "end": 3.04
+    "text": "—",
+    "start": 2.88,
+    "end": 2.92
    },
    {
-    "text": "jarayonga",
-    "start": 3.16,
-    "end": 3.6
+    "text": "sikl",
+    "start": 2.96,
+    "end": 3.28
    },
    {
-    "text": "sarflangan",
-    "start": 3.68,
+    "text": "vaqti.",
+    "start": 3.36,
     "end": 4.24
    },
    {
+    "text": "Bu",
+    "start": 4.4,
+    "end": 4.56
+   },
+   {
+    "text": "bitta",
+    "start": 4.64,
+    "end": 4.88
+   },
+   {
+    "text": "jarayonga",
+    "start": 4.96,
+    "end": 5.44
+   },
+   {
+    "text": "sarflangan",
+    "start": 5.52,
+    "end": 6.16
+   },
+   {
     "text": "vaqt.",
-    "start": 4.32,
-    "end": 5.2
+    "start": 6.28,
+    "end": 7.12
    }
   ]
  },
  "rwt": {
-  "duration": 8.045714,
+  "duration": 11.807347,
   "words": [
    {
-    "text": "Er",
+    "text": "RWT,",
     "start": 0,
-    "end": 0.16
+    "end": 1.52
    },
    {
-    "text": "ve",
-    "start": 0.24,
-    "end": 0.4
+    "text": "yaʼni",
+    "start": 1.6,
+    "end": 2.24
    },
    {
-    "text": "te",
-    "start": 0.48,
-    "end": 0.64
+    "text": "Real",
+    "start": 2.4,
+    "end": 2.64
    },
    {
-    "text": "esa",
-    "start": 0.96,
-    "end": 1.28
+    "text": "Work",
+    "start": 2.72,
+    "end": 2.96
    },
    {
-    "text": "sikl",
-    "start": 1.44,
-    "end": 1.76
+    "text": "Time",
+    "start": 3.04,
+    "end": 3.76
    },
    {
-    "text": "vaqtidan",
-    "start": 1.84,
-    "end": 2.4
+    "text": "—",
+    "start": 3.84,
+    "end": 3.88
    },
    {
-    "text": "ishchining",
-    "start": 2.56,
-    "end": 3.04
-   },
-   {
-    "text": "yurishga",
-    "start": 3.08,
-    "end": 3.44
-   },
-   {
-    "text": "ketgan",
-    "start": 3.56,
-    "end": 3.84
-   },
-   {
-    "text": "vaqtini",
+    "text": "real",
     "start": 3.92,
-    "end": 4.32
-   },
-   {
-    "text": "olib",
-    "start": 4.4,
-    "end": 4.64
-   },
-   {
-    "text": "tashlaganda",
-    "start": 4.68,
-    "end": 5.6
-   },
-   {
-    "text": "qolgan",
-    "start": 5.68,
-    "end": 6.16
-   },
-   {
-    "text": "sof",
-    "start": 6.24,
-    "end": 6.56
+    "end": 4.24
    },
    {
     "text": "ish",
-    "start": 6.64,
-    "end": 6.8
+    "start": 4.32,
+    "end": 4.48
    },
    {
     "text": "vaqti.",
+    "start": 4.56,
+    "end": 5.4
+   },
+   {
+    "text": "Bu",
+    "start": 5.44,
+    "end": 5.68
+   },
+   {
+    "text": "sikl",
+    "start": 5.84,
+    "end": 6.12
+   },
+   {
+    "text": "vaqtidan",
+    "start": 6.16,
+    "end": 6.8
+   },
+   {
+    "text": "ishchining",
     "start": 6.88,
-    "end": 8
+    "end": 7.28
+   },
+   {
+    "text": "yurishga",
+    "start": 7.36,
+    "end": 7.68
+   },
+   {
+    "text": "ketgan",
+    "start": 7.76,
+    "end": 8.08
+   },
+   {
+    "text": "vaqtini",
+    "start": 8.16,
+    "end": 8.56
+   },
+   {
+    "text": "olib",
+    "start": 8.64,
+    "end": 8.8
+   },
+   {
+    "text": "tashlaganda",
+    "start": 8.84,
+    "end": 9.76
+   },
+   {
+    "text": "qolgan",
+    "start": 9.8,
+    "end": 10.24
+   },
+   {
+    "text": "sof",
+    "start": 10.32,
+    "end": 10.64
+   },
+   {
+    "text": "ish",
+    "start": 10.72,
+    "end": 10.8
+   },
+   {
+    "text": "vaqti.",
+    "start": 10.88,
+    "end": 11.84
    }
   ]
  },

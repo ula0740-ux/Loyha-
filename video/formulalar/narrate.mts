@@ -9,6 +9,20 @@ import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 
 const run = promisify(execFile);
+// {English} segments are read in English (the user's choice, 2026-10-14): they bypass prepareUzbek and keep their letters;
+// everything else goes through prepareUzbek as usual. Captions and timing use the text without braces.
+const plain = (t: string) => t.replace(/[{}]/g, '');
+function prepMixed(t: string) {
+  const parts = t.split(/(\{[^}]*\})/).filter(Boolean);
+  const out = parts.map((p) => {
+    if (p.startsWith('{')) return p.slice(1, -1);
+    const lead = /^\s/.test(p) ? ' ' : '', tail = /\s$/.test(p) ? ' ' : '';
+    let tts = prepareUzbek(p, 'latin').tts;
+    if (!/[.!?…:;,]\s*$/.test(p)) tts = tts.replace(/[.]$/, ''); // addPauses appends a stop to every chunk; keep only real ones
+    return lead + tts + tail;
+  });
+  return { tts: out.join('').replace(/\s+/g, ' ').trim() };
+}
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const cfg = JSON.parse(await readFile(HERE + 'narration.json', 'utf8'));
 const voice = process.env.VOICE || cfg.voice;
@@ -21,8 +35,8 @@ if (only.length) timing = JSON.parse(await readFile(HERE + 'audio/timing.json', 
 for (const line of cfg.lines) {
   if (only.length && !only.includes(line.id)) continue;
   // text stays in correct literary spelling; prepareUzbek (Uzbek Latin only) applies the tested lexicon and numbers
-  const prep = prepareUzbek(line.text, 'latin');
-  const shown = line.text.split(/\s+/).filter(Boolean);
+  const prep = prepMixed(line.text);
+  const shown = plain(line.text).split(/\s+/).filter(Boolean);
   // automatic ear: each take is transcribed (STT) and compared; up to ATTEMPTS takes, the best one is kept (CHECK=0 skips)
   const attempts = process.env.CHECK === '0' ? 1 : Number(process.env.ATTEMPTS || 4);
   let best: { s: Awaited<ReturnType<typeof synth>>; sc?: ReturnType<typeof score> } | null = null;
@@ -30,9 +44,9 @@ for (const line of cfg.lines) {
     // neighbouring lines as context (previous_text/next_text; sent only to models that accept it, e.g. eleven_v4):
     // without it eleven_v4 sometimes gives a short line a Persian accent
     const idx = cfg.lines.indexOf(line);
-    const ctx = { previousText: cfg.lines[idx - 1] && prepareUzbek(cfg.lines[idx - 1].text).tts, nextText: cfg.lines[idx + 1] && prepareUzbek(cfg.lines[idx + 1].text).tts };
+    const ctx = { previousText: cfg.lines[idx - 1] && prepMixed(cfg.lines[idx - 1].text).tts, nextText: cfg.lines[idx + 1] && prepMixed(cfg.lines[idx + 1].text).tts };
     const s = await synth(prep.tts, { voice, model: cfg.model, ...ctx });
-    const sc = process.env.CHECK === '0' ? undefined : score(spokenReference(line.text), await transcribe(s.mp3));
+    const sc = process.env.CHECK === '0' ? undefined : score(spokenReference(plain(line.text)), await transcribe(s.mp3));
     if (sc) console.log(`  ${line.id} #${k + 1}: STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);
     if (!best || (sc && best.sc && sc.similarity > best.sc.similarity)) best = { s, sc };
     if (!sc || (sc.similarity >= 0.97 && !sc.problems.some((p) => /x/.test(p.expected)))) break;

@@ -55,32 +55,74 @@ function layer() { const l = el(cam, 'div'); l.className = 'layer'; l.style.zInd
 const show = (e, on) => { e.style.visibility = on ? 'inherit' : 'hidden'; };
 
 /** blueprint grid + a drifting green light (each scene layer has its own) */
-function bg(L, gx, gy) {
+function bg(L, gx, gy, tilted = false) {
   el(L, 'div', { position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 55%, #13235a 0%, #0a1431 60%, #060c22 100%)' });
-  const grid = el(L, 'div', { position: 'absolute', inset: '-216px', backgroundImage:
+  const persp = el(L, 'div', { position: 'absolute', inset: 0, perspective: '900px', perspectiveOrigin: '50% 40%' });
+  const grid = el(persp, 'div', { position: 'absolute', inset: '-216px', backgroundImage:
     `linear-gradient(${C.grid2} 2px, transparent 2px), linear-gradient(90deg, ${C.grid2} 2px, transparent 2px), linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`,
     backgroundSize: '216px 216px, 216px 216px, 54px 54px, 54px 54px' });
   const blob = el(L, 'div', { position: 'absolute', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(61,255,122,.32) 0%, rgba(61,255,122,.08) 35%, transparent 65%)' });
-  return t => {
-    grid.style.transform = `translate(${(t * 6) % 216}px, ${(t * 10) % 216}px)`;
+  return (t, tilt = 0) => {
+    // reference 2.3 s: the grid swings in from a steep 3D tilt and settles flat
+    grid.style.transform = `rotateX(${tilt * 62}deg) rotateZ(${tilt * -14}deg) scale(${1 + tilt * .6}) translate(${(t * 6) % 216}px, ${(t * 10) % 216}px)`;
+    grid.style.opacity = 1 - tilt * .3;
     blob.style.transform = `translate(${gx - 450 + Math.sin(t * .4) * 120}px, ${gy - 450 + Math.cos(t * .33) * 100}px)`;
   };
 }
-/** section header: index, huge abbreviation (glow), name */
-function header(L, idx, abbr, name) {
-  const box = el(L, 'div', { position: 'absolute', left: '70px', top: '640px', width: '940px' });
-  const i = el(box, 'div', { font: '600 26px "JetBrains Mono"', color: C.g, letterSpacing: '.2em' }, idx);
-  const a = el(box, 'div', { font: '900 150px/1 Montserrat', color: C.g, textShadow: GLOW, marginTop: '6px', letterSpacing: '-.01em', whiteSpace: 'nowrap' }, abbr);
-  const n = el(box, 'div', { font: '600 34px "JetBrains Mono"', color: '#dfe7ff', marginTop: '10px', letterSpacing: '.04em' }, '');
-  const rule = el(box, 'div', { height: '2px', background: C.line, marginTop: '22px', transformOrigin: '0 0' });
-  return { box, set(abbrT, nameT) { a.textContent = abbrT; name = nameT; }, f(t, t0, tOut = 1e9) {
-    const p = sp(t - t0, 2.4, .75), q = inn(seg(t, tOut, tOut + .3));
-    i.style.opacity = clamp((t - t0) * 4) * (1 - q);
-    a.style.transform = `translateY(${(1 - p) * 60}px) scale(${1.25 - .25 * p})`; a.style.transformOrigin = '0 100%';
-    a.style.opacity = clamp(p * 1.6) * (1 - q); a.style.filter = `blur(${(1 - clamp(p * 1.3)) * 10}px)`;
-    n.textContent = scramble(name, t, t0 + .25, .7);
-    n.style.opacity = 1 - q;
-    rule.style.transform = `scaleX(${out(seg(t, t0 + .1, t0 + .9)) * (1 - q)})`;
+/** kinetic word pop (reference "В ПОЛНОМ АХУЕ?"): snaps in big, lands with a spring; arrives hot green and
+ * cools to white with a soft green halo (keep = stays green). No blur: the reference words are crisp. */
+const HOT = '0 0 10px rgba(180,255,200,.95), 0 0 40px rgba(61,255,122,.9), 0 0 90px rgba(61,255,122,.55)';
+function pop(e, t, t0, tOut = 1e9, keep = false, from = 1.18) {
+  const p = sp(t - t0, 3.0, .55), on = t >= t0;
+  e.style.opacity = on ? clamp((t - t0) * 20) : 0;
+  e.style.transform = `scale(${from - (from - 1) * p})`;
+  const c = keep ? 1 : 1 - seg(t, t0 + .12, t0 + .55);
+  e.style.color = keep ? C.g : `rgb(${Math.round(lerp(255, 61, c))},255,${Math.round(lerp(255, 122, c))})`;
+  e.style.textShadow = c > .02 ? HOT : '0 0 18px rgba(61,255,122,.45), 0 0 50px rgba(61,255,122,.2)';
+  echo(e, t, tOut);
+}
+/** echo exit (reference 5.0 s / 20.8 s): the text leaves a stack of fading copies as it lifts away */
+function echo(e, t, tOut) {
+  if (t < tOut) return;
+  const k = seg(t, tOut, tOut + .4), d = 26 * out(k);
+  e.style.textShadow = [1, 2, 3, 4, 5].map(j => `0 ${-j * d}px 0 rgba(255,255,255,${(.5 - j * .08) * (1 - k)})`).join(',');
+  e.style.opacity = (1 - inn(k)) * (+e.style.opacity || 1);
+  e.style.transform = (e.style.transform || '') + ` translateY(${-60 * inn(k)}px)`;
+}
+/** light-pen writing (reference intro "Привет,"): thin letters appear behind a glowing green dot */
+function pen(parent, text, css) {
+  const box = el(parent, 'div', Object.assign({ position: 'absolute', whiteSpace: 'nowrap', font: '200 72px/1.1 Inter', color: '#fff' }, css));
+  const ch = [...text].map(c => { const sEl = el(box, 'span', { display: 'inline-block', whiteSpace: 'pre' }, c === ' ' ? ' ' : c); return sEl; });
+  const dot = el(box, 'div', { position: 'absolute', width: '14px', height: '14px', borderRadius: '50%', background: '#eafff0', boxShadow: '0 0 12px 4px rgba(61,255,122,.95), 0 0 70px 30px rgba(61,255,122,.35)', top: '50%', marginTop: '-7px', marginLeft: '-7px' });
+  let xs = null;
+  return { box, f(t, t0, dur = .8, tOut = 1e9) {
+    if (!xs) xs = ch.map(c => c.offsetLeft + c.offsetWidth);
+    const k = seg(t, t0, t0 + dur), n = ch.length, pos = k * n;
+    ch.forEach((c, j) => { const a = clamp(pos - j); c.style.opacity = a; c.style.textShadow = a < 1 && a > 0 ? HOT : '0 0 14px rgba(61,255,122,.35)'; });
+    const j = Math.min(n - 1, Math.floor(pos)), fr = pos - Math.floor(pos);
+    const x = lerp(j ? xs[j - 1] : 0, xs[j], k >= 1 ? 1 : fr);
+    dot.style.left = x + 'px'; dot.style.opacity = t >= t0 && t < t0 + dur + .25 ? 1 - seg(t, t0 + dur, t0 + dur + .25) : 0;
+    dot.style.transform = `translateY(${Math.sin(pos * 2.1) * 10}px)`;
+    box.style.visibility = t >= t0 ? 'inherit' : 'hidden';
+    box.style.opacity = 1; box.style.transform = '';
+    if (t >= tOut) { const q = seg(t, tOut, tOut + .4); box.style.opacity = 1 - inn(q); box.style.transform = `translateY(${-50 * inn(q)}px)`; box.style.filter = `blur(${q * 6}px)`; }
+  } };
+}
+/** section header: index, abbreviation (kinetic pop), English expansion (light pen), Uzbek meaning (pop) */
+function header(L, idx, abbr, en, uz) {
+  const box = el(L, 'div', { position: 'absolute', left: '70px', top: '540px', width: '940px', height: '380px' });
+  const i = el(box, 'div', { position: 'absolute', left: 0, top: 0, font: '600 26px "JetBrains Mono"', color: C.g, letterSpacing: '.2em' }, idx);
+  const a = el(box, 'div', { position: 'absolute', left: 0, top: '40px', font: '900 150px/1 Montserrat', letterSpacing: '-.01em', whiteSpace: 'nowrap', transformOrigin: '0 100%' }, abbr);
+  const E = pen(box, en, { left: '4px', top: '200px', fontSize: abbr.length > 4 ? '60px' : '70px' });
+  const n = el(box, 'div', { position: 'absolute', left: '4px', top: '292px', font: '800 36px Montserrat', letterSpacing: '.06em', whiteSpace: 'nowrap', transformOrigin: '0 50%' }, uz.toUpperCase());
+  const rule = el(box, 'div', { position: 'absolute', left: 0, top: '356px', width: '940px', height: '3px', background: C.g, boxShadow: '0 0 12px rgba(61,255,122,.8)', transformOrigin: '0 0' });
+  return { box, f(t, tA, tE, tU, tOut = 1e9) {
+    i.style.opacity = clamp((t - tA + .2) * 4) * (1 - seg(t, tOut, tOut + .3));
+    pop(a, t, tA, tOut);
+    E.f(t, tE, .75, tOut);
+    pop(n, t, tU, tOut, true, 1.1);
+    const r = out(seg(t, tU, tU + .5)) * (1 - seg(t, tOut, tOut + .3));
+    rule.style.transform = `scaleX(${r})`; rule.style.opacity = r > 0 ? 1 : 0;
   } };
 }
 /** decode effect: characters resolve left to right out of random glyphs */
@@ -135,13 +177,15 @@ const W = (id, i) => S[id].words[i].t;
 // =====================================================================================
 const groups = [];   // {L, t0, t1, inType}
 let scenes = [];
-function group(t0key, t1key, inType) { const L = layer(); const g = { L, k0: t0key, k1: t1key, inType }; groups.push(g); return L; }
+function group(t0key, t1key, inType, word = '') { const L = layer(); const g = { L, k0: t0key, k1: t1key, inType, word }; groups.push(g); return L; }
 
 function build() {
   // ---------------- HOOK + INTRO
   {
     const L = group('hook', 'tt1', 'cut');
-    const B = bg(L, 540, 1100);
+    const B = bg(L, 540, 1100, true);
+    const hookPen = pen(L, 'Bitta avtomobil', { left: '120px', top: '470px', fontSize: '84px' });
+    const bloom = el(L, 'div', { position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 70%, rgba(200,255,215,.9), rgba(61,255,122,.35) 45%, transparent 75%)', zIndex: 4, opacity: 0 });
     const dot = el(L, 'div', { position: 'absolute', left: '540px', top: '1100px', width: '40px', height: '40px', marginLeft: '-20px', marginTop: '-20px', borderRadius: '50%', background: C.g, boxShadow: '0 0 30px 10px rgba(61,255,122,.7), 0 0 120px 40px rgba(61,255,122,.3)' });
     const ring = svg(L, 520, 520, { left: '280px', top: '840px' });
     const ticks = [];
@@ -157,8 +201,10 @@ function build() {
     const names = ['TT', 'ATT', 'JPH netto', 'JPH brutto', 'Overspeed', 'CT', 'RWT'];
     const chips = names.map((n, i) => { const c = el(L, 'div', { position: 'absolute', left: (i % 2 ? 560 : 90) + 'px', top: (1290 + Math.floor(i / 2) * 104) + 'px', width: i === 6 ? '900px' : '430px', height: '82px', border: `2px solid ${C.line}`, background: 'rgba(8,16,42,.75)', boxSizing: 'border-box', font: '700 38px "JetBrains Mono"', display: 'flex', alignItems: 'center', gap: '18px', paddingLeft: '24px', color: '#e9f0ff' }, `<span style="color:${C.g};font-size:26px">0${i + 1}</span>${n}`); return c; });
     scenes.push(t => {
-      B(t);
+      B(t, 1 - sp(t - .25, 1.1, .8));
       const hs = S.hook, is = S.intro;
+      hookPen.f(t, W('hook', 0) - .05, .9, W('hook', 2) - .2);
+      bloom.style.opacity = .55 * Math.exp(-Math.max(0, t - W('hook', 3)) * 5) * (t > W('hook', 3) ? 1 : 0);
       const intro = t >= is.start;
       // dot breath -> becomes the stopwatch centre
       const d = sp(t - .15, 2.2, .55);
@@ -171,24 +217,24 @@ function build() {
       arc.setAttribute('stroke-dashoffset', 1257 * (1 - out(spin)));
       tc.textContent = t < W('hook', 3) ? '' : `${String(Math.floor(fq(t - W('hook', 3)) * 237 % 1000)).padStart(3, '0')} s`;
       show(tc, !intro);
-      slam(necha, t, W('hook', 2) - .05, is.start - .3);
-      slam(soniya, t, W('hook', 3) - .05, is.start - .3);
+      pop(necha, t, W('hook', 2) - .05, is.start - .3, false, 1.3);
+      pop(soniya, t, W('hook', 3) - .05, is.start - .3, true, 1.3);
       // intro: zoom through the dot -> 7
       const z = io(seg(t, is.start - .35, is.start + .15));
       cam.dataset.zoom = intro ? 0 : z;
-      slam(seven, t, W('intro', 3) - .1, 1e9, 1.6);
+      pop(seven, t, W('intro', 3) - .1, is.end - .45, true, 1.5);
       seven.style.color = `rgba(61,255,122,${io(seg(t, W('intro', 3) + .2, W('intro', 3) + .7)) * .9})`;
       seven.style.textShadow = t > W('intro', 3) + .2 ? GLOW : 'none';
-      slam(sevenLbl, t, W('intro', 4) - .05, 1e9, 1.2);
+      pop(sevenLbl, t, W('intro', 4) - .05, is.end - .45, false, 1.2);
       chips.forEach((c, i) => { const p = sp(t - W('intro', 5) - i * .12, 2.4, .7); c.style.opacity = clamp(p * 2); c.style.transform = `translateY(${(1 - p) * 50}px)`; c.style.borderColor = t > W('intro', 5) + i * .12 + .25 ? C.line : C.g; });
     });
   }
 
   // ---------------- TT (tt1, tt2, tt3)
   {
-    const L = group('tt1', 'att1', 'flash');
+    const L = group('tt1', 'att1', 'flash', 'TT');
     const B = bg(L, 300, 1150);
-    const H = header(L, '01 / 07', 'TT', 'TAKT VAQTI');
+    const H = header(L, '01 / 07', 'TT', 'Takt Time', 'takt vaqti');
     const num = el(L, 'div', { position: 'absolute', left: '70px', width: '940px', top: '1000px', textAlign: 'center', font: '700 56px Montserrat' });
     const bar = el(L, 'div', { position: 'absolute', left: '140px', width: '800px', top: '1088px', height: '6px', background: '#fff', transformOrigin: '50% 50%', boxShadow: '0 0 14px rgba(255,255,255,.5)' });
     const den = el(L, 'div', { position: 'absolute', left: '70px', width: '940px', top: '1112px', textAlign: 'center', font: '700 56px Montserrat', color: C.g, textShadow: GLOW });
@@ -202,15 +248,16 @@ function build() {
     sv(timer, 'circle', { cx: 80, cy: 80, r: 64, fill: 'none', stroke: C.line, 'stroke-width': 6 });
     const tArc = sv(timer, 'circle', { cx: 80, cy: 80, r: 64, fill: 'none', stroke: C.g, 'stroke-width': 8, 'stroke-dasharray': 402, transform: 'rotate(-90 80 80)' });
     const tLbl = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1385px', textAlign: 'center', font: '600 30px "JetBrains Mono"', color: C.mute }, 'har 675 s → 1 avtomobil');
+    const D0 = defcard(L, 1470, 'Xaridor talabiga asosan bitta avtomobil ishlab chiqarishga sarflanadigan vaqt.');
     const D = defcard(L, 1470, 'TT — xaridor talabiga asosan bitta avtomobil ishlab chiqarishga sarflanadigan vaqt (soniyada).');
     scenes.push(t => {
       B(t);
-      H.f(t, S.tt1.vo + .9);
+      H.f(t, W('tt1', 2) - .05, W('tt1', 4) - .05, W('tt1', 7) - .05, S.att1.start - .45);
       const s2 = S.tt2.start, s3 = S.tt3.start;
       // fraction: words -> numbers (tt2) -> folds away (tt3)
-      const fIn = W('tt1', 7) - .1, gone = io(seg(t, s3 - .1, s3 + .4));
+      const fIn = W('tt1', 22) - .1, gone = io(seg(t, s3 - .1, s3 + .4));
       num.textContent = t < W('tt2', 0) - .15 ? scramble('Toza liniya ishlash vaqti', t, fIn, .8) : scramble('450 daqiqa', t, W('tt2', 0) - .15, .5);
-      den.textContent = t < W('tt2', 4) - .1 ? scramble('Xaridor talabi', t, W('tt1', 11) - .1, .6) : scramble('40 ta avtomobil', t, W('tt2', 4) - .1, .5);
+      den.textContent = t < W('tt2', 4) - .1 ? scramble('Xaridor talabi', t, W('tt1', 26) - .1, .6) : scramble('40 ta avtomobil', t, W('tt2', 4) - .1, .5);
       bar.style.transform = `scaleX(${out(seg(t, fIn, fIn + .6))})`;
       const shift = io(seg(t, W('tt2', 8) - .4, W('tt2', 8)));
       for (const e of [num, bar, den]) { e.style.transform = (e === bar ? `scaleX(${out(seg(t, fIn, fIn + .6))}) ` : '') + `translateY(${-shift * 90}px)`; e.style.opacity = 1 - gone; }
@@ -220,7 +267,7 @@ function build() {
       const c0 = W('tt2', 16), c1 = W('tt2', 21);
       const v = Math.round(675 * out(seg(fq(t), c0, c1)));
       big.textContent = `${v} s`;
-      slam(big, t, c0 - .05, 1e9, 1.15);
+      pop(big, t, c0 - .05, S.att1.start - .45, true, 1.15);
       const up = io(seg(t, s3 - .2, s3 + .5));
       big.style.transform += ` translateY(${-up * 330}px) scale(${1 - up * .35})`;
       if (t > c1 && t < c1 + .5) big.style.textShadow = `0 0 ${14 + 40 * (1 - seg(t, c1, c1 + .5))}px rgba(61,255,122,.9), 0 0 60px rgba(61,255,122,.4)`; else big.style.textShadow = GLOW;
@@ -235,15 +282,16 @@ function build() {
       cars.forEach((g, i) => { g.style.left = (-260 + ((i * 300 + pos) % 1500)) + 'px'; show(g, on); g.style.opacity = beltIn; });
       tArc.setAttribute('stroke-dashoffset', 402 * (1 - (k % STEP) / STEP));
       timer.style.opacity = beltIn; tLbl.style.opacity = beltIn;
+      D0(t, W('tt1', 9) - .1, S.tt2.start - .2);
       D(t, W('tt3', 11) - .2);
     });
   }
 
   // ---------------- ATT (att1, att2)
   {
-    const L = group('att1', 'jph1', 'scan');
+    const L = group('att1', 'jph1', 'glitch');
     const B = bg(L, 780, 1050);
-    const H = header(L, '02 / 07', 'ATT', 'HAQIQIY TAKT VAQTI');
+    const H = header(L, '02 / 07', 'ATT', 'Actual Takt Time', 'haqiqiy takt vaqti');
     const hundred = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '950px', textAlign: 'center', font: '900 300px/1 Montserrat', color: '#fff', textShadow: '0 0 30px rgba(255,255,255,.3)' }, '100%');
     const X = svg(L, 900, 340, { left: '90px', top: '940px' });
     const x1 = sv(X, 'line', { x1: 0, y1: 0, x2: 900, y2: 340, stroke: C.g, 'stroke-width': 12, 'stroke-dasharray': 962, 'stroke-linecap': 'round' });
@@ -261,9 +309,9 @@ function build() {
     const D = defcard(L, 1560, 'ATT — rejani bajarish uchun bitta avtomobilni ishlab chiqarishga sarflanadigan vaqt (soniyada).');
     scenes.push(t => {
       B(t);
-      H.f(t, W('att1', 9) - .1);
+      H.f(t, W('att1', 9) - .05, W('att1', 11) - .05, W('att1', 15) - .05, S.jph1.start - .45);
       const a2 = S.att2.start;
-      slam(hundred, t, W('att1', 4) - .1, a2 - .2, 1.2);
+      pop(hundred, t, W('att1', 4) - .1, a2 - .2, false, 1.2);
       const xk = W('att1', 6);
       x1.setAttribute('stroke-dashoffset', 962 * (1 - out(seg(t, xk, xk + .25))));
       x2.setAttribute('stroke-dashoffset', 962 * (1 - out(seg(t, xk + .18, xk + .43))));
@@ -278,22 +326,22 @@ function build() {
       strip.style.transform = `translateY(${io(seg(t, a2 - .2, a2 + .4)) * -20}px)`;
       // formula
       mshow(f1, t, a2 + .05, .8);
-      mshow(f2, t, W('att2', 9) - .1, .7);
-      const c0 = W('att2', 13), c1 = W('att2', 18);
+      mshow(f2, t, W('att2', 11) - .1, .7);
+      const c0 = W('att2', 14), c1 = W('att2', 19);
       big.textContent = `${Math.round(lerp(675, 574, io(seg(fq(t), c0, c1))))} s`;
-      slam(big, t, c0 - .1, 1e9, 1.15);
-      big.style.transform += ` translateY(${io(seg(t, W('att2', 19) - .3, W('att2', 19) + .2)) * -10}px)`;
+      pop(big, t, c0 - .1, S.jph1.start - .45, true, 1.15);
+      big.style.transform += ` translateY(${io(seg(t, W('att2', 20) - .3, W('att2', 20) + .2)) * -10}px)`;
       strip.style.top = lerp(1330, 1400, io(seg(t, c0 - .3, c0 + .2))) + 'px';
-      strip.style.opacity = parseFloat(strip.style.opacity) * (1 - seg(t, W('att2', 19) - .4, W('att2', 19)));
-      D(t, W('att2', 19) - .2);
+      strip.style.opacity = parseFloat(strip.style.opacity) * (1 - seg(t, W('att2', 20) - .4, W('att2', 20)));
+      D(t, W('att2', 20) - .2);
     });
   }
 
   // ---------------- JPH (jph1, jph2, jph3)
   {
-    const L = group('jph1', 'over', 'flash');
+    const L = group('jph1', 'over', 'flash', 'JPH');
     const B = bg(L, 540, 1250);
-    const H = header(L, '03 / 07', 'JPH', 'SOATLIK QUVVAT');
+    const H = header(L, '03 / 07', 'JPH', 'Jobs Per Hour', 'soatlik quvvat');
     const clock = svg(L, 440, 440, { left: '320px', top: '930px' });
     sv(clock, 'circle', { cx: 220, cy: 220, r: 200, fill: 'rgba(8,16,42,.7)', stroke: C.line, 'stroke-width': 4 });
     for (let i = 0; i < 60; i++) { const a = i / 60 * Math.PI * 2, r1 = i % 5 ? 184 : 168; sv(clock, 'line', { x1: 220 + Math.sin(a) * r1, y1: 220 - Math.cos(a) * r1, x2: 220 + Math.sin(a) * 194, y2: 220 - Math.cos(a) * 194, stroke: i % 5 ? C.line : C.g, 'stroke-width': i % 5 ? 2 : 5 }); }
@@ -326,17 +374,17 @@ function build() {
     }
     scenes.push(t => {
       B(t);
-      H.f(t, W('jph1', 5) - .1);
+      H.f(t, W('jph1', 1) - .05, W('jph1', 3) - .05, W('jph1', 6) - .05, S.over.start - .45);
       const j2 = S.jph2.start;
       const ci = sp(t - S.jph1.start - .3, 1.8, .8), co = io(seg(t, j2 - .3, j2 + .2));
       clock.style.opacity = ci * (1 - co); clock.style.transform = `scale(${(.7 + .3 * ci) * (1 - co * .3)})`;
-      const ang = Math.max(0, t - W('jph1', 8)) * 3.2, a = ang % (Math.PI * 2);
+      const ang = Math.max(0, t - W('jph1', 14)) * 3.2, a = ang % (Math.PI * 2);
       hand.setAttribute('transform', `rotate(${a * 180 / Math.PI} 220 220)`);
       const big = a > Math.PI ? 1 : 0;
       sweep.setAttribute('d', a < .01 ? '' : `M220 220 L220 20 A200 200 0 ${big} 1 ${220 + Math.sin(a) * 200} ${220 - Math.cos(a) * 200} Z`);
-      const h0 = W('jph1', 10);
+      const h0 = W('jph1', 16);
       hLbl.textContent = t < h0 - .05 ? '' : `${Math.round(3600 * out(seg(fq(t), h0, h0 + 1.2)))} s`;
-      slam(hLbl, t, h0 - .05, j2 - .3, 1.15);
+      pop(hLbl, t, h0 - .05, j2 - .3, false, 1.15);
       hSub.style.opacity = clamp((t - h0 - .3) * 3) * (1 - co);
       show(net.r, t > j2 - .1); show(bru.r, t > S.jph3.start - .1);
       rowF(net, t, j2, W('jph2', 1) - .1, W('jph2', 12));
@@ -346,9 +394,9 @@ function build() {
 
   // ---------------- OVERSPEED
   {
-    const L = group('over', 'ct', 'scan');
+    const L = group('over', 'ct', 'glitch');
     const B = bg(L, 900, 1150);
-    const H = header(L, '04 / 07', 'OVERSPEED', 'ORTIQCHA TEZLIK');
+    const H = header(L, '04 / 07', 'OVERSPEED', '(TT − ATT) / ATT', 'ortiqcha tezlik');
     const pn = panel(L, 70, 930, 940, 420, 'rejaga nisbatan, soniya');
     const bars = [['TT', 675, 1000], ['ATT', 574, 1150]].map(([n, v, y]) => {
       const l = el(L, 'div', { position: 'absolute', left: '100px', top: (y + 18) + 'px', font: '800 34px "JetBrains Mono"', color: '#fff' }, n);
@@ -362,26 +410,26 @@ function build() {
     const big = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1530px', textAlign: 'center', font: '900 200px/1 Montserrat', color: C.g, textShadow: GLOW }); big.className = 'num';
     scenes.push(t => {
       B(t);
-      H.f(t, S.over.vo - .1);
-      pn.f(t, W('over', 3) - .2);
-      bars.forEach((b, i) => { const t0 = W('over', 3) + i * .3; b.b.style.transform = `scaleX(${out(seg(t, t0, t0 + .7))})`; b.l.style.opacity = clamp((t - t0) * 4); b.vv.style.opacity = clamp((t - t0 - .6) * 4); });
-      const g0 = W('over', 10);
-      const blink = t > W('over', 21) && t < W('over', 26) ? .65 + .35 * Math.cos((t - W('over', 21)) * 9) : 1;
+      H.f(t, S.over.vo - .25, W('over', 0) - .05, W('over', 2) - .05, S.ct.start - .45);
+      pn.f(t, W('over', 5) - .2);
+      bars.forEach((b, i) => { const t0 = W('over', 5) + i * .3; b.b.style.transform = `scaleX(${out(seg(t, t0, t0 + .7))})`; b.l.style.opacity = clamp((t - t0) * 4); b.vv.style.opacity = clamp((t - t0 - .6) * 4); });
+      const g0 = W('over', 13);
+      const blink = t > W('over', 24) && t < W('over', 29) ? .65 + .35 * Math.cos((t - W('over', 24)) * 9) : 1;
       gap.style.opacity = clamp((t - g0) * 3) * blink; gapL.style.opacity = clamp((t - g0 - .3) * 3);
       gap.style.transform = `scaleX(${out(seg(t, g0, g0 + .4))})`; gap.style.transformOrigin = '0 0';
       mshow(f1, t, g0 + .2, .9);
-      const r0 = W('over', 27);
+      const r0 = W('over', 30);
       big.textContent = `${uz(17.6 * io(seg(fq(t), r0, r0 + 1.2)), 1)} %`;
-      slam(big, t, r0 - .1, 1e9, 1.2);
+      pop(big, t, r0 - .1, S.ct.start - .45, true, 1.2);
     });
   }
 
   // ---------------- CT + RWT
   {
-    const L = group('ct', 'outro', 'flash');
+    const L = group('ct', 'outro', 'flash', 'CT');
     const B = bg(L, 540, 1200);
-    const H = header(L, '05 / 07', 'CT', 'SIKL VAQTI');
-    const H2 = header(L, '06 / 07', 'RWT', 'SOF ISH VAQTI');
+    const H = header(L, '05 / 07', 'CT', 'Cycle Time', 'sikl vaqti');
+    const H2 = header(L, '06 / 07', 'RWT', 'Real Work Time', 'real ish vaqti');
     const ring = svg(L, 520, 520, { left: '280px', top: '960px' });
     sv(ring, 'circle', { cx: 260, cy: 260, r: 210, fill: 'none', stroke: C.line, 'stroke-width': 4, 'stroke-dasharray': '6 12' });
     const cArc = sv(ring, 'circle', { cx: 260, cy: 260, r: 210, fill: 'none', stroke: C.g, 'stroke-width': 10, 'stroke-dasharray': 1319, transform: 'rotate(-90 260 260)', 'stroke-linecap': 'round' });
@@ -403,17 +451,17 @@ function build() {
     scenes.push(t => {
       B(t);
       const r0 = S.rwt.start;
-      H.f(t, S.ct.vo - .1, r0 - .35); H2.f(t, r0 - .05);
-      const ri = sp(t - W('ct', 3) + .2, 1.8, .8), ro = io(seg(t, r0 - .3, r0 + .2));
+      H.f(t, W('ct', 0) - .05, W('ct', 2) - .05, W('ct', 5) - .05, r0 - .45); H2.f(t, W('rwt', 0) - .05, W('rwt', 2) - .05, W('rwt', 6) - .05, S.outro.start - .45);
+      const ri = sp(t - W('ct', 5) + .2, 1.8, .8), ro = io(seg(t, r0 - .3, r0 + .2));
       ring.style.opacity = ri * (1 - ro); ring.style.transform = `scale(${.75 + .25 * ri})`;
-      const cyc = Math.max(0, t - W('ct', 3)) / 1.6, k = cyc % 1;
+      const cyc = Math.max(0, t - W('ct', 5)) / 1.6, k = cyc % 1;
       cArc.setAttribute('stroke-dashoffset', 1319 * (1 - io(k)));
       const a = io(k) * Math.PI * 2; head.setAttribute('cx', 260 + Math.sin(a) * 210); head.setAttribute('cy', 260 - Math.cos(a) * 210);
-      rIn.style.opacity = clamp((t - W('ct', 6) + .1) * 3) * (1 - ro); rIn2.style.opacity = clamp((t - W('ct', 7)) * 3) * (1 - ro);
+      rIn.style.opacity = clamp((t - W('ct', 8) + .1) * 3) * (1 - ro); rIn2.style.opacity = clamp((t - W('ct', 9)) * 3) * (1 - ro);
       // track
       show(trk, t > r0 - .2);
       trk.style.opacity = clamp((t - r0) * 3);
-      const wHi = W('rwt', 6), wOut = W('rwt', 10), wJoin = W('rwt', 12);
+      const wHi = W('rwt', 12), wOut = W('rwt', 16), wJoin = W('rwt', 18);
       let acc = 0;
       blocks.forEach((B, i) => {
         const p = sp(t - r0 - .1 - i * .08, 2.4, .8);
@@ -428,17 +476,17 @@ function build() {
       brace.style.opacity = ctL.style.opacity = clamp((t - r0 - .5) * 3);
       const rj = out(seg(t, wJoin + .3, wJoin + .8));
       rwtB.style.transform = `scaleX(${rj})`; rwtB.style.transformOrigin = '0 0';
-      slam(rwtL, t, wJoin + .5, 1e9, 1.3);
-      D(t, W('rwt', 13));
+      pop(rwtL, t, wJoin + .5, 1e9, true, 1.3);
+      D(t, W('rwt', 19));
     });
   }
 
   // ---------------- OUTRO
   {
-    const L = group('outro', null, 'scan');
+    const L = group('outro', null, 'dot');
     const B = bg(L, 540, 1000);
     const takt = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '620px', textAlign: 'center', font: '900 250px/1 Montserrat', color: C.g, textShadow: GLOW, letterSpacing: '.04em' }, 'TAKT');
-    const sub = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '880px', textAlign: 'center', font: '700 44px "JetBrains Mono"', color: '#fff' });
+    const sub = pen(L, 'liniyaning yurak urishi', { left: '150px', top: '880px', fontSize: '60px' });
     const ecg = svg(L, 1080, 300, { left: '0px', top: '940px' });
     let d = 'M0 150'; const beats = [];
     for (let x = 0; x < 1080; x += 270) { d += ` L${x + 90} 150 L${x + 110} 120 L${x + 125} 150 L${x + 140} 150 L${x + 152} 40 L${x + 166} 250 L${x + 180} 150 L${x + 210} 150 L${x + 228} 110 L${x + 250} 150 L${x + 270} 150`; beats.push(x + 152); }
@@ -446,22 +494,51 @@ function build() {
     path.style.filter = 'drop-shadow(0 0 10px rgba(61,255,122,.9))';
     const PL = 1080 * 2.2;
     path.setAttribute('stroke-dasharray', PL);
-    const sheet = el(L, 'div', { position: 'absolute', left: '70px', top: '1260px', width: '940px' });
-    const rows = ['TT = toza vaqt / talab = 675 s', 'ATT = TT × 85 / 100 = 574 s', 'JPH netto = 3600 / 675 = 5,3', 'JPH brutto = 3600 / 574 = 6,3', 'Overspeed = (TT − ATT) / ATT = 17,6 %', 'CT = bitta jarayon vaqti', 'RWT = CT − yurish vaqti'].map(s => { const r = el(sheet, 'div', { font: '600 31px/1.75 "JetBrains Mono"', color: '#dfe7ff', whiteSpace: 'nowrap', borderBottom: '1px solid rgba(150,180,255,.18)' }); r.dataset.text = s; return r; });
+    const head = el(L, 'div', { position: 'absolute', width: '24px', height: '24px', marginLeft: '-12px', marginTop: '-12px', borderRadius: '50%', background: '#eafff0', boxShadow: '0 0 16px 6px rgba(61,255,122,.95), 0 0 110px 44px rgba(61,255,122,.3)' });
+    // white paper form (reference "ФОРМА 2-Б / ФОРМА 9" interludes): ticked checklist, highlighter strokes, stamp
+    const paper = el(L, 'div', { position: 'absolute', left: '50px', top: '470px', width: '980px', height: '1250px', background: '#eef1f6', boxShadow: '0 30px 80px rgba(0,0,0,.5)', zIndex: 3, overflow: 'hidden', transformOrigin: '50% 50%' });
+    el(paper, 'div', { position: 'absolute', left: 0, top: 0, right: 0, height: '150px', background: '#1d2433' });
+    el(paper, 'div', { position: 'absolute', left: '44px', top: '38px', font: '900 64px/1 Montserrat', color: '#fff' }, 'FORMA 7');
+    el(paper, 'div', { position: 'absolute', left: '370px', top: '42px', font: '700 22px/1.45 "JetBrains Mono"', color: '#c8d0e0', letterSpacing: '.08em' }, 'ISHLAB CHIQARISH FORMULALARI<br>ME · TECHNOLOGY DEPARTMENT');
+    const forms = [['TT', 'Takt Time', '450 / 40 × 60 = 675 s'], ['ATT', 'Actual Takt Time', '675 × 85 / 100 = 574 s'], ['JPH netto', 'Jobs Per Hour', '3600 / 675 = 5,3'], ['JPH brutto', 'Jobs Per Hour', '3600 / 574 = 6,3'], ['Overspeed', 'ortiqcha tezlik', '(675 − 574) / 574 = 17,6 %'], ['CT', 'Cycle Time', 'bitta jarayon vaqti'], ['RWT', 'Real Work Time', 'CT − yurish vaqti']];
+    const rows = forms.map(([a, en, f], i) => {
+      const r = el(paper, 'div', { position: 'absolute', left: '44px', top: (190 + i * 128) + 'px', width: '892px', height: '112px', borderBottom: '2px dashed #c3cad8' });
+      const box = el(r, 'div', { position: 'absolute', left: 0, top: '22px', width: '44px', height: '44px', border: '4px solid #1d2433', boxSizing: 'border-box' });
+      const tick = svg(r, 60, 60, { left: '-4px', top: '8px' });
+      const tp = sv(tick, 'path', { d: 'M8 32 L24 48 L56 6', fill: 'none', stroke: '#14b84a', 'stroke-width': 9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-dasharray': 80 });
+      el(r, 'div', { position: 'absolute', left: '76px', top: '14px', font: '900 38px/1 Montserrat', color: '#1d2433', whiteSpace: 'nowrap' }, `${a} <span style="font:500 26px Inter;color:#5d6678">· ${en}</span>`);
+      const hl = el(r, 'div', { position: 'absolute', left: '72px', top: '62px', height: '40px', width: (f.length * 19 + 16) + 'px', background: 'rgba(61,255,122,.55)', transformOrigin: '0 0', transform: 'skewX(-8deg)' });
+      el(r, 'div', { position: 'absolute', left: '80px', top: '64px', font: '600 30px "JetBrains Mono"', color: '#1d2433', whiteSpace: 'nowrap' }, f);
+      return { r, tp, hl };
+    });
+    const stamp = el(paper, 'div', { position: 'absolute', left: '520px', top: '1010px', padding: '14px 26px', border: '7px solid #14b84a', color: '#14b84a', font: '900 46px/1 Montserrat', letterSpacing: '.04em', transform: 'rotate(-9deg)', borderRadius: '10px', whiteSpace: 'nowrap', background: 'rgba(238,241,246,.6)' }, 'REJA BAJARILADI');
+    const wflash = el(L, 'div', { position: 'absolute', inset: 0, background: '#fff', zIndex: 4 });
     const logo = el(L, 'img', { position: 'absolute', left: '340px', top: '760px', width: '400px' }); logo.src = 'assets/logo_t.png';
     const me = el(L, 'div', { position: 'absolute', left: 0, width: '1080px', top: '1120px', textAlign: 'center', font: '600 34px "JetBrains Mono"', color: C.mute, letterSpacing: '.12em' }, 'ME · TECHNOLOGY DEPARTMENT');
     const black = el(L, 'div', { position: 'absolute', inset: 0, background: '#000', zIndex: 5 });
     scenes.push(t => {
       B(t);
       const o = S.outro, lg = W('outro', 10) - .3, fadeA = io(seg(t, lg - .5, lg));
-      slam(takt, t, o.vo - .1, lg - .5, 1.3);
-      sub.textContent = scramble('liniyaning yurak urishi', t, W('outro', 3) - .1, .9); sub.style.opacity = 1 - fadeA;
-      path.setAttribute('stroke-dashoffset', PL * (1 - out(seg(t, o.start + .2, W('outro', 5)))));
+      pop(takt, t, o.vo - .1, lg - .5, true, 1.3);
+      sub.f(t, W('outro', 3) - .1, 1.0, W('outro', 6) - .4);
+      const dk = out(seg(t, o.start + .2, W('outro', 5)));
+      path.setAttribute('stroke-dashoffset', PL * (1 - dk));
+      const hp = path.getPointAtLength(PL * dk * .999);
+      head.style.left = hp.x + 'px'; head.style.top = (940 + hp.y) + 'px'; head.style.opacity = dk > 0 && dk < 1 ? 1 : 0;
+      // paper: white flash in, rows tick + highlighter, stamp, then it collapses to a line (CRT off)
+      const p0 = W('outro', 6) - .2, p1 = lg - .45;
+      wflash.style.opacity = t > p0 - .1 ? Math.exp(-Math.max(0, t - p0) * 6) * clamp((t - p0 + .1) * 10) : 0;
+      const pin = sp(t - p0, 2.4, .8), pc = io(seg(t, p1, p1 + .35));
+      paper.style.visibility = t >= p0 && t < p1 + .4 ? 'inherit' : 'hidden';
+      paper.style.transform = `translateY(${(1 - pin) * 120}px) rotate(${(1 - pin) * 3}deg) scaleY(${1 - pc * .995}) scaleX(${1 - pc * .1})`;
+      paper.style.filter = pc > 0 ? `brightness(${1 + pc * 2})` : 'none';
+      rows.forEach((R, i) => { const ti = p0 + .25 + i * .2; R.r.style.opacity = clamp((t - ti + .15) * 6); R.tp.setAttribute('stroke-dashoffset', 80 * (1 - out(seg(t, ti, ti + .18)))); R.hl.style.transform = `skewX(-8deg) scaleX(${out(seg(t, ti + .08, ti + .35))})`; });
+      const sp0 = W('outro', 8) + .3, sk = sp(t - sp0, 3, .5);
+      stamp.style.opacity = t >= sp0 ? 1 : 0; stamp.style.transform = `rotate(-9deg) scale(${2.2 - 1.2 * sk})`;
       // heartbeat: everything pulses on each takt beat
       const bt = Math.max(0, t - W('outro', 0)) % 1.1, pulse = Math.exp(-bt * 7);
       ecg.style.opacity = 1 - fadeA; ecg.style.transform = `scaleY(${1 + .12 * pulse})`;
       takt.style.textShadow = `0 0 ${14 + 30 * pulse}px rgba(61,255,122,.85), 0 0 60px rgba(61,255,122,.35)`;
-      rows.forEach((r, i) => { r.textContent = scramble(r.dataset.text, t, W('outro', 6) + i * .17, .55); r.style.opacity = 1 - fadeA; });
       const lp = sp(t - lg, 1.8, .8);
       logo.style.opacity = clamp(lp * 1.5); logo.style.transform = `scale(${.85 + .15 * lp})`; logo.style.filter = `blur(${(1 - clamp(lp * 1.4)) * 12}px)`;
       me.style.opacity = clamp((t - lg - .6) * 2);
@@ -470,27 +547,43 @@ function build() {
   }
 }
 
-// ---------- transitions: green flash with the Enter key (reference), scanline wipe
+// ---------- transitions (all taken from the reference)
+// flash: full green + Enter key, then a giant black word slams on the green (reference 44.9 s "↵" -> 45.2 s "ВОТ")
 const flash = el(cam, 'div', { position: 'absolute', inset: 0, background: C.g, zIndex: 90, display: 'flex', alignItems: 'center', justifyContent: 'center' });
-const enter = svg(flash, 360, 280, { position: 'relative' });
+const enter = svg(flash, 360, 280, { position: 'absolute', left: '360px', top: '820px' });
 const ePath = sv(enter, 'path', { d: 'M320 20 L320 170 L60 170 M130 100 L60 170 L130 240', fill: 'none', stroke: '#06210f', 'stroke-width': 26, 'stroke-linecap': 'square', 'stroke-dasharray': 700 });
-const scanLine = el(cam, 'div', { position: 'absolute', left: 0, width: '1080px', height: '8px', marginTop: '-4px', background: '#eafff0', boxShadow: '0 0 30px 10px rgba(61,255,122,.8)', zIndex: 90 });
-const FL = .35, SC = .55;   // half-length of a flash / full scan wipe
+const fWord = el(flash, 'div', { position: 'absolute', left: 0, width: '1080px', top: '700px', textAlign: 'center', font: '900 400px/1 Montserrat', color: '#04140a', letterSpacing: '-.03em' });
+// glitch: horizontal bands of the new scene tear in, layers jitter sideways, green streaks (reference 13.8 / 15.8 / 16.1 s)
+const streaks = [...Array(9)].map(() => el(cam, 'div', { position: 'absolute', height: '10px', zIndex: 91, background: C.g, boxShadow: '0 0 18px rgba(61,255,122,.9)' }));
+// dot: the scene goes dark, only the green light dot is left (reference 10.3 s); it becomes the next scene's pen
+const dark = el(cam, 'div', { position: 'absolute', inset: 0, background: '#03060f', zIndex: 89 });
+const tDot = el(cam, 'div', { position: 'absolute', width: '22px', height: '22px', marginLeft: '-11px', marginTop: '-11px', borderRadius: '50%', background: '#eafff0', zIndex: 92, boxShadow: '0 0 16px 6px rgba(61,255,122,.95), 0 0 120px 50px rgba(61,255,122,.35)' });
+const GW = .45;   // glitch window
 function transitions(t) {
-  flash.style.opacity = 0; scanLine.style.visibility = 'hidden';
-  groups.forEach((g, i) => {
+  flash.style.opacity = 0; flash.style.visibility = 'hidden';
+  streaks.forEach(e => e.style.visibility = 'hidden');
+  dark.style.opacity = 0; tDot.style.visibility = 'hidden';
+  groups.forEach(g => {
     const tb = S[g.k0].start;
-    if (g.inType === 'flash') {
-      const k = t < tb ? seg(t, tb - .14, tb - .02) : 1 - seg(t, tb + .15, tb + FL);
-      if (t > tb - .14 && t < tb + FL) {
-        flash.style.opacity = k;
-        flash.style.transform = `scale(${1 + .06 * (1 - k)})`;
-        ePath.setAttribute('stroke-dashoffset', 700 * (1 - out(seg(t, tb - .1, tb + .12))));
-      }
+    if (g.inType === 'flash' && t > tb - .14 && t < tb + .62) {
+      const k = t < tb ? seg(t, tb - .14, tb - .04) : 1 - seg(t, tb + .45, tb + .62);
+      flash.style.visibility = 'inherit'; flash.style.opacity = k;
+      ePath.setAttribute('stroke-dashoffset', 700 * (1 - out(seg(t, tb - .1, tb + .08))));
+      enter.style.opacity = t < tb + .14 ? 1 : 0;
+      fWord.textContent = g.word;
+      const p = sp(t - tb - .14, 3.2, .5);
+      fWord.style.opacity = t >= tb + .14 ? 1 : 0; fWord.style.transform = `scale(${1.25 - .25 * p})`;
     }
-    if (g.inType === 'scan' && t > tb - SC / 2 && t < tb + SC / 2) {
-      const y = 1920 * io(seg(t, tb - SC / 2, tb + SC / 2));
-      scanLine.style.visibility = 'inherit'; scanLine.style.top = y + 'px';
+    if (g.inType === 'glitch' && t > tb - GW / 2 && t < tb + GW / 2) {
+      const f = Math.floor(fq(t) * 30);
+      streaks.forEach((e, j) => { if (hash(f * 7 + j) < .6) { e.style.visibility = 'inherit'; e.style.top = Math.floor(hash(f * 3 + j * 11) * 1920) + 'px'; e.style.left = Math.floor(hash(f + j * 5) * 600 - 100) + 'px'; e.style.width = (120 + hash(f * 13 + j) * 700) + 'px'; e.style.height = (4 + hash(f * 17 + j) * 22) + 'px'; e.style.background = hash(f + j) < .3 ? '#eafff0' : C.g; } });
+    }
+    if (g.inType === 'dot' && t > tb - .7 && t < tb + .5) {
+      dark.style.opacity = t < tb ? io(seg(t, tb - .7, tb - .25)) : 1 - seg(t, tb + .1, tb + .45);
+      tDot.style.visibility = 'inherit';
+      const k = io(seg(t, tb - .1, tb + .3));
+      tDot.style.left = lerp(540, 20, k) + 'px'; tDot.style.top = lerp(1090, 1090, k) + 'px';
+      tDot.style.transform = `scale(${(1 - seg(t, tb + .3, tb + .5)) * (.6 + .4 * sp(t - tb + .45, 2, .5))})`;
     }
   });
 }
@@ -498,12 +591,20 @@ function groupVis(t) {
   groups.forEach((g, i) => {
     const t0 = S[g.k0].start, t1 = g.k1 ? S[g.k1].start : 1e9;
     const next = groups[i + 1];
-    const tail = next && next.inType === 'scan' ? SC / 2 : 0;
-    const head = g.inType === 'scan' ? SC / 2 : 0;
+    const tail = next && next.inType === 'glitch' ? GW / 2 : 0;
+    const head = g.inType === 'glitch' ? GW / 2 : 0;
     const on = t >= t0 - head && t < t1 + tail;
     g.L.style.visibility = on ? 'inherit' : 'hidden';
-    if (g.inType === 'scan' && t < t0 + head) { const y = 1920 * io(seg(t, t0 - head, t0 + head)); g.L.style.clipPath = `inset(0 0 ${1920 - y}px 0)`; }
-    else g.L.style.clipPath = 'none';
+    g.L.style.transform = '';
+    if (g.inType === 'glitch' && t < t0 + head) {
+      // the new scene arrives in torn horizontal bands; both layers jitter
+      const k = seg(t, t0 - head, t0 + head), f = Math.floor(fq(t) * 30), n = 24, bands = [];
+      for (let b = 0; b < n; b++) if (hash(b * 7.3 + 1) < k * 1.15 - .05 + .1 * Math.sin(f + b)) bands.push(b);
+      g.L.style.clipPath = k >= 1 ? 'none' : bands.length ? `polygon(${bands.map(b => `0 ${b * 80}px, 1080px ${b * 80}px, 1080px ${b * 80 + 80}px, 0 ${b * 80 + 80}px, 0 ${b * 80}px`).join(', ')})` : 'inset(100% 0 0 0)';
+      const jx = (hash(f * 3.1) - .5) * 60 * Math.sin(Math.PI * k);
+      g.L.style.transform = `translateX(${jx}px)`;
+      if (groups[i - 1]) groups[i - 1].L.style.transform = `translateX(${-jx * .8}px) skewX(${jx * .05}deg)`;
+    } else g.L.style.clipPath = 'none';
   });
 }
 
@@ -513,7 +614,7 @@ let CAPS = [];
 function buildCaptions() {
   for (const ln of NAR.lines) {
     const sc = S[ln.id], sp = sc.words;
-    const written = ln.text.split(/\s+/).filter(Boolean);
+    const written = ln.text.replace(/[{}]/g, '').split(/\s+/).filter(Boolean);
     // map written words to spoken time by character position (numbers are spoken longer than written)
     const spLen = sp.reduce((a, w) => a + w.text.length + 1, 0), wrLen = written.reduce((a, w) => a + w.length + 1, 0);
     const spAt = f => { let acc = 0; for (const w of sp) { const l = (w.text.length + 1) / spLen; if (acc + l >= f) return lerp(w.t, w.e, (f - acc) / l); acc += l; } return sp[sp.length - 1].e; };
@@ -521,9 +622,10 @@ function buildCaptions() {
     written.forEach((w, i) => { cur.push({ text: w, t: spAt(acc / wrLen + 1e-4) }); acc += w.length + 1; if (/[.!?:]$/.test(w) || i === written.length - 1) { sent.push(cur); cur = []; } });
     sent.forEach((s, si) => {
       const box = el(cap, 'div', { position: 'absolute', left: 0, top: 0, width: '940px' });
+      const ul = el(box, 'div', { position: 'absolute', height: '4px', background: C.g, boxShadow: '0 0 12px rgba(61,255,122,.9)', borderRadius: '2px' });
       const spans = s.map(w => { const e = el(box, 'span', {}, w.text); e.className = 'w'; return e; });
       const end = si < sent.length - 1 ? sent[si + 1][0].t - .05 : sc.voEnd + .25;
-      CAPS.push({ box, spans, words: s, t0: s[0].t - .12, t1: end });
+      CAPS.push({ box, ul, spans, words: s, t0: s[0].t - .12, t1: end });
     });
   }
 }
@@ -538,6 +640,7 @@ function captions(t) {
       const e = c.spans[i], said = t >= w.t, next = c.words[i + 1], curr = said && (!next || t < next.t);
       e.style.color = curr ? C.g : said ? '#ffffff' : 'rgba(255,255,255,.32)';
       e.style.textShadow = curr ? GLOW : 'none';
+      if (curr) { const k = out(seg(t, w.t, next ? next.t : w.t + .3)); Object.assign(c.ul.style, { left: e.offsetLeft + 'px', top: (e.offsetTop + e.offsetHeight + 2) + 'px', width: (e.offsetWidth * k) + 'px' }); }
     });
   }
 }
