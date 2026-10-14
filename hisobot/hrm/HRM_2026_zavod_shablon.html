@@ -544,6 +544,17 @@ h1 em,h2 em{font-style:normal;background:linear-gradient(95deg,var(--amber),var(
 .stk svg{width:100%;height:100%;display:block}
 @keyframes stkf{50%{transform:translateY(-6px) rotate(-3deg)}}
 @media (prefers-reduced-motion:reduce){.stk{animation:none}}
+.tile{position:relative;overflow:hidden;display:flex;align-items:center;gap:calc(var(--u)*1);padding:calc(var(--u)*.7) calc(var(--u)*1.1);
+  border-radius:14px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(46,168,255,.10),rgba(255,122,26,.05));transition:border-color .3s,transform .3s var(--out)}
+.tile:hover{border-color:rgba(255,160,80,.6);transform:translateY(-2px)}
+.tile::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--cyan),var(--orange))}
+.tile b{flex:none;font-family:var(--mono);font-size:calc(var(--u)*1.9);font-weight:800;line-height:1;
+  background:linear-gradient(180deg,var(--amber),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tile span{font-size:calc(var(--u)*1.12);font-weight:650;line-height:1.3}
+.col > .kpis:only-child{flex:1;grid-auto-rows:1fr}
+.col > .kpis:only-child .kpi{justify-content:center}
+.col > .kpis:only-child .kpi b{font-size:calc(var(--u)*2.4)}
+.col > .kpis:only-child .kpi .s{font-size:calc(var(--u)*.85)}
 
 </style>
 </head>
@@ -1171,7 +1182,7 @@ h1 em,h2 em{font-style:normal;background:linear-gradient(95deg,var(--amber),var(
     { t: 'Электрон ариза тизимини жорий этилди ва ходимларни ишга қабул қилиш ҳамда мослаштириш бўйича иккита муҳим стандарт тасдиқланди.', long: true, layout: 'grid-template-columns:minmax(0,.8fr) minmax(0,2fr);grid-template-rows:minmax(min-content,1fr) auto', body: () =>
       C(kpis([kpi('', '8', 'электронлаштирилган ариза тури', 'acc'), kpi('', '1', 'янги модул (йиллик таътил)'), kpi('', '100%', 'электрон кузатиш'), kpi('', '0 сўм', 'киоск харидига сарфланган маблағ')], 1)) +
       card('Электрон шаклга ўтказилган аризалар', grid('1fr 1fr', ['Бола туғилиши муносабати билан таътил', 'Никоҳ тўйи муносабати билан таътил', 'Яқин қариндош вафоти муносабати билан таътил', 'Иш ҳақи сақланмаган ҳолда таътил', 'Ўқув таътили бериш', 'Отгул бериш', 'Ҳарбий хизматга чақириш бўйича ариза', 'Иш вақтида ташқарига чиқиш учун рухсатнома']
-        .map((t, i) => `<div class="ls"><li><span class="n">${i + 1}</span><span>${t}</span></li></div>`).join(''), 'row-gap:calc(var(--u)*.7)'), 'grow') +
+        .map((t, i) => `<div class="tile"><b>0${i + 1}</b><span>${t}</span></div>`).join(''), 'flex:1;grid-auto-rows:1fr'), 'grow') +
       `<div style="grid-column:1/-1" class="col"><span class="cap">Тасдиқланган стандартлар · ходимларни бошқариш жараёнлари бўйича</span>${grid('1fr 1fr', [['KSt-205000-006:2026', 'Ишга қабул қилиш тартиби', 'Тасдиқланди 03.09.2026 · амал қилади 02.09.2029'], ['KSt-205000-020:2026', 'Мослаштириш тартиби', 'Тасдиқланди 09.09.2026 · амал қилади 08.09.2029']]
         .map(([c, h, d]) => card('', `<div style="display:flex;justify-content:space-between;gap:1em;align-items:center"><div><div class="note">${c}</div><div style="font-weight:800;font-size:calc(var(--u)*1.05)">${h}</div><div class="note">${d}</div></div><span class="tag">ТАСДИҚЛАНДИ</span></div>`)).join(''))}</div>` },
 
