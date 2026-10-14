@@ -1,0 +1,1322 @@
+{
+ "hook": {
+  "duration": 3.239184,
+  "words": [
+   {
+    "text": "Bitta",
+    "start": 0,
+    "end": 0.32
+   },
+   {
+    "text": "avtomobil",
+    "start": 0.4,
+    "end": 0.96
+   },
+   {
+    "text": "necha",
+    "start": 1.12,
+    "end": 1.44
+   },
+   {
+    "text": "soniyada",
+    "start": 1.56,
+    "end": 1.92
+   },
+   {
+    "text": "tayyor",
+    "start": 1.96,
+    "end": 2.24
+   },
+   {
+    "text": "boʻlishi",
+    "start": 2.32,
+    "end": 2.6
+   },
+   {
+    "text": "kerak?",
+    "start": 2.64,
+    "end": 3.2
+   }
+  ]
+ },
+ "intro": {
+  "duration": 5.250612,
+  "words": [
+   {
+    "text": "Bugun",
+    "start": 0,
+    "end": 0.32
+   },
+   {
+    "text": "ishlab",
+    "start": 0.4,
+    "end": 0.64
+   },
+   {
+    "text": "chiqarishning",
+    "start": 0.72,
+    "end": 1.44
+   },
+   {
+    "text": "yettita",
+    "start": 1.52,
+    "end": 1.92
+   },
+   {
+    "text": "asosiy",
+    "start": 2,
+    "end": 2.48
+   },
+   {
+    "text": "formulasini",
+    "start": 2.6,
+    "end": 3.36
+   },
+   {
+    "text": "oddiy",
+    "start": 3.44,
+    "end": 3.787
+   },
+   {
+    "text": "tilda",
+    "start": 3.813,
+    "end": 4.08
+   },
+   {
+    "text": "tushuntiramiz.",
+    "start": 4.107,
+    "end": 5.28
+   }
+  ]
+ },
+ "tt1": {
+  "duration": 8.829388,
+  "words": [
+   {
+    "text": "Birinchisi",
+    "start": 0,
+    "end": 0.64
+   },
+   {
+    "text": "—",
+    "start": 1.12,
+    "end": 1.16
+   },
+   {
+    "text": "te",
+    "start": 1.2,
+    "end": 1.44
+   },
+   {
+    "text": "te,",
+    "start": 2,
+    "end": 2.72
+   },
+   {
+    "text": "yaʼni",
+    "start": 2.8,
+    "end": 3.36
+   },
+   {
+    "text": "takt",
+    "start": 3.44,
+    "end": 3.76
+   },
+   {
+    "text": "vaqti.",
+    "start": 3.84,
+    "end": 4.88
+   },
+   {
+    "text": "Liniyaning",
+    "start": 4.96,
+    "end": 5.52
+   },
+   {
+    "text": "toza",
+    "start": 5.6,
+    "end": 5.84
+   },
+   {
+    "text": "ishlash",
+    "start": 5.92,
+    "end": 6.24
+   },
+   {
+    "text": "vaqtini",
+    "start": 6.32,
+    "end": 6.8
+   },
+   {
+    "text": "kharidor",
+    "start": 6.84,
+    "end": 7.28
+   },
+   {
+    "text": "talabiga",
+    "start": 7.36,
+    "end": 7.76
+   },
+   {
+    "text": "boʻlamiz.",
+    "start": 7.84,
+    "end": 8.8
+   }
+  ]
+ },
+ "tt2": {
+  "duration": 9.325714,
+  "words": [
+   {
+    "text": "Toʻrt",
+    "start": 0,
+    "end": 0.24
+   },
+   {
+    "text": "yuz",
+    "start": 0.28,
+    "end": 0.48
+   },
+   {
+    "text": "ellik",
+    "start": 0.6,
+    "end": 0.8
+   },
+   {
+    "text": "daqiqani",
+    "start": 0.88,
+    "end": 1.6
+   },
+   {
+    "text": "qirq",
+    "start": 1.64,
+    "end": 1.84
+   },
+   {
+    "text": "ta",
+    "start": 1.92,
+    "end": 2
+   },
+   {
+    "text": "avtomobilga",
+    "start": 2.08,
+    "end": 2.64
+   },
+   {
+    "text": "boʻlsak,",
+    "start": 2.72,
+    "end": 3.48
+   },
+   {
+    "text": "oʻn",
+    "start": 3.52,
+    "end": 3.68
+   },
+   {
+    "text": "bir",
+    "start": 3.76,
+    "end": 3.84
+   },
+   {
+    "text": "butun",
+    "start": 3.96,
+    "end": 4.24
+   },
+   {
+    "text": "yuzdan",
+    "start": 4.32,
+    "end": 4.72
+   },
+   {
+    "text": "yigirma",
+    "start": 4.8,
+    "end": 5.2
+   },
+   {
+    "text": "besh",
+    "start": 5.24,
+    "end": 5.44
+   },
+   {
+    "text": "daqiqa",
+    "start": 5.52,
+    "end": 5.84
+   },
+   {
+    "text": "chiqadi.",
+    "start": 5.92,
+    "end": 6.76
+   },
+   {
+    "text": "Bu",
+    "start": 6.8,
+    "end": 7.12
+   },
+   {
+    "text": "olti",
+    "start": 7.2,
+    "end": 7.44
+   },
+   {
+    "text": "yuz",
+    "start": 7.48,
+    "end": 7.68
+   },
+   {
+    "text": "yetmish",
+    "start": 7.76,
+    "end": 8.08
+   },
+   {
+    "text": "besh",
+    "start": 8.12,
+    "end": 8.32
+   },
+   {
+    "text": "soniya.",
+    "start": 8.4,
+    "end": 9.36
+   }
+  ]
+ },
+ "tt3": {
+  "duration": 7.810612,
+  "words": [
+   {
+    "text": "Demak,",
+    "start": 0,
+    "end": 0.8
+   },
+   {
+    "text": "kharidor",
+    "start": 0.88,
+    "end": 1.28
+   },
+   {
+    "text": "talabini",
+    "start": 1.36,
+    "end": 1.76
+   },
+   {
+    "text": "bajarish",
+    "start": 1.867,
+    "end": 2.24
+   },
+   {
+    "text": "uchun",
+    "start": 2.32,
+    "end": 2.72
+   },
+   {
+    "text": "har",
+    "start": 2.8,
+    "end": 3.12
+   },
+   {
+    "text": "olti",
+    "start": 3.2,
+    "end": 3.48
+   },
+   {
+    "text": "yuz",
+    "start": 3.52,
+    "end": 3.68
+   },
+   {
+    "text": "yetmish",
+    "start": 3.8,
+    "end": 4.16
+   },
+   {
+    "text": "besh",
+    "start": 4.2,
+    "end": 4.4
+   },
+   {
+    "text": "soniyada",
+    "start": 4.48,
+    "end": 5.12
+   },
+   {
+    "text": "bitta",
+    "start": 5.2,
+    "end": 5.52
+   },
+   {
+    "text": "avtomobil",
+    "start": 5.6,
+    "end": 6.16
+   },
+   {
+    "text": "tayyor",
+    "start": 6.2,
+    "end": 6.56
+   },
+   {
+    "text": "boʻlishi",
+    "start": 6.6,
+    "end": 6.88
+   },
+   {
+    "text": "kerak.",
+    "start": 7,
+    "end": 7.84
+   }
+  ]
+ },
+ "att1": {
+  "duration": 8.672653,
+  "words": [
+   {
+    "text": "Ammo",
+    "start": 0,
+    "end": 0.24
+   },
+   {
+    "text": "liniya",
+    "start": 0.32,
+    "end": 0.8
+   },
+   {
+    "text": "hech",
+    "start": 0.88,
+    "end": 1.12
+   },
+   {
+    "text": "qachon",
+    "start": 1.2,
+    "end": 1.6
+   },
+   {
+    "text": "yuz",
+    "start": 1.68,
+    "end": 1.92
+   },
+   {
+    "text": "foiz",
+    "start": 2,
+    "end": 2.24
+   },
+   {
+    "text": "ishlamaydi.",
+    "start": 2.32,
+    "end": 3.4
+   },
+   {
+    "text": "Shuning",
+    "start": 3.44,
+    "end": 3.68
+   },
+   {
+    "text": "uchun",
+    "start": 3.8,
+    "end": 4.24
+   },
+   {
+    "text": "a",
+    "start": 4.32,
+    "end": 4.48
+   },
+   {
+    "text": "te",
+    "start": 4.56,
+    "end": 4.72
+   },
+   {
+    "text": "te,",
+    "start": 4.8,
+    "end": 5.36
+   },
+   {
+    "text": "yaʼni",
+    "start": 5.44,
+    "end": 6
+   },
+   {
+    "text": "haqiqiy",
+    "start": 6.08,
+    "end": 6.72
+   },
+   {
+    "text": "takt",
+    "start": 6.76,
+    "end": 7.04
+   },
+   {
+    "text": "vaqtini",
+    "start": 7.12,
+    "end": 7.44
+   },
+   {
+    "text": "hisoblaymiz.",
+    "start": 7.52,
+    "end": 8.72
+   }
+  ]
+ },
+ "att2": {
+  "duration": 14.445714,
+  "words": [
+   {
+    "text": "Olti",
+    "start": 0,
+    "end": 0.28
+   },
+   {
+    "text": "yuz",
+    "start": 0.32,
+    "end": 0.48
+   },
+   {
+    "text": "yetmish",
+    "start": 0.56,
+    "end": 0.88
+   },
+   {
+    "text": "besh",
+    "start": 0.92,
+    "end": 1.12
+   },
+   {
+    "text": "soniyani",
+    "start": 1.2,
+    "end": 1.84
+   },
+   {
+    "text": "liniyaning",
+    "start": 2,
+    "end": 2.56
+   },
+   {
+    "text": "ishlash",
+    "start": 2.68,
+    "end": 2.96
+   },
+   {
+    "text": "ulushiga,",
+    "start": 3.04,
+    "end": 3.8
+   },
+   {
+    "text": "yaʼni",
+    "start": 3.84,
+    "end": 4.48
+   },
+   {
+    "text": "sakson",
+    "start": 4.56,
+    "end": 4.96
+   },
+   {
+    "text": "besh",
+    "start": 5,
+    "end": 5.2
+   },
+   {
+    "text": "foizga",
+    "start": 5.28,
+    "end": 5.68
+   },
+   {
+    "text": "koʻpaytiramiz.",
+    "start": 5.76,
+    "end": 6.92
+   },
+   {
+    "text": "Natija:",
+    "start": 6.96,
+    "end": 7.88
+   },
+   {
+    "text": "besh",
+    "start": 7.92,
+    "end": 8.16
+   },
+   {
+    "text": "yuz",
+    "start": 8.24,
+    "end": 8.4
+   },
+   {
+    "text": "yetmish",
+    "start": 8.52,
+    "end": 8.8
+   },
+   {
+    "text": "toʻrt",
+    "start": 8.88,
+    "end": 9.04
+   },
+   {
+    "text": "soniya.",
+    "start": 9.12,
+    "end": 10.12
+   },
+   {
+    "text": "Rejani",
+    "start": 10.16,
+    "end": 10.56
+   },
+   {
+    "text": "bajarish",
+    "start": 10.6,
+    "end": 11.04
+   },
+   {
+    "text": "uchun",
+    "start": 11.12,
+    "end": 11.52
+   },
+   {
+    "text": "bitta",
+    "start": 11.56,
+    "end": 11.84
+   },
+   {
+    "text": "avtomobilga",
+    "start": 11.92,
+    "end": 12.64
+   },
+   {
+    "text": "shuncha",
+    "start": 12.72,
+    "end": 13.12
+   },
+   {
+    "text": "vaqt",
+    "start": 13.2,
+    "end": 13.44
+   },
+   {
+    "text": "beriladi.",
+    "start": 13.52,
+    "end": 14.48
+   }
+  ]
+ },
+ "jph1": {
+  "duration": 7.810612,
+  "words": [
+   {
+    "text": "Endi",
+    "start": 0,
+    "end": 0.32
+   },
+   {
+    "text": "liniyaning",
+    "start": 0.4,
+    "end": 0.96
+   },
+   {
+    "text": "soatlik",
+    "start": 1.04,
+    "end": 1.44
+   },
+   {
+    "text": "quvvati",
+    "start": 1.52,
+    "end": 2
+   },
+   {
+    "text": "—",
+    "start": 2.4,
+    "end": 2.44
+   },
+   {
+    "text": "je",
+    "start": 2.48,
+    "end": 2.64
+   },
+   {
+    "text": "pe",
+    "start": 2.72,
+    "end": 2.8
+   },
+   {
+    "text": "ha.",
+    "start": 2.88,
+    "end": 3.52
+   },
+   {
+    "text": "Bir",
+    "start": 3.56,
+    "end": 3.68
+   },
+   {
+    "text": "soatdagi",
+    "start": 3.76,
+    "end": 4.4
+   },
+   {
+    "text": "uch",
+    "start": 4.48,
+    "end": 4.64
+   },
+   {
+    "text": "ming",
+    "start": 4.76,
+    "end": 4.88
+   },
+   {
+    "text": "olti",
+    "start": 4.96,
+    "end": 5.2
+   },
+   {
+    "text": "yuz",
+    "start": 5.24,
+    "end": 5.36
+   },
+   {
+    "text": "soniyani",
+    "start": 5.48,
+    "end": 6.08
+   },
+   {
+    "text": "takt",
+    "start": 6.16,
+    "end": 6.4
+   },
+   {
+    "text": "vaqtiga",
+    "start": 6.48,
+    "end": 6.8
+   },
+   {
+    "text": "boʻlamiz.",
+    "start": 6.84,
+    "end": 7.84
+   }
+  ]
+ },
+ "jph2": {
+  "duration": 10.997551,
+  "words": [
+   {
+    "text": "Netto:",
+    "start": 0,
+    "end": 1.04
+   },
+   {
+    "text": "uch",
+    "start": 1.12,
+    "end": 1.2
+   },
+   {
+    "text": "ming",
+    "start": 1.28,
+    "end": 1.52
+   },
+   {
+    "text": "olti",
+    "start": 1.6,
+    "end": 1.84
+   },
+   {
+    "text": "yuz",
+    "start": 1.92,
+    "end": 2.08
+   },
+   {
+    "text": "ni",
+    "start": 2.24,
+    "end": 2.4
+   },
+   {
+    "text": "olti",
+    "start": 2.48,
+    "end": 2.68
+   },
+   {
+    "text": "yuz",
+    "start": 2.72,
+    "end": 2.88
+   },
+   {
+    "text": "yetmish",
+    "start": 2.96,
+    "end": 3.28
+   },
+   {
+    "text": "besh",
+    "start": 3.36,
+    "end": 3.52
+   },
+   {
+    "text": "soniyaga",
+    "start": 3.6,
+    "end": 4.08
+   },
+   {
+    "text": "boʻlsak,",
+    "start": 4.12,
+    "end": 4.88
+   },
+   {
+    "text": "soatiga",
+    "start": 4.96,
+    "end": 5.52
+   },
+   {
+    "text": "besh",
+    "start": 5.6,
+    "end": 5.84
+   },
+   {
+    "text": "butun",
+    "start": 5.92,
+    "end": 6.24
+   },
+   {
+    "text": "oʻndan",
+    "start": 6.32,
+    "end": 6.72
+   },
+   {
+    "text": "uch",
+    "start": 6.8,
+    "end": 6.96
+   },
+   {
+    "text": "ta",
+    "start": 7.04,
+    "end": 7.12
+   },
+   {
+    "text": "avtomobil.",
+    "start": 7.2,
+    "end": 8.32
+   },
+   {
+    "text": "Bu",
+    "start": 8.4,
+    "end": 8.48
+   },
+   {
+    "text": "kharidor",
+    "start": 8.56,
+    "end": 9.04
+   },
+   {
+    "text": "talabiga",
+    "start": 9.12,
+    "end": 9.52
+   },
+   {
+    "text": "mos",
+    "start": 9.64,
+    "end": 9.76
+   },
+   {
+    "text": "quvvat.",
+    "start": 9.84,
+    "end": 10.96
+   }
+  ]
+ },
+ "jph3": {
+  "duration": 11.467755,
+  "words": [
+   {
+    "text": "Brutto:",
+    "start": 0,
+    "end": 1.04
+   },
+   {
+    "text": "uch",
+    "start": 1.12,
+    "end": 1.2
+   },
+   {
+    "text": "ming",
+    "start": 1.28,
+    "end": 1.44
+   },
+   {
+    "text": "olti",
+    "start": 1.52,
+    "end": 1.8
+   },
+   {
+    "text": "yuz",
+    "start": 1.84,
+    "end": 2
+   },
+   {
+    "text": "ni",
+    "start": 2.08,
+    "end": 2.32
+   },
+   {
+    "text": "besh",
+    "start": 2.56,
+    "end": 2.8
+   },
+   {
+    "text": "yuz",
+    "start": 2.84,
+    "end": 2.96
+   },
+   {
+    "text": "yetmish",
+    "start": 3.04,
+    "end": 3.36
+   },
+   {
+    "text": "toʻrt",
+    "start": 3.44,
+    "end": 3.6
+   },
+   {
+    "text": "soniyaga",
+    "start": 3.68,
+    "end": 4.08
+   },
+   {
+    "text": "boʻlsak,",
+    "start": 4.16,
+    "end": 4.96
+   },
+   {
+    "text": "soatiga",
+    "start": 5.04,
+    "end": 5.68
+   },
+   {
+    "text": "olti",
+    "start": 5.76,
+    "end": 5.96
+   },
+   {
+    "text": "butun",
+    "start": 6,
+    "end": 6.4
+   },
+   {
+    "text": "oʻndan",
+    "start": 6.48,
+    "end": 6.88
+   },
+   {
+    "text": "uch",
+    "start": 6.96,
+    "end": 7.12
+   },
+   {
+    "text": "ta",
+    "start": 7.16,
+    "end": 7.2
+   },
+   {
+    "text": "avtomobil.",
+    "start": 7.28,
+    "end": 8.4
+   },
+   {
+    "text": "Bu",
+    "start": 8.48,
+    "end": 8.56
+   },
+   {
+    "text": "rejani",
+    "start": 8.64,
+    "end": 8.96
+   },
+   {
+    "text": "bajarish",
+    "start": 9.04,
+    "end": 9.44
+   },
+   {
+    "text": "uchun",
+    "start": 9.52,
+    "end": 9.76
+   },
+   {
+    "text": "kerakli",
+    "start": 9.84,
+    "end": 10.32
+   },
+   {
+    "text": "quvvat.",
+    "start": 10.4,
+    "end": 11.44
+   }
+  ]
+ },
+ "over": {
+  "duration": 14.106122,
+  "words": [
+   {
+    "text": "Ortiqcha",
+    "start": 0,
+    "end": 0.48
+   },
+   {
+    "text": "tezlik",
+    "start": 0.56,
+    "end": 0.88
+   },
+   {
+    "text": "esa",
+    "start": 0.96,
+    "end": 1.36
+   },
+   {
+    "text": "liniya",
+    "start": 1.52,
+    "end": 1.84
+   },
+   {
+    "text": "rejaga",
+    "start": 1.92,
+    "end": 2.24
+   },
+   {
+    "text": "koʻra",
+    "start": 2.32,
+    "end": 2.64
+   },
+   {
+    "text": "qanchalik",
+    "start": 2.68,
+    "end": 3.12
+   },
+   {
+    "text": "samarali",
+    "start": 3.2,
+    "end": 3.68
+   },
+   {
+    "text": "yurishini",
+    "start": 3.76,
+    "end": 4.16
+   },
+   {
+    "text": "koʻrsatadi.",
+    "start": 4.2,
+    "end": 5.4
+   },
+   {
+    "text": "Olti",
+    "start": 5.44,
+    "end": 5.68
+   },
+   {
+    "text": "yuz",
+    "start": 5.72,
+    "end": 5.84
+   },
+   {
+    "text": "yetmish",
+    "start": 5.92,
+    "end": 6.24
+   },
+   {
+    "text": "besh",
+    "start": 6.28,
+    "end": 6.48
+   },
+   {
+    "text": "dan",
+    "start": 6.72,
+    "end": 6.96
+   },
+   {
+    "text": "besh",
+    "start": 7,
+    "end": 7.2
+   },
+   {
+    "text": "yuz",
+    "start": 7.24,
+    "end": 7.36
+   },
+   {
+    "text": "yetmish",
+    "start": 7.44,
+    "end": 7.68
+   },
+   {
+    "text": "toʻrt",
+    "start": 7.76,
+    "end": 7.96
+   },
+   {
+    "text": "ni",
+    "start": 8,
+    "end": 8.08
+   },
+   {
+    "text": "ayirib,",
+    "start": 8.16,
+    "end": 8.88
+   },
+   {
+    "text": "besh",
+    "start": 8.92,
+    "end": 9.12
+   },
+   {
+    "text": "yuz",
+    "start": 9.16,
+    "end": 9.28
+   },
+   {
+    "text": "yetmish",
+    "start": 9.36,
+    "end": 9.6
+   },
+   {
+    "text": "toʻrt",
+    "start": 9.68,
+    "end": 9.84
+   },
+   {
+    "text": "ga",
+    "start": 9.92,
+    "end": 10
+   },
+   {
+    "text": "boʻlamiz:",
+    "start": 10.04,
+    "end": 10.92
+   },
+   {
+    "text": "oʻn",
+    "start": 10.96,
+    "end": 11.08
+   },
+   {
+    "text": "yetti",
+    "start": 11.12,
+    "end": 11.36
+   },
+   {
+    "text": "butun",
+    "start": 11.44,
+    "end": 11.84
+   },
+   {
+    "text": "oʻndan",
+    "start": 11.92,
+    "end": 12.32
+   },
+   {
+    "text": "olti",
+    "start": 12.4,
+    "end": 12.64
+   },
+   {
+    "text": "foiz.",
+    "start": 12.72,
+    "end": 14.08
+   }
+  ]
+ },
+ "ct": {
+  "duration": 5.250612,
+  "words": [
+   {
+    "text": "Se",
+    "start": 0,
+    "end": 0.16
+   },
+   {
+    "text": "te",
+    "start": 0.32,
+    "end": 0.56
+   },
+   {
+    "text": "—",
+    "start": 0.88,
+    "end": 0.92
+   },
+   {
+    "text": "sikl",
+    "start": 0.96,
+    "end": 1.28
+   },
+   {
+    "text": "vaqti.",
+    "start": 1.36,
+    "end": 2.24
+   },
+   {
+    "text": "Bu",
+    "start": 2.32,
+    "end": 2.48
+   },
+   {
+    "text": "bitta",
+    "start": 2.72,
+    "end": 3.04
+   },
+   {
+    "text": "jarayonga",
+    "start": 3.16,
+    "end": 3.6
+   },
+   {
+    "text": "sarflangan",
+    "start": 3.68,
+    "end": 4.24
+   },
+   {
+    "text": "vaqt.",
+    "start": 4.32,
+    "end": 5.2
+   }
+  ]
+ },
+ "rwt": {
+  "duration": 8.045714,
+  "words": [
+   {
+    "text": "Er",
+    "start": 0,
+    "end": 0.16
+   },
+   {
+    "text": "ve",
+    "start": 0.24,
+    "end": 0.4
+   },
+   {
+    "text": "te",
+    "start": 0.48,
+    "end": 0.64
+   },
+   {
+    "text": "esa",
+    "start": 0.96,
+    "end": 1.28
+   },
+   {
+    "text": "sikl",
+    "start": 1.44,
+    "end": 1.76
+   },
+   {
+    "text": "vaqtidan",
+    "start": 1.84,
+    "end": 2.4
+   },
+   {
+    "text": "ishchining",
+    "start": 2.56,
+    "end": 3.04
+   },
+   {
+    "text": "yurishga",
+    "start": 3.08,
+    "end": 3.44
+   },
+   {
+    "text": "ketgan",
+    "start": 3.56,
+    "end": 3.84
+   },
+   {
+    "text": "vaqtini",
+    "start": 3.92,
+    "end": 4.32
+   },
+   {
+    "text": "olib",
+    "start": 4.4,
+    "end": 4.64
+   },
+   {
+    "text": "tashlaganda",
+    "start": 4.68,
+    "end": 5.6
+   },
+   {
+    "text": "qolgan",
+    "start": 5.68,
+    "end": 6.16
+   },
+   {
+    "text": "sof",
+    "start": 6.24,
+    "end": 6.56
+   },
+   {
+    "text": "ish",
+    "start": 6.64,
+    "end": 6.8
+   },
+   {
+    "text": "vaqti.",
+    "start": 6.88,
+    "end": 8
+   }
+  ]
+ },
+ "outro": {
+  "duration": 9.16898,
+  "words": [
+   {
+    "text": "Takt",
+    "start": 0,
+    "end": 0.48
+   },
+   {
+    "text": "—",
+    "start": 0.8,
+    "end": 0.84
+   },
+   {
+    "text": "bu",
+    "start": 0.88,
+    "end": 1.04
+   },
+   {
+    "text": "liniyaning",
+    "start": 1.16,
+    "end": 1.76
+   },
+   {
+    "text": "yurak",
+    "start": 1.84,
+    "end": 2.16
+   },
+   {
+    "text": "urishi.",
+    "start": 2.24,
+    "end": 3.2
+   },
+   {
+    "text": "Formulalarni",
+    "start": 3.36,
+    "end": 4
+   },
+   {
+    "text": "bilsangiz,",
+    "start": 4.08,
+    "end": 4.88
+   },
+   {
+    "text": "reja",
+    "start": 4.96,
+    "end": 5.28
+   },
+   {
+    "text": "bajariladi.",
+    "start": 5.387,
+    "end": 6.48
+   },
+   {
+    "text": "ADM",
+    "start": 6.56,
+    "end": 8
+   },
+   {
+    "text": "Jizzax.",
+    "start": 8.04,
+    "end": 9.2
+   }
+  ]
+ }
+}
