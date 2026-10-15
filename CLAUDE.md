@@ -22,6 +22,7 @@
 - Finished work lives in the repo:
   - `video/pptx-film/ADM_HR_2026_v5.mp4`: the approved film;
   - `audio/IMTQ/`: a 5-minute summary of the Ichki mehnat tartibi qoidalari.
+  - `video/formulalar/Formulalar_v5.mp4`: the production-formulas film (TT, ATT, JPH, Overspeed, CT, RWT), approved 2026-10-15. Pending work: add the Uptime formula the user will send, plus other additions. Status and how to continue are in `video/formulalar/README.md`.
 - Uzbek voice-over (ElevenLabs): always follow `.claude/skills/uzbek-tts/SKILL.md`. The goal is fluent, natural and accurate literary Uzbek. In short:
   - **Uzbek Latin script only.** No English or Russian respelling, and no English letter names.
   - x = deep throat x (never "eks"), h = soft h (never dropped). **x and h are never swapped.** oʻ, gʻ, sh, ch and ng are kept.
