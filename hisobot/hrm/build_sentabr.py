@@ -12,7 +12,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 src = (HERE / 'HRM_2026_zavod_shablon.html').read_text(encoding='utf-8')
 
-ORDER = [0, 1, 20, 21, 'K', 22, 23, 24, 25, 26, 27, 28]   # pptx v2: the KPI dashboard sits right after the e-application summary
+ORDER = [0, 1, 20, 21, 'K', 22, 24, 25, 26, 27, 28]   # salary-grade table (23) removed at the user's request   # pptx v2: the KPI dashboard sits right after the e-application summary
 N = len(ORDER)
 RENUM = {'05': '01', '06': '02', '07': '03'}
 KPI_TITLE = '01 · ИТР ходимлари KPI'
@@ -54,7 +54,7 @@ assert len(ents) == 29
 
 ents[0] = ents[0].replace('Август 2026', 'Сентабр 2026')
 ents[1] = re.sub(r"grid\('repeat\(4,minmax\(0,1fr\)\)'.*?'align-content:center'\)",
-    lambda m: """grid('repeat(3,minmax(0,1fr))', [['01', 'Электрон ариза тизими', '8 та ариза тури электрон шаклда · 2 та стандарт · ИТР KPI дашборди · маош жадвали'], ['02', 'Корпоратив маданият', 'Коммуникациялар · Сентябрь тадбирлари · Табель сўровномаси'], ['03', 'Интизом бўйича', '2025 ва 2026-йил солиштирмаси · ички меҳнат тартиби қоидалари янги таҳрири']]
+    lambda m: """grid('repeat(3,minmax(0,1fr))', [['01', 'Электрон ариза тизими', '8 та ариза тури электрон шаклда · 2 та стандарт · ИТР KPI дашборди'], ['02', 'Корпоратив маданият', 'Коммуникациялар · Сентябрь тадбирлари · Табель сўровномаси'], ['03', 'Интизом бўйича', '2025 ва 2026-йил солиштирмаси · ички меҳнат тартиби қоидалари янги таҳрири']]
         .map(([n, t, d]) => card('', `<div style="font-size:calc(var(--u)*4.2);font-weight:900;color:var(--accent);line-height:1">${n}</div><div class="rule" style="margin:calc(var(--u)*.8) 0"></div><div class="txt" style="font-size:calc(var(--u)*1.5);line-height:1.25"><b>${t}</b></div><p class="note" style="margin-top:auto;font-size:calc(var(--u)*.95)">${d}</p>`, 'grow')).join(''), 'align-items:stretch')""",
     ents[1], flags=re.S)
 assert "'03', 'Интизом бўйича'" in ents[1], 'contents not replaced'
