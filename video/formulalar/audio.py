@@ -99,11 +99,11 @@ for sid, i, d in welds: put(sfx, W(sid, i), crackle(d + .1), .5)
 kins = [("hook", [2, 3]), ("tt1", [2, 3]), ("up", [1]), ("att1", [5, 6, 7]), ("jph1", [5, 6, 7]), ("over1", [2]), ("ct", [2, 3]), ("rwt", [2, 3, 4]), ("intro", [3, 4, 5])]
 for sid, ix in kins:
     for i in ix: put(sfx, W(sid, i) - .05, kick_s(int(.35 * SR)), .45); put(sfx, W(sid, i) - .05, pop(500, 1200, .06), .15)
-nums = [("tt3", 21), ("up", 24), ("att2", 21), ("jph1", 25), ("jph2", 21), ("jph3", 27), ("over2", 34), ("ct", 18)]
+nums = [("tt3", 21), ("up", 24), ("att2", 22), ("jph1", 25), ("jph2", 21), ("jph3", 27), ("over2", 35), ("ct", 18)]
 for sid, i in nums:
     for k in np.arange(0, 1.0, .06): put(sfx, W(sid, i) + k, tick(), .1)
     put(sfx, W(sid, i) + 1.0, tone(1318.5, .6, .25), .14); put(sfx, W(sid, i) - .05, kick_s(), .5)
-types = [("intro", 6, 120, 3.5), ("tt1", 13, 110, 30), ("tt2", 1, 40, 40), ("tt3", 0, 25, 30), ("tt3", 15, 25, 30), ("up", 5, 70, 34), ("att1", 13, 120, 30), ("att2", 1, 25, 26), ("att2", 9, 14, 22), ("jph1", 16, 55, 30), ("jph2", 6, 14, 26), ("jph3", 11, 14, 26), ("over1", 7, 100, 30), ("over2", 1, 30, 26), ("over2", 11, 18, 24), ("over2", 25, 18, 24), ("ct", 8, 75, 30), ("rwt", 10, 75, 30)]
+types = [("intro", 6, 120, 3.5), ("tt1", 13, 110, 30), ("tt2", 2, 40, 40), ("tt3", 0, 25, 30), ("tt3", 15, 25, 30), ("up", 5, 70, 34), ("att1", 13, 120, 30), ("att2", 2, 25, 26), ("att2", 10, 14, 22), ("jph1", 16, 55, 30), ("jph2", 6, 14, 26), ("jph3", 11, 14, 26), ("over1", 7, 100, 30), ("over2", 2, 30, 26), ("over2", 12, 18, 24), ("over2", 26, 18, 24), ("ct", 8, 75, 30), ("rwt", 10, 75, 30)]
 for sid, i, n, cps in types: typing(W(sid, i), n, cps if cps > 5 else 60)
 put(sfx, W("rwt", 27), whoosh(.5), .3); put(sfx, W("rwt", 29) + .5, kick_s(), .6)
 po = S["outro"]["start"] + .55

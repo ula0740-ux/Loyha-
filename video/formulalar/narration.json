@@ -16,7 +16,7 @@
     },
     {
       "id": "tt2",
-      "text": "Formula: liniyaning toza yurish vaqtini xaridor talabiga boʻlamiz. Misol: liniyaning toza yurish vaqti 450 daqiqa, xaridor talabi esa 40 ta avtomobil."
+      "text": "Formulasi quyidagicha: liniyaning toza yurish vaqtini xaridor talabiga boʻlamiz. Misol: liniyaning toza yurish vaqti 450 daqiqa, xaridor talabi esa 40 ta avtomobil."
     },
     {
       "id": "tt3",
@@ -32,7 +32,7 @@
     },
     {
       "id": "att2",
-      "text": "Formula: takt vaqtini {Uptime} ga koʻpaytirib, 100 ga boʻlamiz. 675 ni 85 ga koʻpaytirib, 100 ga boʻlsak, 574 soniya chiqadi. Yaʼni toʻxtashlarni hisobga olsak, har bir avtomobilga 574 soniya qoladi."
+      "text": "Formulasi quyidagicha: takt vaqtini {Uptime} ga koʻpaytirib, 100 ga boʻlamiz. 675 ni 85 ga koʻpaytirib, 100 ga boʻlsak, 574 soniya chiqadi. Yaʼni toʻxtashlarni hisobga olsak, har bir avtomobilga 574 soniya qoladi."
     },
     {
       "id": "jph1",
@@ -52,7 +52,7 @@
     },
     {
       "id": "over2",
-      "text": "Formula: takt vaqtidan haqiqiy takt vaqtini ayirib, haqiqiy takt vaqtiga boʻlamiz. 675 dan 574 ni ayirsak, 101 chiqadi. 101 ni 574 ga boʻlsak, 17,6 foiz. Demak, liniya 17,6 foiz tezroq yurishi kerak."
+      "text": "Formulasi quyidagicha: takt vaqtidan haqiqiy takt vaqtini ayirib, haqiqiy takt vaqtiga boʻlamiz. 675 dan 574 ni ayirsak, 101 chiqadi. 101 ni 574 ga boʻlsak, 17,6 foiz. Demak, liniya 17,6 foiz tezroq yurishi kerak."
     },
     {
       "id": "ct",

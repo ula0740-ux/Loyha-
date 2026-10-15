@@ -463,10 +463,10 @@ function build() {
       SH(t);
       const tOut = S.up.start - .4;
       P.f(t, S.tt2.vo - .3, tOut);
-      num(t, W('tt2', 1), 40, tOut); den(t, W('tt2', 5), 40, tOut);
-      bar.style.transform = `scaleX(${out(seg(t, W('tt2', 4), W('tt2', 4) + .5))})`;
-      ex.style.opacity = clamp((t - W('tt2', 8)) * 4) * (t < tOut ? 1 : 0);
-      c1.f(t, W('tt2', 9) - .1, tOut); c2.f(t, W('tt2', 17) - .1, tOut);
+      num(t, W('tt2', 2), 40, tOut); den(t, W('tt2', 6), 40, tOut);
+      bar.style.transform = `scaleX(${out(seg(t, W('tt2', 5), W('tt2', 5) + .5))})`;
+      ex.style.opacity = clamp((t - W('tt2', 9)) * 4) * (t < tOut ? 1 : 0);
+      c1.f(t, W('tt2', 10) - .1, tOut); c2.f(t, W('tt2', 18) - .1, tOut);
       s1(t, W('tt3', 0), 30, tOut); s2(t, W('tt3', 15), 30, tOut);
       popNum(big, t, W('tt3', 21) - .05, '675 s', tOut);
       const b0 = W('tt3', 26), on = t >= b0 - .1;
@@ -535,14 +535,14 @@ function build() {
     scenes.push(t => {
       SH(t);
       const tOut = S.jph1.start - .4;
-      P.f(t, S.att2.vo - .3, tOut); f(t, W('att2', 1), 26, tOut);
-      ex.style.opacity = clamp((t - W('att2', 9)) * 4) * (t < tOut ? 1 : 0);
-      s1(t, W('att2', 9), 22, tOut);
-      const c0 = W('att2', 21) - .1;
+      P.f(t, S.att2.vo - .3, tOut); f(t, W('att2', 2), 26, tOut);
+      ex.style.opacity = clamp((t - W('att2', 10)) * 4) * (t < tOut ? 1 : 0);
+      s1(t, W('att2', 10), 22, tOut);
+      const c0 = W('att2', 22) - .1;
       popNum(big, t, c0, `${Math.round(lerp(675, 574, io(seg(fq(t), c0, c0 + 1))))} s`, tOut);
-      P2.f(t, W('att2', 27) - .3, tOut);
-      cmp.forEach((b, i) => b.style.transform = `scaleX(${out(seg(t, W('att2', 27) + i * .3, W('att2', 27) + i * .3 + .6))})`);
-      note(t, W('att2', 31), 30, tOut);
+      P2.f(t, W('att2', 28) - .3, tOut);
+      cmp.forEach((b, i) => b.style.transform = `scaleX(${out(seg(t, W('att2', 28) + i * .3, W('att2', 28) + i * .3 + .6))})`);
+      note(t, W('att2', 32), 30, tOut);
     });
   }
   // ---------------- JOBS PER HOUR: name, meaning, 1 hour = 3600 s
@@ -637,16 +637,16 @@ function build() {
     scenes.push(t => {
       SH(t);
       const tOut = S.ct.start - .4;
-      P.f(t, S.over2.vo - .3, tOut); f(t, W('over2', 1), 26, tOut);
-      P2.f(t, W('over2', 11) - .3, tOut);
-      bars.forEach((b, i) => b.style.transform = `scaleX(${out(seg(t, W('over2', 11) + i * .9, W('over2', 11) + i * .9 + .6))})`);
-      const g0 = W('over2', 21);
+      P.f(t, S.over2.vo - .3, tOut); f(t, W('over2', 2), 26, tOut);
+      P2.f(t, W('over2', 12) - .3, tOut);
+      bars.forEach((b, i) => b.style.transform = `scaleX(${out(seg(t, W('over2', 12) + i * .9, W('over2', 12) + i * .9 + .6))})`);
+      const g0 = W('over2', 22);
       gap.style.transform = `scaleX(${out(seg(t, g0, g0 + .4))})`; gap.style.opacity = t > g0 ? .7 + .3 * Math.cos((t - g0) * 8) : 0;
       gl.style.opacity = clamp((t - g0 - .3) * 3);
-      s1(t, W('over2', 11), 24, tOut); s2(t, W('over2', 25), 24, tOut);
-      const r0 = W('over2', 34) - .1;
+      s1(t, W('over2', 12), 24, tOut); s2(t, W('over2', 26), 24, tOut);
+      const r0 = W('over2', 35) - .1;
       popNum(big, t, r0, `${uz(17.6 * io(seg(fq(t), r0, r0 + 1.1)), 1)} %`, tOut);
-      note(t, W('over2', 41), 30, tOut);
+      note(t, W('over2', 42), 30, tOut);
     });
   }
   // ---------------- CYCLE TIME: name, meaning, definition, 60 s example
