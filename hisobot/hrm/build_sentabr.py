@@ -12,7 +12,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 src = (HERE / 'HRM_2026_zavod_shablon.html').read_text(encoding='utf-8')
 
-ORDER = [0, 1, 20, 21, 'K', 22, 24, 25, 26, 27, 28]   # salary-grade table (23) removed at the user's request   # pptx v2: the KPI dashboard sits right after the e-application summary
+ORDER = [0, 1, 20, 21, 22, 'K', 24, 25, 26, 27, 28]   # user's order: e-application summary, process & benefit, then the KPI dashboard (salary table removed)
 N = len(ORDER)
 RENUM = {'05': '01', '06': '02', '07': '03'}
 KPI_TITLE = '01 · ИТР ходимлари KPI'
