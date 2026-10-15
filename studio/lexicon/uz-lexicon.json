@@ -90,6 +90,18 @@
       "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
       "prefer": "latin"
     },
+    "formula": {
+      "original": "Formula",
+      "latin": "Formula",
+      "cyrillic": "Формула",
+      "spoken": {
+        "latin": "For-mu-la",
+        "cyrillic": "Формула"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "word"
+    },
     "hr": {
       "original": "HR",
       "latin": "HR",
@@ -126,7 +138,7 @@
       },
       "prefer": "latin",
       "status": "approved",
-      "score": 1.0,
+      "score": 1,
       "notes": "Foydalanuvchi quloq bilan tanlagan (2026-10-13): eleven_v4 + language_code uz, ovozga 'Jizzakh' (x -> kh avtomatik). Avvalgi v3 sinovlari: 'Jizzax' -> 'jezaks'. Gap oxirida: 'Jizzakh!' (F varianti, foydalanuvchi tanlagan); nuqta bilan 'jizzaq'/'zzkh' boʻlib qolgan.",
       "kind": "word",
       "testedAt": "2026-10-13"

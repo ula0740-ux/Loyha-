@@ -33,7 +33,7 @@ test('sʼh is two sounds, not the digraph sh', () => {
 test('numbers in Uzbek words', () => {
   assert.equal(cardinal(855), 'sakkiz yuz ellik besh');
   assert.equal(cardinal(2026), 'ikki ming yigirma olti');
-  assert.equal(cardinal(172), 'bir yuz yetmish ikki');
+  assert.equal(cardinal(172), 'yuz yetmish ikki');
   assert.equal(ordinal(2026), 'ikki ming yigirma oltinchi');
   assert.equal(ordinal(1), 'birinchi');
   assert.equal(ordinal(9), 'toʻqqizinchi');

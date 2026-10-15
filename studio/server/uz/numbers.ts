@@ -9,7 +9,8 @@ export const MONTHS = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul
 function under1000(n: number): string {
   const out: string[] = [];
   const h = Math.floor(n / 100), t = Math.floor((n % 100) / 10), o = n % 10;
-  if (h) out.push(ONES[h], 'yuz');
+  // 100-199: plain "yuz" ("yuz yetmish ikki"), not "bir yuz" — the user's choice by ear (2026-10-15)
+  if (h) out.push(...(h === 1 ? ['yuz'] : [ONES[h], 'yuz']));
   if (t) out.push(TENS[t]);
   if (o) out.push(ONES[o]);
   return out.join(' ');

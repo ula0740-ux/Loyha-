@@ -18,6 +18,7 @@ function prepMixed(t: string) {
     if (p.startsWith('{')) return p.slice(1, -1);
     const lead = /^\s/.test(p) ? ' ' : '', tail = /\s$/.test(p) ? ' ' : '';
     let tts = prepareUzbek(p, 'latin').tts;
+    if (/^\s*[a-zʻ]/.test(p)) tts = tts.charAt(0).toLowerCase() + tts.slice(1); // prepareUzbek capitalises each chunk; keep mid-sentence case
     if (!/[.!?…:;,]\s*$/.test(p)) tts = tts.replace(/[.]$/, ''); // addPauses appends a stop to every chunk; keep only real ones
     return lead + tts + tail;
   });
@@ -44,7 +45,9 @@ for (const line of cfg.lines) {
     // neighbouring lines as context (previous_text/next_text; sent only to models that accept it, e.g. eleven_v4):
     // without it eleven_v4 sometimes gives a short line a Persian accent
     const idx = cfg.lines.indexOf(line);
-    const ctx = { previousText: cfg.lines[idx - 1] && prepMixed(cfg.lines[idx - 1].text).tts, nextText: cfg.lines[idx + 1] && prepMixed(cfg.lines[idx + 1].text).tts };
+    // context sentences go through prepareUzbek in full (English words included): English context pulled
+    // "ADM" towards an English reading (heard by the user, 2026-10-15)
+    const ctx = { previousText: cfg.lines[idx - 1] && prepareUzbek(plain(cfg.lines[idx - 1].text), 'latin').tts, nextText: cfg.lines[idx + 1] && prepareUzbek(plain(cfg.lines[idx + 1].text), 'latin').tts };
     const s = await synth(prep.tts, { voice, model: cfg.model, ...ctx });
     const sc = process.env.CHECK === '0' ? undefined : score(spokenReference(plain(line.text)), await transcribe(s.mp3));
     if (sc) console.log(`  ${line.id} #${k + 1}: STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);
