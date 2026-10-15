@@ -12,10 +12,10 @@ from pathlib import Path
 HERE = Path(__file__).parent
 src = (HERE / 'HRM_2026_zavod_shablon.html').read_text(encoding='utf-8')
 
-ORDER = [0, 1, 20, 21, 22, 23, 24, 25, 'K1', 'K2', 26, 27, 28]
+ORDER = [0, 1, 20, 21, 'K', 22, 23, 24, 25, 26, 27, 28]   # pptx v2: the KPI dashboard sits right after the e-application summary
 N = len(ORDER)
 RENUM = {'05': '01', '06': '02', '07': '03'}
-KPI_TITLE = '02 · ИТР ходимлари KPI'
+KPI_TITLE = '01 · ИТР ходимлари KPI'
 
 # ---------------- slide sections (markup) ----------------
 starts = [m.start() for m in re.finditer(r'  <section class="slide', src)]
@@ -35,9 +35,9 @@ def renum(t):
 out_secs = []
 for j, k in enumerate(ORDER):
     if isinstance(k, str):   # new KPI dashboard slide: same shell as the corporate-culture data slide
-        t = secs[25].replace('data-title="06 · Корпоратив маданият ва коммуникациялар"', f'data-title="{KPI_TITLE}"')
-        t = t.replace('<div class="ghost" aria-hidden="true">06</div>', '<div class="ghost" aria-hidden="true">KPI</div>')
-        old = 25
+        t = secs[21].replace('data-title="05 · Электрон ариза тизими"', f'data-title="{KPI_TITLE}"')
+        t = t.replace('<div class="ghost" aria-hidden="true">05</div>', '<div class="ghost" aria-hidden="true">KPI</div>')
+        old = 21
     else:
         t, old = renum(secs[k]), k
     t = t.replace(f'data-i="{old}"', f'data-i="{j}"')
@@ -54,7 +54,7 @@ assert len(ents) == 29
 
 ents[0] = ents[0].replace('Август 2026', 'Сентабр 2026')
 ents[1] = re.sub(r"grid\('repeat\(4,minmax\(0,1fr\)\)'.*?'align-content:center'\)",
-    lambda m: """grid('repeat(3,minmax(0,1fr))', [['01', 'Электрон ариза тизими', '8 та ариза тури электрон шаклда · 2 та стандарт тасдиқланди · маош жадвали'], ['02', 'Корпоратив маданият', 'Коммуникациялар · Сентябрь тадбирлари · Табель сўровномаси · ИТР KPI дашборди'], ['03', 'Интизом бўйича', '2025 ва 2026-йил солиштирмаси · ички меҳнат тартиби қоидалари янги таҳрири']]
+    lambda m: """grid('repeat(3,minmax(0,1fr))', [['01', 'Электрон ариза тизими', '8 та ариза тури электрон шаклда · 2 та стандарт · ИТР KPI дашборди · маош жадвали'], ['02', 'Корпоратив маданият', 'Коммуникациялар · Сентябрь тадбирлари · Табель сўровномаси'], ['03', 'Интизом бўйича', '2025 ва 2026-йил солиштирмаси · ички меҳнат тартиби қоидалари янги таҳрири']]
         .map(([n, t, d]) => card('', `<div style="font-size:calc(var(--u)*4.2);font-weight:900;color:var(--accent);line-height:1">${n}</div><div class="rule" style="margin:calc(var(--u)*.8) 0"></div><div class="txt" style="font-size:calc(var(--u)*1.5);line-height:1.25"><b>${t}</b></div><p class="note" style="margin-top:auto;font-size:calc(var(--u)*.95)">${d}</p>`, 'grow')).join(''), 'align-items:stretch')""",
     ents[1], flags=re.S)
 assert "'03', 'Интизом бўйича'" in ents[1], 'contents not replaced'
@@ -89,28 +89,38 @@ UNITS = [  # name, sub-row, Jul, Aug, Sep, 3 months, delta
 ]
 js_pos = ',\n        '.join(f"['{p}', '{n}', '{a}', '{b}', '{c}', '<b>{t}</b>', '<b>{k}</b>']" for p, n, a, b, c, t, k in POS)
 js_units = ',\n        '.join(f"[{repr(u)}, {s}, '{a}', '{b}', '{c}', {v}, '{d}']" for u, s, a, b, c, v, d in UNITS)
-K1 = f"""    {{ t: 'ИТР ходимлари KPI бажарилиши: 3 ойлик дашборд', s: '«ADM JIZZAKH» АЖ · Июль — Сентябрь 2026 · 576 ИТР ходими, улардан 465 нафари 3 ойда ҳам ишлаган', layout: 'grid-template-columns:minmax(0,1fr) minmax(0,1.75fr)', body: () =>
-      C(kpis([kpi('ИТР ходими', '576', 'Июль — Сентябрь 2026', 'acc'), kpi('3 ойда ҳам ишлаган', '465', 'нафар'),
-        kpi('Тўлиқ KPI олмаганлар', '92', '3 ой жами, нафар'), kpi('3 ой KPI · жами ИТР', '98,8%', 'натижа ÷ мақсад', 'acc')], 2) +
-        card('Тўлиқ KPI олмаганлар, нафар', vbar(['Июль', 'Авг', 'Сен'], [{{ v: [44, 21, 27] }}], {{ hi: [0], h: 5 }}), 'grow')) +
-      card('<span class="cap">Лавозимлар кесимида — тўлиқ KPI олмаганлар сони</span>',
-        `<p class="note" style="margin:0 0 calc(var(--u)*.4)">Энг кўп ходимли лавозимлар (асл номлари) · KPI натижаси мақсаддан паст бўлган ходимлар, нафар</p>` + table(['Лавозим', 'Ходим*', 'Июль', 'Авг', 'Сен', 'Жами', '3 ой KPI'], [
-        {js_pos},
-        ['<b>Жами ИТР</b>', '523', '44', '21', '27', '<b>92</b>', '<b>98,8%</b>']], {{ r: [1, 2, 3, 4, 5, 6], tot: true, hotRows: [0] }}) +
-        `<p class="note">* Ходим — Сентябрь ҳолатига. 3 ой KPI — ходимлар бўйича ўртача бажарилиш (натижа ÷ мақсад). 3 ой давомида 100% бажарган 4 та лавозим (Мутахассис, Омбор мудири, Бухгалтер, Муҳандис технолог) кўрсатилмаган.</p>`, 'grow') }},"""
-K2 = f"""    {{ t: 'Бўлинмалар рейтинги — KPI бажарилиши (Факт ÷ Режа), %', s: 'Манба: kpi.adm.uz · Report department · Июль — Сентябрь 2026', layout: 'grid-template-columns:minmax(0,3.3fr) minmax(0,1fr)', body: () => {{
-      const bar = (v) => {{ const c = v >= 95 ? 'linear-gradient(90deg,var(--green),var(--cyan))' : v >= 85 ? 'linear-gradient(90deg,var(--blue),var(--cyan))' : 'linear-gradient(90deg,var(--orange),var(--amber))';
-        return `<span class="kb"><i style="--w:${{((v - 70) / 30 * 100).toFixed(1)}}%;background:${{c}}"></i></span><b>${{fmt(v)}}%</b>`; }};
-      const dl = (d) => `<span class="dl ${{d[0] === '▲' ? 'up' : d[0] === '▼' ? 'dn' : ''}}">${{d}}</span>`;
-      const U = [
-        {js_units}];
-      return card('', table(['Бўлинма / цех', 'Июль', 'Авг', 'Сен', '3 ой (шкала 70–100%)', 'Δ Сен/Авг'],
-          U.map((u) => [{{ t: (u[1] ? '↳ ' : '') + u[0], cls: u[1] ? 'sub' : '' }}, u[2], u[3], u[4], {{ t: bar(u[5]), cls: 'kbc' }}, dl(u[6])]), {{ r: [1, 2, 3, 5] }}), 'grow') +
-        C(kpis([kpi('Жами корхона · Июль', '95,6%', 'kpi.adm.uz'), kpi('Август', '95,5%'), kpi('Сентябрь', '93,2%'), kpi('3 ой', '94,7%', 'ўртача', 'acc'), kpi('Δ Сен/Авг', '▼ −2,3', 'пункт', 'hot')], 1) +
-        `<p class="note">Изоҳ: СКД, Бўёқлаш, Пайвандлаш цехлари ҳамда Сифат назорати ва кафолоти бошқармасида KPI натижалари бўлим ва цех бошлиқлари томонидан текширилганлиги сабабли бажарилиш 100% дан паст. 3 ой давомида 100% бажарган 4 та бўлинма рейтингга киритилмаган.</p>`);
-    }} }},"""
+# ITR KPI dashboard: one slide exactly as in the pptx (two panels, no extra charts)
+def jsq(t): return "'" + t.replace("\\", "\\\\").replace("'", "\\'") + "'"
+pos_rows = ''.join(
+    "<tr class=\"%s\"><td>%s</td><td class=\"r\">%s</td>%s<td class=\"r tot\">%s</td><td class=\"r\">%s</td></tr>" % (
+        'hot' if p == 'Мастер' else '', ('<b>%s</b>' % p) if p == 'Мастер' else p, n,
+        ''.join('<td class="r %s">%s</td>' % ('z' if v == 0 else 'b', v) for v in (a, b, c)), t, k)
+    for p, n, a, b, c, t, k in POS)
+pos_table = ('<table class="tb kp"><thead><tr><th></th><th></th><th class="grp" colspan="4">Тўлиқ KPI олмаганлар, нафар</th><th></th></tr>'
+             '<tr><th>Лавозим</th><th class="r">Ходим*</th><th class="r">Июль</th><th class="r">Авг</th><th class="r">Сен</th><th class="r">Жами</th><th class="r">3 ой KPI</th></tr></thead><tbody>'
+             + pos_rows + '<tr class="tot"><td><b>Жами ИТР</b></td><td class="r">523</td><td class="r b">44</td><td class="r b">21</td><td class="r b">27</td><td class="r tot">92</td><td class="r">98,8%</td></tr></tbody></table>')
+def pct(v): return float(v.replace('%', '').replace(',', '.')) if v not in ('—',) else 100.0
+def cell(v): return '<td class="r%s">%s</td>' % (' b' if v != '—' and pct(v) < 85 else '', v)
+def bar(v):
+    c = 'linear-gradient(90deg,var(--green),var(--cyan))' if v >= 95 else 'linear-gradient(90deg,var(--blue),var(--cyan))' if v >= 85 else 'linear-gradient(90deg,var(--orange),var(--amber))'
+    return '<span class="kb"><i style="--w:%.1f%%;background:%s"></i></span><b>%s%%</b>' % ((v - 70) / 30 * 100, c, ('%.1f' % v).replace('.', ',').replace(',0', '') if v == 100 else ('%.1f' % v).replace('.', ','))
+def dl(d): return '<span class="dl %s">%s</span>' % ('up' if d[0] == '▲' else 'dn' if d[0] == '▼' else '', d)
+unit_rows = ''.join(
+    '<tr class="%s"><td class="%s">%s</td>%s%s%s<td class="kbc">%s</td><td class="r">%s</td></tr>' % (
+        'grp' if u.startswith('9.') else '', 'sub' if sub else '', ('↳ ' if sub else '') + (('<b>%s</b>' % u) if u.startswith('9.') else u),
+        cell(a), cell(b), cell(c), bar(v), dl(d))
+    for u, sub, a, b, c, v, d in UNITS)
+unit_table = ('<table class="tb kr"><thead><tr><th>Бўлинма / цех</th><th class="r">Июль</th><th class="r">Авг</th><th class="r">Сен</th><th>3 ой (шкала 70–100%)</th><th class="r">Δ Сен/Авг</th></tr></thead><tbody>'
+              + unit_rows + '<tr class="tot"><td><b>Жами корхона (kpi.adm.uz)</b></td><td class="r">95,6%</td><td class="r">95,5%</td><td class="r">93,2%</td><td class="kbc">' + bar(94.7) + '</td><td class="r">' + dl('▼ −2,3') + '</td></tr></tbody></table>')
+left = ('<span class="cap">Лавозимлар кесимида — тўлиқ KPI олмаганлар сони</span>'
+        '<p class="note" style="margin:0 0 calc(var(--u)*.5)">Энг кўп ходимли лавозимлар (асл номлари) · KPI натижаси мақсаддан паст бўлган ходимлар, нафар</p>'
+        + pos_table + '<p class="note" style="margin-top:auto"><i>* Ходим — Сентябрь ҳолатига. 3 ой KPI — ходимлар бўйича ўртача бажарилиш (натижа ÷ мақсад). 3 ой давомида 100% бажарган 4 та лавозим (Мутахассис, Омбор мудири, Бухгалтер, Муҳандис технолог) кўрсатилмаган.</i></p>')
+right = ('<div style="display:flex;justify-content:space-between;align-items:baseline;gap:1em"><span class="cap">Бўлинмалар рейтинги — KPI (Факт ÷ Режа), %</span><span class="note" style="white-space:nowrap">Манба: kpi.adm.uz · Report department</span></div>'
+         + unit_table + '<p class="note" style="margin-top:auto"><i>Изоҳ: СКД, Бўёқлаш, Пайвандлаш цехлари ҳамда Сифат назорати ва кафолоти бошқармасида KPI натижалари бўлим ва цех бошлиқлари томонидан текширилганлиги сабабли бажарилиш 100% дан паст. 3 ой давомида 100% бажарган 4 та бўлинма рейтингга киритилмаган.</i></p>')
+K = ("    { t: 'ИТР ходимлари KPI бажарилиши: <em>3 ойлик дашборд</em>', s: '«ADM JIZZAKH» АЖ · Июль — Сентябрь 2026 · 576 ИТР ходими, улардан 465 нафари 3 ойда ҳам ишлаган', "
+     "layout: 'grid-template-columns:minmax(0,1fr) minmax(0,1.62fr)', body: () =>\n      card('', " + jsq(left) + ", 'grow') + card('', " + jsq(right) + ", 'grow') },")
 
-new_ents = [K1 if k == 'K1' else K2 if k == 'K2' else ents[k] for k in ORDER]
+new_ents = [K if k == 'K' else ents[k] for k in ORDER]
 for i, e in enumerate(new_ents):   # every entry ends with a comma
     if not e.rstrip().endswith(','): new_ents[i] = e.rstrip() + ','
 html = html[:a] + '\n' + '\n\n'.join(new_ents) + html[b:]
@@ -131,6 +141,12 @@ css = """
 @keyframes kbIn{from{transform:scaleX(0)}}
 .tb td.kbc{white-space:nowrap}
 .vb .x{line-height:1.15}
+.tb.kp th.grp{text-align:center;color:var(--cyan);border-bottom:1px solid var(--line);font-weight:700}
+.tb.kp td{padding-top:calc(var(--u)*.55);padding-bottom:calc(var(--u)*.55)}
+.tb.kp td.z{color:rgba(170,185,203,.45)}.tb .b{font-weight:800}
+.tb.kp td.tot{color:var(--orange);font-weight:900}
+.tb.kr tr.grp td{background:rgba(46,168,255,.10)}
+.tb.kr tr.tot .kb i{background:linear-gradient(90deg,var(--orange),var(--amber))!important}
 .tb td.sub{padding-left:calc(var(--u)*1.6);color:var(--muted);font-size:.94em}
 .dl{font-family:var(--mono);font-weight:700;white-space:nowrap}
 .dl.up{color:var(--green)}.dl.dn{color:var(--orange)}
