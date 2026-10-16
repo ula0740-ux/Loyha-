@@ -1,3 +1,19 @@
+/* chiziqli grafik: kartochkaning haqiqiy o'lchamida chiziladi (matn cho'zilmaydi) */
+line = function(el, labels, values, lo, hi, dec){
+  var W = el.clientWidth || 600, H = el.clientHeight || 260, px = 34, pt = 34, pb = 34;
+  var x = function(i){ return px + i * (W - px * 2) / (values.length - 1); };
+  var y = function(v){ return pt + (1 - (v - lo) / (hi - lo)) * (H - pt - pb); };
+  var d = values.map(function(v, i){ return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); }).join(" ");
+  var area = d + " L" + x(values.length - 1).toFixed(1) + " " + (H - pb) + " L" + x(0).toFixed(1) + " " + (H - pb) + " Z";
+  var grid = [0, .5, 1].map(function(f){ var yy = (pt + f * (H - pt - pb)).toFixed(1); return '<line x1="' + px + '" x2="' + (W - px) + '" y1="' + yy + '" y2="' + yy + '" stroke="rgba(170,195,225,.10)"/>'; }).join("");
+  var pts = values.map(function(v, i){
+    return '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(v).toFixed(1) + '" r="5.5" fill="#0b0f15" stroke="#8fb3d9" stroke-width="3"/>' +
+      '<text x="' + x(i).toFixed(1) + '" y="' + (y(v) - 13).toFixed(1) + '" text-anchor="middle" font-size="16" font-weight="700" fill="#f1f4f8">' + (dec ? fmt(v.toFixed(dec)) : fmt(v)) + '</text>' +
+      '<text x="' + x(i).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="15" fill="#8b97a6">' + labels[i] + '</text>';
+  }).join("");
+  el.innerHTML = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true"><defs><linearGradient id="lg' + el.id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb3d9" stop-opacity=".28"/><stop offset="1" stop-color="#8fb3d9" stop-opacity="0"/></linearGradient></defs>' +
+    grid + '<path d="' + area + '" fill="url(#lg' + el.id + ')"/><path d="' + d + '" fill="none" stroke="#8fb3d9" stroke-width="3.5" stroke-linejoin="round"/>' + pts + '</svg>';
+};
 /* ===== HRM 2026 · Сентабр — slayd diagrammalari (shablon hbars/vbars/line yordamchilari bilan) ===== */
 (function(){ /* мундарижа ҳалқаси */
   var s = "", n = 7, c = 100, r = 78, w = 30;
