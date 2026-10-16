@@ -199,3 +199,16 @@ h3{font-size:21px}
 /* muqova: qo'shimcha kartochkalarsiz */
 .cover .cover-title{font-size:170px}.cover .brand-xl{font-size:84px}.cover .rule{width:700px}
 .itr-unit{font-size:14.5px}.itr-unit td{padding:2px 10px;line-height:1.2}.itr-unit th{padding:6px 10px}
+
+/* bo'lim slaydlari: PowerPoint'dagidek faqat raqam, nom, izoh */
+.sec2{position:relative;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:70px;padding:0 40px;overflow:hidden;border-radius:12px;
+  background:radial-gradient(70% 90% at 15% 50%,rgba(234,85,63,.16),transparent 70%),linear-gradient(90deg,rgba(52,69,107,.25),transparent 60%)}
+.sec2-n{font-family:var(--display);font-weight:800;font-size:560px;line-height:.78;letter-spacing:-.04em;color:var(--coral);text-shadow:0 30px 90px rgba(234,85,63,.35)}
+.sec2-tx{display:flex;flex-direction:column;justify-content:center}
+.sec2-k{font-family:var(--mono);font-size:22px;letter-spacing:.3em;color:var(--steel)}
+.sec2-k::before{content:"БЎЛИМ  "}
+.sec2-t{font-size:88px;line-height:1.02;margin:18px 0 6px}
+.sec2 .rule{width:520px;height:4px}
+.sec2-s{font-size:30px;color:var(--muted);line-height:1.35;max-width:900px}
+.toc2 li{grid-template-columns:76px 1fr}
+.toc2 strong{font-size:30px}
