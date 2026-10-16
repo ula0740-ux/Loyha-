@@ -190,3 +190,12 @@ h3{font-size:21px}
 .pil4 .num{align-self:flex-start}
 .ev27 li{gap:10px}.ev27 b{font-size:18px}.ev27 span.d{font-size:16px}
 .pil4 .bul{flex:1;align-content:space-evenly}.pil4 .bul li{font-size:19px}
+
+/* 26 · маош жадвали */
+.sal{font-size:19px}.sal th{font-size:17px;padding:12px 12px}.sal td{padding:10px 12px;vertical-align:middle}
+.gbadge{display:inline-block;padding:6px 14px;border-radius:8px;background:#34456b;color:#fff;font-family:var(--display);font-weight:700;font-size:20px;white-space:nowrap}
+.sal tr.dark .gbadge{background:var(--coral)}
+.itr-unit{font-size:15px}.itr-unit td{padding:3px 10px}
+/* muqova: qo'shimcha kartochkalarsiz */
+.cover .cover-title{font-size:170px}.cover .brand-xl{font-size:84px}.cover .rule{width:700px}
+.itr-unit{font-size:14.5px}.itr-unit td{padding:2px 10px;line-height:1.2}.itr-unit th{padding:6px 10px}
