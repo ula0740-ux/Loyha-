@@ -5,9 +5,24 @@
   - `motion-design`: code-only motion-design pipeline (seek(t) HTML, Playwright render, ffmpeg, music and SFX, QA).
   - `motion-reel`: product reels and showreels (springs, beat grid, critique loop).
   - `uzbek-tts`: Uzbek ElevenLabs voice-over. It covers the approved settings, the lexicon, the STT check, and the document → MP3 summary workflow.
+- **Remotion skills** (`remotion-*`, from `npx skills add remotion-dev/skills`): `remotion-best-practices` routes to `remotion-create`, `remotion-render`, `remotion-captions`, `remotion-studio` and the other `remotion-*` skills. Remotion licence: free for individuals and companies of up to 3 people; larger companies need a paid licence. The `studio/` project uses Remotion 4.
+- **Taste skills** (Leonxlnx/taste-skill, MIT): design-quality skills for websites, decks and brand work. They are `design-taste-frontend` (the main one; v1 and v2-experimental are kept only for compatibility), `high-end-visual-design`, `minimalist-ui`, `industrial-brutalist-ui`, `redesign-existing-projects`, `gpt-taste`, `brandkit`, `image-to-code`, `imagegen-frontend-web`/`-mobile`, `stitch-design-taste` and `full-output-enforcement`.
+- **Emil Kowalski skills** (emilkowalski/skills, MIT; 15 markdown-only skills): `animate`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `animation-performance`, `animation-vocabulary`, `apple-design`, `emil-design-eng`, `break-ui`, `mobile-native`, `prototype`, `pick-ui-library`, `ask-sonner`, `animate-expo` and `write-swift`. Use them for the motion timing, easing and polish of web/UI animation.
+- **Impeccable** (pbakaus/impeccable, Apache-2.0): the `impeccable` skill, run as `/impeccable init|audit|polish|critique|...`, for frontend and UI design quality. It was installed from GitHub with `npx skills add pbakaus/impeccable`, because `impeccable.style` is blocked by this environment's network. Its engine downloads from GitHub releases on first run. Hooks are not installed, so run `impeccable detect` by hand after UI changes.
+- **Plugin `hyperframes@hyperframes`** (heygen-com/hyperframes, Apache-2.0): makes videos from HTML. Its skills include `hyperframes`, `music-to-video`, `motion-graphics`, `general-video`, `embedded-captions` and `product-launch-video`, and its CLI runs as `npx hyperframes`. It is declared in `.claude/settings.json`, so new sessions install it automatically. Needs Node.js 22+ and FFmpeg.
+- **ReelMimic** (edenfunf/reelmimic, MIT): clones a reference video's style into a new 2D video, using Claude Code agents and a web UI at `localhost:4318`.
+  - Install it with `sh tools/reelmimic/setup.sh`. It clones the repo to `../reelmimic`, adds the Uzbek ElevenLabs voice (`uz_tts.py`, which runs this repo's `npm run uz -- make`) and the Uzbek rules to its CLAUDE.md/AGENTS.md, and writes `~/.reelmimic/secrets.json`.
+  - Uzbek narration in ReelMimic: always use `uz_tts.py`, never Yating or Kokoro.
+  - **When to use it (the user's decision, 2026-10-13):** use ReelMimic to copy the style of OTHER people's videos into new 2D videos. When the reference is our own work or a style we already know, build it ourselves with `motion-design`/`motion-reel`, which costs much less of the Claude limit.
+  - ReelMimic is heavy on the limit. Before every job, say so and suggest the economy settings: `BUILDERS` 2, rounds 1, and a shorter video.
+  - It copies only the technique; it never copies another video's footage, characters or logos. The rights to use the result are the user's responsibility.
+- **Fonts** (`assets/fonts/`, Google Fonts, OFL): Inter (captions/UI), Montserrat (headings), Unbounded (hook titles), Manrope, Onest, Oswald (numbers), Rubik, Playfair Display (premium), Space Grotesk (tech), JetBrains Mono (code).
+  - Uzbek text: only **Inter, Montserrat, Onest and Oswald** have every Uzbek Latin and Cyrillic letter. The coverage table and the workarounds are in `assets/fonts/README.md`.
+  - HTML: `fonts.css`. System install in a new session: `sh assets/fonts/install.sh`.
 - Finished work lives in the repo:
   - `video/pptx-film/ADM_HR_2026_v5.mp4`: the approved film;
   - `audio/IMTQ/`: a 5-minute summary of the Ichki mehnat tartibi qoidalari.
+  - `video/formulalar/Formulalar_v5.mp4`: the production-formulas film (TT, ATT, JPH, Overspeed, CT, RWT), approved 2026-10-15. Pending work: add the Uptime formula the user will send, plus other additions. Status and how to continue are in `video/formulalar/README.md`.
 - Uzbek voice-over (ElevenLabs): always follow `.claude/skills/uzbek-tts/SKILL.md`. The goal is fluent, natural and accurate literary Uzbek. In short:
   - **Uzbek Latin script only.** No English or Russian respelling, and no English letter names.
   - x = deep throat x (never "eks"), h = soft h (never dropped). **x and h are never swapped.** oʻ, gʻ, sh, ch and ng are kept.
