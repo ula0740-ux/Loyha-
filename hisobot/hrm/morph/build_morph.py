@@ -536,6 +536,32 @@ def chevron(s, vx, vy, k):
     t.rotation = 270
 
 
+def spin_anim(s, turns=1.5, dur=1900):
+    """Slayd ochilishi bilan '!!spin1/2' guruhlari avtomatik aylanadi
+    (Morph 360° dan katta burilishni ko'rsatmaydi, shuning uchun Spin effekti).
+    1-yoy soat strelkasi bo'yicha, 2-yoy teskari; boshida tezlashib, oxirida sekinlashadi."""
+    ids = {sh.name: sh.shape_id for sh in s.shapes if sh.name in ('!!spin1', '!!spin2')}
+    by = int(turns * 360 * 60000)
+    P = 'http://schemas.openxmlformats.org/presentationml/2006/main'
+    effs, n = '', 5
+    for nm, sign in (('!!spin1', 1), ('!!spin2', -1)):
+        effs += ('<p:par><p:cTn id="%d" presetID="8" presetClass="emph" presetSubtype="0" accel="15000" decel="65000" fill="hold" nodeType="withEffect">'
+                 '<p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst><p:animRot by="%d"><p:cBhvr>'
+                 '<p:cTn id="%d" dur="%d" fill="hold"/><p:tgtEl><p:spTgt spid="%d"/></p:tgtEl>'
+                 '<p:attrNameLst><p:attrName>r</p:attrName></p:attrNameLst></p:cBhvr></p:animRot></p:childTnLst></p:cTn></p:par>'
+                 % (n, sign * by, n + 1, dur, ids[nm]))
+        n += 2
+    xml = ('<p:timing xmlns:p="%s"><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst>'
+           '<p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>'
+           '<p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/><p:cond evt="onBegin" delay="0"><p:tn val="2"/></p:cond></p:stCondLst><p:childTnLst>'
+           '<p:par><p:cTn id="4" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst>%s</p:childTnLst></p:cTn></p:par>'
+           '</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn>'
+           '<p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst>'
+           '<p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq>'
+           '</p:childTnLst></p:cTn></p:par></p:tnLst></p:timing>') % (P, effs)
+    s._element.append(etree.fromstring(xml))
+
+
 class Deck:
     def __init__(self):
         self.p = Presentation()
@@ -601,7 +627,7 @@ def build():
     s = d.new()
     s.background.fill.fore_color.rgb = rgb('ECE8EA')
     fullbg(s, 'ECE8EA')
-    rings(s, W / 2, H / 2 - 0.2, k=0.62, light=True, rot=(240, -240))
+    rings(s, W / 2, H / 2 - 0.2, k=0.62, light=True, rot=(0, 0))
     disc(s, W / 2, H / 2 - 0.2, 1.25, light=True)
     morph(s, 1600)
 
@@ -611,7 +637,8 @@ def build():
     rings(s, W / 2, H / 2 - 0.2, k=1.12, rot=(0, 0))
     disc(s, W / 2, H / 2 - 0.2, 2.2)
     pic(s, 'word_white.png', W / 2 - 0.9, H - 0.78, 1.8, None, name='!!brand')
-    morph(s, 1600)
+    morph(s, 1100)
+    spin_anim(s, 1.5, 1900)
 
     # 1 — muqova
     s = d.new()
