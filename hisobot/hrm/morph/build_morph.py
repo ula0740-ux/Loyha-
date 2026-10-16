@@ -450,7 +450,7 @@ def soft(sh, rad_in):
     etree.SubElement(ef, qn('a:softEdge')).set('rad', str(int(rad_in * IN)))
 
 
-def rings(s, cx, cy, k=1.0, alpha=1.0, arc=True, light=False):
+def rings(s, cx, cy, k=1.0, alpha=1.0, arc=True, light=False, rot=None):
     for i, (nm, d, fill, ln) in enumerate(RINGS):
         dd = d * k
         if light:
@@ -459,24 +459,45 @@ def rings(s, cx, cy, k=1.0, alpha=1.0, arc=True, light=False):
             continue
         shape(s, MSO_SHAPE.OVAL, cx - dd / 2, cy - dd / 2, dd, dd, fill=fill, line=ln, lw=0.75,
               name=nm, alpha=alpha, lalpha=alpha)
-    if light:
-        return
     if arc:
-        d = 4.2 * k
-        a = shape(s, MSO_SHAPE.ARC, cx - d / 2, cy - d / 2, d, d, line=TEAL, lw=2.25, name='!!arc')
-        a.adjustments[0] = -150
-        a.adjustments[1] = -40
-        d2 = 6.0 * k
-        a2 = shape(s, MSO_SHAPE.ARC, cx - d2 / 2, cy - d2 / 2, d2, d2, line=TEAL2, lw=1.25, name='!!arc2')
-        a2.adjustments[0] = 20
-        a2.adjustments[1] = 95
-        dot = 0.14 * max(k, 0.8)
-        import math
-        for nm, ang, dia in (('!!dot1', -150, 4.2), ('!!dot2', 95, 6.0)):
-            rr = dia * k / 2
-            px = cx + rr * math.cos(math.radians(ang))
-            py = cy + rr * math.sin(math.radians(ang))
-            shape(s, MSO_SHAPE.OVAL, px - dot / 2, py - dot / 2, dot, dot, fill=TEAL, name=nm)
+        spin(s, cx, cy, k, rot or (0, 0), light)
+
+
+class _In:
+    """Guruh ichiga shakl qo'shish uchun (shape() s.shapes ni kutadi)."""
+    def __init__(self, g):
+        self.shapes = g.shapes
+
+
+# (guruh nomi, diametr, yoy boshi, yoy oxiri, rang, qalinlik, asosiy burilish)
+# 2-yoy 270° burilgan holda chiziladi: shunda u 1-yoyga teskari aylanadi.
+ARCS = [('!!spin1', 4.2, 200, 320, TEAL, 2.25, 0),
+        ('!!spin2', 6.0, 110, 185, TEAL2, 1.25, 270)]
+
+
+def spin(s, cx, cy, k, rot, light=False):
+    """Firuza yoy + nuqta bitta guruhda. Morph guruhning burilishini
+    animatsiya qiladi: slaydlar orasida yoylar markaz atrofida aylanadi."""
+    import math
+    dot = 0.14 * max(k, 0.8)
+    for (nm, dia, a0, a1, col, lw, base), r in zip(ARCS, rot):
+        if light:
+            col, lw = 'A9A4A6', lw * 0.8
+        d = dia * k
+        g = s.shapes.add_group_shape()
+        gi = _In(g)
+        pad = dot
+        # shaffof kvadrat: guruh markazi = halqa markazi bo'lsin
+        shape(gi, MSO_SHAPE.RECTANGLE, cx - d / 2 - pad, cy - d / 2 - pad, d + 2 * pad, d + 2 * pad)
+        a = shape(gi, MSO_SHAPE.ARC, cx - d / 2, cy - d / 2, d, d, line=col, lw=lw)
+        # python-pptx qiymatni 100000 ga ko'paytiradi, OOXML burchak birligi 60000/°
+        a.adjustments[0] = (a0 % 360) * 0.6
+        a.adjustments[1] = (a1 % 360) * 0.6
+        px = cx + d / 2 * math.cos(math.radians(a0))
+        py = cy + d / 2 * math.sin(math.radians(a0))
+        shape(gi, MSO_SHAPE.OVAL, px - dot / 2, py - dot / 2, dot, dot, fill=col)
+        g.name = nm
+        g._element.grpSpPr.get_or_add_xfrm().set('rot', str(int(((base + r) % 360) * 60000)))
 
 
 def disc(s, cx, cy, d, light=False):
@@ -539,7 +560,7 @@ class Deck:
     # --- bo'lim slaydi ---
     def section(self, num, title, sub=''):
         s = self.new()
-        rings(s, 12.4, 3.75, k=1.05, arc=True)
+        rings(s, 12.4, 3.75, k=1.05, arc=True, rot=(320, -220))
         # ghost kartochkalar (keyingi slaydda haqiqiy kartochkalarga aylanadi)
         for i, (gx, gy) in enumerate(((6.6, 0.75), (9.75, 0.75), (6.6, 3.9), (9.75, 3.9))):
             rect(s, gx, gy, 3.0, 2.95, fill=BG2, line=LINE, r=0.08, name='!!c%d' % (i + 1),
@@ -580,21 +601,21 @@ def build():
     s = d.new()
     s.background.fill.fore_color.rgb = rgb('ECE8EA')
     fullbg(s, 'ECE8EA')
-    rings(s, W / 2, H / 2 - 0.2, k=0.62, light=True)
+    rings(s, W / 2, H / 2 - 0.2, k=0.62, light=True, rot=(240, -240))
     disc(s, W / 2, H / 2 - 0.2, 1.25, light=True)
     morph(s, 1600)
 
     # 1 — rang to'q tusga o'tadi, halqalar kengayadi
     s = d.new()
     fullbg(s, BG)
-    rings(s, W / 2, H / 2 - 0.2, k=1.12)
+    rings(s, W / 2, H / 2 - 0.2, k=1.12, rot=(0, 0))
     disc(s, W / 2, H / 2 - 0.2, 2.2)
     pic(s, 'word_white.png', W / 2 - 0.9, H - 0.78, 1.8, None, name='!!brand')
     morph(s, 1600)
 
     # 1 — muqova
     s = d.new()
-    rings(s, 3.55, 3.75, k=1.0)
+    rings(s, 3.55, 3.75, k=1.0, rot=(120, -60))
     disc(s, 3.55, 3.75, 2.05)
     text(s, 7.1, 2.0, 5.6, 0.4, 'ADM JIZZAKH AJ', 12, TEAL, FS, name='!!sub')
     text(s, 7.1, 2.45, 5.8, 1.9, ['HRM', 'Ҳисоботи 2026'], 44, WHITE, FL, name='!!title', lsp=0.92)
@@ -607,7 +628,7 @@ def build():
 
     # 2 — mundarija (videodagi "TABLE OF THE CONTENT")
     s = d.new()
-    rings(s, W / 2, 3.75, k=0.95, alpha=0.9)
+    rings(s, W / 2, 3.75, k=0.95, alpha=0.9, rot=(230, -150))
     text(s, W / 2 - 1.6, 3.15, 3.2, 1.2, ['ҲИСОБОТ', 'МУНДАРИЖАСИ'], 22, WHITE, FL,
          align='c', anchor='m', name='!!title', lsp=0.95)
     items = ['Ишга қабул ва адаптация', 'Самарадорлик ва KPI', 'Ўқитишлар', 'Grading тизими',
@@ -1417,7 +1438,7 @@ def build():
 
     # ================= ЯКУН =================
     s = d.new()
-    rings(s, W / 2, H / 2 - 0.55, k=0.95)
+    rings(s, W / 2, H / 2 - 0.55, k=0.95, rot=(0, 0))
     disc(s, W / 2, H / 2 - 0.55, 1.8)
     text(s, W / 2 - 4, H - 1.45, 8, 0.6, 'Эътиборингиз учун раҳмат!', 26, WHITE, FL, align='c', name='!!title')
     text(s, W / 2 - 4, H - 0.85, 8, 0.4, 'Саволлар бўлса, марҳамат', 12, MUTED, align='c', name='!!sub')
