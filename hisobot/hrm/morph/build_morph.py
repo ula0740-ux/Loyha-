@@ -441,11 +441,26 @@ RINGS = [  # (nom, diametr, fill, line)
 ]
 
 
-def rings(s, cx, cy, k=1.0, alpha=1.0, arc=True):
-    for nm, d, fill, ln in RINGS:
+LIGHT_RINGS = ['E2DDDF', 'D3CECF', 'BFBABC', 'D8D3D5']
+
+
+def soft(sh, rad_in):
+    spPr = sh._element.spPr
+    ef = etree.SubElement(spPr, qn('a:effectLst'))
+    etree.SubElement(ef, qn('a:softEdge')).set('rad', str(int(rad_in * IN)))
+
+
+def rings(s, cx, cy, k=1.0, alpha=1.0, arc=True, light=False):
+    for i, (nm, d, fill, ln) in enumerate(RINGS):
         dd = d * k
+        if light:
+            sh = shape(s, MSO_SHAPE.OVAL, cx - dd / 2, cy - dd / 2, dd, dd, fill=LIGHT_RINGS[i], name=nm)
+            soft(sh, 0.35 * k)
+            continue
         shape(s, MSO_SHAPE.OVAL, cx - dd / 2, cy - dd / 2, dd, dd, fill=fill, line=ln, lw=0.75,
               name=nm, alpha=alpha, lalpha=alpha)
+    if light:
+        return
     if arc:
         d = 4.2 * k
         a = shape(s, MSO_SHAPE.ARC, cx - d / 2, cy - d / 2, d, d, line=TEAL, lw=2.25, name='!!arc')
@@ -464,23 +479,40 @@ def rings(s, cx, cy, k=1.0, alpha=1.0, arc=True):
             shape(s, MSO_SHAPE.OVAL, px - dot / 2, py - dot / 2, dot, dot, fill=TEAL, name=nm)
 
 
-def disc(s, cx, cy, d):
-    shape(s, MSO_SHAPE.OVAL, cx - d / 2, cy - d / 2, d, d, fill=WHITE, name='!!disc')
+def disc(s, cx, cy, d, light=False):
+    shape(s, MSO_SHAPE.OVAL, cx - d / 2, cy - d / 2, d, d, fill='F1EDEF' if light else WHITE, name='!!disc')
     m = d * 0.56
-    pic(s, 'mark_duo.png', cx - m / 2, cy - m / 2, m, m, name='!!mark')
+    pic(s, 'mark_gray.png' if light else 'mark_duo.png', cx - m / 2, cy - m / 2, m, m, name='!!mark')
 
 
-def chevron(s, big):
-    if big:
-        shape(s, MSO_SHAPE.CHEVRON, -2.0, 1.05, 4.6, 5.4, fill=WHITE, name='!!chev', flip=True,
-              alpha=0.92, adj=[0.42])
-        shape(s, MSO_SHAPE.CHEVRON, -2.55, 1.05, 4.6, 5.4, fill=TEAL, name='!!chev2', flip=True,
-              alpha=0.85, adj=[0.42])
-    else:
-        shape(s, MSO_SHAPE.CHEVRON, -0.38, 0.3, 0.88, 0.95, fill=WHITE, name='!!chev', flip=True,
-              alpha=0.92, adj=[0.42])
-        shape(s, MSO_SHAPE.CHEVRON, -0.5, 0.3, 0.88, 0.95, fill=TEAL, name='!!chev2', flip=True,
-              alpha=0.85, adj=[0.42])
+def brand(s):
+    """ADM logosi: yuqori chap burchakda, xira."""
+    pic(s, 'word_dim.png', 0.62, 0.2, 0.85, None, name='!!brand')
+
+
+def fullbg(s, color):
+    rect(s, 0, 0, W, H, fill=color, r=0, name='!!bg')
+
+
+def chevron(s, vx, vy, k):
+    """Videodagi "<" belgisi: ikki yumaloq bo'lak + firuza uchburchaklar.
+    (vx, vy) — uchi, k — masshtab."""
+    import math
+    T, dx, dy = 1.2 * k, 1.5 * k, 2.4 * k
+    L = math.hypot(dx, dy) + T
+    ang = math.degrees(math.atan2(dx, dy))
+    t = shape(s, MSO_SHAPE.ISOSCELES_TRIANGLE, vx - 0.45 * k, vy - 0.5 * k, 1.0 * k, 0.9 * k,
+              fill=TEAL2, name='!!chT2', alpha=0.9)
+    t.rotation = 270
+    for nm, sign in (('!!chA', -1), ('!!chB', 1)):
+        cx, cy = vx + dx / 2, vy + sign * dy / 2
+        sh = shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, cx - T / 2, cy - L / 2, T, L, fill='D9D6D8',
+                   name=nm, alpha=0.62)
+        sh.adjustments[0] = 0.5
+        sh.rotation = ang if sign < 0 else 360 - ang
+    t = shape(s, MSO_SHAPE.ISOSCELES_TRIANGLE, vx + 1.0 * k, vy - 0.3 * k, 0.55 * k, 0.6 * k,
+              fill=TEAL, name='!!chT1', alpha=0.95)
+    t.rotation = 270
 
 
 class Deck:
@@ -500,9 +532,9 @@ class Deck:
         return s
 
     def footer(self, s):
-        pic(s, 'word_white.png', W - 1.55, H - 0.42, 1.05, None, name='!!brand')
+        brand(s)
         text(s, 0.55, H - 0.4, 3, 0.25, 'HRM | Ҳисобот 2026', 8, DIM, name='!!foot')
-        text(s, W - 2.4, H - 0.42, 0.6, 0.25, '%02d' % self.n, 8, TEAL, FS, align='r', name='!!pg')
+        text(s, W - 1.15, H - 0.42, 0.6, 0.25, '%02d' % self.n, 8, TEAL, FS, align='r', name='!!pg')
 
     # --- bo'lim slaydi ---
     def section(self, num, title, sub=''):
@@ -512,12 +544,12 @@ class Deck:
         for i, (gx, gy) in enumerate(((6.6, 0.75), (9.75, 0.75), (6.6, 3.9), (9.75, 3.9))):
             rect(s, gx, gy, 3.0, 2.95, fill=BG2, line=LINE, r=0.08, name='!!c%d' % (i + 1),
                  alpha=0.35, lalpha=0.5)
-        chevron(s, True)
-        text(s, 2.75, 1.7, 3.2, 1.9, num, 120, WHITE, FL, name='!!num', anchor='b')
-        rect(s, 2.85, 3.85, 0.9, 0.05, fill=TEAL, r=0, name='!!acc')
-        text(s, 2.85, 4.05, 4.6, 1.2, title, 30, WHITE, FL, name='!!title', lsp=0.95)
+        chevron(s, 0.7, 3.75, 1.05)
+        text(s, 3.15, 0.85, 4.0, 1.3, title, 28, WHITE, FL, name='!!title', lsp=0.95, anchor='b')
+        text(s, 3.05, 2.55, 3.4, 2.1, num, 130, WHITE, FL, name='!!num', anchor='m')
+        rect(s, 3.25, 4.75, 0.9, 0.05, fill=TEAL, r=0, name='!!acc')
         if sub:
-            text(s, 2.85, 5.35, 4.0, 0.9, sub, 11.5, MUTED, name='!!sub')
+            text(s, 3.25, 4.95, 3.3, 1.0, sub, 11.5, MUTED, name='!!sub')
         self.footer(s)
         morph(s)
         return s
@@ -526,12 +558,12 @@ class Deck:
     def content(self, num, title, sub=None):
         s = self.new()
         rings(s, 14.6, 8.4, k=0.9, alpha=0.55, arc=False)
-        chevron(s, False)
-        text(s, 0.62, 0.36, 0.8, 0.6, num, 26, WHITE, FL, name='!!num', anchor='m')
-        rect(s, 1.42, 0.45, 0.04, 0.42, fill=TEAL, r=0, name='!!acc')
-        text(s, 1.6, 0.27, 10.6, 0.5, title, 22, WHITE, FL, name='!!title')
+        chevron(s, 0.02, 0.84, 0.2)
+        text(s, 0.62, 0.52, 0.8, 0.6, num, 26, WHITE, FL, name='!!num', anchor='m')
+        rect(s, 1.42, 0.6, 0.04, 0.42, fill=TEAL, r=0, name='!!acc')
+        text(s, 1.6, 0.43, 10.6, 0.5, title, 22, WHITE, FL, name='!!title')
         if sub:
-            text(s, 1.62, 0.8, 11.0, 0.3, sub, 10.5, MUTED, name='!!sub')
+            text(s, 1.62, 0.93, 11.0, 0.3, sub, 10, MUTED, name='!!sub')
         self.footer(s)
         morph(s)
         return s
@@ -544,12 +576,21 @@ class Deck:
 def build():
     d = Deck()
 
-    # 0 — intro: logo markazda, halqalar
+    # 0 — oppoq ochilish: oq fon, yumshoq kulrang halqalar, logo markazda
     s = d.new()
+    s.background.fill.fore_color.rgb = rgb('ECE8EA')
+    fullbg(s, 'ECE8EA')
+    rings(s, W / 2, H / 2 - 0.2, k=0.62, light=True)
+    disc(s, W / 2, H / 2 - 0.2, 1.25, light=True)
+    morph(s, 1600)
+
+    # 1 — rang to'q tusga o'tadi, halqalar kengayadi
+    s = d.new()
+    fullbg(s, BG)
     rings(s, W / 2, H / 2 - 0.2, k=1.12)
     disc(s, W / 2, H / 2 - 0.2, 2.2)
     pic(s, 'word_white.png', W / 2 - 0.9, H - 0.78, 1.8, None, name='!!brand')
-    morph(s)
+    morph(s, 1600)
 
     # 1 — muqova
     s = d.new()
@@ -561,7 +602,7 @@ def build():
     pill = rect(s, 7.1, 5.15, 3.6, 0.6, fill=WHITE, r=0.3, name='!!pill', alpha=0.12)
     text(s, 7.1, 5.15, 3.6, 0.6, 'Сентабр 2026', 15, WHITE, F, align='c', anchor='m', name='!!pilltx')
     rect(s, 7.1, 5.95, 1.0, 0.04, fill=TEAL, r=0, name='!!acc')
-    pic(s, 'word_white.png', W - 1.55, H - 0.42, 1.05, None, name='!!brand')
+    brand(s)
     morph(s)
 
     # 2 — mundarija (videodagi "TABLE OF THE CONTENT")
@@ -571,7 +612,7 @@ def build():
          align='c', anchor='m', name='!!title', lsp=0.95)
     items = ['Ишга қабул ва адаптация', 'Самарадорлик ва KPI', 'Ўқитишлар', 'Grading тизими',
              'Электрон ариза тизими', 'Корпоратив маданият ва коммуникациялар', 'Интизом бўйича']
-    pages = [4, 14, 19, 22, 25, 28, 31]
+    pages = [5, 15, 20, 23, 26, 29, 32]
     left = [(0, 1.15), (1, 2.85), (2, 4.55), (3, 6.05)]
     right = [(4, 1.15), (5, 2.85), (6, 4.55)]
     for i, yy in left:
@@ -1380,7 +1421,7 @@ def build():
     disc(s, W / 2, H / 2 - 0.55, 1.8)
     text(s, W / 2 - 4, H - 1.45, 8, 0.6, 'Эътиборингиз учун раҳмат!', 26, WHITE, FL, align='c', name='!!title')
     text(s, W / 2 - 4, H - 0.85, 8, 0.4, 'Саволлар бўлса, марҳамат', 12, MUTED, align='c', name='!!sub')
-    pic(s, 'word_white.png', W - 1.55, H - 0.42, 1.05, None, name='!!brand')
+    brand(s)
     morph(s)
 
     d.save()
