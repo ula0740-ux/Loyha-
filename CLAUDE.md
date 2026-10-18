@@ -1,6 +1,8 @@
 # Loyha — motion-design videos with Uzbek narration
 
 - Talk to the user in **Uzbek**.
+- **Savol ≠ topshiriq (the user, 2026-10-18):** when the user only asks "can you make …?", answer the question (what is possible, how, what is needed) and stop. Do not build, render or send anything until they explicitly ask for it.
+- **No synthetic noise soundtracks (the user, 2026-10-18):** the numpy-synthesised drone/riser/whoosh track of the Formulalar demo sounded like plain noise. Never use synthesised audio as a final soundtrack; use real music and SFX (Mixkit, the user's audio, or ElevenLabs/uzbek-tts voice).
 - **Project skills (`.claude/skills/`, kept in this repo; the user asked never to forget them):**
   - `motion-design`: code-only motion-design pipeline (seek(t) HTML, Playwright render, ffmpeg, music and SFX, QA).
   - `motion-reel`: product reels and showreels (springs, beat grid, critique loop).

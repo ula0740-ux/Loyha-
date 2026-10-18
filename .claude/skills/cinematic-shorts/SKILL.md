@@ -25,13 +25,14 @@ Bu skill `motion-design` (seek(t) dvigateli, Playwright render, Mixkit/SFX, crit
 - Namuna: `video/shorts/demo_formulalar/` (short.html, audio.py — sintez saundtrek, build.sh).
 
 ## Ish tartibi
+0. **Faqat so'ralganda yasa.** "Yasay olasanmi?" — bu savol: imkoniyat, usul va kerakli materiallarni ayt, video yasama.
 1. **Brif**: maqsad, platforma (Shorts/Reels/TikTok = 1080×1920, 30 yoki 60 fps; YouTube = 1920×1080), davomiylik (short 8–30 s), til, ovoz/musiqa. Savol qolsa — tavsiya bilan bitta savol.
 2. **Namuna video berilgan bo'lsa**: `analyze_ref.py` → `grid.png`/`shots.png` ni ko'r (Read) → uslub kartasi yoz: kompozitsiya, kamera harakati, o'tishlar turi, matn animatsiyasi va shrifti, ranglar, ritm (shot uzunligi, BPM), effektlar. Faqat texnika olinadi; birovning kadrlari, qahramonlari, logolari, musiqasi ko'chirilmaydi. Juda murakkab boshqa birovning uslubi → `ReelMimic` (CLAUDE.md qoidasi: limit og'ir, avval ayt).
 3. **Foydalanuvchi videosidan short**: `analyze_ref.py` bilan eng kuchli lahzalarni top (grid) → 3–6 klip × 1.5–4 s → `prep_footage.py` (gorizontal bo'lsa `fill` yoki fokusli `crop`) → `footage/` (git'ga kirmaydi).
 4. **Beat map**: BPM → har kesish urg'uda; birinchi **1 soniyada hook** (kuchli sarlavha/harakat/savol); har 1.5–3 s da yangi vizual hodisa; hech narsa 1 s dan ortiq qotib turmaydi; eng kuchli lahza musiqa "drop"ida.
 5. **Sahna HTML**: `cinefx.js` ni ulab, `window.seek(t)` ichida hammasini t dan hisobla. Har bir videoda kamida: kamera harakati (push-in/shake/punch), 2+ turdagi o'tish (whip, flash, iris, glitch, match-cut), kinetik matn, post qatlam (grain + vignette + rang + light leak/flare), kesishlarda zarba (punch + chroma), letterbox ochilish/yopilish kirish-chiqishda.
 6. **Probe** (`--probe`, 6–12 kadr) → ko'r → tuzat. Keyin to'liq render (`--sub 4`, uzun bo'lsa `--chunk` 3 parallel) → audio mux.
-7. **Ovoz**: Mixkit musiqa/SFX (`motion-design` §4) yoki `audio.py` uslubida sintez (drone, riser, boom, whoosh, kick); har SFX vizual hodisaga kadr aniqligida; `loudnorm -14 LUFS`. O'zbekcha diktor — faqat `uzbek-tts`, musiqa ovoz ostida ~9 dB pasaytiriladi.
+7. **Ovoz**: faqat haqiqiy musiqa va SFX — Mixkit (`motion-design` §4), foydalanuvchining audiosi yoki diktor (`uzbek-tts`). **Sintez qilingan shovqin saundtrek ishlatilmaydi** (foydalanuvchi: "shovqindan nariga o'tmagan"); `demo_formulalar/audio.py` faqat vaqtinchalik namuna. Har SFX vizual hodisaga kadr aniqligida; `loudnorm -14 LUFS`. O'zbekcha diktor — faqat `uzbek-tts`, musiqa ovoz ostida ~9 dB pasaytiriladi.
 
 ## "Before → After" talking-head uslubi (namuna 2026-10-18)
 Oddiy studiya intervyusi → premium reel: fon almashtirilgan (rangli devor + gobo/palma soyalari), iliq grade, katta sarlavha **odam orqasida** (matte), punch-in zoom (keng ↔ yaqin, crop bilan), kinetik sarlavha + subtitr, shisha (glassmorphism) UI kartochkalar, yoy chiziqlari, nur (light streak) chiziqlari, yumaloq burchakli "telefon" ramka. Before/After taqqoslash ko'rinishi: ikki ramka yonma-yon.
