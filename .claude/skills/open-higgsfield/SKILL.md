@@ -33,3 +33,11 @@ MUAPI_API_KEY=... npx next dev -p 3000   # → http://localhost:3000/studio/
 - Before any paid generation, tell the user it spends muapi.ai credits and confirm.
 - For our own motion-design videos the code pipeline (`motion-design`, `motion-reel`, `hyperframes`) stays the free default; use this studio only when AI-generated footage/images are really needed.
 - Uzbek narration still always goes through `uzbek-tts` (ElevenLabs), never through this app.
+
+## Higgsfield Katana (haqiqiy Higgsfield, konnektor orqali) — 2026-10-18 ulandi
+Katana — Higgsfield'ning agentli video tahrir xizmati. U lokal Open Higgsfield'ga qo'shilmaydi (yopiq kod); u **claude.ai Higgsfield konnektori** (MCP `mcp__Higgsfield__*`) orqali ishlaydi.
+- Ishga tushirish: `get_preset_instructions({preset:"/katana"})` → (kiritmalar bo'lsa) `get_workflow_instructions({workflow:"katana"})` → `get_katana_config({preset:"/katana/<slug>", free_generation:false, idempotency_key})` → generatsiya → `show_result` (`action:"katana_video"`).
+- Katalog: `get_presets({source:"katana"})`; aniq uslub: `/katana/<slug>` (`get_preset_instructions` presetsiz chaqirilsa ro'yxat beradi).
+- Rejim: namuna video (reference) + foydalanuvchining media'si → shu uslubda remix; yoki foydalanuvchi footage'ini brif bo'yicha tahrir.
+- **Pul:** Katana Higgsfield kreditlari bilan ishlaydi. 2026-10-18 holati: 0 kredit, free plan. Har qanday ishga tushirishdan oldin narxni ayt va foydalanuvchidan tasdiq ol; `free_generation:true` / `use_free_gens:true` faqat u aniq bepul run so'rasa.
+- O'zbek ovozi baribir `uzbek-tts` orqali; Katana videoga keyin qo'shiladi.
