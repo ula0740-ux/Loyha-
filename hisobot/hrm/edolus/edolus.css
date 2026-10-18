@@ -1,0 +1,30 @@
+/* ===== EDOLUS uslubi: kino sahnalar ustida shisha panellar, oltin urg'u ===== */
+:root{--coral:#e0a443;--coral2:#f4c470;--blue:#8fb8ff;--panel:rgba(12,10,8,.74)}
+#gl{position:absolute;inset:0;width:100%;height:100%}
+#vignette{background:radial-gradient(130% 95% at 50% 45%,transparent 62%,rgba(0,0,0,.32))}
+.slide{background:rgba(12,11,10,.74);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);
+  border:1px solid rgba(255,235,200,.14);box-shadow:0 40px 90px -30px rgba(0,0,0,.7)}
+#bar{background:linear-gradient(90deg,#8a6a3a,#f4c470)}
+
+/* qahramon slaydlar (muqova va bo'lim sarlavhalari): panel yo'q, sahna to'liq ko'rinadi */
+.slide.hero{background:transparent;border-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.hero .sec2{background:none!important;box-shadow:none!important;border:none!important}
+.hero .sec2-n{color:transparent;-webkit-text-stroke:2px rgba(244,196,112,.75);text-shadow:none}
+.hero .sec2-t,.hero .sec2-s,.hero .cover-title,.hero .brand-xl{text-shadow:0 4px 30px rgba(0,0,0,.55)}
+.hero .sec2-k{color:#f4c470}
+.hero .cover-title{font-size:150px;letter-spacing:.01em}
+.hero .cv-r{background:radial-gradient(55% 55% at 50% 50%,rgba(255,255,255,.10),transparent 70%)}
+
+/* yorug' sahnalarda (oltin tuman, mashina): to'q matn, chapda joy */
+.hero.onlight .sec2-t{color:#1d1813;text-shadow:none;font-size:74px}
+.hero.onlight .sec2-s{color:#5a4d40;text-shadow:none;font-size:27px}
+.hero.onlight .sec2-k{color:#8a6a3a}
+.hero.onlight .sec2-n{-webkit-text-stroke:2px rgba(120,80,30,.55);font-size:200px}
+.hero.onlight .sec2{grid-template-columns:auto 1fr;gap:36px}
+.hero.onlight .sec2-tx{max-width:520px}
+.hero.onlight .sec2-t{font-size:64px}
+
+/* yakun: xiralashuv → xabar → tasma → qora (reel oxiridagidek) */
+#outro{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:4}
+#omsg{color:#fff;font:600 56px/1.2 var(--display);letter-spacing:.01em;text-shadow:0 4px 40px rgba(0,0,0,.55);opacity:0;text-align:center}
+#omsg b{color:#f4c470}
