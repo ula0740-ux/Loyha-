@@ -18,6 +18,10 @@ Bu skill `motion-design` (seek(t) dvigateli, Playwright render, Mixkit/SFX, crit
 - `scripts/analyze_ref.py VIDEO OUT` — namuna tahlili: o'lcham, fps, shotlar/kesishlar, o'rtacha shot uzunligi, palitra, LUFS, `shots.png` + `grid.png`.
 - `scripts/prep_footage.py VIDEO OUT --ss --to --fps 30 --mode fill|crop|fit [--x 0.5]` — foydalanuvchi videosini 1080×1920 kadrlar ketma-ketligiga (+audio.wav) aylantiradi. `crop` — markazdan (yoki `--x` fokus), `fill` — xiralashgan fon (gorizontal videoni vertikalga), `fit` — qora maydon.
 - `scripts/render_short.py HTML OUT.mp4 --dur S [--w 1080 --h 1920 --fps 30 --sub 4 --shutter .5 --cuts a,b --audio x.wav --root REPO --probe t1,t2 --chunk k/n --port P]` — subkadrli kino motion blur (180° shutter), kesishlarda ikki sahna ustma-ust tushmaydi, parallel bo'laklar.
+- `scripts/matte.py FRAMES OUT [--model u2net_human_seg|birefnet-portrait|multiclass|selfie] [--smooth .6] [--feather 2]` — odamni fondan ajratish (alfa niqob `m_000001.png`). Bilan: **fon almashtirish**, **matn odam orqasida**, odam atrofida glow/outline, relight, faqat fonni xiralashtirish. HTML da: fon → orqa matn/grafika → `<img>` kadr + CSS `mask-image: url(m_XXXX.png)` (yoki canvas `destination-in`) → old grafika.
+  - `u2net_human_seg` standart (~2-3 s/kadr, 4 yadro); `birefnet-portrait` eng aniq (soch), sekin — faqat master; MediaPipe `multiclass`/`selfie` tez, faqat yaqin kadr.
+  - Talab: `pip install mediapipe "rembg[cpu]"`, `apt-get install -y libegl1 libgles2` (MediaPipe uchun). Modellar: `models/` (MediaPipe) va `~/.rembg/models` (rembg, birinchi ishlatishda yuklanadi).
+  - Uzun klip uchun niqobni fonda ishga tushir; 30 fps × 20 s ≈ 600 kadr ≈ 25-30 daqiqa (u2net).
 - Namuna: `video/shorts/demo_formulalar/` (short.html, audio.py — sintez saundtrek, build.sh).
 
 ## Ish tartibi
@@ -28,6 +32,10 @@ Bu skill `motion-design` (seek(t) dvigateli, Playwright render, Mixkit/SFX, crit
 5. **Sahna HTML**: `cinefx.js` ni ulab, `window.seek(t)` ichida hammasini t dan hisobla. Har bir videoda kamida: kamera harakati (push-in/shake/punch), 2+ turdagi o'tish (whip, flash, iris, glitch, match-cut), kinetik matn, post qatlam (grain + vignette + rang + light leak/flare), kesishlarda zarba (punch + chroma), letterbox ochilish/yopilish kirish-chiqishda.
 6. **Probe** (`--probe`, 6–12 kadr) → ko'r → tuzat. Keyin to'liq render (`--sub 4`, uzun bo'lsa `--chunk` 3 parallel) → audio mux.
 7. **Ovoz**: Mixkit musiqa/SFX (`motion-design` §4) yoki `audio.py` uslubida sintez (drone, riser, boom, whoosh, kick); har SFX vizual hodisaga kadr aniqligida; `loudnorm -14 LUFS`. O'zbekcha diktor — faqat `uzbek-tts`, musiqa ovoz ostida ~9 dB pasaytiriladi.
+
+## "Before → After" talking-head uslubi (namuna 2026-10-18)
+Oddiy studiya intervyusi → premium reel: fon almashtirilgan (rangli devor + gobo/palma soyalari), iliq grade, katta sarlavha **odam orqasida** (matte), punch-in zoom (keng ↔ yaqin, crop bilan), kinetik sarlavha + subtitr, shisha (glassmorphism) UI kartochkalar, yoy chiziqlari, nur (light streak) chiziqlari, yumaloq burchakli "telefon" ramka. Before/After taqqoslash ko'rinishi: ikki ramka yonma-yon.
+Kerak: foydalanuvchining xom (before) videosi ≥ 1080p, ovozi bilan. Ovozdan subtitr: so'zma-so'z timing (Whisper/ElevenLabs STT).
 
 ## Short-form qoidalari (9:16)
 - Xavfsiz zona: matn tepadan ≥ 220 px, pastdan ≥ 380 px (platforma tugmalari), o'ngdan ≥ 140 px.
