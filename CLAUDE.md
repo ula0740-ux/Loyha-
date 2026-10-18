@@ -16,6 +16,7 @@
   - **When to use it (the user's decision, 2026-10-13):** use ReelMimic to copy the style of OTHER people's videos into new 2D videos. When the reference is our own work or a style we already know, build it ourselves with `motion-design`/`motion-reel`, which costs much less of the Claude limit.
   - ReelMimic is heavy on the limit. Before every job, say so and suggest the economy settings: `BUILDERS` 2, rounds 1, and a shorter video.
   - It copies only the technique; it never copies another video's footage, characters or logos. The rights to use the result are the user's responsibility.
+- **Open Higgsfield AI** (`tools/open-higgsfield`, skill `open-higgsfield`; installed 2026-10-18 at the user's request, no licence file, internal use only): a local Higgsfield-style studio (Image/Video/Cinema/LipSync) on Next.js. It generates only through the paid muapi.ai API (`MUAPI_API_KEY` from the environment or `.env.local`, never committed). Confirm with the user before spending credits. The user will send more tools later.
 - **Fonts** (`assets/fonts/`, Google Fonts, OFL): Inter (captions/UI), Montserrat (headings), Unbounded (hook titles), Manrope, Onest, Oswald (numbers), Rubik, Playfair Display (premium), Space Grotesk (tech), JetBrains Mono (code).
   - Uzbek text: only **Inter, Montserrat, Onest and Oswald** have every Uzbek Latin and Cyrillic letter. The coverage table and the workarounds are in `assets/fonts/README.md`.
   - HTML: `fonts.css`. System install in a new session: `sh assets/fonts/install.sh`.
