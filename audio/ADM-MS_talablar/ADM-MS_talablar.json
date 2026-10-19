@@ -1,0 +1,613 @@
+{
+ "out": "../audio/ADM-MS_talablar/ADM-MS_talablar.mp3",
+ "voice": "EXAVITQu4vr4xnSDxMaL",
+ "model": "eleven_v4",
+ "createdAt": "2026-10-19T12:16:26.791Z",
+ "segments": [
+  {
+   "i": 1,
+   "text": "Birinchi.",
+   "tts": "Birinchi.",
+   "hash": "9302e81e26cd5d4c",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/9302e81e26cd5d4c.mp3",
+   "duration": 0.835918,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "birinchi"
+  },
+  {
+   "i": 2,
+   "text": "Korxonaning madaniy qadriyatlari, missiyasi va strategik maqsadlarini faoliyatida tatbiq qiladi, talab — Pi Ay bir.",
+   "tts": "Korkhonaning madaniy qadriyatlari, missiyasi va strategik maqsadlarini faoliyatida tatbiq qiladi, talab — Pi Ay bir.",
+   "hash": "75925d6ee5ac3eac",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/75925d6ee5ac3eac.mp3",
+   "duration": 9.090612,
+   "takes": 3,
+   "similarity": 0.9363636363636364,
+   "problems": [
+    {
+     "expected": "pi",
+     "heard": "∅"
+    },
+    {
+     "expected": "ay",
+     "heard": "∅"
+    },
+    {
+     "expected": "bir",
+     "heard": "pi1"
+    }
+   ],
+   "heard": "korxonaning madaniy qadriyatlari missiyasi va strategik maqsadlarini faoliyatida tatbiq qiladi talab pi1"
+  },
+  {
+   "i": 3,
+   "text": "Xodim korxona nima maqsadda ishlashi, qanday qadriyatlarga tayanishi va kelajakda qanday natijalarga erishmoqchi ekanini tushunishi kerak.",
+   "tts": "Khodim korkhona nima maqsadda ishlashi, qanday qadriyatlarga tayanishi va kelajakda qanday natijalarga erishmoqchi ekanini tushunishi kerak.",
+   "hash": "e56aff6632b249b7",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/e56aff6632b249b7.mp3",
+   "duration": 9.874286,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "xodim korxona nima maqsadda ishlashi qanday qadriyatlarga tayanishi va kelajakda qanday natijalarga erishmoqchi ekanini tushunishi kerak"
+  },
+  {
+   "i": 4,
+   "text": "Kundalik ishini bajarishda shu yoʻnalishlarga mos harakat qilishi lozim.",
+   "tts": "Kundalik ishini bajarishda shu yoʻnalishlarga mos harakat qilishi lozim.",
+   "hash": "2471900c1e1a896b",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/2471900c1e1a896b.mp3",
+   "duration": 4.91102,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "kundalik ishini bajarishda shu yo'nalishlarga mos harakat qilishi lozim"
+  },
+  {
+   "i": 5,
+   "text": "Bu hamkasblarga hurmat bilan munosabatda boʻlish, jamoada hamkorlik qilish, muammolarni yashirmaslik, mahsulot sifatini taʼminlash va resurslardan oqilona foydalanishda namoyon boʻladi.",
+   "tts": "Bu hamkasblarga hurmat bilan munosabatda boʻlish, jamoada hamkorlik qilish, muammolarni yashirmaslik, mahsulot sifatini taʼminlash va resurslardan oqilona foydalanishda namoyon boʻladi.",
+   "hash": "b9cc5d08431d62ed",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/b9cc5d08431d62ed.mp3",
+   "duration": 13.87102,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "bu hamkasblarga hurmat bilan munosabatda bo'lish jamoada hamkorlik qilish muammolarni yashirmaslik mahsulot sifatini ta'minlash va resurslardan oqilona foydalanishda namoyon bo'ladi"
+  },
+  {
+   "i": 6,
+   "text": "Korxonaning aniq qadriyatlari esa uning tasdiqlangan hujjatlaridan olinadi.",
+   "tts": "Korkhonaning aniq qadriyatlari esa uning tasdiqlangan hujjatlaridan olinadi.",
+   "hash": "aeaf3887da29d9c5",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/aeaf3887da29d9c5.mp3",
+   "duration": 5.32898,
+   "takes": 1,
+   "similarity": 0.9864864864864865,
+   "problems": [
+    {
+     "expected": "korxonaning",
+     "heard": "qorxonaning"
+    }
+   ],
+   "heard": "qorxonaning aniq qadriyatlari esa uning tasdiqlangan hujjatlaridan olinadi"
+  },
+  {
+   "i": 7,
+   "text": "Amaliy misol: xodim mahsulotda nuqson aniqlasa, uni yashirmaydi; belgilangan tartibda xabar beradi va nuqsonli mahsulot keyingi jarayonga oʻtishining oldini olishga yordam beradi.",
+   "tts": "Amaliy misol: khodim mahsulotda nuqson aniqlasa, uni yashirmaydi; belgilangan tartibda khabar beradi va nuqsonli mahsulot keyingi jarayonga oʻtishining oldini olishga yordam beradi.",
+   "hash": "504d34ae2274b34c",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/504d34ae2274b34c.mp3",
+   "duration": 12.930612,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "amaliy misol xodim mahsulotda nuqson aniqlasa uni yashirmaydi belgilangan tartibda xabar beradi va nuqsonli mahsulot keyingi jarayonga o'tishining oldini olishga yordam beradi"
+  },
+  {
+   "i": 8,
+   "text": "Shu orqali sifatga oid maqsadlarga hissa qoʻshadi.",
+   "tts": "Shu orqali sifatga oid maqsadlarga hissa qoʻshadi.",
+   "hash": "459d6e7efce2cd26",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/459d6e7efce2cd26.mp3",
+   "duration": 3.787755,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "shu orqali sifatga oid maqsadlarga hissa qo'shadi"
+  },
+  {
+   "i": 9,
+   "text": "Ikkinchi.",
+   "tts": "Ikkinchi.",
+   "hash": "0a19267345adcc6d",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/0a19267345adcc6d.mp3",
+   "duration": 1.227755,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "ikkinchi"
+  },
+  {
+   "i": 10,
+   "text": "Lavozimiga tegishli rol, vakolat va javobgarliklarni biladi, talab — Pi Ay yetti.",
+   "tts": "Lavozimiga tegishli rol, vakolat va javobgarliklarni biladi, talab — Pi Ay yetti.",
+   "hash": "6785f90883a9e046",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6785f90883a9e046.mp3",
+   "duration": 7.314286,
+   "takes": 3,
+   "similarity": 0.9605263157894737,
+   "problems": [
+    {
+     "expected": "ay",
+     "heard": "∅"
+    }
+   ],
+   "heard": "lavozimiga tegishli rol vakolat va javobgarliklarni biladi talab pi yetti"
+  },
+  {
+   "i": 11,
+   "text": "Xodim oʻz lavozimida uchta narsani aniq tushunishi zarur.",
+   "tts": "Khodim oʻz lavozimida uchta narsani aniq tushunishi zarur.",
+   "hash": "37ce4ca6ae174103",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/37ce4ca6ae174103.mp3",
+   "duration": 4.519184,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "xodim o'z lavozimida uchta narsani aniq tushunishi zarur"
+  },
+  {
+   "i": 12,
+   "text": "Rol — uning vazifasi va umumiy jarayondagi oʻrni.",
+   "tts": "Rol — uning vazifasi va umumiy jarayondagi oʻrni.",
+   "hash": "6ff6540c72be7619",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6ff6540c72be7619.mp3",
+   "duration": 4.754286,
+   "takes": 1,
+   "similarity": 0.9782608695652174,
+   "problems": [
+    {
+     "expected": "rol",
+     "heard": "role"
+    }
+   ],
+   "heard": "role uning vazifasi va umumiy jarayondagi o'rni"
+  },
+  {
+   "i": 13,
+   "text": "Vakolat — mustaqil qabul qilishi mumkin boʻlgan qarorlar va bajarishga ruxsat etilgan harakatlar.",
+   "tts": "Vakolat — mustaqil qabul qilishi mumkin boʻlgan qarorlar va bajarishga rukhsat etilgan harakatlar.",
+   "hash": "f67e84d6342fe994",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f67e84d6342fe994.mp3",
+   "duration": 7.079184,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "vakolat mustaqil qabul qilishi mumkin bo'lgan qarorlar va bajarishga ruxsat etilgan harakatlar"
+  },
+  {
+   "i": 14,
+   "text": "Javobgarlik — qaysi ishlar, natijalar va qoidalarga rioya etish uchun masʼul ekanligi.",
+   "tts": "Javobgarlik — qaysi ishlar, natijalar va qoidalarga rioya etish uchun masʼul ekanligi.",
+   "hash": "61a59ef2df03e08e",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/61a59ef2df03e08e.mp3",
+   "duration": 7.235918,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "javobgarlik qaysi ishlar natijalar va qoidalarga rioya etish uchun mas'ul ekanligi"
+  },
+  {
+   "i": 15,
+   "text": "Bundan tashqari, kimga boʻysunishini, kim bilan hamkorlik qilishini va muammo yuzaga kelganda kimga murojaat qilishini bilishi kerak.",
+   "tts": "Bundan tashqari, kimga boʻysunishini, kim bilan hamkorlik qilishini va muammo yuzaga kelganda kimga murojaat qilishini bilishi kerak.",
+   "hash": "b17903c517f5ff0a",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/b17903c517f5ff0a.mp3",
+   "duration": 9.560816,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "bundan tashqari kimga bo'ysunishini kim bilan hamkorlik qilishini va muammo yuzaga kelganda kimga murojaat qilishini bilishi kerak"
+  },
+  {
+   "i": 16,
+   "text": "Amaliy misol: operator uskunani yoʻriqnoma asosida boshqaradi va uning ishlashini kuzatadi.",
+   "tts": "Amaliy misol: operator uskunani yoʻriqnoma asosida boshqaradi va uning ishlashini kuzatadi.",
+   "hash": "f9c6eabbf91973e1",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f9c6eabbf91973e1.mp3",
+   "duration": 6.844082,
+   "takes": 1,
+   "similarity": 0.9775280898876404,
+   "problems": [
+    {
+     "expected": "yo'riqnoma",
+     "heard": "yo'riqnomaga"
+    }
+   ],
+   "heard": "amaliy misol operator uskunani yo'riqnomaga asosida boshqaradi va uning ishlashini kuzatadi"
+  },
+  {
+   "i": 17,
+   "text": "Nosozlik yuzaga kelsa, belgilangan xavfsizlik tartibiga amal qiladi va masʼul shaxsga xabar beradi.",
+   "tts": "Nosozlik yuzaga kelsa, belgilangan khavfsizlik tartibiga amal qiladi va masʼul shakhsga khabar beradi.",
+   "hash": "ed41a8e7923c52d8",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/ed41a8e7923c52d8.mp3",
+   "duration": 7.392653,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "nosozlik yuzaga kelsa belgilangan xavfsizlik tartibiga amal qiladi va mas'ul shaxsga xabar beradi"
+  },
+  {
+   "i": 18,
+   "text": "Maxsus ruxsati yoki malakasi boʻlmasa, uskunani oʻzboshimchalik bilan taʼmirlamaydi.",
+   "tts": "Makhsus rukhsati yoki malakasi boʻlmasa, uskunani oʻzboshimchalik bilan taʼmirlamaydi.",
+   "hash": "292c9bb5375b4341",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/292c9bb5375b4341.mp3",
+   "duration": 6.426122,
+   "takes": 1,
+   "similarity": 0.9878048780487805,
+   "problems": [
+    {
+     "expected": "o'zboshimchalik",
+     "heard": "o'zbo'shimchalik"
+    }
+   ],
+   "heard": "maxsus ruxsati yoki malakasi bo'lmasa uskunani o'zbo'shimchalik bilan ta'mirlamaydi"
+  },
+  {
+   "i": 19,
+   "text": "Uchinchi.",
+   "tts": "Uchinchi.",
+   "hash": "91cbdfb860913b08",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/91cbdfb860913b08.mp3",
+   "duration": 1.07102,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "uchinchi"
+  },
+  {
+   "i": 20,
+   "text": "Takomillashtirish takliflarini beradi va tatbiq qiladi.",
+   "tts": "Takomillashtirish takliflarini beradi va tatbiq qiladi.",
+   "hash": "7fc942e4e692bcc7",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/7fc942e4e692bcc7.mp3",
+   "duration": 4.04898,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "takomillashtirish takliflarini beradi va tatbiq qiladi"
+  },
+  {
+   "i": 21,
+   "text": "Xodim oʻz ish joyidagi ortiqcha harakatlar, vaqt yoʻqotishlari, material isrofi, sifat muammolari va xavflarni kuzatib, ularni kamaytirish boʻyicha takliflar beradi.",
+   "tts": "Khodim oʻz ish joyidagi ortiqcha harakatlar, vaqt yoʻqotishlari, material isrofi, sifat muammolari va khavflarni kuzatib, ularni kamaytirish boʻyicha takliflar beradi.",
+   "hash": "00cf0b06ab53af68",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/00cf0b06ab53af68.mp3",
+   "duration": 12.277551,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "xodim o'z ish joyidagi ortiqcha harakatlar vaqt yo'qotishlari material isrofi sifat muammolari va xavflarni kuzatib ularni kamaytirish bo'yicha takliflar beradi"
+  },
+  {
+   "i": 22,
+   "text": "Taklif tushunarli boʻlishi uchun unda mavjud muammo, uning sababi, taklif etilayotgan yechim va kutilayotgan foyda koʻrsatiladi.",
+   "tts": "Taklif tushunarli boʻlishi uchun unda mavjud muammo, uning sababi, taklif etilayotgan yechim va kutilayotgan foyda koʻrsatiladi.",
+   "hash": "8fa51882292a4192",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/8fa51882292a4192.mp3",
+   "duration": 8.986122,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "taklif tushunarli bo'lishi uchun unda mavjud muammo uning sababi taklif etilayotgan yechim va kutilayotgan foyda ko'rsatiladi"
+  },
+  {
+   "i": 23,
+   "text": "Taklif tegishli tartibda koʻrib chiqilib, maʼqullangach amalga oshiriladi.",
+   "tts": "Taklif tegishli tartibda koʻrib chiqilib, maʼqullangach amalga oshiriladi.",
+   "hash": "ac7bb63ca6cd244f",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/ac7bb63ca6cd244f.mp3",
+   "duration": 4.91102,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "taklif tegishli tartibda ko'rib chiqilib ma'qullangach amalga oshiriladi"
+  },
+  {
+   "i": 24,
+   "text": "Keyin esa oʻzgarish haqiqatan foyda bergani tekshiriladi.",
+   "tts": "Keyin esa oʻzgarish haqiqatan foyda bergani tekshiriladi.",
+   "hash": "f0a5178e56193796",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f0a5178e56193796.mp3",
+   "duration": 4.284082,
+   "takes": 2,
+   "similarity": 0.9821428571428571,
+   "problems": [
+    {
+     "expected": "haqiqatan",
+     "heard": "haqiqatdan"
+    }
+   ],
+   "heard": "keyin esa o'zgarish haqiqatdan foyda bergani tekshiriladi"
+  },
+  {
+   "i": 25,
+   "text": "Amaliy misol: zarur asboblar ish joyidan uzoqda turgani sababli xodim ularni olishga koʻp vaqt sarflaydi.",
+   "tts": "Amaliy misol: zarur asboblar ish joyidan uzoqda turgani sababli khodim ularni olishga koʻp vaqt sarflaydi.",
+   "hash": "da7dae31e505fd6a",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/da7dae31e505fd6a.mp3",
+   "duration": 8.202449,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "amaliy misol zarur asboblar ish joyidan uzoqda turgani sababli xodim ularni olishga ko'p vaqt sarflaydi"
+  },
+  {
+   "i": 26,
+   "text": "U asboblarni xavfsiz va qulay joyga tartib bilan joylashtirishni taklif qiladi.",
+   "tts": "U asboblarni khavfsiz va qulay joyga tartib bilan joylashtirishni taklif qiladi.",
+   "hash": "f202c08731a30d65",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f202c08731a30d65.mp3",
+   "duration": 5.799184,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "u asboblarni xavfsiz va qulay joyga tartib bilan joylashtirishni taklif qiladi"
+  },
+  {
+   "i": 27,
+   "text": "Oʻzgarishdan keyin asbob qidirish va olib kelishga ketadigan vaqt kamaygani baholanadi.",
+   "tts": "Oʻzgarishdan keyin asbob qidirish va olib kelishga ketadigan vaqt kamaygani baholanadi.",
+   "hash": "2e29c8f7b876519d",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/2e29c8f7b876519d.mp3",
+   "duration": 6.269388,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "o'zgarishdan keyin asbob qidirish va olib kelishga ketadigan vaqt kamaygani baholanadi"
+  },
+  {
+   "i": 28,
+   "text": "Toʻrtinchi.",
+   "tts": "Toʻrtinchi.",
+   "hash": "a9b8c2a6d0e5d7ea",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/a9b8c2a6d0e5d7ea.mp3",
+   "duration": 1.227755,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "to'rtinchi"
+  },
+  {
+   "i": 29,
+   "text": "Ish joyida xavfsiz mehnat muhitini taʼminlaydi, talab — Global Call to Actions, Pi Ay ikki va Pi Ay uch.",
+   "tts": "Ish joyida khavfsiz mehnat muhitini taʼminlaydi, talab — Global Call to Actions, Pi Ay ikki va Pi Ay uch.",
+   "hash": "cae2da2629aa6bf9",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/cae2da2629aa6bf9.mp3",
+   "duration": 8.829388,
+   "takes": 3,
+   "similarity": 0.8484848484848485,
+   "problems": [
+    {
+     "expected": "pi",
+     "heard": "∅"
+    },
+    {
+     "expected": "ay",
+     "heard": "∅"
+    },
+    {
+     "expected": "ikki",
+     "heard": "pa2"
+    },
+    {
+     "expected": "pi",
+     "heard": "∅"
+    },
+    {
+     "expected": "ay",
+     "heard": "∅"
+    },
+    {
+     "expected": "uch",
+     "heard": "pa3"
+    }
+   ],
+   "heard": "ish joyida xavfsiz mehnat muhitini ta'minlaydi talab global call to actions pa2 va pa3"
+  },
+  {
+   "i": 30,
+   "text": "Xodim oʻz faoliyatida oʻzi va atrofdagilar xavfsizligini hisobga olishi kerak.",
+   "tts": "Khodim oʻz faoliyatida oʻzi va atrofdagilar khavfsizligini hisobga olishi kerak.",
+   "hash": "d4200cc76454f790",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/d4200cc76454f790.mp3",
+   "duration": 5.485714,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "xodim o'z faoliyatida o'zi va atrofdagilar xavfsizligini hisobga olishi kerak"
+  },
+  {
+   "i": 31,
+   "text": "Ishni boshlashdan oldin ish joyi, uskuna va himoya vositalarining holatini tekshirishi, ish davomida esa xavfsizlik yoʻriqnomalariga rioya qilishi zarur.",
+   "tts": "Ishni boshlashdan oldin ish joyi, uskuna va himoya vositalarining holatini tekshirishi, ish davomida esa khavfsizlik yoʻriqnomalariga rioya qilishi zarur.",
+   "hash": "4e89d42cc6a4bbb6",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/4e89d42cc6a4bbb6.mp3",
+   "duration": 10.997551,
+   "takes": 1,
+   "similarity": 0.9866666666666667,
+   "problems": [
+    {
+     "expected": "uskuna",
+     "heard": "uskunav"
+    },
+    {
+     "expected": "vositalarining",
+     "heard": "vositalarning"
+    }
+   ],
+   "heard": "ishni boshlashdan oldin ish joyi uskunav va himoya vositalarning holatini tekshirishi ish davomida esa xavfsizlik yo'riqnomalariga rioya qilishi zarur"
+  },
+  {
+   "i": 32,
+   "text": "Global Call to Actions doirasida xodimga yetkazilgan xavfsizlik koʻrsatmalari va chora-tadbirlarning uning ish joyiga tegishli qismlari bajariladi.",
+   "tts": "Global Call to Actions doirasida khodimga yetkazilgan khavfsizlik koʻrsatmalari va chora-tadbirlarning uning ish joyiga tegishli qismlari bajariladi.",
+   "hash": "24290732375b1eda",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/24290732375b1eda.mp3",
+   "duration": 10.03102,
+   "takes": 1,
+   "similarity": 0.993103448275862,
+   "problems": [
+    {
+     "expected": "ko'rsatmalari",
+     "heard": "ko'rsatmaları"
+    }
+   ],
+   "heard": "global call to actions doirasida xodimga yetkazilgan xavfsizlik ko'rsatmaları va choratadbirlarning uning ish joyiga tegishli qismlari bajariladi"
+  },
+  {
+   "i": 33,
+   "text": "Ularning aniq mazmuni korxona hujjatlari orqali aniqlanadi.",
+   "tts": "Ularning aniq mazmuni korkhona hujjatlari orqali aniqlanadi.",
+   "hash": "6c8a8d29b51d99e1",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6c8a8d29b51d99e1.mp3",
+   "duration": 4.440816,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "ularning aniq mazmuni korxona hujjatlari orqali aniqlanadi"
+  },
+  {
+   "i": 34,
+   "text": "Amalda xodim belgilangan shaxsiy himoya vositalaridan foydalanadi.",
+   "tts": "Amalda khodim belgilangan shakhsiy himoya vositalaridan foydalanadi.",
+   "hash": "75aa8af94d0ff476",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/75aa8af94d0ff476.mp3",
+   "duration": 4.597551,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "amalda xodim belgilangan shaxsiy himoya vositalaridan foydalanadi"
+  },
+  {
+   "i": 35,
+   "text": "Uskunaning himoya moslamalarini chetlab oʻtmaydi.",
+   "tts": "Uskunaning himoya moslamalarini chetlab oʻtmaydi.",
+   "hash": "987403a419526993",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/987403a419526993.mp3",
+   "duration": 3.552653,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "uskunaning himoya moslamalarini chetlab o'tmaydi"
+  },
+  {
+   "i": 36,
+   "text": "Xavfli holat va jarohatga olib kelishi mumkin boʻlgan hodisalar haqida xabar beradi.",
+   "tts": "Khavfli holat va jarohatga olib kelishi mumkin boʻlgan hodisalar haqida khabar beradi.",
+   "hash": "a41e9a2991ceaa14",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/a41e9a2991ceaa14.mp3",
+   "duration": 6.269388,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "xavfli holat va jarohatga olib kelishi mumkin bo'lgan hodisalar haqida xabar beradi"
+  },
+  {
+   "i": 37,
+   "text": "Bevosita xavf tugʻilganda ishni korxonada belgilangan tartibda toʻxtatib, masʼul shaxsni ogohlantiradi.",
+   "tts": "Bevosita khavf tugʻilganda ishni korkhonada belgilangan tartibda toʻkhtatib, masʼul shakhsni ogohlantiradi.",
+   "hash": "2069d1f9e457482f",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/2069d1f9e457482f.mp3",
+   "duration": 7.706122,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "bevosita xavf tug'ilganda ishni korxonada belgilangan tartibda to'xtatib mas'ul shaxsni ogohlantiradi"
+  },
+  {
+   "i": 38,
+   "text": "Amaliy misol: uskuna himoya toʻsigʻi shikastlangan boʻlsa, xodim bu holatni eʼtiborsiz qoldirmaydi.",
+   "tts": "Amaliy misol: uskuna himoya toʻsigʻi shikastlangan boʻlsa, khodim bu holatni eʼtiborsiz qoldirmaydi.",
+   "hash": "6185855bd0838458",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6185855bd0838458.mp3",
+   "duration": 7.314286,
+   "takes": 1,
+   "similarity": 0.9791666666666666,
+   "problems": [
+    {
+     "expected": "uskuna",
+     "heard": "uskunani"
+    }
+   ],
+   "heard": "amaliy misol uskunani himoya to'sig'i shikastlangan bo'lsa xodim bu holatni e'tiborsiz qoldirmaydi"
+  },
+  {
+   "i": 39,
+   "text": "Belgilangan tartibda chora koʻradi va xavf bartaraf etilmaguncha uskunadan foydalanmaydi.",
+   "tts": "Belgilangan tartibda chora koʻradi va khavf bartaraf etilmaguncha uskunadan foydalanmaydi.",
+   "hash": "4d98a8fd029f0b6f",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/4d98a8fd029f0b6f.mp3",
+   "duration": 6.765714,
+   "takes": 1,
+   "similarity": 1,
+   "problems": [],
+   "heard": "belgilangan tartibda chora ko'radi va xavf bartaraf etilmaguncha uskunadan foydalanmaydi"
+  },
+  {
+   "i": 40,
+   "text": "Beshinchi.",
+   "tts": "Beshinchi.",
+   "hash": "2d33413115a43c07",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/2d33413115a43c07.mp3",
+   "duration": 1.227755,
+   "takes": 2,
+   "similarity": 1,
+   "problems": [],
+   "heard": "beshinchi"
+  },
+  {
+   "i": 41,
+   "text": "Korxonaning ichki tartib-qoidalari va mehnat intizomi talablarini biladi.",
+   "tts": "Korkhonaning ichki tartib-qoidalari va mehnat intizomi talablarini biladi.",
+   "hash": "f54c27e61c484549",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f54c27e61c484549.mp3",
+   "duration": 5.32898,
+   "takes": 1,
+   "similarity": 0.9859154929577465,
+   "problems": [
+    {
+     "expected": "tartibqoidalari",
+     "heard": "qoidalari"
+    }
+   ],
+   "heard": "korxonaning ichki tartib qoidalari va mehnat intizomi talablarini biladi"
+  },
+  {
+   "i": 42,
+   "text": "Xodim ish vaqti, tanaffuslar, ishga kelish-ketish, topshiriqlarni bajarish va korxona hududida oʻzini tutish qoidalarini bilishi hamda ularga rioya qilishi kerak.",
+   "tts": "Khodim ish vaqti, tanaffuslar, ishga kelish-ketish, topshiriqlarni bajarish va korkhona hududida oʻzini tutish qoidalarini bilishi hamda ularga rioya qilishi kerak.",
+   "hash": "ee4f27fee794b8e8",
+   "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/ee4f27fee794b8e8.mp3",
+   "duration": 12.120816,
+   "takes": 1,
+   "similarity": 0.9745222929936306,
+   "problems": [
+    {
+     "expected": "xodim",
+     "heard": "qortim"
+    },
+    {
+     "expected": "kelishketish",
+     "heard": "ketish"
+    }
+   ],
+   "heard": "qortim ish vaqti tanaffuslar ishga kelish ketish topshiriqlarni bajarish va korxona hududida o'zini tutish qoidalarini bilishi hamda ularga rioya qilishi kerak"
+  }
+ ]
+}

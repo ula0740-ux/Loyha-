@@ -1,0 +1,17 @@
+{
+ "i": 44,
+ "text": "Korxonaning ichki tartib-qoidalari va mehnat intizomi talablarini biladi.",
+ "tts": "Korkhonaning ichki tartib-qoidalari va mehnat intizomi talablarini biladi.",
+ "hash": "f54c27e61c484549",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f54c27e61c484549.mp3",
+ "duration": 5.32898,
+ "takes": 1,
+ "similarity": 0.9859154929577465,
+ "problems": [
+  {
+   "expected": "tartibqoidalari",
+   "heard": "qoidalari"
+  }
+ ],
+ "heard": "korxonaning ichki tartib qoidalari va mehnat intizomi talablarini biladi"
+}
