@@ -1683,6 +1683,7 @@ function makeEdolus(canvas, slides, carSrc){
   return {
     resize: function(){},
     frame: frame,
+    frameT: function(t){ frame(t0 + t * 1000); },
     setJ: function(j){ J = j; },
     setTarget: function(t){ from = J; target = t; },
     snap: function(j){ J = j; from = j; target = j; }
