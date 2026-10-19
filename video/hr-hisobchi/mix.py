@@ -7,7 +7,7 @@ def load(path, ch, af='anull'):
     return np.frombuffer(raw, np.float32).reshape(-1, ch)
 orig = load(V, 2)[:N]; orig = np.pad(orig, ((0, N - len(orig)), (0, 0)))
 # id: (boshlanish s, tempo) — tempo > 1 faqat sahnaga sig'masa
-PLAN = {'s1': (0.25, 1.08), 's2': (4.25, 1), 's3': (8.4, 1), 's4': (11.3, 1), 's5': (15.2, 1.04),
+PLAN = {'s1': (0.25, 1.08), 's2': (4.25, 1), 's3': (8.4, 1), 's4': (11.3, 1), 's5': (15.2, 1.06),
         's6': (21.4, 1), 's7': (26.1, 1), 's8': (30.2, 1), 's9': (34.2, 1), 's10': (37.35, 1.15)}
 voice = np.zeros(N, np.float32)
 for k, (at, tempo) in PLAN.items():

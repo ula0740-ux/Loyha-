@@ -35,6 +35,7 @@ Its settings are the default for every future Uzbek voice-over, so do not change
   - 100–199 is read as plain "yuz" ("yuz yetmish ikki"), never "bir yuz" (`numbers.ts`).
   - "Formula" alone at the start of a sentence still sounded English (even as "For-mu-la"). The user chose by ear (2026-10-15, variant C of A/B/C/D): write **"Formulasi quyidagicha: …"**. The Uzbek suffix keeps the word Uzbek.
   - English terms the user wants read in English go in `{braces}` in the narration (`video/formulalar/narrate.mts`); they skip `prepareUzbek`. Neighbouring-sentence context is always sent through `prepareUzbek`, because English context pulled "ADM" towards an English reading.
+- **KPI (the user's choice by ear, 2026-10-19):** read in English, joined, written **"Kei-pi-ai"** in the Uzbek take (variant G). Rejected: Uzbek letter names "ka pe i", {K, P, I}, {K. P. I.}, {KPI}, "Keypiay", "Key-pi-ay".
 - **Never cut a word out of one take and splice it into another.** It was tried: the user heard "ji zzkh" (the vowel lost, the fricative cut). Fix pronunciation with the text form and by regenerating, not with audio surgery.
 
 ## 2. Preparing the text (`prepareUzbek`, always)
