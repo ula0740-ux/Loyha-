@@ -145,7 +145,7 @@
   ]
  },
  "s5": {
-  "duration": 6.426122,
+  "duration": 6.60898,
   "words": [
    {
     "text": "Toʻqqiz",
@@ -155,22 +155,22 @@
    {
     "text": "modul:",
     "start": 0.48,
-    "end": 1.36
+    "end": 1.28
    },
    {
     "text": "tabel,",
-    "start": 1.4,
+    "start": 1.36,
     "end": 2.08
    },
    {
     "text": "grafiklar,",
-    "start": 2.24,
-    "end": 2.96
+    "start": 2.16,
+    "end": 3
    },
    {
-    "text": "khodimlar,",
-    "start": 3,
-    "end": 3.92
+    "text": "xodimlar,",
+    "start": 3.04,
+    "end": 3.96
    },
    {
     "text": "ish",
@@ -179,28 +179,18 @@
    },
    {
     "text": "haqi",
-    "start": 4.28,
-    "end": 4.72
+    "start": 4.24,
+    "end": 4.8
    },
    {
     "text": "va",
-    "start": 4.8,
-    "end": 5.04
+    "start": 4.88,
+    "end": 5.2
    },
    {
-    "text": "ka",
-    "start": 5.2,
-    "end": 5.36
-   },
-   {
-    "text": "pe",
-    "start": 5.48,
-    "end": 5.6
-   },
-   {
-    "text": "i.",
-    "start": 5.68,
-    "end": 6.4
+    "text": "KPI.",
+    "start": 5.28,
+    "end": 6.64
    }
   ]
  },
