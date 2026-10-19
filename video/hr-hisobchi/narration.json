@@ -1,0 +1,66 @@
+{
+ "voice": "EXAVITQu4vr4xnSDxMaL",
+ "model": "eleven_v4",
+ "lines": [
+  {
+   "id": "s1",
+   "at": 0.35,
+   "end": 4.0,
+   "text": "Tabel, davomat, oylik — hali ham tarqoqmi?"
+  },
+  {
+   "id": "s2",
+   "at": 4.25,
+   "end": 8.0,
+   "text": "Har biri — alohida faylda."
+  },
+  {
+   "id": "s3",
+   "at": 8.4,
+   "end": 11.0,
+   "text": "Endi — bitta dasturda."
+  },
+  {
+   "id": "s4",
+   "at": 11.2,
+   "end": 15.2,
+   "text": "Ikki ming sakkiz yuz toʻrt xodim — bir joyda."
+  },
+  {
+   "id": "s5",
+   "at": 15.4,
+   "end": 21.0,
+   "text": "Toʻqqiz modul: tabel, grafiklar, xodimlar, ish haqi va KPI."
+  },
+  {
+   "id": "s6",
+   "at": 21.2,
+   "end": 25.8,
+   "text": "Tabelchi standartni oʻzi tekshiradi."
+  },
+  {
+   "id": "s7",
+   "at": 26.0,
+   "end": 29.9,
+   "text": "Struktura kod boʻyicha oʻzi quriladi."
+  },
+  {
+   "id": "s8",
+   "at": 30.1,
+   "end": 33.9,
+   "text": "Tabeldan oylikka — bitta zanjirda."
+  },
+  {
+   "id": "s9",
+   "at": 34.1,
+   "end": 37.8,
+   "text": "Maʼlumot kompyuterdan chiqmaydi."
+  },
+  {
+   "id": "s10",
+   "at": 37.7,
+   "end": 41.0,
+   "text": "{HR} Hisobchi — xodimlar boʻlimining ish quroli."
+  }
+ ]
+}
