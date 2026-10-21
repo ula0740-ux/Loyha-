@@ -2,13 +2,37 @@
  "voice": "EXAVITQu4vr4xnSDxMaL",
  "model": "eleven_v4",
  "lines": [
-  {"id": "m0", "text": "Juda ham ajoyib!"},
-  {"id": "m1", "text": "Bizda birinchi mashqimiz: tanamizni yengil qizdirib olish maqsadida oʻz joyimizda turgan holda yugurib olamiz. Qani, boshladik!"},
-  {"id": "m2", "text": "Qani, boʻshashmasdan davom ettiramiz!"},
-  {"id": "m3", "text": "Juda ham ajoyib! Bizda keyingi mashqimiz: oyoqlar yelka kengligida, qoʻllarimiz esa yelkada. Oldinga va orqaga toʻrt martadan aylantirib olamiz."},
-  {"id": "m4", "text": "Ajoyib! Bizda keyingi mashqimiz: oyoqlar yelka kengligida, qoʻllarimiz esa belda."},
-  {"id": "m5", "text": "Belimizni oʻng va chap tomonga toʻrt martadan aylantirib olamiz."},
-  {"id": "m6", "text": "Juda ham ajoyib! Bizda navbatdagi mashqimiz: oyoqlar yelka kengligida, qoʻllarimiz esa tizzada. Tizzalarimizni ichkariga va tashqariga toʻrt martadan aylantirib olamiz."},
-  {"id": "m7", "text": "Yaxshi! Endi oyoqlarimizni juft qilgan holatda oʻngga va chapga toʻrt martadan aylantirib olamiz."}
+  {
+   "id": "m0",
+   "text": "Juda ham ajoyib!"
+  },
+  {
+   "id": "m1",
+   "text": "Bizda birinchi mashqimiz: tanamizni yengil qizdirib olish maqsadida oʻz joyimizda turgan holda yugurib olamiz. Qani, boshladik!"
+  },
+  {
+   "id": "m2",
+   "text": "Qani, boʻshashmasdan davom ettiramiz!"
+  },
+  {
+   "id": "m3",
+   "text": "Juda ham ajoyib! Bizda keyingi mashqimiz: oyoqlarimiz yelka kengligida, qoʻllarimiz esa yelkada. Yelkalarimizni oldinga va orqaga toʻrt martadan aylantirib olamiz."
+  },
+  {
+   "id": "m4",
+   "text": "Ajoyib! Bizda keyingi mashqimiz: oyoqlar yelka kengligida, qoʻllarimiz esa belda."
+  },
+  {
+   "id": "m5",
+   "text": "Belimizni oʻng va chap tomonga toʻrt martadan aylantirib olamiz."
+  },
+  {
+   "id": "m6",
+   "text": "Juda ham ajoyib! Bizda navbatdagi mashqimiz: oyoqlar yelka kengligida, qoʻllarimiz esa tizzada. Tizzalarimizni ichkariga va tashqariga toʻrt martadan aylantirib olamiz."
+  },
+  {
+   "id": "m7",
+   "text": "Yaxshi! Endi oyoqlarimizni juft qilgan holatda oʻngga va chapga toʻrt martadan aylantirib olamiz."
+  }
  ]
 }

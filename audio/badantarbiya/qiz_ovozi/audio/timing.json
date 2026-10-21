@@ -130,7 +130,7 @@
   ]
  },
  "m3": {
-  "duration": 11.650612,
+  "duration": 12.826122,
   "words": [
    {
     "text": "Juda",
@@ -145,87 +145,92 @@
    {
     "text": "ajoyib!",
     "start": 0.64,
-    "end": 1.76
+    "end": 1.68
    },
    {
     "text": "Bizda",
-    "start": 1.84,
-    "end": 2.16
+    "start": 1.76,
+    "end": 2.08
    },
    {
     "text": "keyingi",
-    "start": 2.24,
-    "end": 2.52
+    "start": 2.2,
+    "end": 2.48
    },
    {
     "text": "mashqimiz:",
-    "start": 2.56,
-    "end": 3.48
+    "start": 2.52,
+    "end": 3.52
    },
    {
-    "text": "oyoqlar",
-    "start": 3.52,
-    "end": 4.16
+    "text": "oyoqlarimiz",
+    "start": 3.6,
+    "end": 4.32
    },
    {
     "text": "yelka",
-    "start": 4.24,
-    "end": 4.56
+    "start": 4.4,
+    "end": 4.72
    },
    {
     "text": "kengligida,",
-    "start": 4.64,
-    "end": 5.48
+    "start": 4.76,
+    "end": 5.627
    },
    {
     "text": "qoʻllarimiz",
-    "start": 5.52,
-    "end": 6.08
+    "start": 5.653,
+    "end": 6.16
    },
    {
     "text": "esa",
-    "start": 6.28,
-    "end": 6.48
+    "start": 6.24,
+    "end": 6.56
    },
    {
     "text": "yelkada.",
-    "start": 6.56,
+    "start": 6.64,
     "end": 7.64
    },
    {
-    "text": "Oldinga",
+    "text": "Yelkalarimizni",
     "start": 7.68,
-    "end": 8.2
+    "end": 8.56
+   },
+   {
+    "text": "oldinga",
+    "start": 8.64,
+    "end": 9.36
    },
    {
     "text": "va",
-    "start": 8.24,
-    "end": 8.4
+    "start": 9.48,
+    "end": 9.6
    },
    {
     "text": "orqaga",
-    "start": 8.48,
-    "end": 9.12
+    "start": 9.68,
+    "end": 10.4
    },
    {
     "text": "toʻrt",
-    "start": 9.2,
-    "end": 9.44
+    "start": 10.44,
+    "end": 10.64
    },
    {
     "text": "martadan",
-    "start": 9.56,
-    "end": 10
+    "start": 10.72,
+    "end": 11.28
    },
    {
     "text": "aylantirib",
-    "start": 10.08,
-    "end": 10.56
+    "start": 11.36,
+    "end": 11.84
    },
    {
     "text": "olamiz.",
-    "start": 10.64,
-    "end": 11.68
+    "start": 11.92,
+    "end": 12.88
    }
   ]
  },

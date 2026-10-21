@@ -22,7 +22,7 @@ free=np.ones(N,bool)
 for s,e in spans: free[s:e]=False
 mono=O.mean(1); D=4; m=mono[::D]; sr=SR//D
 okd=free[::D]
-bed=O.copy(); XF=int(.12*SR); CTX=int(.6*sr)
+bed=O.copy(); XF=int(.25*SR); CTX=int(.6*sr)
 def best_src(ctx, need):
     """ctx: oxirgi 0.6 s (downsampled); topilgan joydan keyin need namuna bo'sh (gapsiz) bo'lishi kerak."""
     c=fftconvolve(m, ctx[::-1], 'valid'); e=np.sqrt(fftconvolve(m*m, np.ones(len(ctx)), 'valid'))+1e-9
@@ -30,16 +30,20 @@ def best_src(ctx, need):
     L=len(score); valid=np.zeros(L,bool)
     # manba oynasi + davomi butunlay bo'sh bo'lsin
     cs=np.concatenate([[0],np.cumsum(~okd)])
-    endi=np.minimum(np.arange(L)+len(ctx)+need, len(okd))
-    valid=(cs[endi]-cs[np.arange(L)])==0
+    endr=np.arange(L)+len(ctx)+need; endi=np.minimum(endr, len(okd))
+    valid=((cs[endi]-cs[np.arange(L)])==0) & (endr<=len(okd))
     score[~valid]=-9
     k=int(np.argmax(score)); return (k+len(ctx))*D, score[k]
 for s,e in spans:
     p=s
     while p<e:
         ctx=bed[max(0,p-CTX*D):p].mean(1)[::D]
-        need=min(e-p+XF, int(6*SR))
-        src,sc=best_src(ctx, need//D+1)
+        need=min(e-p+XF, int(20*SR))
+        while True:   # gapsiz bo'lak topilmasa, uzunlikni qisqartiramiz
+            src,sc=best_src(ctx, need//D+1)
+            if sc>-9 or need<int(1.5*SR): break
+            need=int(need*0.75)
+        assert sc>-9, 'gapsiz manba topilmadi'
         L=min(e-p, need-XF) if e-p>need-XF else e-p
         seg=O[src:src+L+XF]
         fi=np.linspace(0,1,XF)[:,None]
