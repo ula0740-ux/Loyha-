@@ -13,7 +13,9 @@ def lufs(x):
     r=subprocess.run(['ffmpeg','-hide_banner','-f','f32le','-ar',str(SR),'-ac','1','-i','t.f32','-af','ebur128','-f','null','-'],capture_output=True,text=True).stderr
     return float([l for l in r.splitlines() if l.strip().startswith('I:')][-1].split()[1])
 CHAIN='silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,highpass=f=90,highshelf=f=4000:g=-2.5,acompressor=threshold=-24dB:ratio=2.5:attack=6:release=120'
-music=load('bed.wav',2); T=len(music); vo=np.zeros(T,np.float32); prev=0
+import sys
+BEDF=sys.argv[1] if len(sys.argv)>1 else 'bed.wav'
+music=load(BEDF,2); T=len(music); vo=np.zeros(T,np.float32); prev=0
 for at,fid in LINES:
     a=load(Q+fid+'.mp3',1,CHAIN); a=a*10**((-16.5-lufs(a))/20)
     st=max(at, prev+0.6); i=int(st*SR); e=min(T,i+len(a)); vo[i:e]+=a[:e-i]; prev=st+len(a)/SR
@@ -23,7 +25,7 @@ subprocess.run(['ffmpeg','-v','error','-y','-f','f32le','-ar',str(SR),'-ac','1',
 vo=load('v_ai.wav')[:T]; vo=np.pad(vo,(0,T-len(vo)))
 act=(np.convolve(np.abs(vo),np.ones(2205)/2205,'same')>0.003).astype(np.float32)
 env=np.clip(np.convolve(act,np.ones(int(.35*SR))/int(.35*SR),'same')*1.5,0,1)
-fade=np.ones(T,np.float32); fe=int((T/SR-2.5)*SR); fade[fe:]=np.linspace(1,0,T-fe)
+fade=np.ones(T,np.float32); fe=int((T/SR-1.0)*SR); fade[fe:]=np.linspace(1,0,T-fe)
 out=music*((1-env*(1-10**(-9/20)))*fade)[:,None]+vo[:,None]
 ap=load('applause.mp3',2); i=int((prev+0.3)*SR); e=min(T,i+len(ap)); out[i:e]+=ap[:e-i]*0.45
 np.clip(out,-1,1).astype(np.float32).tofile('mix.f32')
