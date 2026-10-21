@@ -1,6 +1,6 @@
-# Yozma savolnoma — javoblar kaliti (baholovchi uchun)
-Manba: Evalution_sheet_Abdumalikov_Ulugbek.xlsx (Evaluation Sheet, TAHLILI, ST 3, ST 6, ST 8, PE 2, PE 3, PE 6, PE 7, CI 1, CI 2).
-Baholash: har savol T(5) / D(4) / K(3) / A(2) / NT(1).
+# Bilim sinovi — javoblar kaliti (baholovchi uchun)
+Manba: Evalution_sheet_Abdumalikov_Ulugbek.xlsx (Evaluation Sheet, TAHLILI, ST 3/6/8, PE 2/3/6/7, CI 1/2). Savolnoma: Bilim_sinovi.docx / .pdf.
+Baholash: har topshiriq T(5) / D(4) / K(3) / A(2) / NT(1). Natija = (Supervisor + HR BP) / 2.
 
 1. PE-1 — hurmat, hamkorlik, muammoni yashirmaslik, sifat, resurslarni tejash; misol: nuqsonni yashirmay xabar berish, keyingi jarayonga o'tkazmaslik. Rasmiy qadriyatlar — korxona hujjatidan.
 2. PE-7 — R&R har bir daraja uchun majburiyat, xatti-harakat va natijani belgilaydi; belgilangan, yozilgan, yetkazilgan va tushunilgan bo'lishi kerak; ADM MS ning 6 tamoyilini qamraydi; SPQRCE ko'rsatkichlarini qo'llab-quvvatlaydi.
@@ -12,26 +12,29 @@ Baholash: har savol T(5) / D(4) / K(3) / A(2) / NT(1).
 8. PE-3 — GCTA: Global Harakatga Chaqiriqlar — xavfsizlik bo'yicha o'rganilgan saboqlar (lessons learned) jarayoni; SIF — jiddiy jarohat va o'lim holatlari; CAP: muammoni hujjatlashtirish + asosiy sabab tahlili (RCA) + aniq tuzatuvchi harakatlar; yopish va validatsiya "Go & See" bilan, qayta takrorlanmasligi tekshiriladi; GCTA TM/TLlarga yetkaziladi va tushunilgani so'raladi.
 9. PE-6 — JIT: TMlarni malakali TL yoki sertifikatlangan TM o'qitadi (check-list, sertifikat); 4 kvadrantli chart jamoaning haqiqiy ko'nikma darajasini ko'rsatadi; yangi operatsiya o'rganilsa kvadrant oshadi, 3 oy bajarilmasa kamaytiriladi.
 10. Intizom — ish vaqti, tanaffuslar, kelish-ketish, topshiriqlarni bajarish, hududda o'zini tutish; IMTQ: haftasiga 40 soat, uzrsiz 4 soatdan ko'p kelmaslik — qo'pol buzilish, jazodan oldin yozma tushuntirish, bitta buzilish uchun bitta jazo, muddati 1 yil.
-11. ST-3 — Saralash, Tartiblash, Tozalash, Standartlash, Odat qilish (intizom).
-12. ST-3 — Red tag: keraksiz buyumlarni yorliqlab vaqtinchalik hududga chiqarish va muntazam olib tashlash; shadow board: har narsaning belgilangan joyi; holat belgisi: qizil X / yashil O.
-13. 7 yo'qotish: ortiqcha ishlab chiqarish, kutish, tashish, ortiqcha ishlov, zaxira, ortiqcha harakat, nuqson; misol: asboblar sonini/zaxirani kamaytirish, stellaj, maydon, PM ehtiyot qismlari joylashuvi.
-14. ST-6 — SOS: standart operatsiyalar varag'i (siklik); JES: ish elementi yo'riqnomasi — nima/qanday/nima uchun (siklik); STS: standart vazifalar varag'i (siklik bo'lmagan); TIS: vazifa ko'rsatmalari varag'i (siklik bo'lmagan).
+11. VAZIYAT — uskunani ishlatmaydi (xavf bartaraf etilmaguncha), ishni belgilangan tartibda to'xtatadi, GL/nazoratchiga darhol xabar beradi; 24 soatda hal etilmasa GL/nazoratchi hujjatlashtiradi, 7 kunda — keyingi rahbariyat darajasi, 30 kunda — SRB (ESCP). Reja bosimi xavfsizlikdan ustun emas: "Har bir Inson, Har bir Ob'ekt, Har Kuni".
+12. ST-3 — Saralash, Tartiblash, Tozalash, Standartlash, Odat qilish (intizom).
+13. ST-3 — Red tag: keraksiz buyumlarni yorliqlab vaqtinchalik hududga chiqarish va muntazam olib tashlash; shadow board: har narsaning belgilangan joyi; holat belgisi: qizil X / yashil O.
+14. 7 yo'qotish: ortiqcha ishlab chiqarish, kutish, tashish, ortiqcha ishlov, zaxira, ortiqcha harakat, nuqson; misol: asboblar sonini/zaxirani kamaytirish, stellaj, maydon, PM ehtiyot qismlari joylashuvi.
 15. ST-6 — ish elementlari va ketma-ketlik, element vaqti, xavfsizlik/ergonomika, sifat tekshiruvlari, qiymat yaratuvchi/yaratmaydigan vaqt (ish, yurish, kutish), ish oqimi diagrammasi, takt va sikl vaqti, model mix yuklamasi; element ≈ sikl vaqtining 10%.
 16. ST-8 — bir necha sikl kuzatish yoki video: SOS elementlari, ketma-ketlik, JES kalit punktlari, harakat yo'nalishi, sekundomer; sikl vaqti ±5% ichida (farq ST-5 shakliga); TL JES/SOS ni qo'lga olib tekshiradi, chetlanishni Layered Audit/BPD ga yozadi.
-17. Takt Time = mavjud ish vaqti / talab: (480 − 30) = 450 daq = 27 000 s / 225 = **120 soniya**.
-18. Vaqtni taqsimlash; konveyer tezligini nazorat qilish; muvozanatni saqlash (yuklamani teng taqsimlash); reja ijrosini real vaqtda baholash.
-19. Cycle Time — bir dona mahsulotning bir operatsiyadan chiqish vaqti; Line Balance — yuklamani stansiyalarga teng taqsimlash; 150 > 120 → bottleneck: liniya to'xtaydi, WIP ortadi, keyingi stansiyalar kutadi, kunlik reja bajarilmaydi.
-20. HPV = ishlangan soat / avtomobil = 4 800 / 300 = **16 soat**; (18 − 16) / 18 × 100 = **11,1%**.
+17. VAZIYAT — operator standart ishga amal qilmayapti (ketma-ketlik buzilgan, sikl vaqti ±5% chegaradan tashqari). TL: JES/SOS bilan sababini aniqlaydi, operatorni JIT bo'yicha qayta o'rgatadi, chetlanishni ST-5 shakliga va Layered Audit/BPD ga yozadi, hal bo'lguncha kuzatadi; agar yangi ketma-ketlik yaxshiroq bo'lsa — standartni rasmiy yangilash taklifi.
+18. Takt Time = mavjud ish vaqti / talab: (480 − 30) = 450 daq = 27 000 s / 225 = **120 soniya**.
+19. Vaqtni taqsimlash; konveyer tezligini nazorat qilish; muvozanatni saqlash (yuklamani teng taqsimlash); reja ijrosini real vaqtda baholash.
+20. Cycle Time — bir dona mahsulotning bir operatsiyadan chiqish vaqti; Line Balance — yuklamani stansiyalarga teng taqsimlash; 150 > 120 → bottleneck: liniya to'xtaydi, WIP ortadi, keyingi stansiyalar kutadi, kunlik reja bajarilmaydi.
 21. To'xtashlar, rework, material yetishmasligi, uskuna nosozligi, ortiqcha harakat, line balance muammolari, malaka yetishmasligi; hajm oshsa HPV odatda kamayadi: doimiy yo'qotishlar ko'proq avtomobilga taqsimlanadi, tajriba ortadi, jarayon barqarorlashadi.
-22. UPH = dona / soat = 450 / 8 = **56,25**; 55/60 = 91,7% — reja bajarilmayapti, uzilish sababini izlash kerak.
-23. Planned: profilaktik ta'mir, tanaffus, rejali sozlash, smena almashinuvi; Unplanned: stanok/robot buzilishi, elektr, sensor, material yetishmasligi, operator xatosi, dastur nosozligi; o'lchash — yo'qotishni, eng ko'p buziladigan uskunani, ta'mir vaqtini aniqlash va samaradorlikni oshirish.
-24. Absentizm: uzilishlarni aniqlash, intizomni baholash, ishchi kuchini oldindan rejalashtirish, samaradorlikni oshirish, sabablarni (kasallik, sharoit, grafik, motivatsiya) aniqlash.
-25. Eventlar: rejani to'liq ta'minlash va muammoli holatlarni tahlil qilish; asosiy eventlarni farqlash, yil/model kesimi, qoldiq avtomobillar soni, eksport jarayoni; 04 — to'liq butlanmagan avtomobillar: sifat nazorati, xavfsizlik, tezkor qaror, mahsulot mukammal holatda yetishiga mas'uliyat.
-26. Talab va taklifni muvofiqlashtirish; logistika va ta'minot zanjiri (butlovchi buyurtma, ombor qoldig'i); quvvatlarni rejalashtirish (konveyer, plan-fakt); dilerlar va sotuv strategiyasi (kvota, marketing).
+22. Planned: profilaktik ta'mir, tanaffus, rejali sozlash, smena almashinuvi; Unplanned: stanok/robot buzilishi, elektr, sensor, material yetishmasligi, operator xatosi, dastur nosozligi; o'lchash — yo'qotishni, eng ko'p buziladigan uskunani, ta'mir vaqtini aniqlash va samaradorlikni oshirish.
+23. Absentizm: uzilishlarni aniqlash, intizomni baholash, ishchi kuchini oldindan rejalashtirish, samaradorlikni oshirish, sabablarni (kasallik, sharoit, grafik, motivatsiya) aniqlash.
+24. Eventlar: rejani to'liq ta'minlash va muammoli holatlarni tahlil qilish; asosiy eventlarni farqlash, yil/model kesimi, qoldiq avtomobillar soni, eksport jarayoni; 04 — to'liq butlanmagan avtomobillar: sifat nazorati, xavfsizlik, tezkor qaror, mahsulot mukammal holatda yetishiga mas'uliyat.
+25. Talab va taklifni muvofiqlashtirish; logistika va ta'minot zanjiri (butlovchi buyurtma, ombor qoldig'i); quvvatlarni rejalashtirish (konveyer, plan-fakt); dilerlar va sotuv strategiyasi (kvota, marketing).
+26. VAZIYAT — ma'lumot: tabel/davomat (kun, smena, bo'lim, ism bo'yicha), sabab kodlari, kasallik varaqalari, grafik; sabablar: dam olishdan keyingi kasallik, transport, smena grafigi, ish sharoiti, motivatsiya; choralar: sabab bo'yicha suhbat, grafikni ko'rib chiqish, rag'bat/intizom choralari, zaxira ishchi kuchini rejalashtirish, natijani haftalik kuzatish.
 27. SPQRC(E): Safety (xavfsizlik), People (xodimlar), Quality (sifat), Responsiveness (tezkorlik/yetkazib berish), Cost (xarajat), Environment (ekologiya); kundalik boshqaruv va Lean asosi.
 28. CI-1 — BPD: biznes rejani vizuallashtirish va butun tashkilotni jalb etish; format SPQRCE bo'yicha Goals, Objectives, Methods, Targets + PDCA; odatda 4–5 daraja; stendlar ko'rinadigan joyda; monitoring grafiklari.
-29. CI-2 — Specific (aniq), Measured (o'lchanadigan), Agreed (kelishilgan), Realistic (real), Timed (muddatli); doimiy yashil → targetni oshirish yoki muhimroq metrika; doimiy qizil → chora-tadbirlar va eskalatsiya samaradorligini tekshirish.
+29. CI-2 — doimiy yashil → targetni talabchanroq qilish yoki muhimroq metrika tanlash; doimiy qizil → chora-tadbirlar va eskalatsiya samaradorligini tekshirish (SMART: Specific, Measured, Agreed, Realistic, Timed).
 30. PDCA — Plan (muammo, sabab, reja), Do (bajarish), Check (natijani o'lchash), Act (standartlashtirish/qayta sikl); amaliy misol talab qilinadi.
 31. Error proofing (poka-yoke) — xatoni jarayonda oldini olish/aniqlash qurilmasi; validatsiya — muntazam (smena boshida) ataylab xato namunasi bilan tekshirish va qayd etish; Go and See — joyiga borib ko'rish; Layered Audit — turli rahbariyat darajalari muntazam tekshiruvi. (Excelda batafsil yo'q — umumiy tushuncha.)
 32. Excel: SUMIFS, COUNTIFS, VLOOKUP/XLOOKUP, IF, foiz (=Fakt/Reja), Pivot jadval.
-33. T(5) — mukammal, o'rgata oladi; D(4) — mustaqil, standart bo'yicha; K(3) — asosiy bilim, yordam kerak; A(2) — umumiy tushuncha, mustaqil qo'llay olmaydi; NT(1) — yetarli emas, o'qitish kerak; Result = (Supervisor + HR BP) / 2.
+33. TAKLIF — muammo, sabab, yechim, raqamli foyda (vaqt/xarajat/nuqson), o'lchash usuli bo'lsa T/D; faqat g'oya — A/K.
+34. To'g'ri/Noto'g'ri: 1 T, 2 N (bottleneck — reja bajarilmaydi), 3 T, 4 N (rejalashtirilgan), 5 T (asosli istisnolar bundan mustasno), 6 T, 7 N (±5%), 8 T.
+35. Moslashtirish: SOS — b, JES — e, STS — f, TIS — c, BPD — d, CAP — a.
+36. Hisob: Takt = 450×60/270 = 100 s; HPV = 5 400/360 = 15 soat; UPH = 420/7,5 = 56; HPV yaxshilanishi = (20−17)/20 = 15%; reja bajarilishi = 282/300 = 94%.
