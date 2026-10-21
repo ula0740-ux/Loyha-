@@ -37,7 +37,7 @@ fade=np.ones(T,np.float32); fe=int((T/SR-2.5)*SR); fade[fe:]=np.linspace(1,0,T-f
 out=music*(duck*fade)[:,None]*float(sys.argv[4] if len(sys.argv)>4 else 1)+vo[:,None]
 def sfx(p,at,g):
     a=load(p,2); i=int(at*SR); e=min(T,i+len(a)); out[i:e]+=a[:e-i]*g
-sfx('whistle.mp3', max(0.2, OFF-1.7), 0.5)
+if OFF > 0: sfx('whistle.mp3', OFF-1.7, 0.5)   # asl musiqali versiyada hushtak yo'q (foydalanuvchi, 2026-10-21)
 sfx('applause.mp3', max(x['end'] for x in words)+OFF+0.3, 0.45)
 np.clip(out,-1,1).astype(np.float32).tofile('mix.f32')
 subprocess.run(['ffmpeg','-v','error','-y','-f','f32le','-ar',str(SR),'-ac','2','-i','mix.f32',OUT],check=True)
