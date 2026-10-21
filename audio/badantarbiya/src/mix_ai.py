@@ -1,4 +1,5 @@
 # Barcha gaplar sun'iy intellekt ovozida (Sarah, eleven_v4 uz, STT tekshiruvi), asl gap vaqtlarida;
+import os
 # fon — asl musiqa (bed.wav, gapsiz tiklangan), hushtak yo'q, oxirida olqish.
 import json, numpy as np, subprocess
 SR=44100; Q='/home/user/Loyha-/audio/badantarbiya/qiz_ovozi/audio/'
@@ -15,7 +16,7 @@ def lufs(x):
 CHAIN='silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,highpass=f=90,highshelf=f=4000:g=-2.5,acompressor=threshold=-24dB:ratio=2.5:attack=6:release=120'
 import sys
 BEDF=sys.argv[1] if len(sys.argv)>1 else 'bed.wav'
-music=load(BEDF,2); T=len(music); vo=np.zeros(T,np.float32); prev=0
+music=load(BEDF,2)*10**(float(os.environ.get('MUSIC_DB','0'))/20); T=len(music); vo=np.zeros(T,np.float32); prev=0
 for at,fid in LINES:
     a=load(Q+fid+'.mp3',1,CHAIN); a=a*10**((-16.5-lufs(a))/20)
     st=max(at, prev+0.6); i=int(st*SR); e=min(T,i+len(a)); vo[i:e]+=a[:e-i]; prev=st+len(a)/SR
