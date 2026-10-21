@@ -618,5 +618,520 @@
     "end": 11.52
    }
   ]
+ },
+ "f0": {
+  "duration": 14.602449,
+  "words": [
+   {
+    "text": "Assalomu",
+    "start": 0,
+    "end": 0.56
+   },
+   {
+    "text": "alaykum,",
+    "start": 0.64,
+    "end": 1.2
+   },
+   {
+    "text": "ADM",
+    "start": 1.32,
+    "end": 2
+   },
+   {
+    "text": "Jizzax",
+    "start": 2.04,
+    "end": 2.4
+   },
+   {
+    "text": "xodimlari!",
+    "start": 2.44,
+    "end": 3.44
+   },
+   {
+    "text": "Ertalabki",
+    "start": 3.48,
+    "end": 4
+   },
+   {
+    "text": "badantarbiya",
+    "start": 4.08,
+    "end": 4.64
+   },
+   {
+    "text": "mashqlarimizni",
+    "start": 4.72,
+    "end": 5.44
+   },
+   {
+    "text": "boshlaymiz.",
+    "start": 5.52,
+    "end": 6.56
+   },
+   {
+    "text": "Dastlab",
+    "start": 6.6,
+    "end": 7.12
+   },
+   {
+    "text": "oraliq",
+    "start": 7.28,
+    "end": 7.64
+   },
+   {
+    "text": "masofani",
+    "start": 7.68,
+    "end": 8.16
+   },
+   {
+    "text": "saqlash",
+    "start": 8.24,
+    "end": 8.64
+   },
+   {
+    "text": "maqsadida",
+    "start": 8.68,
+    "end": 9.28
+   },
+   {
+    "text": "qoʻllarimizni",
+    "start": 9.6,
+    "end": 10.4
+   },
+   {
+    "text": "ikki",
+    "start": 10.56,
+    "end": 10.72
+   },
+   {
+    "text": "yonga",
+    "start": 10.76,
+    "end": 11.12
+   },
+   {
+    "text": "yoygan",
+    "start": 11.16,
+    "end": 11.52
+   },
+   {
+    "text": "holda",
+    "start": 11.6,
+    "end": 12
+   },
+   {
+    "text": "oʻngga",
+    "start": 12.24,
+    "end": 12.72
+   },
+   {
+    "text": "va",
+    "start": 12.8,
+    "end": 12.96
+   },
+   {
+    "text": "chapga",
+    "start": 13.04,
+    "end": 13.36
+   },
+   {
+    "text": "qarab",
+    "start": 13.44,
+    "end": 13.68
+   },
+   {
+    "text": "olamiz.",
+    "start": 13.72,
+    "end": 14.56
+   }
+  ]
+ },
+ "f2": {
+  "duration": 12.669388,
+  "words": [
+   {
+    "text": "Bizda",
+    "start": 0,
+    "end": 0.4
+   },
+   {
+    "text": "navbatdagi",
+    "start": 0.52,
+    "end": 0.96
+   },
+   {
+    "text": "mashqimiz:",
+    "start": 1.04,
+    "end": 2.08
+   },
+   {
+    "text": "tirsaklarimiz",
+    "start": 2.12,
+    "end": 2.8
+   },
+   {
+    "text": "bukilgan,",
+    "start": 2.88,
+    "end": 3.76
+   },
+   {
+    "text": "qoʻllarimizni",
+    "start": 3.8,
+    "end": 4.48
+   },
+   {
+    "text": "gavdamizga",
+    "start": 4.64,
+    "end": 5.28
+   },
+   {
+    "text": "toʻgʻri",
+    "start": 5.36,
+    "end": 5.68
+   },
+   {
+    "text": "olib",
+    "start": 5.8,
+    "end": 5.92
+   },
+   {
+    "text": "kelib,",
+    "start": 6,
+    "end": 6.56
+   },
+   {
+    "text": "musht",
+    "start": 6.64,
+    "end": 6.88
+   },
+   {
+    "text": "qilgan",
+    "start": 6.96,
+    "end": 7.28
+   },
+   {
+    "text": "holatda",
+    "start": 7.4,
+    "end": 8
+   },
+   {
+    "text": "ichkariga",
+    "start": 8.08,
+    "end": 8.72
+   },
+   {
+    "text": "hamda",
+    "start": 8.88,
+    "end": 9.2
+   },
+   {
+    "text": "tashqariga",
+    "start": 9.28,
+    "end": 10.08
+   },
+   {
+    "text": "toʻrt",
+    "start": 10.16,
+    "end": 10.4
+   },
+   {
+    "text": "martadan",
+    "start": 10.48,
+    "end": 11.04
+   },
+   {
+    "text": "aylantirib",
+    "start": 11.12,
+    "end": 11.6
+   },
+   {
+    "text": "olamiz.",
+    "start": 11.68,
+    "end": 12.64
+   }
+  ]
+ },
+ "f3": {
+  "duration": 12.120816,
+  "words": [
+   {
+    "text": "Bizda",
+    "start": 0,
+    "end": 0.32
+   },
+   {
+    "text": "keyingi",
+    "start": 0.4,
+    "end": 0.8
+   },
+   {
+    "text": "mashqimiz:",
+    "start": 0.88,
+    "end": 1.84
+   },
+   {
+    "text": "oyoqlarimiz",
+    "start": 1.96,
+    "end": 2.56
+   },
+   {
+    "text": "yelka",
+    "start": 2.64,
+    "end": 2.96
+   },
+   {
+    "text": "kengligida,",
+    "start": 3,
+    "end": 3.84
+   },
+   {
+    "text": "qoʻllarimiz",
+    "start": 3.88,
+    "end": 4.4
+   },
+   {
+    "text": "esa",
+    "start": 4.6,
+    "end": 4.8
+   },
+   {
+    "text": "ikki",
+    "start": 4.88,
+    "end": 5.12
+   },
+   {
+    "text": "yonga",
+    "start": 5.2,
+    "end": 5.52
+   },
+   {
+    "text": "yoygan",
+    "start": 5.56,
+    "end": 6
+   },
+   {
+    "text": "holatda.",
+    "start": 6.12,
+    "end": 7.12
+   },
+   {
+    "text": "Oʻng",
+    "start": 7.2,
+    "end": 7.44
+   },
+   {
+    "text": "va",
+    "start": 7.52,
+    "end": 7.6
+   },
+   {
+    "text": "chap",
+    "start": 7.68,
+    "end": 7.84
+   },
+   {
+    "text": "tomonga",
+    "start": 7.92,
+    "end": 8.32
+   },
+   {
+    "text": "qayrilib",
+    "start": 8.4,
+    "end": 8.8
+   },
+   {
+    "text": "olamiz.",
+    "start": 8.88,
+    "end": 9.68
+   },
+   {
+    "text": "Boʻshashmaymiz,",
+    "start": 9.72,
+    "end": 10.8
+   },
+   {
+    "text": "ADM!",
+    "start": 10.88,
+    "end": 12.08
+   }
+  ]
+ },
+ "f4": {
+  "duration": 12.747755,
+  "words": [
+   {
+    "text": "Bizda",
+    "start": 0,
+    "end": 0.4
+   },
+   {
+    "text": "soʻnggi",
+    "start": 0.56,
+    "end": 0.88
+   },
+   {
+    "text": "mashqimiz:",
+    "start": 0.92,
+    "end": 2
+   },
+   {
+    "text": "oyoqlarimiz",
+    "start": 2.12,
+    "end": 2.72
+   },
+   {
+    "text": "kengroq",
+    "start": 2.76,
+    "end": 3.24
+   },
+   {
+    "text": "holatda,",
+    "start": 3.28,
+    "end": 4.08
+   },
+   {
+    "text": "qoʻllarimizni",
+    "start": 4.12,
+    "end": 4.88
+   },
+   {
+    "text": "tizzalarimizga",
+    "start": 4.92,
+    "end": 5.76
+   },
+   {
+    "text": "qoʻyib,",
+    "start": 5.8,
+    "end": 6.48
+   },
+   {
+    "text": "oʻng",
+    "start": 6.56,
+    "end": 6.8
+   },
+   {
+    "text": "va",
+    "start": 6.88,
+    "end": 7.04
+   },
+   {
+    "text": "chap",
+    "start": 7.16,
+    "end": 7.28
+   },
+   {
+    "text": "tizzalarimizga",
+    "start": 7.36,
+    "end": 8.08
+   },
+   {
+    "text": "tayangan",
+    "start": 8.16,
+    "end": 8.64
+   },
+   {
+    "text": "holda",
+    "start": 8.72,
+    "end": 9.44
+   },
+   {
+    "text": "oyoqlarimiz",
+    "start": 9.52,
+    "end": 10.24
+   },
+   {
+    "text": "paylarini",
+    "start": 10.36,
+    "end": 10.88
+   },
+   {
+    "text": "choʻzib",
+    "start": 10.96,
+    "end": 11.2
+   },
+   {
+    "text": "olamiz.",
+    "start": 11.28,
+    "end": 12.72
+   }
+  ]
+ },
+ "f5": {
+  "duration": 9.482449,
+  "words": [
+   {
+    "text": "Hammaga",
+    "start": 0,
+    "end": 0.4
+   },
+   {
+    "text": "rahmat!",
+    "start": 0.52,
+    "end": 1.36
+   },
+   {
+    "text": "Xavfsizlik",
+    "start": 1.4,
+    "end": 1.92
+   },
+   {
+    "text": "qoidalariga",
+    "start": 2,
+    "end": 2.64
+   },
+   {
+    "text": "rioya",
+    "start": 2.72,
+    "end": 3.04
+   },
+   {
+    "text": "qilgan",
+    "start": 3.08,
+    "end": 3.44
+   },
+   {
+    "text": "holda",
+    "start": 3.6,
+    "end": 4
+   },
+   {
+    "text": "oʻz",
+    "start": 4.08,
+    "end": 4.4
+   },
+   {
+    "text": "ish",
+    "start": 4.48,
+    "end": 4.56
+   },
+   {
+    "text": "faoliyatingizni",
+    "start": 4.64,
+    "end": 5.52
+   },
+   {
+    "text": "davom",
+    "start": 5.56,
+    "end": 5.84
+   },
+   {
+    "text": "ettirishingiz",
+    "start": 5.92,
+    "end": 6.48
+   },
+   {
+    "text": "mumkin.",
+    "start": 6.56,
+    "end": 7.52
+   },
+   {
+    "text": "Olgʻa,",
+    "start": 7.6,
+    "end": 8.4
+   },
+   {
+    "text": "ADM!",
+    "start": 8.48,
+    "end": 9.52
+   }
+  ]
  }
 }

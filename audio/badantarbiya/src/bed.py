@@ -23,7 +23,7 @@ for s,e in spans: free[s:e]=False
 mono=O.mean(1); D=4; m=mono[::D]; sr=SR//D
 okd=free[::D]
 bed=O.copy(); XF=int(.25*SR); CTX=int(.6*sr)
-def best_src(ctx, need):
+def best_src(ctx, need, ctx2=None):
     """ctx: oxirgi 0.6 s (downsampled); topilgan joydan keyin need namuna bo'sh (gapsiz) bo'lishi kerak."""
     c=fftconvolve(m, ctx[::-1], 'valid'); e=np.sqrt(fftconvolve(m*m, np.ones(len(ctx)), 'valid'))+1e-9
     score=c/e
@@ -32,7 +32,12 @@ def best_src(ctx, need):
     cs=np.concatenate([[0],np.cumsum(~okd)])
     endr=np.arange(L)+len(ctx)+need; endi=np.minimum(endr, len(okd))
     valid=((cs[endi]-cs[np.arange(L)])==0) & (endr<=len(okd))
-    score[~valid]=-9
+    if ctx2 is not None:   # oxirgi bo'lak: ulanishning chiqish tomoni ham asl musiqaga mos kelsin
+        c2=fftconvolve(m, ctx2[::-1], 'valid'); e2=np.sqrt(fftconvolve(m*m, np.ones(len(ctx2)), 'valid'))+1e-9
+        s2=np.full(L,-9.0); off=len(ctx)+need-len(ctx2)//2
+        idx=np.arange(L)+off; ok=idx<len(c2); s2[ok]=(c2/e2)[idx[ok]]
+        score=score+s2
+    score[~valid]=-99
     k=int(np.argmax(score)); return (k+len(ctx))*D, score[k]
 for s,e in spans:
     p=s
@@ -40,10 +45,12 @@ for s,e in spans:
         ctx=bed[max(0,p-CTX*D):p].mean(1)[::D]
         need=min(e-p+XF, int(20*SR))
         while True:   # gapsiz bo'lak topilmasa, uzunlikni qisqartiramiz
-            src,sc=best_src(ctx, need//D+1)
-            if sc>-9 or need<int(1.5*SR): break
+            last = e-p+XF <= need
+            ctx2 = O[e:e+int(.6*SR)].mean(1)[::D] if last and e+int(.6*SR)<=N else None
+            src,sc=best_src(ctx, (e-p+XF)//D+1 if last else need//D+1, ctx2)
+            if sc>-90 or need<int(1.5*SR): break
             need=int(need*0.75)
-        assert sc>-9, 'gapsiz manba topilmadi'
+        assert sc>-90, 'gapsiz manba topilmadi'
         L=min(e-p, need-XF) if e-p>need-XF else e-p
         seg=O[src:src+L+XF]
         fi=np.linspace(0,1,XF)[:,None]
