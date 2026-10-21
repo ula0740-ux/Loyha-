@@ -8,6 +8,7 @@ html,body{margin:0;background:#000;overflow:hidden}
 </style></head>
 <body><div id="stage"><canvas id="c" width="1080" height="1920"></canvas></div>
 <script src="beats.js"></script>
+<script src="words.js"></script>
 <script>
 /* Avtomobil zavodida stiker-odamchalar badantarbiyasi. Hammasi t dan hisoblanadi (seek(t)).
    Mashqlar audiodagi ko'rsatmalarga, harakatlar 120 BPM zarbiga, kadrlar musiqa bo'limlariga bog'langan. */
@@ -29,136 +30,139 @@ const barPulse = t => { const b = bpos(t) - B.down, f = ((b % 4) + 4) % 4; retur
 /* yumshoq "sakrash" (zarbda pastga cho'kish) */
 const bounce = (t, ph = 0) => { const b = bpos(t) + ph, f = b - Math.floor(b); return Math.sin(f * PI); };
 
-/* ======================= PALITRA VA QAHRAMONLAR ======================= */
-const C = { tq: '#19c3b5', or: '#ff8a1f', ye: '#ffd23f', co: '#ff6b6b', li: '#9be15d', cb: '#2f5bea', ink: '#1d1b2e', paper: '#fffaf0' };
-const SK = ['#f6d0b1', '#e8b48a', '#c98b5e', '#a0673f', '#7a4a2a', '#5a3620'];
-/* 7 ishchi: oldingi qator 3 ta (y=0), orqa qator 4 ta (y=-120, 0.86 masshtab) */
+/* ======================= PALITRA VA ISHCHILAR ======================= */
+const C = { tq: '#19b3a6', or: '#ff7a1a', ye: '#ffc934', co: '#ef5a5a', li: '#b7e03a', cb: '#2f5bea', ink: '#1b1d2a', paper: '#f6f4ee' };
+const SK = ['#f3cdb0', '#e2b08a', '#c68b62', '#9c6a46', '#7a4c30', '#5a3824'];
+const NAVY = '#2c3f73', STEEL = '#4f5d7c', REFL = '#e9eef5';
+/* 7 katta yoshli ishchi: bir xil ish kiyimi (kombinezon, aks ettiruvchi chiziqlar), ba'zilarida signal jilet; kaskalar turli rangda */
 const CREW = [
-  { x: -330, row: 0, suit: C.or, hat: C.cb, skin: SK[2], shoe: C.ye, glove: C.ye, feat: 'beard', hair: '#3a2416' },
-  { x: 0, row: 0, suit: C.tq, hat: C.ye, skin: SK[1], shoe: C.co, glove: C.or, feat: 'ponytail', hair: '#2a1a12', lead: 1 },
-  { x: 330, row: 0, suit: C.cb, hat: C.or, skin: SK[4], shoe: C.li, glove: C.ye, feat: 'glasses', hair: '#151018' },
-  { x: -500, row: 1, suit: C.li, hat: C.co, skin: SK[0], shoe: C.cb, glove: C.or, feat: 'scarf', hair: '#e2557a' },
-  { x: -170, row: 1, suit: C.co, hat: C.tq, skin: SK[3], shoe: C.ye, glove: C.li, feat: 'mustache', hair: '#22160f' },
-  { x: 170, row: 1, suit: C.ye, hat: C.li, skin: SK[1], shoe: C.tq, glove: C.co, feat: 'bangs', hair: '#6b3b1c' },
-  { x: 500, row: 1, suit: '#5b8cff', hat: C.co, skin: SK[5], shoe: C.or, glove: C.ye, feat: 'curly', hair: '#120c0a' },
+  { x: -420, row: 0, suit: NAVY, vest: C.or, hat: '#f5f5f2', skin: SK[2], feat: 'beard', hair: '#2e1f15', glove: '#f0a83a' },
+  { x: 0, row: 0, suit: NAVY, vest: C.li, hat: C.ye, skin: SK[1], feat: 'bob', hair: '#3b2516', glove: '#f0a83a', lead: 1 },
+  { x: 420, row: 0, suit: STEEL, vest: null, hat: C.cb, skin: SK[4], feat: 'glasses', hair: '#151018', glove: '#d9d9d9' },
+  { x: -720, row: 1, suit: STEEL, vest: C.li, hat: '#f5f5f2', skin: SK[0], feat: 'scarf', hair: '#5a6fb0', glove: '#d9d9d9' },
+  { x: -240, row: 1, suit: NAVY, vest: null, hat: C.or, skin: SK[3], feat: 'mustache', hair: '#22160f', glove: '#f0a83a' },
+  { x: 240, row: 1, suit: NAVY, vest: C.or, hat: C.ye, skin: SK[1], feat: 'stubble', hair: '#4a2c18', glove: '#d9d9d9' },
+  { x: 720, row: 1, suit: STEEL, vest: null, hat: '#f5f5f2', skin: SK[5], feat: 'short', hair: '#120c0a', glove: '#f0a83a' },
 ];
-const ROWY = [0, -120], ROWS = [1, .86];
+const ROWY = [0, -125], ROWS = [1, .86];
+const WORDS = window.WORDS;
 
 /* ======================= MASHQLAR JADVALI ======================= */
-/* boshlanish vaqtlari takt chegarasida (1.25 + 2k); ko'rsatmalar audiodagi gaplardan */
+/* Har bir ko'rsatma aytilayotganda ishchilar tinglaydi va faqat aytilgan holatni oladi ("qo'llar belda" va h.k.);
+   mashq gap tugagach, keyingi zarbdan boshlanadi. Vaqtlar words.json (so'zma-so'z STT) dan. */
 const SEG = [
-  [0, 'walk'], [11.25, 'spread'], [17.25, 'raise'], [23.25, 'clap'], [25.25, 'run'], [51.25, 'neck'],
-  [77.25, 'step'], [81.25, 'shoulder'], [97.25, 'squat'], [111.25, 'fist'], [129.25, 'raiseStep'],
-  [141.25, 'waist'], [167.25, 'twist'], [193.25, 'breathe'], [197.25, 'knees'], [225.25, 'kneesT'],
-  [253.25, 'lunge'], [265.25, 'jacks'], [273.25, 'final'], [279.25, 'wave'], [290.25, 'cheer'],
+  [0, 'walk'], [8.25, 'idle'], [11.25, 'spreadReady'], [16.25, 'spread'], [22.75, 'idle'], [34.25, 'run'],
+  [51.75, 'idle'], [54.75, 'hipsReady'], [56.25, 'hipsWide'], [62.75, 'neck'], [81.75, 'idle'],
+  [85.75, 'wide'], [87.75, 'shReady'], [94.25, 'shoulder'], [111.25, 'idle'], [113.75, 'fistReady'], [123.75, 'fist'],
+  [141.75, 'idle'], [144.75, 'wide'], [146.75, 'hipsWide'], [153.25, 'waist'], [168.75, 'wide'], [170.75, 'spreadWide'], [176.25, 'twist'],
+  [198.25, 'idle'], [202.25, 'wide'], [204.25, 'kneeReady'], [210.75, 'knees'], [225.75, 'idle'], [227.75, 'kneeTReady'], [233.25, 'kneesT'],
+  [253.75, 'idle'], [255.75, 'wider'], [257.75, 'lungeReady'], [265.25, 'lunge'], [279.75, 'thanks'], [288.25, 'pump'], [290.25, 'cheer'],
 ];
-/* har bir qahramonning bitta "xarakter lahzasi" */
+/* har bir ishchining bitta qisqa "xarakter lahzasi" */
 const MOMENT = [
-  { i: 3, t: 9.25, d: 2.2, k: 'waveHi' },     // orqa chap: kameraga qo'l silkitadi
-  { i: 1, t: 23.25, d: 2.0, k: 'wink' },      // yetakchi: ko'z qisib, bosh barmoq
-  { i: 2, t: 64.75, d: 2.0, k: 'glasses' },   // ko'zoynakni to'g'rilaydi
-  { i: 5, t: 77.25, d: 2.0, k: 'spin' },      // aylanib oladi
-  { i: 0, t: 141.25, d: 2.4, k: 'flex' },     // muskul ko'rsatadi
-  { i: 4, t: 178.25, d: 2.2, k: 'pump' },     // "ADM!" ga musht ko'taradi
-  { i: 6, t: 225.75, d: 2.2, k: 'peace' },    // "Yaxshi!" — ikki barmoq
+  { i: 3, t: 9.25, d: 2.0, k: 'waveHi' },      // keldi — kameraga qo'l silkitadi
+  { i: 1, t: 23.25, d: 1.8, k: 'thumb' },      // "Juda ham ajoyib!" — bosh barmoq
+  { i: 2, t: 72.25, d: 2.0, k: 'glasses' },    // ko'zoynagini to'g'rilaydi
+  { i: 5, t: 82.25, d: 2.2, k: 'wipe' },       // peshonasini artadi
+  { i: 0, t: 141.75, d: 2.2, k: 'flex' },      // "Ajoyib!" — kuchini ko'rsatadi
+  { i: 4, t: 177.75, d: 1.8, k: 'pump' },      // "ADM!" — musht ko'taradi
+  { i: 6, t: 226.0, d: 1.8, k: 'thumb' },      // "Yaxshi!" — bosh barmoq
 ];
 
 /* ======================= POZA ======================= */
-const L1 = 105, L2 = 100, UA = 85, FA = 80;          // son, boldir, yelka, bilak
-const SH = { x: 62, y: -365 }, HIP = -200;
+const L1 = 120, L2 = 114, UA = 94, FA = 88;          // son, boldir, yelka, bilak (katta yosh proporsiyasi)
+const HIP = -236, TORSO = 192, SHW = 56;
 function base() {
   return { y: 0, squat: 0, bend: 0, lean: 0, hipX: 0, tilt: 0, turn: 0, headY: 0, twist: 0, sh: 0,
-    aL: .14, eL: -.12, aR: .14, eR: -.12, scL: 1, scR: 1, foreL: 1, foreR: 1, fxL: 0, fxR: 0, liftL: 0, liftR: 0,
-    kx: 0, onHip: 0, onKnee: 0, joy: .3, wink: 0, fistL: 0, fistR: 0, thumbR: 0, peaceR: 0, spin: 0 };
+    aL: .12, eL: -.1, aR: .12, eR: -.1, scL: 1, scR: 1, foreL: 1, foreR: 1, fxL: 0, fxR: 0, liftL: 0, liftR: 0,
+    kxL: 0, kxR: 0, kin: 0, onHip: 0, onKnee: 0, joy: .25, wink: 0, fistL: 0, fistR: 0, thumbR: 0, talk: 0 };
 }
-/* qo'l IK: elka nuqtasidan nishon (ox — tashqariga, oy — pastga) → {a, e} */
 function armIK(ox, oy) {
-  let d = Math.hypot(ox, oy); d = clamp(d, 8, UA + FA - 1);
+  const r = Math.hypot(ox, oy) || 1, d = clamp(r, 10, UA + FA - 1);
   const bs = Math.atan2(ox, oy), al = Math.acos(clamp((UA * UA + d * d - FA * FA) / (2 * UA * d), -1, 1));
-  const a = bs + al, ex = UA * Math.sin(a), ey = UA * Math.cos(a);
-  const hx = ox / Math.hypot(ox, oy) * d, hy = oy / Math.hypot(ox, oy) * d;
+  const a = bs + al, ex = UA * Math.sin(a), ey = UA * Math.cos(a), hx = ox / r * d, hy = oy / r * d;
   return { a, e: Math.atan2(hx - ex, hy - ey) - a };
 }
-const HIPARM = armIK(-6, 132), BELT = armIK(-6, 132);
 function exPose(kind, t, i, t0) {
-  const P = base(), b = bpos(t), lb = (t - t0) / SPB, bt = bounce(t), ch = CREW[i];
-  const ph4 = ((b - B.down) / 4) % 1, s4 = Math.sin(ph4 * TAU), c4 = Math.cos(ph4 * TAU);
-  P.y = -7 * bt; P.joy = .45;
+  const P = base(), b = bpos(t), lb = (t - t0) / SPB, bt = bounce(t);
+  const ph = (lb / 4) % 1, dir = Math.floor(lb / 16) % 2 ? -1 : 1;     // 1 aylana = 4 zarb (2 s); 4 martadan keyin yo'nalish almashadi
+  const sA = Math.sin(ph * TAU * dir), cA = Math.cos(ph * TAU);
+  P.y = -3 * bt;
   switch (kind) {
-    case 'walk': case 'idle': P.y = -5 * bt; P.aL = P.aR = .16 + .03 * bt; break;
-    case 'breathe': { const k = Math.sin(((b - B.down) / 8) * TAU); P.aL = P.aR = .35 + .9 * (k * .5 + .5); P.eL = P.eR = -.1; P.y = -3 * bt; P.tilt = -.05 * k; break; }
-    case 'spread': { // ikki yonga qo'l yoyib, o'ngga va chapga qarash (har takt)
-      P.aL = P.aR = 1.5; P.eL = P.eR = -.05; const f = ((b - B.down) / 4) % 2;
-      P.turn = f < 1 ? lerp(-.9, .9, eio((f - .2) * 2)) : lerp(.9, -.9, eio((f - 1.2) * 2)); P.joy = .5; break; }
-    case 'raise': case 'raiseStep': { // 4 zarb: qo'llar tepaga (1-2), pastga (3-4)
-      const f = (b - B.down) % 4, up = f < 2 ? eio(f / 1.1) : 1 - eio((f - 2) / 1.1);
-      P.aL = P.aR = lerp(.2, 2.85, up); P.eL = P.eR = lerp(-.15, .05, up); P.y = -14 * up - 4 * bt; P.joy = .5 + .4 * up;
-      if (kind === 'raiseStep') { const st = Math.sin(((b - B.down) / 4) * PI); P.hipX = 40 * st; P.fxL = 30 - 30 * st; P.fxR = 30 + 30 * st; }
-      break; }
-    case 'clap': { const f = b - Math.floor(b), c = Math.exp(-f * 7);
-      const k = armIK(-58 + 40 * (1 - c), 70 - 60 * c); P.aL = P.aR = k.a + .2 * c; P.eL = P.eR = k.e; P.joy = 1; P.y = -12 * bt; break; }
+    case 'walk': case 'idle': P.aL = P.aR = .12; P.y = -2 * bt; break;
+    case 'spreadReady': case 'spreadWide': P.aL = P.aR = 1.52; P.eL = P.eR = -.04; P.scL = P.scR = .86; if (kind === 'spreadWide') P.fxL = P.fxR = 28; break;
+    case 'spread': { // qo'llar ikki yonda, o'ngga va chapga qarash — har 4 zarbda
+      P.aL = P.aR = 1.52; P.eL = P.eR = -.04; P.scL = P.scR = .86; const f = (lb / 4) % 2;
+      P.turn = f < 1 ? lerp(-.9, .9, eio((f - .15) * 2.2)) : lerp(.9, -.9, eio((f - 1.15) * 2.2)); P.joy = .35; break; }
     case 'run': { // joyida yugurish: har zarbda bitta tizza
       const n = Math.floor(b), f = b - n, up = Math.sin(f * PI), L = n % 2 === 0;
-      P.liftL = L ? .9 * up : 0; P.liftR = L ? 0 : .9 * up; P.y = -16 * up;
-      P.aL = .35 + (L ? -.5 : .5) * up; P.aR = .35 + (L ? .5 : -.5) * up; P.eL = P.eR = -1.5; P.joy = .7; break; }
-    case 'neck': { // qo'llar belda, bosh aylana bo'ylab (2 s = 1 aylana)
-      P.onHip = 1; P.tilt = .32 * s4; P.turn = .7 * c4; P.headY = 6 * (1 - Math.abs(s4)) * (c4 > 0 ? 1 : .2); P.y = -3 * bt; P.joy = .45; break; }
-    case 'step': { const st = Math.sin(((b - B.down) / 4) * TAU);
-      P.hipX = 55 * st; P.fxL = 40 - 40 * st; P.fxR = 40 + 40 * st; P.aL = .3 + .35 * (st * .5 + .5); P.aR = .3 + .35 * (.5 - st * .5); P.y = -8 * bt; P.joy = .8; break; }
-    case 'shoulder': { // qo'llar yelkada, yelkalar oldinga-orqaga aylanadi
-      const dir = Math.floor((b - 81.25 / SPB) / 16) % 2 ? -1 : 1, a = (ph4 * TAU) * dir;
-      P.aL = P.aR = 1.32 + .42 * Math.sin(a); P.eL = P.eR = -2.75 - .1 * Math.cos(a); P.sh = 12 * Math.cos(a); P.y = -4 * bt; P.joy = .5; break; }
-    case 'squat': { const f = ((b - B.down) % 4) / 4, k = Math.sin(f * PI);
-      P.squat = .85 * eio(k); const h = armIK(-75, 40); P.aL = P.aR = lerp(.25, h.a, k); P.eL = P.eR = lerp(-.1, h.e, k);
-      P.foreL = P.foreR = lerp(1, .6, k); P.fxL = P.fxR = 26; P.joy = .4 + .3 * k; break; }
-    case 'fist': { // tirsak bukilgan, musht ichkariga/tashqariga aylanadi
-      const dir = Math.floor(((t - 111.25) / SPB) / 16) % 2 ? -1 : 1, a = (((b - B.down) / 2) % 1) * TAU * dir;
-      P.aL = P.aR = .32 + .1 * Math.sin(a); P.eL = P.eR = -1.5 + .45 * Math.cos(a); P.foreL = P.foreR = .62 + .2 * Math.sin(a);
-      P.fistL = P.fistR = 1; P.y = -5 * bt; P.joy = .55; break; }
-    case 'waist': { // bel aylanasi
-      P.onHip = 1; P.hipX = 38 * s4; P.lean = -.13 * s4; P.y = -4 * bt + 6 * c4; P.turn = .25 * s4; P.joy = .5; break; }
-    case 'twist': { // qo'llar yoyilgan, gavda o'ngga-chapga buriladi
-      const k = Math.sin(((b - B.down) / 4) * TAU); P.aL = P.aR = 1.48; P.eL = P.eR = 0;
-      P.twist = k; P.scL = 1 - .55 * Math.max(0, k); P.scR = 1 - .55 * Math.max(0, -k); P.turn = .85 * k; P.y = -5 * bt; P.joy = .6; break; }
-    case 'knees': case 'kneesT': { // egilib, qo'llar tizzada, tizzalar aylanadi
-      const T = kind === 'kneesT', dir = Math.floor((lb) / 16) % 2 ? -1 : 1;
-      P.bend = .75; P.squat = .45; P.onKnee = 1; P.kx = 30 * s4 * dir; P.fxL = P.fxR = T ? -12 : 22; P.y = -3 * bt + 5 * c4;
-      P.turn = .15 * s4; P.joy = T ? .7 : .55; break; }
-    case 'lunge': { // keng turib, oyoq paylarini cho'zish (o'ng/chap)
-      const k = Math.sin(((b - B.down) / 8) * TAU); P.fxL = P.fxR = 95; P.hipX = 75 * k; P.squat = .25 + .3 * Math.abs(k);
-      P.onKnee = .85; P.bend = .35; P.lean = -.08 * k; P.turn = .4 * k; P.joy = .5; break; }
-    case 'jacks': { // kulminatsiya: "yulduz" sakrash har zarbda, oxirgi taktda katta sakrash
-      const f = b - Math.floor(b), up = Math.sin(f * PI), n = Math.floor(b - B.down) % 2, open = n ? 1 - eio(f) : eio(f);
-      P.aL = P.aR = lerp(.25, 2.75, open); P.fxL = P.fxR = lerp(0, 70, open); P.y = -38 * up; P.joy = .95;
-      const big = (t - 271.25) / 2; if (big > 0 && big < 1) { const j = Math.sin(clamp(big / .85) * PI); P.y = -150 * j; P.squat = .5 * (big > .85 ? 1 - (big - .85) / .15 : 0); P.aL = P.aR = 2.6; P.fxL = P.fxR = 40; }
-      break; }
-    case 'final': case 'wave': case 'cheer': { // yakuniy poza (har kimniki o'zgacha), keyin xayrlashuv va olqish
-      const land = clamp((t - 273.25) / .35), sq = Math.sin(land * PI) * .45;
-      const poses = [[2.5, .1, 1.1, -2.4], [2.6, .05, 2.6, .05], [1.7, -.1, 2.9, 0], [2.7, 0, .5, -.2], [2.3, -.3, 2.3, -.3], [.6, -1.9, 2.8, 0], [2.6, 0, 1.5, -.1]];
-      const p = poses[i]; P.aL = p[0]; P.eL = p[1]; P.aR = p[2]; P.eR = p[3]; P.squat = sq; P.joy = 1; P.y = -6 * bt;
-      if (i === 0) { P.fistL = P.fistR = 1; } if (i === 2) { P.turn = -.5; }
-      if (kind === 'wave') { const w = Math.sin(b * PI) ; P.aR = 2.75; P.eR = -.3 + .45 * w; P.aL = .2; P.eL = -.1; P.turn = 0; P.fistL = P.fistR = 0; }
-      if (kind === 'cheer') { const f = b - Math.floor(b), c = Math.exp(-f * 7); const k = armIK(-60 + 42 * (1 - c), -40 - 50 * c); P.aL = P.aR = k.a; P.eL = P.eR = k.e; P.y = -10 * bt; P.fistL = P.fistR = 0; P.turn = 0; }
-      break; }
+      P.liftL = L ? .85 * up : 0; P.liftR = L ? 0 : .85 * up; P.y = -14 * up;
+      P.aL = .3 + (L ? -.45 : .45) * up; P.aR = .3 + (L ? .45 : -.45) * up; P.eL = P.eR = -1.45; P.joy = .4; break; }
+    case 'hipsReady': P.onHip = 1; break;
+    case 'hipsWide': P.onHip = 1; P.fxL = P.fxR = 28; break;
+    case 'neck': // qo'llar belda, bosh o'ngga 4 marta, keyin chapga 4 marta aylanadi
+      P.onHip = 1; P.fxL = P.fxR = 28; P.tilt = .3 * sA; P.turn = .6 * cA * dir; P.headY = 5 * (1 + cA) * .5; break;
+    case 'wide': P.fxL = P.fxR = 28; P.aL = P.aR = .12; break;
+    case 'wider': P.fxL = P.fxR = 85; P.aL = P.aR = .2; break;
+    case 'shReady': P.fxL = P.fxR = 28; P.aL = P.aR = 1.3; P.eL = P.eR = -2.72; break;
+    case 'shoulder': { // qo'llar yelkada: 4 marta oldinga, 4 marta orqaga
+      const a = ph * TAU * dir; P.fxL = P.fxR = 28;
+      P.aL = P.aR = 1.3 + .42 * Math.sin(a); P.eL = P.eR = -2.72 - .1 * Math.cos(a); P.sh = 10 * Math.cos(a); break; }
+    case 'fistReady': P.aL = P.aR = .3; P.eL = P.eR = -1.5; P.foreL = P.foreR = .62; P.fistL = P.fistR = 1; break;
+    case 'fist': { // tirsaklar bukilgan, mushtlar 4 marta ichkariga, 4 marta tashqariga aylanadi
+      const a = ph * TAU * dir; P.aL = P.aR = .3 + .1 * Math.sin(a); P.eL = P.eR = -1.5 + .42 * Math.cos(a);
+      P.foreL = P.foreR = .6 + .2 * Math.sin(a); P.fistL = P.fistR = 1; break; }
+    case 'waist': // qo'llar belda: bel o'ngga 4 marta, keyin chapga 4 marta aylanadi
+      P.onHip = 1; P.fxL = P.fxR = 28; P.hipX = 36 * sA; P.lean = -.12 * sA; P.y = 5 * cA - 2; P.turn = .2 * sA; break;
+    case 'twist': { // qo'llar yoyilgan, gavda o'ngga va chapga buriladi
+      const k = Math.sin(((lb / 4) % 1) * TAU); P.aL = P.aR = 1.5; P.eL = P.eR = 0; P.fxL = P.fxR = 28;
+      P.twist = k; P.scL = .86 * (1 - .5 * Math.max(0, k)); P.scR = .86 * (1 - .5 * Math.max(0, -k)); P.turn = .85 * k; break; }
+    case 'kneeReady': P.fxL = P.fxR = 28; P.bend = .72; P.squat = .42; P.onKnee = 1; break;
+    case 'knees': { // qo'llar tizzada: tizzalar 4 marta ichkariga, 4 marta tashqariga (ko'zgu aylanalar)
+      P.fxL = P.fxR = 28; P.bend = .72; P.squat = .42; P.onKnee = 1;
+      const s = 34 * Math.sin(ph * TAU) * dir; P.kxL = s; P.kxR = -s; P.y = 4 * Math.cos(ph * TAU); break; }
+    case 'kneeTReady': P.kin = 1; P.fxL = P.fxR = -22; P.bend = .6; P.squat = .62; P.onKnee = 1; break;
+    case 'kneesT': { // oyoqlar juft: tizzalar birga o'ngga 4 marta, keyin chapga 4 marta aylanadi
+      P.kin = 1; P.fxL = P.fxR = -22; P.bend = .6; P.squat = .62 + .08 * (1 - Math.cos(ph * TAU)) * .5; P.onKnee = 1;
+      const s = 58 * Math.sin(ph * TAU) * dir; P.kxL = P.kxR = s; P.hipX = -s * .3; P.y = 6 * Math.cos(ph * TAU); P.turn = .12 * s / 46; break; }
+    case 'lungeReady': P.fxL = P.fxR = 85; P.squat = .3; P.bend = .3; P.onKnee = 1; break;
+    case 'lunge': { // keng turib, o'ng va chap tizzaga tayanib cho'zilish (har tomonda 4 zarb)
+      const f = (lb / 8) % 1, k = f < .5 ? sm(f * 4) * (1 - sm((f - .4) * 10)) : -sm((f - .5) * 4) * (1 - sm((f - .9) * 10));
+      P.fxL = P.fxR = 85; P.hipX = 80 * k; P.squat = .3 + .3 * Math.abs(k); P.bend = .3; P.onKnee = 1; P.lean = -.07 * k; P.turn = .35 * k; break; }
+    case 'thanks': { const k = sm((t - t0) / .8); P.aL = .12; P.aR = lerp(.12, 2.6, k); P.eR = lerp(-.1, -.35, k) + .25 * Math.sin(b * PI); P.joy = .8; break; }  // qo'l silkitib xayrlashish
+    case 'pump': { const up = back(clamp((t - t0) / .35)); P.aL = P.aR = lerp(.2, 2.8, up); P.eL = P.eR = -.1; P.fistL = P.fistR = 1; P.joy = 1; P.y = -18 * Math.sin(clamp((t - t0) / .5) * PI); break; }
+    case 'cheer': { const f = b - Math.floor(b), c = Math.exp(-f * 7), k = armIK(-64 + 44 * (1 - c), 60 - 60 * c);  // olqish
+      P.aL = P.aR = k.a; P.eL = P.eR = k.e; P.joy = .9; P.y = -3 * bt; break; }
   }
   return P;
 }
+const _ex = exPose;
+exPose = function (kind, t, i, t0) {
+  const P = _ex(kind, t, i, t0);
+  if (kind === 'walk') { const w = walkX(i, t);
+    if (w.walking) { const b = bpos(t), n = Math.floor(b), f = b - n, up = Math.sin(f * PI), L = n % 2 === 0;
+      P.liftL = L ? .4 * up : 0; P.liftR = L ? 0 : .4 * up; P.y = -8 * up; P.aL = .2 + (L ? -.3 : .3) * up; P.aR = .2 + (L ? .3 : -.3) * up; P.turn = CREW[i].x < 0 ? .6 : -.6; } }
+  return P;
+};
 function segAt(t) { let k = 0; while (k < SEG.length - 1 && t >= SEG[k + 1][0]) k++; return k; }
 function blendP(A, Bp, k) { const o = {}; for (const key in A) o[key] = lerp(A[key], Bp[key], k); return o; }
+/* yetakchi (oldingi qator markazi) — ko'rsatmalarni aytayotgan murabbiy: og'zi so'zlarga mos ochiladi */
+function talkAt(t) { for (const w of WORDS) { if (t < w[1] - .02) return 0; if (t <= w[2]) { const u = (t - w[1]) / Math.max(.12, w[2] - w[1]); return .35 + .55 * Math.abs(Math.sin(u * PI * Math.max(1, Math.round((w[2] - w[1]) / .16)))); } } return 0; }
 function poseOf(i, t) {
   const k = segAt(t), [t0, kind] = SEG[k];
   let P = exPose(kind, t, i, t0);
-  const tb = t - t0; if (k > 0 && tb < .45) P = blendP(exPose(SEG[k - 1][1], t, i, SEG[k - 1][0]), P, eio(tb / .45));
+  const BL = /Ready|Wide|wide|wider/.test(kind) ? .7 : .45, tb = t - t0;
+  if (k > 0 && tb < BL) P = blendP(exPose(SEG[k - 1][1], t, i, SEG[k - 1][0]), P, eio(tb / BL));
+  if (CREW[i].lead) { P.talk = talkAt(t); if (P.talk > 0 && !/spread|neck|twist|waist/.test(kind)) P.turn *= .3; }
   for (const m of MOMENT) if (m.i === i && t >= m.t && t < m.t + m.d) {
     const u = (t - m.t) / m.d, w = sm(u / .18) * sm((1 - u) / .18), Q = Object.assign({}, P);
-    if (m.k === 'waveHi') { Q.aR = 2.7; Q.eR = -.35 + .5 * Math.sin(u * 22); Q.joy = 1; Q.turn = 0; Q.onHip = 0; }
-    if (m.k === 'wink') { Q.wink = 1; Q.aR = .9; Q.eR = -2.1; Q.thumbR = 1; Q.joy = 1; Q.tilt = .12; }
-    if (m.k === 'glasses') { const h = armIK(25, -95); Q.aR = h.a; Q.eR = h.e; Q.fistR = 0; Q.joy = .8; Q.tilt = -.1 * Math.sin(u * 6); Q.onHip = 0; }
-    if (m.k === 'spin') { Q.spin = eio(u); Q.aL = Q.aR = 1.2; Q.joy = 1; }
-    if (m.k === 'flex') { Q.onHip = 0; Q.aL = Q.aR = 1.55; Q.eL = Q.eR = -2.1 - .15 * Math.sin(u * 18); Q.fistL = Q.fistR = 1; Q.joy = 1; Q.hipX = 0; Q.lean = 0; Q.y -= 6; }
-    if (m.k === 'pump') { Q.aL = 2.8 - .25 * Math.abs(Math.sin(u * 14)); Q.eL = -.1; Q.fistL = 1; Q.joy = 1; Q.scL = 1; Q.onKnee = 0; Q.onHip = 0; }
-    if (m.k === 'peace') { Q.aR = 1.0; Q.eR = -2.25; Q.peaceR = 1; Q.wink = 1; Q.joy = 1; Q.tilt = .14; }
-    P = blendP(P, Q, w); P.wink = w > .5 ? Q.wink : P.wink; P.thumbR = w > .5 ? Q.thumbR : 0; P.peaceR = w > .5 ? Q.peaceR : 0;
+    if (m.k === 'waveHi') { Q.aR = 2.6; Q.eR = -.3 + .45 * Math.sin(u * 20); Q.joy = .9; Q.turn = 0; }
+    if (m.k === 'thumb') { Q.aR = .95; Q.eR = -2.15; Q.thumbR = 1; Q.fistR = 1; Q.joy = .9; Q.wink = 1; Q.onHip = 0; Q.onKnee = 0; }
+    if (m.k === 'glasses') { const h = armIK(22, -100); Q.aR = h.a; Q.eR = h.e; Q.joy = .5; Q.onHip = 0; }
+    if (m.k === 'wipe') { const h = armIK(30 - 60 * Math.sin(u * PI), -118); Q.aR = h.a; Q.eR = h.e; Q.joy = .7; Q.tilt = -.08; }
+    if (m.k === 'flex') { Q.onHip = 0; Q.aL = Q.aR = 1.55; Q.eL = Q.eR = -2.1 - .12 * Math.sin(u * 16); Q.fistL = Q.fistR = 1; Q.joy = .9; }
+    if (m.k === 'pump') { Q.aL = 2.8 - .2 * Math.abs(Math.sin(u * 12)); Q.eL = -.1; Q.fistL = 1; Q.joy = 1; Q.scL = 1; Q.onHip = 0; Q.onKnee = 0; Q.twist *= .3; }
+    P = blendP(P, Q, w); P.wink = w > .5 ? Q.wink : P.wink; P.thumbR = w > .5 ? Q.thumbR : 0;
   }
   return P;
 }
@@ -166,53 +170,54 @@ function poseOf(i, t) {
 /* ======================= SKELET ======================= */
 function rot(x, y, a) { const c = Math.cos(a), s = Math.sin(a); return [x * c - y * s, x * s + y * c]; }
 function rig(P) {
-  const R = {}, hipY = HIP + P.squat * 75 + P.bend * 18 + P.y;
+  const R = {}, hipY = HIP + P.squat * 85 + P.bend * 20 + P.y;
   R.hip = [P.hipX, hipY];
-  const TL = 165 * (1 - .36 * P.bend), [sx, sy] = rot(P.twist * 14, -TL + P.sh * .3, P.lean);
+  const TL = TORSO * (1 - .36 * P.bend), [sx, sy] = rot(P.twist * 14, -TL + P.sh * .3, P.lean);
   R.sc = [R.hip[0] + sx, R.hip[1] + sy];
-  const hw = 62 * (1 - .18 * Math.abs(P.twist));
+  const hw = SHW * (1 - .18 * Math.abs(P.twist));
   R.sL = (() => { const [x, y] = rot(-hw, P.sh, P.lean); return [R.sc[0] + x, R.sc[1] + y]; })();
   R.sR = (() => { const [x, y] = rot(hw, P.sh, P.lean); return [R.sc[0] + x, R.sc[1] + y]; })();
-  const [hx, hy] = rot(P.turn * 5, -70 + P.headY + P.bend * 22, P.lean + P.tilt * .35);
-  R.head = [R.sc[0] + hx, R.sc[1] + hy];
-  /* oyoqlar */
+  const [hx, hy] = rot(P.turn * 4, -64 + P.headY + P.bend * 20, P.lean + P.tilt * .35);
+  R.head = [R.sc[0] + hx, R.sc[1] + hy]; R.neck = [R.sc[0], R.sc[1] - 6];
   const footY = Math.min(0, P.y * .9);
   for (const s of [-1, 1]) {
     const S = s < 0 ? 'L' : 'R', fxs = P['fx' + S], lift = P['lift' + S];
-    const Hj = [R.hip[0] + s * 32, hipY], F = [s * (36 + fxs), footY];
+    const Hj = [R.hip[0] + s * 30, hipY], F = [s * (34 + fxs), footY];
     let dx = F[0] - Hj[0], dy = F[1] - Hj[1], d = Math.hypot(dx, dy), K;
     if (d >= L1 + L2 - .5) K = [Hj[0] + dx * L1 / d, Hj[1] + dy * L1 / d];
     else { const a = (L1 * L1 - L2 * L2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, L1 * L1 - a * a)), ux = dx / d, uy = dy / d;
-      let nx = -uy, ny = ux; if (nx * s < 0) { nx = -nx; ny = -ny; } K = [Hj[0] + ux * a + nx * h, Hj[1] + uy * a + ny * h]; }
-    K[0] += P.kx * (1 - .3 * s * Math.sign(P.kx));
+      let nx = -uy, ny = ux; if (nx * s < 0) { nx = -nx; ny = -ny; } const kf = lerp(.55, -.7, P.kin); K = [Hj[0] + ux * a + nx * h * kf, Hj[1] + uy * a + ny * h * kf];
+      if (P.kin > .5) K[0] = s * Math.max(s * K[0], 12); }
+    K[0] += P['kx' + S];
     let Fo = F;
-    if (lift > 0) { const k = sm(lift * 3), Kl = [Hj[0] + s * 8, hipY + L1 * Math.cos(lift * 1.25) * .75], Fl = [Hj[0] + s * 10, hipY + L1 * Math.cos(lift * 1.25) * .75 + L2 * .95];
+    if (lift > 0) { const k = sm(lift * 3), ky = hipY + L1 * Math.cos(lift * 1.25) * .75, Kl = [Hj[0] + s * 8, ky], Fl = [Hj[0] + s * 10, ky + L2 * .95];
       K = [lerp(K[0], Kl[0], k), lerp(K[1], Kl[1], k)]; Fo = [lerp(F[0], Fl[0], k), lerp(F[1], Fl[1], k)]; }
     R['h' + S] = Hj; R['k' + S] = K; R['f' + S] = Fo; R['lift' + S] = lift;
   }
-  /* qo'llar */
   for (const s of [-1, 1]) {
     const S = s < 0 ? 'L' : 'R', Sh = R['s' + S], sc = P['sc' + S];
     let a = P['a' + S], e = P['e' + S];
     const toLocal = (tx, ty) => { const [x, y] = rot(tx - Sh[0], ty - Sh[1], -P.lean); return [x * s, y]; };
-    if (P.onHip > 0) { const [ox, oy] = toLocal(R.hip[0] + s * 48, R.hip[1] - 30), k = armIK(ox, oy); a = lerp(a, k.a, P.onHip); e = lerp(e, k.e, P.onHip); }
-    if (P.onKnee > 0) { const Kn = R['k' + S], [ox, oy] = toLocal(Kn[0] + s * 4, Kn[1] - 14), k = armIK(ox, oy); a = lerp(a, k.a, P.onKnee); e = lerp(e, k.e, P.onKnee); }
+    if (P.onHip > 0) { const [ox, oy] = toLocal(R.hip[0] + s * 46, R.hip[1] - 34), k = armIK(ox, oy); a = lerp(a, k.a, P.onHip); e = lerp(e, k.e, P.onHip); }
+    if (P.onKnee > 0) { const Kn = R['k' + S], [ox, oy] = toLocal(Kn[0] + s * 2, Kn[1] - 16), k = armIK(ox, oy); a = lerp(a, k.a, P.onKnee); e = lerp(e, k.e, P.onKnee); }
     const v1 = rot(s * Math.sin(a) * UA * sc, Math.cos(a) * UA * sc, P.lean);
     const E = [Sh[0] + v1[0], Sh[1] + v1[1]], fl = FA * sc * P['fore' + S];
     const v2 = rot(s * Math.sin(a + e) * fl, Math.cos(a + e) * fl, P.lean);
-    R['e' + S] = E; R['w' + S] = [E[0] + v2[0], E[1] + v2[1]]; R['ang' + S] = Math.atan2(v2[1], v2[0]);
+    R['e' + S] = E; R['w' + S] = [E[0] + v2[0], E[1] + v2[1]];
   }
   return R;
 }
 
 /* ======================= CHIZISH ======================= */
-const LW = { leg: 36, arm: 27 }, BORDER = 20, OUT = 9;
-function limb(pts, w, col, pass) {
-  X.beginPath(); X.moveTo(pts[0][0], pts[0][1]); for (let k = 1; k < pts.length; k++) X.lineTo(pts[k][0], pts[k][1]);
-  X.lineCap = 'round'; X.lineJoin = 'round';
+const LW = { leg: 40, arm: 28 }, BORDER = 10, OUT = 6;
+function limb(pts, w, col, pass, stripeAt) {
+  const path = () => { X.beginPath(); X.moveTo(pts[0][0], pts[0][1]); for (let k = 1; k < pts.length; k++) X.lineTo(pts[k][0], pts[k][1]); };
+  path(); X.lineCap = 'round'; X.lineJoin = 'round';
   if (pass === 0) { X.strokeStyle = C.paper; X.lineWidth = w + OUT + BORDER; X.stroke(); return; }
   if (pass === -1) { X.lineWidth = w + OUT + BORDER; X.stroke(); return; }
   X.strokeStyle = C.ink; X.lineWidth = w + OUT; X.stroke(); X.strokeStyle = col; X.lineWidth = w; X.stroke();
+  if (stripeAt != null) { /* aks ettiruvchi tasma */ const [a, b] = [pts[stripeAt], pts[stripeAt + 1]], m = [lerp(a[0], b[0], .55), lerp(a[1], b[1], .55)], n = [lerp(a[0], b[0], .68), lerp(a[1], b[1], .68)];
+    X.lineCap = 'butt'; X.strokeStyle = REFL; X.lineWidth = w; X.beginPath(); X.moveTo(...m); X.lineTo(...n); X.stroke(); X.lineCap = 'round'; }
 }
 function blob(path, col, pass, extra) {
   path(); X.lineJoin = 'round';
@@ -226,83 +231,90 @@ function shade(hex, k) { const n = parseInt(hex.slice(1), 16); let r = n >> 16, 
 
 function drawCrew(ch, P, R, t, idx, pass) {
   const ink = C.ink;
-  /* oyoqlar + poyabzal */
+  /* oyoqlar + ish botinkalari */
   for (const S of ['L', 'R']) {
-    const s = S === 'L' ? -1 : 1, Hj = R['h' + S], K = R['k' + S], F = R['f' + S];
-    limb([Hj, K, [F[0], F[1] - 14]], LW.leg, shade(ch.suit, -.12), pass);
-    const sw = 64, sh2 = 30, lift = R['lift' + S];
-    blob(() => { rr(F[0] - sw / 2 + s * 10, F[1] - sh2 + 4 - lift * 6, sw, sh2 * (1 - .25 * lift), 14); }, ch.shoe, pass, () => {
-      X.fillStyle = 'rgba(255,255,255,.75)'; rr(F[0] - sw / 2 + s * 10 + 8, F[1] - 6 - lift * 6, sw - 16, 7, 4); X.fill(); });
+    const s = S === 'L' ? -1 : 1, Hj = R['h' + S], K = R['k' + S], F = R['f' + S], lift = R['lift' + S];
+    limb([Hj, K, [F[0], F[1] - 16]], LW.leg, shade(ch.suit, -.08), pass, 1);
+    blob(() => { X.beginPath(); X.moveTo(F[0] - 26 + s * 8, F[1] + 2 - lift * 6); X.lineTo(F[0] - 22 + s * 8, F[1] - 26 - lift * 6); X.lineTo(F[0] + 14 + s * 8, F[1] - 26 - lift * 6);
+      X.quadraticCurveTo(F[0] + 34 + s * 14, F[1] - 18 - lift * 6, F[0] + 32 + s * 12, F[1] + 2 - lift * 6); X.closePath(); }, '#2a2b33', pass, () => {
+      X.fillStyle = '#5a5c68'; X.fillRect(F[0] - 26 + s * 8, F[1] - 4 - lift * 6, 58, 6); });
   }
-  /* gavda (kombinezon) */
+  /* gavda: kombinezon (+ signal jilet) */
   const sc = R.sc, hp = R.hip, sL = R.sL, sR = R.sR;
-  const torso = () => { X.beginPath(); const hw = 50;
-    X.moveTo(sL[0] - 12, sL[1] - 4); X.quadraticCurveTo(sc[0], sc[1] - 16, sR[0] + 12, sR[1] - 4);
-    X.quadraticCurveTo(sR[0] + 18, (sR[1] + hp[1]) / 2, hp[0] + hw + 6, hp[1] + 14);
-    X.quadraticCurveTo(hp[0], hp[1] + 30, hp[0] - hw - 6, hp[1] + 14);
-    X.quadraticCurveTo(sL[0] - 18, (sL[1] + hp[1]) / 2, sL[0] - 12, sL[1] - 4); X.closePath(); };
+  const torso = () => { X.beginPath(); const hw = 46;
+    X.moveTo(sL[0] - 10, sL[1] - 2); X.quadraticCurveTo(sc[0], sc[1] - 12, sR[0] + 10, sR[1] - 2);
+    X.quadraticCurveTo(sR[0] + 12, (sR[1] + hp[1]) / 2, hp[0] + hw + 4, hp[1] + 14);
+    X.quadraticCurveTo(hp[0], hp[1] + 26, hp[0] - hw - 4, hp[1] + 14);
+    X.quadraticCurveTo(sL[0] - 12, (sL[1] + hp[1]) / 2, sL[0] - 10, sL[1] - 2); X.closePath(); };
+  /* bo'yin */
+  blob(() => { rr(R.neck[0] - 15, R.neck[1] - 26, 30, 34, 10); }, ch.skin, pass);
   blob(torso, ch.suit, pass, () => {
     X.save(); torso(); X.clip();
-    X.fillStyle = shade(ch.suit, -.16); X.fillRect(hp[0] - 90, hp[1] - 32, 180, 22);                 // kamar
-    X.fillStyle = C.ye; rr(hp[0] - 14, hp[1] - 31, 28, 20, 5); X.fill();
-    X.fillStyle = 'rgba(255,255,255,.85)'; X.fillRect(hp[0] - 90, (sc[1] + hp[1]) / 2 + 6, 180, 10);   // nur qaytaruvchi chiziq
-    X.fillStyle = shade(ch.suit, .25); rr(sc[0] + 10 + R.sc[0] * 0, sc[1] + 26, 34, 30, 6); X.fill(); // ko'krak cho'ntagi
-    X.strokeStyle = shade(ch.suit, -.3); X.lineWidth = 4; X.beginPath(); X.moveTo(sc[0], sc[1] - 6); X.lineTo(hp[0], hp[1] - 32); X.stroke();
-    X.fillStyle = 'rgba(255,255,255,.18)'; X.beginPath(); X.ellipse(sc[0] - 28, sc[1] + 40, 14, 40, -.2, 0, TAU); X.fill();
+    const midY = (sc[1] + hp[1]) / 2;
+    if (ch.vest) { X.fillStyle = ch.vest; X.beginPath(); X.moveTo(sL[0] - 14, sL[1] + 4); X.lineTo(sc[0] - 16, sc[1] + 4); X.lineTo(sc[0] - 10, hp[1] - 10); X.lineTo(hp[0] - 70, hp[1] - 10); X.closePath(); X.fill();
+      X.beginPath(); X.moveTo(sR[0] + 14, sR[1] + 4); X.lineTo(sc[0] + 16, sc[1] + 4); X.lineTo(sc[0] + 10, hp[1] - 10); X.lineTo(hp[0] + 70, hp[1] - 10); X.closePath(); X.fill();
+      X.fillStyle = REFL; X.fillRect(hp[0] - 90, midY + 10, 70, 10); X.fillRect(hp[0] + 20, midY + 10, 70, 10); X.fillRect(sc[0] - 50, sc[1] + 8, 9, midY - sc[1]); X.fillRect(sc[0] + 41, sc[1] + 8, 9, midY - sc[1]);
+      X.strokeStyle = ink; X.lineWidth = 3; X.beginPath(); X.moveTo(sc[0] - 16, sc[1] + 4); X.lineTo(sc[0] - 10, hp[1] - 10); X.moveTo(sc[0] + 16, sc[1] + 4); X.lineTo(sc[0] + 10, hp[1] - 10); X.stroke(); }
+    else { X.fillStyle = REFL; X.fillRect(hp[0] - 90, midY + 8, 180, 9); X.fillStyle = shade(ch.suit, .18); rr(sc[0] + 12, sc[1] + 22, 30, 26, 4); X.fill(); }
+    X.fillStyle = shade(ch.suit, -.25); X.fillRect(hp[0] - 90, hp[1] - 30, 180, 14);   // kamar
+    X.strokeStyle = shade(ch.suit, -.35); X.lineWidth = 3; X.beginPath(); X.moveTo(sc[0], sc[1] - 4); X.lineTo(hp[0], hp[1] - 30); X.stroke();
+    X.fillStyle = ink; X.beginPath(); X.moveTo(sc[0] - 16, sc[1] - 8); X.lineTo(sc[0], sc[1] + 12); X.lineTo(sc[0] + 16, sc[1] - 8); X.fill();  // yoqa
     X.restore(); });
   /* bosh */
-  const [hx, hy] = R.head, tn = P.turn, hr = 70, tl = P.tilt;
+  const [hx, hy] = R.head, tn = P.turn, tl = P.tilt;
   X.save(); X.translate(hx, hy); X.rotate(tl + P.lean * .5);
-  if (ch.feat === 'ponytail') { const sw = Math.sin(t * 7.5 + idx) * .25 + P.lean * 2 - tn * .3;
-    blob(() => { X.beginPath(); X.ellipse(-tn * 30 + 62, -6, 22, 50, .5 + sw, 0, TAU); }, ch.hair, pass); }
-  if (ch.feat === 'scarf') blob(() => { X.beginPath(); X.ellipse(0, 8, hr + 10, hr + 16, 0, 0, TAU); }, ch.hair, pass);
-  blob(() => { X.beginPath(); X.arc(0, 0, hr, 0, TAU); }, ch.skin, pass, () => {
-    const fx2 = tn * 22;
-    if (ch.feat === 'curly') { X.fillStyle = ch.hair; for (let k = 0; k < 7; k++) { X.beginPath(); X.arc(-56 + k * 18.6, -34 + Math.abs(k - 3) * 4, 15, 0, TAU); X.fill(); } }
-    if (ch.feat === 'bangs') { X.fillStyle = ch.hair; X.beginPath(); X.moveTo(-66, -20); X.quadraticCurveTo(-20 + fx2, 2, 10 + fx2, -26); X.quadraticCurveTo(40 + fx2, -4, 66, -20); X.lineTo(66, -60); X.lineTo(-66, -60); X.fill(); }
-    if (ch.feat === 'ponytail') { X.fillStyle = ch.hair; X.beginPath(); X.moveTo(-68, -12); X.quadraticCurveTo(fx2, -30, 68, -12); X.lineTo(68, -60); X.lineTo(-68, -60); X.fill(); }
-    // yuz
-    const ey = -4 + P.headY * .2, blink = (((t * 1000 + idx * 1777) % 3900) < 130) ? .12 : 1;
-    X.fillStyle = 'rgba(255,110,120,.35)'; X.beginPath(); X.arc(fx2 - 38, 22, 13, 0, TAU); X.arc(fx2 + 38, 22, 13, 0, TAU); X.fill();
+  if (ch.feat === 'scarf') blob(() => { X.beginPath(); X.moveTo(-50, -10); X.quadraticCurveTo(-56, 54, 0, 66); X.quadraticCurveTo(56, 54, 50, -10); X.closePath(); }, ch.hair, pass);
+  const head = () => { X.beginPath(); X.ellipse(0, 4, 40, 48, 0, 0, TAU); };
+  /* quloqlar */
+  if (ch.feat !== 'scarf') for (const s of [-1, 1]) blob(() => { X.beginPath(); X.ellipse(s * 40 + tn * -6, 8, 8, 12, 0, 0, TAU); }, shade(ch.skin, -.06), pass);
+  blob(head, ch.skin, pass, () => {
+    X.save(); head(); X.clip();
+    const fx2 = tn * 16;
+    if (ch.feat === 'bob' || ch.feat === 'short' || ch.feat === 'stubble' || ch.feat === 'mustache' || ch.feat === 'beard' || ch.feat === 'glasses') {
+      X.fillStyle = ch.hair; X.fillRect(-44, -50, 88, ch.feat === 'bob' ? 22 : 14);
+      if (ch.feat === 'bob') { X.fillRect(-44, -40, 12, 56); X.fillRect(32, -40, 12, 56); } }
+    if (ch.feat === 'stubble' || ch.feat === 'beard') { X.fillStyle = ch.feat === 'beard' ? ch.hair : 'rgba(60,40,30,.28)';
+      X.beginPath(); X.moveTo(-42, 6); X.quadraticCurveTo(-36, 58, fx2 * .5, 56); X.quadraticCurveTo(36, 58, 42, 6); X.quadraticCurveTo(fx2, 34, -42, 6); X.fill(); }
+    X.restore();
+    /* yuz: kichik ko'zlar, qoshlar, burun */
+    const ey = -2 + P.headY * .2, blink = (((t * 1000 + idx * 1777) % 4300) < 120) ? .15 : 1;
     for (const s of [-1, 1]) {
-      const ex = fx2 + s * 24;
-      if (P.wink > .5 && s > 0) { X.strokeStyle = ink; X.lineWidth = 6; X.lineCap = 'round'; X.beginPath(); X.moveTo(ex - 10, ey + 2); X.quadraticCurveTo(ex, ey - 8, ex + 10, ey + 2); X.stroke(); continue; }
-      X.fillStyle = ink; X.beginPath(); X.ellipse(ex, ey, 8.5, 12 * blink, 0, 0, TAU); X.fill();
-      if (blink > .5) { X.fillStyle = '#fff'; X.beginPath(); X.arc(ex + 3, ey - 4, 3.2, 0, TAU); X.fill(); }
+      const ex = fx2 + s * 15;
+      X.strokeStyle = ch.feat === 'scarf' ? '#3a2a20' : ch.hair; X.lineWidth = 4.5; X.lineCap = 'round';
+      X.beginPath(); X.moveTo(ex - 8, ey - 12 - (P.joy > .7 ? 2 : 0)); X.lineTo(ex + 8, ey - 13 + s * 1); X.stroke();
+      if (P.wink > .5 && s > 0) { X.strokeStyle = ink; X.lineWidth = 4; X.beginPath(); X.moveTo(ex - 6, ey + 1); X.quadraticCurveTo(ex, ey - 4, ex + 6, ey + 1); X.stroke(); continue; }
+      X.fillStyle = '#fff'; X.beginPath(); X.ellipse(ex, ey, 6.5, 5 * blink, 0, 0, TAU); X.fill();
+      X.fillStyle = ink; X.beginPath(); X.arc(ex + tn * 2, ey, 3.4 * Math.max(.3, blink), 0, TAU); X.fill();
     }
-    if (ch.feat === 'glasses') { X.strokeStyle = ink; X.lineWidth = 5; X.beginPath(); X.arc(fx2 - 24, ey, 18, 0, TAU); X.moveTo(fx2 + 42, ey); X.arc(fx2 + 24, ey, 18, 0, TAU); X.moveTo(fx2 - 6, ey); X.lineTo(fx2 + 6, ey); X.stroke(); }
-    if (ch.feat === 'beard') { X.fillStyle = ch.hair; X.beginPath(); X.moveTo(-64, 8); X.quadraticCurveTo(-60, 70, fx2 * .5, 74); X.quadraticCurveTo(60, 70, 64, 8); X.quadraticCurveTo(fx2, 46, -64, 8); X.fill(); }
-    // og'iz
-    const j = P.joy, my = 30;
-    if (j > .62) { X.fillStyle = '#7a1f2e'; X.beginPath(); X.moveTo(fx2 - 20, my); X.quadraticCurveTo(fx2, my + 34 * j, fx2 + 20, my); X.closePath(); X.fill();
-      X.fillStyle = '#ff8fa0'; X.beginPath(); X.ellipse(fx2, my + 16 * j, 9, 6, 0, 0, TAU); X.fill(); X.strokeStyle = ink; X.lineWidth = 5; X.beginPath(); X.moveTo(fx2 - 20, my); X.quadraticCurveTo(fx2, my + 34 * j, fx2 + 20, my); X.closePath(); X.stroke(); }
-    else { X.strokeStyle = ink; X.lineWidth = 6; X.lineCap = 'round'; X.beginPath(); X.moveTo(fx2 - 16, my); X.quadraticCurveTo(fx2, my + 14 + 10 * j, fx2 + 16, my); X.stroke(); }
-    if (ch.feat === 'mustache') { X.fillStyle = ch.hair; X.beginPath(); X.ellipse(fx2 - 13, my - 6, 15, 7, .25, 0, TAU); X.ellipse(fx2 + 13, my - 6, 15, 7, -.25, 0, TAU); X.fill(); }
+    X.strokeStyle = shade(ch.skin, -.3); X.lineWidth = 3.5; X.beginPath(); X.moveTo(fx2 + 2, ey + 6); X.quadraticCurveTo(fx2 + 7, ey + 18, fx2 - 2, ey + 20); X.stroke();   // burun
+    if (ch.feat === 'glasses') { X.strokeStyle = ink; X.lineWidth = 3.5; X.beginPath(); rr(fx2 - 27, ey - 8, 22, 16, 5); X.stroke(); X.beginPath(); rr(fx2 + 5, ey - 8, 22, 16, 5); X.stroke(); X.beginPath(); X.moveTo(fx2 - 5, ey); X.lineTo(fx2 + 5, ey); X.stroke(); }
+    if (ch.feat === 'mustache' || ch.feat === 'beard') { X.fillStyle = ch.hair; X.beginPath(); X.ellipse(fx2 - 8, ey + 25, 11, 4.5, .15, 0, TAU); X.ellipse(fx2 + 8, ey + 25, 11, 4.5, -.15, 0, TAU); X.fill(); }
+    /* og'iz: gapirganda ochiladi */
+    const my = ey + 34;
+    if (P.talk > 0) { X.fillStyle = '#5a1f24'; X.beginPath(); X.ellipse(fx2, my, 9, 3 + 8 * P.talk, 0, 0, TAU); X.fill(); }
+    else if (P.joy > .7) { X.fillStyle = '#fff'; X.beginPath(); X.moveTo(fx2 - 13, my - 2); X.quadraticCurveTo(fx2, my + 12, fx2 + 13, my - 2); X.closePath(); X.fill(); X.strokeStyle = ink; X.lineWidth = 3.5; X.stroke(); }
+    else { X.strokeStyle = shade(ch.skin, -.45); X.lineWidth = 4; X.lineCap = 'round'; X.beginPath(); X.moveTo(fx2 - 10, my); X.quadraticCurveTo(fx2, my + 4 + 6 * P.joy, fx2 + 10, my); X.stroke(); }
   });
   /* kaska */
-  blob(() => { X.beginPath(); X.moveTo(-74, -18); X.bezierCurveTo(-74, -110, 74, -110, 74, -18); X.closePath(); }, ch.hat, pass, () => {
-    X.fillStyle = 'rgba(255,255,255,.45)'; X.beginPath(); X.ellipse(-28 + tn * 10, -66, 18, 9, -.5, 0, TAU); X.fill();
-    X.fillStyle = shade(ch.hat, -.18); rr(-8 + tn * 16, -96, 16, 78, 8); X.fill(); });
-  blob(() => { rr(-90 + tn * 8, -30, 180, 22, 11); }, shade(ch.hat, -.08), pass);
+  blob(() => { X.beginPath(); X.moveTo(-48, -22); X.bezierCurveTo(-48, -84, 48, -84, 48, -22); X.closePath(); }, ch.hat, pass, () => {
+    X.fillStyle = 'rgba(255,255,255,.4)'; X.beginPath(); X.ellipse(-18 + tn * 8, -56, 12, 6, -.5, 0, TAU); X.fill();
+    X.fillStyle = shade(ch.hat, -.14); rr(-6 + tn * 12, -76, 12, 54, 6); X.fill(); });
+  blob(() => { rr(-60 + tn * 6, -30, 120, 14, 7); }, shade(ch.hat, -.06), pass);
   X.restore();
-  /* qo'llar (gavda oldida) */
+  /* qo'llar */
   for (const S of ['L', 'R']) {
     const Sh = R['s' + S], E = R['e' + S], Wr = R['w' + S];
-    limb([Sh, E, Wr], LW.arm, ch.suit, pass);
-    const fist = P['fist' + S] > .5, g = S === 'R' ? 1 : 0;
-    blob(() => { X.beginPath(); X.arc(Wr[0], Wr[1], fist ? 21 : 19, 0, TAU); }, ch.glove, pass, () => {
-      if (!fist) { X.strokeStyle = shade(ch.glove, -.35); X.lineWidth = 3; X.beginPath(); X.moveTo(Wr[0] - 7, Wr[1] + 4); X.lineTo(Wr[0] + 7, Wr[1] + 4); X.stroke(); } });
-    if (g && P.thumbR) blob(() => { rr(Wr[0] - 7, Wr[1] - 44, 15, 32, 7); }, ch.glove, pass);
-    if (g && P.peaceR) { blob(() => { X.save(); X.translate(Wr[0], Wr[1]); X.rotate(-.25); rr(-12, -52, 12, 40, 6); X.restore(); }, ch.glove, pass);
-      blob(() => { X.save(); X.translate(Wr[0], Wr[1]); X.rotate(.25); rr(1, -52, 12, 40, 6); X.restore(); }, ch.glove, pass); }
+    limb([Sh, E, Wr], LW.arm, ch.suit, pass, 0);
+    const fist = P['fist' + S] > .5;
+    blob(() => { X.beginPath(); X.ellipse(Wr[0], Wr[1], fist ? 17 : 15, fist ? 17 : 19, 0, 0, TAU); }, ch.glove, pass);
+    if (S === 'R' && P.thumbR) blob(() => { rr(Wr[0] - 6, Wr[1] - 38, 12, 28, 6); }, ch.glove, pass);
   }
 }
 function drawCharacter(i, t, x, y, s) {
   const ch = CREW[i], P = poseOf(i, t), R = rig(P);
   X.save(); X.translate(x, y); X.scale(s, s);
-  X.fillStyle = 'rgba(20,30,60,.16)'; X.beginPath(); X.ellipse(0, 6, 150 + P.fxL + P.fxR, 26, 0, 0, TAU); X.fill();   // soya
-  if (P.spin > 0 && P.spin < 1) X.scale(Math.cos(P.spin * TAU) * .82 + .18 * Math.sign(Math.cos(P.spin * TAU)) || .18, 1);
-  X.save(); X.translate(9, 10); X.fillStyle = X.strokeStyle = 'rgba(25,20,50,.16)'; drawCrew(ch, P, R, t, i, -1); X.restore();  // stiker soyasi
+  X.fillStyle = 'rgba(20,30,60,.16)'; X.beginPath(); X.ellipse(0, 6, 120 + P.fxL + P.fxR, 22, 0, 0, TAU); X.fill();
+  X.save(); X.translate(7, 8); X.fillStyle = X.strokeStyle = 'rgba(25,20,50,.14)'; drawCrew(ch, P, R, t, i, -1); X.restore();
   drawCrew(ch, P, R, t, i, 0); drawCrew(ch, P, R, t, i, 1);
   X.restore();
   return R;
@@ -327,8 +339,7 @@ function drawWall(t) {
     for (let k = -10; k <= 10; k++) { X.beginPath(); X.moveTo(k * 260, -1880); X.lineTo(k * 260 + 130, -1700); X.lineTo(k * 260 + 260, -1880); X.stroke(); }
     X.fillStyle = '#7f8db3'; X.fillRect(-3000, -1900, 6000, 26); X.fillRect(-3000, -1705, 6000, 20);
     /* rangli devor yo'laklari */
-    const st = [C.tq, C.ye, C.or, C.co, C.li, C.cb];
-    for (let k = 0; k < 6; k++) { X.fillStyle = st[k]; X.fillRect(-3000, -900 + k * 22, 6000, 22); }
+    X.fillStyle = '#c9d2e2'; X.fillRect(-3000, -980, 6000, 120); X.fillStyle = '#1f8f86'; X.fillRect(-3000, -900, 6000, 16); X.fillStyle = '#ff7a1a'; X.fillRect(-3000, -880, 6000, 8);
     /* osma chiroqlar (zarbga mos yorishadi) */
     for (let k = -7; k <= 7; k++) { const x = k * 260, ph = (k + 20) % 2 ? lp : .55 + .45 * pulse(t + SPB, 4);
       X.strokeStyle = '#5b6584'; X.lineWidth = 6; X.beginPath(); X.moveTo(x, -1700); X.lineTo(x, -1560); X.stroke();
@@ -381,9 +392,9 @@ function drawLine(t) {
     X.fillStyle = '#3e4766'; X.fillRect(-4000, -812, 8000, 46); X.fillStyle = '#626d92';
     for (let k = -40; k < 40; k++) { const x = k * 90 + (t * 26) % 90; X.fillRect(x, -806, 40, 8); }
     X.fillStyle = '#2b3150'; for (let k = -30; k < 30; k++) X.fillRect(k * 260 - 10, -766, 20, 70);
-    const cols = [C.co, C.tq, C.ye, C.cb, C.li, C.or];
+    const cols = ['#f2f3f5', '#b9c0cc', '#5b6274', '#c8323c', '#2d4f9e', '#e8e9ec'];
     for (let k = -8; k < 8; k++) { const x = ((k * 560 + t * 26) % 8960 + 8960) % 8960 - 4480;
-      X.save(); X.translate(x, -812); X.scale(.62, .62); carShape(520, shade(cols[(k + 16) % 6], .1), true, false, t, 0); X.restore(); }
+      X.save(); X.translate(x, -812); X.scale(.62, .62); carShape(520, cols[(k + 16) % 6], true, false, t, 0); X.restore(); }
     for (let k = -4; k <= 4; k++) robot(k * 560 + 280, -1030 + 220, t, k * 1.7, k % 2 ? C.or : C.ye);
     /* xavfsizlik to'sig'i */
     X.fillStyle = '#ffd23f'; X.fillRect(-4000, -700, 8000, 16); X.fillStyle = C.ink; X.fillRect(-4000, -686, 8000, 4);
@@ -420,12 +431,12 @@ function drawCarStage(t) {
 function drawFloor(t) {
   layer(1, () => {
     /* mashq maydoni: xavfsiz, mashinalardan uzoq — sariq-qora chegara */
-    X.fillStyle = '#bff0e7'; rr(-760, -250, 1520, 420, 40); X.fill();
+    X.fillStyle = '#d3ebe3'; rr(-760, -250, 1520, 420, 40); X.fill();
     hazard(-780, -270, 1560, 20); hazard(-780, 170, 1560, 20);
     X.fillStyle = '#ffd23f'; X.fillRect(-780, -270, 20, 460); X.fillRect(760, -270, 20, 460);
     X.strokeStyle = 'rgba(25,195,181,.6)'; X.lineWidth = 8; X.setLineDash([26, 20]); X.beginPath(); X.ellipse(0, -40, 520, 150, 0, 0, TAU); X.stroke(); X.setLineDash([]);
     /* har bir ishchining joy belgisi */
-    for (const c of CREW) { X.fillStyle = shade(c.suit, .35); X.globalAlpha = .7; X.beginPath(); X.ellipse(c.x * (c.row ? .86 : 1), ROWY[c.row] + 4, 120 * ROWS[c.row], 24, 0, 0, TAU); X.fill(); X.globalAlpha = 1; }
+    for (const c of CREW) { X.fillStyle = 'rgba(31,143,134,.25)'; X.globalAlpha = 1; X.beginPath(); X.ellipse(c.x * (c.row ? .86 : 1), ROWY[c.row] + 4, 120 * ROWS[c.row], 24, 0, 0, TAU); X.fill(); X.globalAlpha = 1; }
   });
 }
 function drawForeground(t) {
@@ -467,6 +478,10 @@ function flourishes(t, energy) {
     }
   });
 }
+function ring(t, t0, x, y) {
+  const u = (t - t0) / .8; if (u < 0 || u > 1) return;
+  X.save(); X.strokeStyle = `rgba(255,255,255,${.55 * (1 - u)})`; X.lineWidth = 30 * (1 - u) + 4; X.beginPath(); X.ellipse(x, y, 200 + 700 * eout(u), (200 + 700 * eout(u)) * .45, 0, 0, TAU); X.stroke(); X.restore();
+}
 function burst(t, t0, x, y, scale = 1) {
   /* rangli portlash: nurlar + doiralar (kuchli urg'ularda) */
   const u = (t - t0) / .9; if (u < 0 || u > 1) return;
@@ -501,23 +516,12 @@ function drawFront(t, energy) {
     for (const i of order) {
       const c = CREW[i], s = ROWS[c.row];
       let x = c.x * (c.row ? .86 : 1), y = ROWY[c.row];
-      if (t < 11.25) { const w = walkX(i, t); x = w.x; if (w.walking) { /* yurish: zarbda qadam */ } }
-      const R = drawCharacter(i, t, x, y, s);
-      if (t > 11.25) motionLines(t, R, x, y, s, kind);
+      if (t < 11.25) x = walkX(i, t).x;
+      drawCharacter(i, t, x, y, s);
     }
   });
   drawForeground(t);
 }
-/* yurish pozasi: poseOf ichida walk segmentida qadamlar */
-const _exPose = exPose;
-exPose = function (kind, t, i, t0) {
-  const P = _exPose(kind, t, i, t0);
-  if (kind === 'walk') { const w = walkX(i, t);
-    if (w.walking) { const b = bpos(t), n = Math.floor(b), f = b - n, up = Math.sin(f * PI), L = n % 2 === 0;
-      P.liftL = L ? .45 * up : 0; P.liftR = L ? 0 : .45 * up; P.y = -10 * up; P.aL = .3 + (L ? -.35 : .35) * up; P.aR = .3 + (L ? .35 : -.35) * up; P.turn = CREW[i].x < 0 ? .6 : -.6; P.joy = .8; } }
-  return P;
-};
-
 /* ======================= TEPADAN KO'RINISH ======================= */
 function drawTop(t) {
   /* zavod poli tepadan: mashq maydoni, joy belgilari, orqada mashina va konveyer — tartib oldingi ko'rinish bilan bir xil */
@@ -525,7 +529,7 @@ function drawTop(t) {
   X.strokeStyle = 'rgba(120,135,170,.3)'; X.lineWidth = 4; for (let k = -20; k < 20; k++) { X.beginPath(); X.moveTo(k * 200, -3000); X.lineTo(k * 200, 3000); X.moveTo(-3000, k * 200); X.lineTo(3000, k * 200); X.stroke(); }
   /* konveyer (shimolda) */
   X.fillStyle = '#3e4766'; X.fillRect(-3000, -1420, 6000, 220);
-  const cols = [C.co, C.tq, C.ye, C.cb, C.li, C.or];
+  const cols = ['#f2f3f5', '#b9c0cc', '#5b6274', '#c8323c', '#2d4f9e', '#e8e9ec'];
   for (let k = -8; k < 8; k++) { const x = ((k * 560 + t * 26) % 8960 + 8960) % 8960 - 4480; X.fillStyle = cols[(k + 16) % 6]; rr(x - 200, -1395, 400, 170, 60); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke(); X.fillStyle = '#9ad9ff'; rr(x - 60, -1380, 110, 140, 30); X.fill(); }
   hazard(-3000, -1180, 6000, 24);
   /* podium va mashina (tepadan) */
@@ -538,23 +542,24 @@ function drawTop(t) {
   X.fillStyle = 'rgba(255,255,255,.4)'; rr(-240, -80, 120, 24, 12); X.fill();
   X.restore();
   /* mashq maydoni */
-  X.fillStyle = '#bff0e7'; rr(-880, -500, 1760, 800, 50); X.fill();
+  X.fillStyle = '#d3ebe3'; rr(-880, -500, 1760, 800, 50); X.fill();
   hazard(-900, -520, 1800, 20); hazard(-900, 300, 1800, 20); X.fillStyle = '#ffd23f'; X.fillRect(-900, -520, 20, 840); X.fillRect(880, -520, 20, 840);
   X.strokeStyle = 'rgba(25,195,181,.7)'; X.lineWidth = 10; X.setLineDash([30, 22]); X.beginPath(); X.ellipse(0, -120, 760, 330, 0, 0, TAU); X.stroke(); X.setLineDash([]);
   /* ishchilar tepadan (oldingi qator janubda) */
   const P0 = { 0: 0 }, b = bpos(t);
   for (const i of [3, 4, 5, 6, 0, 1, 2]) {
-    const c = CREW[i], x = c.x * 1.15, y = c.row ? -300 : 60, P = poseOf(i, t);
-    X.fillStyle = shade(c.suit, .35); X.beginPath(); X.arc(x, y, 130, 0, TAU); X.fill();
+    const c = CREW[i], x = c.x, y = c.row ? -300 : 60, P = poseOf(i, t);
+    X.fillStyle = 'rgba(31,143,134,.18)'; X.beginPath(); X.arc(x, y, 130, 0, TAU); X.fill();
     X.save(); X.translate(x, y); X.rotate(P.twist * .5);
     X.fillStyle = 'rgba(20,30,60,.18)'; X.beginPath(); X.ellipse(12, 16, 120, 60, 0, 0, TAU); X.fill();
-    for (const s of [-1, 1]) { X.fillStyle = C.paper; rr(s * 30 - 22, 30, 44, 62, 20); X.fill(); X.fillStyle = c.shoe; rr(s * 30 - 16, 40, 32, 48, 14); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.stroke(); }
+    for (const s of [-1, 1]) { X.fillStyle = C.paper; rr(s * 30 - 22, 30, 44, 62, 20); X.fill(); X.fillStyle = '#2a2b33'; rr(s * 30 - 16, 40, 32, 48, 14); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.stroke(); }
     // qo'llar ikki yonga yoyilgan (tepadan "+" shakli)
     for (const s of [-1, 1]) { X.lineCap = 'round'; X.beginPath(); X.moveTo(s * 50, -2); X.lineTo(s * 168, -2);
       X.strokeStyle = C.paper; X.lineWidth = 44; X.stroke(); X.strokeStyle = C.ink; X.lineWidth = 34; X.stroke(); X.strokeStyle = c.suit; X.lineWidth = 25; X.stroke();
       X.fillStyle = C.paper; X.beginPath(); X.arc(s * 176, -2, 26, 0, TAU); X.fill(); X.fillStyle = c.glove; X.beginPath(); X.arc(s * 176, -2, 18, 0, TAU); X.fill(); X.lineWidth = 6; X.strokeStyle = C.ink; X.stroke(); }
     X.fillStyle = C.paper; rr(-82, -40, 164, 82, 38); X.fill();
     X.fillStyle = c.suit; rr(-72, -32, 144, 66, 30); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 8; X.stroke();
+    if (c.vest) { X.fillStyle = c.vest; rr(-60, -26, 120, 54, 24); X.fill(); X.fillStyle = REFL; X.fillRect(-60, 6, 120, 8); }
     if (c.feat === 'ponytail') { X.fillStyle = c.hair; X.beginPath(); X.ellipse(0, 46 + 5 * Math.sin(t * 7), 15, 24, 0, 0, TAU); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.stroke(); }
     X.fillStyle = C.paper; X.beginPath(); X.arc(0, -6, 52, 0, TAU); X.fill();
     X.fillStyle = shade(c.hat, -.08); X.beginPath(); X.arc(0, -6, 44, 0, TAU); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke();
@@ -570,40 +575,50 @@ function drawTop(t) {
 /* ======================= KADRLAR (kamera rejasi) ======================= */
 /* [boshlanish, turi, kamera kalitlari [[u, cx, cy, z], ...], o'tish] */
 const MED = [0, -330, .98], WIDE = [-60, -560, .6];
+/* kesishlar zarbda; ko'rsatma paytida kamera murabbiyga yaqinlashadi, mashq paytida guruh turli rakurslardan */
 const SHOTS = [
-  [0, 'f', [[0, -80, -1150, .5], [.55, -60, -700, .56], [1, -40, -560, .62]], 'none'],
-  [9.25, 'f', [[0, -40, -560, .62], [1, 0, -380, .9]], 'cut'],
-  [17.25, 'f', [[0, 0, -330, 1.0], [1, 0, -320, 1.06]], 'drop'],
-  [23.25, 'f', [[0, 0, -440, 2.3], [1, 0, -430, 2.45]], 'whip'],
-  [25.25, 'f', [[0, -470, -330, 1.55], [1, 470, -330, 1.55]], 'cut'],
-  [37.25, 'f', [[0, -300, 20, 2.4], [1, 260, 20, 2.4]], 'cut'],
-  [41.25, 'f', [[0, -40, -520, .68], [1, -20, -470, .76]], 'cut'],
-  [51.25, 'f', [[0, 0, -330, .98], [1, 0, -350, 1.12]], 'cut'],
-  [61.25, 'f', [[0, -330, -430, 2.05], [.35, -330, -430, 2.05], [.6, 330, -430, 2.05], [1, 330, -430, 2.1]], 'whip'],
-  [67.25, 'f', [[0, -60, -330, 1.02], [1, 60, -330, 1.02]], 'cut'],
-  [77.25, 'f', [[0, 0, -480, .74], [1, 0, -460, .8]], 'cut'],
-  [81.25, 'f', [[0, -380, -360, 1.4], [1, 380, -360, 1.4]], 'cut'],
-  [89.25, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.1]], 'cut'],
-  [97.25, 'f', [[0, -80, -520, .7], [1, 80, -500, .74]], 'flash'],
-  [111.25, 'f', [[0, 0, -300, 2.2], [1, 0, -300, 2.4]], 'cut'],
-  [117.25, 'f', [[0, 0, -330, 1.0], [1, 0, -340, 1.1]], 'cut'],
-  [129.25, 'f', [[0, 0, -540, .66], [.3, 0, -360, .98], [1, 0, -340, 1.04]], 'drop'],
-  [141.25, 'f', [[0, -330, -400, 1.7], [.4, -330, -400, 1.7], [1, 0, -340, 1.0]], 'cut'],
-  [149.25, 'f', [[0, -360, -340, 1.3], [1, 360, -340, 1.3]], 'cut'],
+  [0, 'f', [[0, -80, -1150, .5], [.6, -60, -700, .56], [1, -40, -560, .62]], 'none'],
+  [8.25, 'f', [[0, -40, -520, .66], [1, 0, -380, .92]], 'cut'],
+  [16.25, 'f', [[0, 0, -340, 1.0], [1, 0, -330, 1.06]], 'cut'],
+  [22.75, 'f', [[0, 0, -470, 2.2], [1, 0, -470, 2.35]], 'whip'],
+  [25.25, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [34.25, 'f', [[0, -460, -330, 1.5], [1, 460, -330, 1.5]], 'cut'],
+  [42.25, 'f', [[0, -260, 10, 2.3], [1, 240, 10, 2.3]], 'cut'],
+  [46.25, 'f', [[0, -40, -520, .68], [1, -20, -470, .76]], 'cut'],
+  [51.75, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [62.75, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.12]], 'cut'],
+  [68.75, 'f', [[0, -330, -470, 2.0], [.35, -330, -470, 2.0], [.6, 330, -470, 2.0], [1, 330, -470, 2.05]], 'whip'],
+  [74.75, 'f', [[0, 0, -480, .74], [1, 0, -460, .8]], 'cut'],
+  [81.75, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [94.25, 'f', [[0, -380, -360, 1.4], [1, 380, -360, 1.4]], 'cut'],
+  [102.25, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.1]], 'cut'],
+  [111.25, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [123.75, 'f', [[0, 0, -300, 2.0], [1, 0, -300, 2.2]], 'cut'],
+  [129.25, 'f', [[0, 0, -540, .66], [.3, 0, -360, .98], [1, 0, -340, 1.04]], 'cut'],
+  [135.25, 'f', [[0, -60, -520, .7], [1, 60, -500, .74]], 'cut'],
+  [141.75, 'f', [[0, -330, -420, 1.7], [.3, -330, -420, 1.7], [1, 0, -400, 1.45]], 'cut'],
+  [153.25, 'f', [[0, -360, -340, 1.3], [1, 360, -340, 1.3]], 'cut'],
   [161.25, 'f', [[0, 0, -330, 1.0], [1, 0, -340, 1.06]], 'cut'],
-  [167.25, 'f', [[0, -360, -340, 1.35], [1, 360, -340, 1.35]], 'cut'],
-  [177.25, 'f', [[0, -146, -560, 1.45], [1, -146, -580, 1.55]], 'whip'],
+  [168.75, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [176.25, 'f', [[0, 0, -330, 1.0], [1, 0, -340, 1.04]], 'cut'],
+  [177.75, 'f', [[0, -146, -560, 1.45], [1, -146, -580, 1.55]], 'whip'],
   [181.25, 't', [[0, 0, -90, .95, -.2], [1, 0, -110, 1.12, .2]], 'iris'],
   [193.25, 'f', [[0, -220, -620, .56], [1, 220, -560, .6]], 'iris'],
-  [209.25, 'f', [[0, 0, -520, .66], [1, 0, -300, 1.3]], 'cut'],
-  [225.25, 'f', [[0, 0, -320, 1.0], [1, 0, -330, 1.08]], 'drop'],
-  [233.25, 'f', [[0, -300, -150, 1.9], [1, 300, -150, 1.9]], 'cut'],
+  [198.25, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [210.75, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.1]], 'cut'],
+  [217.25, 'f', [[0, -280, -60, 2.0], [1, 280, -60, 2.0]], 'cut'],
+  [225.25, 'f', [[0, 0, -330, 1.0], [1, 0, -340, 1.08]], 'cut'],
+  [227.75, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [233.25, 'f', [[0, -300, -120, 1.9], [1, 300, -120, 1.9]], 'cut'],
   [241.25, 'f', [[0, 0, -330, 1.0], [1, 0, -360, 1.1]], 'cut'],
-  [253.25, 'f', [[0, 0, -500, .72], [1, 0, -470, .8]], 'cut'],
-  [265.25, 'f', [[0, 0, -360, 1.0], [.75, 0, -380, 1.12], [1, 0, -460, .9]], 'drop'],
-  [273.25, 'f', [[0, 0, -440, .95], [.3, -40, -520, .78], [1, -40, -540, .74]], 'drop'],
+  [247.25, 'f', [[0, 0, -500, .72], [1, 0, -480, .78]], 'cut'],
+  [253.75, 'f', [[0, 0, -400, 1.45], [1, 0, -420, 1.6]], 'cut'],
+  [265.25, 'f', [[0, 0, -500, .74], [1, 0, -470, .82]], 'cut'],
+  [273.25, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.08]], 'cut'],
+  [279.75, 'f', [[0, 0, -400, 1.3], [1, 0, -400, 1.4]], 'cut'],
+  [288.25, 'f', [[0, 0, -380, 1.15], [.25, 0, -500, .85], [1, -30, -560, .72]], 'cut'],
 ];
-const DROPS = [17.25, 129.25, 225.25, 273.25];
+const DROPS = [17.25, 129.25, 225.25, 288.25];
 function shotAt(t) { let k = 0; while (k < SHOTS.length - 1 && t >= SHOTS[k + 1][0]) k++; return k; }
 function camAt(t) {
   const k = shotAt(t), S = SHOTS[k], t0 = S[0], t1 = k < SHOTS.length - 1 ? SHOTS[k + 1][0] : B.dur, u = (t - t0) / (t1 - t0), ks = S[2];
@@ -616,7 +631,7 @@ function camAt(t) {
   /* whip: kesish atrofida tez gorizontal surilish */
   if (S[3] === 'whip' && t - t0 < .22) cam.cx += (1 - eout((t - t0) / .22)) * 900 / cam.z;
   if (k + 1 < SHOTS.length && SHOTS[k + 1][3] === 'whip' && t1 - t < .22) cam.cx -= eio(1 - (t1 - t) / .22) * 900 / cam.z;
-  if (cam.view === 'f' && cam.z < 1.3) cam.cy -= 60 * (1.3 - cam.z) / .3;
+  if (cam.view === 'f' && cam.z < 1.3) { cam.cy -= 60 * (1.3 - cam.z) / .3; cam.z *= .9; }
   return cam;
 }
 
@@ -629,8 +644,7 @@ function render(t) {
     X.save(); X.translate(W / 2, H / 2); X.rotate(cam.r); X.scale(cam.z, cam.z); X.translate(-cam.cx, -cam.cy); drawTop(t); X.restore();
   } else {
     drawFront(t, energy);
-    flourishes(t, energy);
-    layer(1, () => { for (const d of DROPS) burst(t, d, 0, -560, 1.3); burst(t, 178.25, -146, -560, .9); burst(t, 296.75, 0, -600, 1.4); });
+    layer(1, () => { for (const d of DROPS) ring(t, d, 0, -330); });
   }
   /* iris o'tish (yon ↔ tepa) */
   const k = cam.k, S = SHOTS[k];
@@ -640,7 +654,7 @@ function render(t) {
     X.save(); X.setTransform(1, 0, 0, 1, 0, 0); X.strokeStyle = C.ye; X.lineWidth = 26; X.beginPath(); X.arc(W / 2, H * .55, 1300 * u + 1, 0, TAU); X.stroke(); X.restore(); }
   /* post */
   const sinceCut = t - S[0], dropFlash = DROPS.some(d => t >= d && t < d + .3) ? 1 - (t - DROPS.find(d => t >= d && t < d + .3)) / .3 : 0;
-  const flash = Math.max(S[3] === 'flash' && sinceCut < .35 ? .55 * (1 - sinceCut / .35) : 0, dropFlash * .6, t > 296.75 ? .5 * (1 - (t - 296.75) / .29) : 0);
+  const flash = Math.max(S[3] === 'flash' && sinceCut < .35 ? .55 * (1 - sinceCut / .35) : 0, dropFlash * .6, 0);
   const fadeIn = clamp(t / .6), fadeOut = 1;
   post(t, Math.max(flash, 1 - fadeIn) * fadeOut);
 }
