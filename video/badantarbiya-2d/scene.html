@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<title>Badantarbiya 2D</title>
+<style>
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+#c{position:absolute;inset:0}
+</style></head>
+<body><div id="stage"><canvas id="c" width="1080" height="1920"></canvas></div>
+<script src="beats.js"></script>
+<script>
+/* Avtomobil zavodida stiker-odamchalar badantarbiyasi. Hammasi t dan hisoblanadi (seek(t)).
+   Mashqlar audiodagi ko'rsatmalarga, harakatlar 120 BPM zarbiga, kadrlar musiqa bo'limlariga bog'langan. */
+const W = 1080, H = 1920, cv = document.getElementById('c'), X = cv.getContext('2d');
+const B = window.BEAT, SPB = 60 / B.bpm;
+const bpos = t => (t - B.off) / SPB;                       // zarb pozitsiyasi
+const barT = k => B.off + (B.down + 4 * k) * SPB;           // k-taktning boshi (1.25 + 2k)
+const PI = Math.PI, TAU = 2 * PI;
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const sm = k => { k = clamp(k); return k * k * (3 - 2 * k); };
+const eio = k => { k = clamp(k); return k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; };
+const eout = k => 1 - Math.pow(1 - clamp(k), 3);
+const back = k => { k = clamp(k); const c = 1.7; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+function hash(n) { n = (n << 13) ^ n; return ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 2147483647; }
+/* zarb impulsi: zarbda 1, keyin tez so'nadi */
+const pulse = (t, d = 6) => { const b = bpos(t), f = b - Math.floor(b); return Math.exp(-f * d); };
+const barPulse = t => { const b = bpos(t) - B.down, f = ((b % 4) + 4) % 4; return Math.exp(-f * 2.2); };
+/* yumshoq "sakrash" (zarbda pastga cho'kish) */
+const bounce = (t, ph = 0) => { const b = bpos(t) + ph, f = b - Math.floor(b); return Math.sin(f * PI); };
+
+/* ======================= PALITRA VA QAHRAMONLAR ======================= */
+const C = { tq: '#19c3b5', or: '#ff8a1f', ye: '#ffd23f', co: '#ff6b6b', li: '#9be15d', cb: '#2f5bea', ink: '#1d1b2e', paper: '#fffaf0' };
+const SK = ['#f6d0b1', '#e8b48a', '#c98b5e', '#a0673f', '#7a4a2a', '#5a3620'];
+/* 7 ishchi: oldingi qator 3 ta (y=0), orqa qator 4 ta (y=-120, 0.86 masshtab) */
+const CREW = [
+  { x: -330, row: 0, suit: C.or, hat: C.cb, skin: SK[2], shoe: C.ye, glove: C.ye, feat: 'beard', hair: '#3a2416' },
+  { x: 0, row: 0, suit: C.tq, hat: C.ye, skin: SK[1], shoe: C.co, glove: C.or, feat: 'ponytail', hair: '#2a1a12', lead: 1 },
+  { x: 330, row: 0, suit: C.cb, hat: C.or, skin: SK[4], shoe: C.li, glove: C.ye, feat: 'glasses', hair: '#151018' },
+  { x: -500, row: 1, suit: C.li, hat: C.co, skin: SK[0], shoe: C.cb, glove: C.or, feat: 'scarf', hair: '#e2557a' },
+  { x: -170, row: 1, suit: C.co, hat: C.tq, skin: SK[3], shoe: C.ye, glove: C.li, feat: 'mustache', hair: '#22160f' },
+  { x: 170, row: 1, suit: C.ye, hat: C.li, skin: SK[1], shoe: C.tq, glove: C.co, feat: 'bangs', hair: '#6b3b1c' },
+  { x: 500, row: 1, suit: '#5b8cff', hat: C.co, skin: SK[5], shoe: C.or, glove: C.ye, feat: 'curly', hair: '#120c0a' },
+];
+const ROWY = [0, -120], ROWS = [1, .86];
+
+/* ======================= MASHQLAR JADVALI ======================= */
+/* boshlanish vaqtlari takt chegarasida (1.25 + 2k); ko'rsatmalar audiodagi gaplardan */
+const SEG = [
+  [0, 'walk'], [11.25, 'spread'], [17.25, 'raise'], [23.25, 'clap'], [25.25, 'run'], [51.25, 'neck'],
+  [77.25, 'step'], [81.25, 'shoulder'], [97.25, 'squat'], [111.25, 'fist'], [129.25, 'raiseStep'],
+  [141.25, 'waist'], [167.25, 'twist'], [193.25, 'breathe'], [197.25, 'knees'], [225.25, 'kneesT'],
+  [253.25, 'lunge'], [265.25, 'jacks'], [273.25, 'final'], [279.25, 'wave'], [290.25, 'cheer'],
+];
+/* har bir qahramonning bitta "xarakter lahzasi" */
+const MOMENT = [
+  { i: 3, t: 9.25, d: 2.2, k: 'waveHi' },     // orqa chap: kameraga qo'l silkitadi
+  { i: 1, t: 23.25, d: 2.0, k: 'wink' },      // yetakchi: ko'z qisib, bosh barmoq
+  { i: 2, t: 64.75, d: 2.0, k: 'glasses' },   // ko'zoynakni to'g'rilaydi
+  { i: 5, t: 77.25, d: 2.0, k: 'spin' },      // aylanib oladi
+  { i: 0, t: 141.25, d: 2.4, k: 'flex' },     // muskul ko'rsatadi
+  { i: 4, t: 178.25, d: 2.2, k: 'pump' },     // "ADM!" ga musht ko'taradi
+  { i: 6, t: 225.75, d: 2.2, k: 'peace' },    // "Yaxshi!" — ikki barmoq
+];
+
+/* ======================= POZA ======================= */
+const L1 = 105, L2 = 100, UA = 85, FA = 80;          // son, boldir, yelka, bilak
+const SH = { x: 62, y: -365 }, HIP = -200;
+function base() {
+  return { y: 0, squat: 0, bend: 0, lean: 0, hipX: 0, tilt: 0, turn: 0, headY: 0, twist: 0, sh: 0,
+    aL: .14, eL: -.12, aR: .14, eR: -.12, scL: 1, scR: 1, foreL: 1, foreR: 1, fxL: 0, fxR: 0, liftL: 0, liftR: 0,
+    kx: 0, onHip: 0, onKnee: 0, joy: .3, wink: 0, fistL: 0, fistR: 0, thumbR: 0, peaceR: 0, spin: 0 };
+}
+/* qo'l IK: elka nuqtasidan nishon (ox — tashqariga, oy — pastga) → {a, e} */
+function armIK(ox, oy) {
+  let d = Math.hypot(ox, oy); d = clamp(d, 8, UA + FA - 1);
+  const bs = Math.atan2(ox, oy), al = Math.acos(clamp((UA * UA + d * d - FA * FA) / (2 * UA * d), -1, 1));
+  const a = bs + al, ex = UA * Math.sin(a), ey = UA * Math.cos(a);
+  const hx = ox / Math.hypot(ox, oy) * d, hy = oy / Math.hypot(ox, oy) * d;
+  return { a, e: Math.atan2(hx - ex, hy - ey) - a };
+}
+const HIPARM = armIK(-6, 132), BELT = armIK(-6, 132);
+function exPose(kind, t, i, t0) {
+  const P = base(), b = bpos(t), lb = (t - t0) / SPB, bt = bounce(t), ch = CREW[i];
+  const ph4 = ((b - B.down) / 4) % 1, s4 = Math.sin(ph4 * TAU), c4 = Math.cos(ph4 * TAU);
+  P.y = -7 * bt; P.joy = .45;
+  switch (kind) {
+    case 'walk': case 'idle': P.y = -5 * bt; P.aL = P.aR = .16 + .03 * bt; break;
+    case 'breathe': { const k = Math.sin(((b - B.down) / 8) * TAU); P.aL = P.aR = .35 + .9 * (k * .5 + .5); P.eL = P.eR = -.1; P.y = -3 * bt; P.tilt = -.05 * k; break; }
+    case 'spread': { // ikki yonga qo'l yoyib, o'ngga va chapga qarash (har takt)
+      P.aL = P.aR = 1.5; P.eL = P.eR = -.05; const f = ((b - B.down) / 4) % 2;
+      P.turn = f < 1 ? lerp(-.9, .9, eio((f - .2) * 2)) : lerp(.9, -.9, eio((f - 1.2) * 2)); P.joy = .5; break; }
+    case 'raise': case 'raiseStep': { // 4 zarb: qo'llar tepaga (1-2), pastga (3-4)
+      const f = (b - B.down) % 4, up = f < 2 ? eio(f / 1.1) : 1 - eio((f - 2) / 1.1);
+      P.aL = P.aR = lerp(.2, 2.85, up); P.eL = P.eR = lerp(-.15, .05, up); P.y = -14 * up - 4 * bt; P.joy = .5 + .4 * up;
+      if (kind === 'raiseStep') { const st = Math.sin(((b - B.down) / 4) * PI); P.hipX = 40 * st; P.fxL = 30 - 30 * st; P.fxR = 30 + 30 * st; }
+      break; }
+    case 'clap': { const f = b - Math.floor(b), c = Math.exp(-f * 7);
+      const k = armIK(-58 + 40 * (1 - c), 70 - 60 * c); P.aL = P.aR = k.a + .2 * c; P.eL = P.eR = k.e; P.joy = 1; P.y = -12 * bt; break; }
+    case 'run': { // joyida yugurish: har zarbda bitta tizza
+      const n = Math.floor(b), f = b - n, up = Math.sin(f * PI), L = n % 2 === 0;
+      P.liftL = L ? .9 * up : 0; P.liftR = L ? 0 : .9 * up; P.y = -16 * up;
+      P.aL = .35 + (L ? -.5 : .5) * up; P.aR = .35 + (L ? .5 : -.5) * up; P.eL = P.eR = -1.5; P.joy = .7; break; }
+    case 'neck': { // qo'llar belda, bosh aylana bo'ylab (2 s = 1 aylana)
+      P.onHip = 1; P.tilt = .32 * s4; P.turn = .7 * c4; P.headY = 6 * (1 - Math.abs(s4)) * (c4 > 0 ? 1 : .2); P.y = -3 * bt; P.joy = .45; break; }
+    case 'step': { const st = Math.sin(((b - B.down) / 4) * TAU);
+      P.hipX = 55 * st; P.fxL = 40 - 40 * st; P.fxR = 40 + 40 * st; P.aL = .3 + .35 * (st * .5 + .5); P.aR = .3 + .35 * (.5 - st * .5); P.y = -8 * bt; P.joy = .8; break; }
+    case 'shoulder': { // qo'llar yelkada, yelkalar oldinga-orqaga aylanadi
+      const dir = Math.floor((b - 81.25 / SPB) / 16) % 2 ? -1 : 1, a = (ph4 * TAU) * dir;
+      P.aL = P.aR = 1.32 + .42 * Math.sin(a); P.eL = P.eR = -2.75 - .1 * Math.cos(a); P.sh = 12 * Math.cos(a); P.y = -4 * bt; P.joy = .5; break; }
+    case 'squat': { const f = ((b - B.down) % 4) / 4, k = Math.sin(f * PI);
+      P.squat = .85 * eio(k); const h = armIK(-75, 40); P.aL = P.aR = lerp(.25, h.a, k); P.eL = P.eR = lerp(-.1, h.e, k);
+      P.foreL = P.foreR = lerp(1, .6, k); P.fxL = P.fxR = 26; P.joy = .4 + .3 * k; break; }
+    case 'fist': { // tirsak bukilgan, musht ichkariga/tashqariga aylanadi
+      const dir = Math.floor(((t - 111.25) / SPB) / 16) % 2 ? -1 : 1, a = (((b - B.down) / 2) % 1) * TAU * dir;
+      P.aL = P.aR = .32 + .1 * Math.sin(a); P.eL = P.eR = -1.5 + .45 * Math.cos(a); P.foreL = P.foreR = .62 + .2 * Math.sin(a);
+      P.fistL = P.fistR = 1; P.y = -5 * bt; P.joy = .55; break; }
+    case 'waist': { // bel aylanasi
+      P.onHip = 1; P.hipX = 38 * s4; P.lean = -.13 * s4; P.y = -4 * bt + 6 * c4; P.turn = .25 * s4; P.joy = .5; break; }
+    case 'twist': { // qo'llar yoyilgan, gavda o'ngga-chapga buriladi
+      const k = Math.sin(((b - B.down) / 4) * TAU); P.aL = P.aR = 1.48; P.eL = P.eR = 0;
+      P.twist = k; P.scL = 1 - .55 * Math.max(0, k); P.scR = 1 - .55 * Math.max(0, -k); P.turn = .85 * k; P.y = -5 * bt; P.joy = .6; break; }
+    case 'knees': case 'kneesT': { // egilib, qo'llar tizzada, tizzalar aylanadi
+      const T = kind === 'kneesT', dir = Math.floor((lb) / 16) % 2 ? -1 : 1;
+      P.bend = .75; P.squat = .45; P.onKnee = 1; P.kx = 30 * s4 * dir; P.fxL = P.fxR = T ? -12 : 22; P.y = -3 * bt + 5 * c4;
+      P.turn = .15 * s4; P.joy = T ? .7 : .55; break; }
+    case 'lunge': { // keng turib, oyoq paylarini cho'zish (o'ng/chap)
+      const k = Math.sin(((b - B.down) / 8) * TAU); P.fxL = P.fxR = 95; P.hipX = 75 * k; P.squat = .25 + .3 * Math.abs(k);
+      P.onKnee = .85; P.bend = .35; P.lean = -.08 * k; P.turn = .4 * k; P.joy = .5; break; }
+    case 'jacks': { // kulminatsiya: "yulduz" sakrash har zarbda, oxirgi taktda katta sakrash
+      const f = b - Math.floor(b), up = Math.sin(f * PI), n = Math.floor(b - B.down) % 2, open = n ? 1 - eio(f) : eio(f);
+      P.aL = P.aR = lerp(.25, 2.75, open); P.fxL = P.fxR = lerp(0, 70, open); P.y = -38 * up; P.joy = .95;
+      const big = (t - 271.25) / 2; if (big > 0 && big < 1) { const j = Math.sin(clamp(big / .85) * PI); P.y = -150 * j; P.squat = .5 * (big > .85 ? 1 - (big - .85) / .15 : 0); P.aL = P.aR = 2.6; P.fxL = P.fxR = 40; }
+      break; }
+    case 'final': case 'wave': case 'cheer': { // yakuniy poza (har kimniki o'zgacha), keyin xayrlashuv va olqish
+      const land = clamp((t - 273.25) / .35), sq = Math.sin(land * PI) * .45;
+      const poses = [[2.5, .1, 1.1, -2.4], [2.6, .05, 2.6, .05], [1.7, -.1, 2.9, 0], [2.7, 0, .5, -.2], [2.3, -.3, 2.3, -.3], [.6, -1.9, 2.8, 0], [2.6, 0, 1.5, -.1]];
+      const p = poses[i]; P.aL = p[0]; P.eL = p[1]; P.aR = p[2]; P.eR = p[3]; P.squat = sq; P.joy = 1; P.y = -6 * bt;
+      if (i === 0) { P.fistL = P.fistR = 1; } if (i === 2) { P.turn = -.5; }
+      if (kind === 'wave') { const w = Math.sin(b * PI) ; P.aR = 2.75; P.eR = -.3 + .45 * w; P.aL = .2; P.eL = -.1; P.turn = 0; P.fistL = P.fistR = 0; }
+      if (kind === 'cheer') { const f = b - Math.floor(b), c = Math.exp(-f * 7); const k = armIK(-60 + 42 * (1 - c), -40 - 50 * c); P.aL = P.aR = k.a; P.eL = P.eR = k.e; P.y = -10 * bt; P.fistL = P.fistR = 0; P.turn = 0; }
+      break; }
+  }
+  return P;
+}
+function segAt(t) { let k = 0; while (k < SEG.length - 1 && t >= SEG[k + 1][0]) k++; return k; }
+function blendP(A, Bp, k) { const o = {}; for (const key in A) o[key] = lerp(A[key], Bp[key], k); return o; }
+function poseOf(i, t) {
+  const k = segAt(t), [t0, kind] = SEG[k];
+  let P = exPose(kind, t, i, t0);
+  const tb = t - t0; if (k > 0 && tb < .45) P = blendP(exPose(SEG[k - 1][1], t, i, SEG[k - 1][0]), P, eio(tb / .45));
+  for (const m of MOMENT) if (m.i === i && t >= m.t && t < m.t + m.d) {
+    const u = (t - m.t) / m.d, w = sm(u / .18) * sm((1 - u) / .18), Q = Object.assign({}, P);
+    if (m.k === 'waveHi') { Q.aR = 2.7; Q.eR = -.35 + .5 * Math.sin(u * 22); Q.joy = 1; Q.turn = 0; Q.onHip = 0; }
+    if (m.k === 'wink') { Q.wink = 1; Q.aR = .9; Q.eR = -2.1; Q.thumbR = 1; Q.joy = 1; Q.tilt = .12; }
+    if (m.k === 'glasses') { const h = armIK(25, -95); Q.aR = h.a; Q.eR = h.e; Q.fistR = 0; Q.joy = .8; Q.tilt = -.1 * Math.sin(u * 6); Q.onHip = 0; }
+    if (m.k === 'spin') { Q.spin = eio(u); Q.aL = Q.aR = 1.2; Q.joy = 1; }
+    if (m.k === 'flex') { Q.onHip = 0; Q.aL = Q.aR = 1.55; Q.eL = Q.eR = -2.1 - .15 * Math.sin(u * 18); Q.fistL = Q.fistR = 1; Q.joy = 1; Q.hipX = 0; Q.lean = 0; Q.y -= 6; }
+    if (m.k === 'pump') { Q.aL = 2.8 - .25 * Math.abs(Math.sin(u * 14)); Q.eL = -.1; Q.fistL = 1; Q.joy = 1; Q.scL = 1; Q.onKnee = 0; Q.onHip = 0; }
+    if (m.k === 'peace') { Q.aR = 1.0; Q.eR = -2.25; Q.peaceR = 1; Q.wink = 1; Q.joy = 1; Q.tilt = .14; }
+    P = blendP(P, Q, w); P.wink = w > .5 ? Q.wink : P.wink; P.thumbR = w > .5 ? Q.thumbR : 0; P.peaceR = w > .5 ? Q.peaceR : 0;
+  }
+  return P;
+}
+
+/* ======================= SKELET ======================= */
+function rot(x, y, a) { const c = Math.cos(a), s = Math.sin(a); return [x * c - y * s, x * s + y * c]; }
+function rig(P) {
+  const R = {}, hipY = HIP + P.squat * 75 + P.bend * 18 + P.y;
+  R.hip = [P.hipX, hipY];
+  const TL = 165 * (1 - .36 * P.bend), [sx, sy] = rot(P.twist * 14, -TL + P.sh * .3, P.lean);
+  R.sc = [R.hip[0] + sx, R.hip[1] + sy];
+  const hw = 62 * (1 - .18 * Math.abs(P.twist));
+  R.sL = (() => { const [x, y] = rot(-hw, P.sh, P.lean); return [R.sc[0] + x, R.sc[1] + y]; })();
+  R.sR = (() => { const [x, y] = rot(hw, P.sh, P.lean); return [R.sc[0] + x, R.sc[1] + y]; })();
+  const [hx, hy] = rot(P.turn * 5, -70 + P.headY + P.bend * 22, P.lean + P.tilt * .35);
+  R.head = [R.sc[0] + hx, R.sc[1] + hy];
+  /* oyoqlar */
+  const footY = Math.min(0, P.y * .9);
+  for (const s of [-1, 1]) {
+    const S = s < 0 ? 'L' : 'R', fxs = P['fx' + S], lift = P['lift' + S];
+    const Hj = [R.hip[0] + s * 32, hipY], F = [s * (36 + fxs), footY];
+    let dx = F[0] - Hj[0], dy = F[1] - Hj[1], d = Math.hypot(dx, dy), K;
+    if (d >= L1 + L2 - .5) K = [Hj[0] + dx * L1 / d, Hj[1] + dy * L1 / d];
+    else { const a = (L1 * L1 - L2 * L2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, L1 * L1 - a * a)), ux = dx / d, uy = dy / d;
+      let nx = -uy, ny = ux; if (nx * s < 0) { nx = -nx; ny = -ny; } K = [Hj[0] + ux * a + nx * h, Hj[1] + uy * a + ny * h]; }
+    K[0] += P.kx * (1 - .3 * s * Math.sign(P.kx));
+    let Fo = F;
+    if (lift > 0) { const k = sm(lift * 3), Kl = [Hj[0] + s * 8, hipY + L1 * Math.cos(lift * 1.25) * .75], Fl = [Hj[0] + s * 10, hipY + L1 * Math.cos(lift * 1.25) * .75 + L2 * .95];
+      K = [lerp(K[0], Kl[0], k), lerp(K[1], Kl[1], k)]; Fo = [lerp(F[0], Fl[0], k), lerp(F[1], Fl[1], k)]; }
+    R['h' + S] = Hj; R['k' + S] = K; R['f' + S] = Fo; R['lift' + S] = lift;
+  }
+  /* qo'llar */
+  for (const s of [-1, 1]) {
+    const S = s < 0 ? 'L' : 'R', Sh = R['s' + S], sc = P['sc' + S];
+    let a = P['a' + S], e = P['e' + S];
+    const toLocal = (tx, ty) => { const [x, y] = rot(tx - Sh[0], ty - Sh[1], -P.lean); return [x * s, y]; };
+    if (P.onHip > 0) { const [ox, oy] = toLocal(R.hip[0] + s * 48, R.hip[1] - 30), k = armIK(ox, oy); a = lerp(a, k.a, P.onHip); e = lerp(e, k.e, P.onHip); }
+    if (P.onKnee > 0) { const Kn = R['k' + S], [ox, oy] = toLocal(Kn[0] + s * 4, Kn[1] - 14), k = armIK(ox, oy); a = lerp(a, k.a, P.onKnee); e = lerp(e, k.e, P.onKnee); }
+    const v1 = rot(s * Math.sin(a) * UA * sc, Math.cos(a) * UA * sc, P.lean);
+    const E = [Sh[0] + v1[0], Sh[1] + v1[1]], fl = FA * sc * P['fore' + S];
+    const v2 = rot(s * Math.sin(a + e) * fl, Math.cos(a + e) * fl, P.lean);
+    R['e' + S] = E; R['w' + S] = [E[0] + v2[0], E[1] + v2[1]]; R['ang' + S] = Math.atan2(v2[1], v2[0]);
+  }
+  return R;
+}
+
+/* ======================= CHIZISH ======================= */
+const LW = { leg: 36, arm: 27 }, BORDER = 20, OUT = 9;
+function limb(pts, w, col, pass) {
+  X.beginPath(); X.moveTo(pts[0][0], pts[0][1]); for (let k = 1; k < pts.length; k++) X.lineTo(pts[k][0], pts[k][1]);
+  X.lineCap = 'round'; X.lineJoin = 'round';
+  if (pass === 0) { X.strokeStyle = C.paper; X.lineWidth = w + OUT + BORDER; X.stroke(); return; }
+  if (pass === -1) { X.lineWidth = w + OUT + BORDER; X.stroke(); return; }
+  X.strokeStyle = C.ink; X.lineWidth = w + OUT; X.stroke(); X.strokeStyle = col; X.lineWidth = w; X.stroke();
+}
+function blob(path, col, pass, extra) {
+  path(); X.lineJoin = 'round';
+  if (pass === 0) { X.fillStyle = X.strokeStyle = C.paper; X.lineWidth = BORDER + OUT; X.fill(); X.stroke(); return; }
+  if (pass === -1) { X.lineWidth = BORDER + OUT; X.fill(); X.stroke(); return; }
+  X.fillStyle = col; X.fill(); X.strokeStyle = C.ink; X.lineWidth = OUT; X.stroke(); if (extra) extra();
+}
+function rr(x, y, w, h, r) { X.beginPath(); X.roundRect(x, y, w, h, r); }
+function shade(hex, k) { const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  const f = v => Math.round(k < 0 ? v * (1 + k) : v + (255 - v) * k); return `rgb(${f(r)},${f(g)},${f(b)})`; }
+
+function drawCrew(ch, P, R, t, idx, pass) {
+  const ink = C.ink;
+  /* oyoqlar + poyabzal */
+  for (const S of ['L', 'R']) {
+    const s = S === 'L' ? -1 : 1, Hj = R['h' + S], K = R['k' + S], F = R['f' + S];
+    limb([Hj, K, [F[0], F[1] - 14]], LW.leg, shade(ch.suit, -.12), pass);
+    const sw = 64, sh2 = 30, lift = R['lift' + S];
+    blob(() => { rr(F[0] - sw / 2 + s * 10, F[1] - sh2 + 4 - lift * 6, sw, sh2 * (1 - .25 * lift), 14); }, ch.shoe, pass, () => {
+      X.fillStyle = 'rgba(255,255,255,.75)'; rr(F[0] - sw / 2 + s * 10 + 8, F[1] - 6 - lift * 6, sw - 16, 7, 4); X.fill(); });
+  }
+  /* gavda (kombinezon) */
+  const sc = R.sc, hp = R.hip, sL = R.sL, sR = R.sR;
+  const torso = () => { X.beginPath(); const hw = 50;
+    X.moveTo(sL[0] - 12, sL[1] - 4); X.quadraticCurveTo(sc[0], sc[1] - 16, sR[0] + 12, sR[1] - 4);
+    X.quadraticCurveTo(sR[0] + 18, (sR[1] + hp[1]) / 2, hp[0] + hw + 6, hp[1] + 14);
+    X.quadraticCurveTo(hp[0], hp[1] + 30, hp[0] - hw - 6, hp[1] + 14);
+    X.quadraticCurveTo(sL[0] - 18, (sL[1] + hp[1]) / 2, sL[0] - 12, sL[1] - 4); X.closePath(); };
+  blob(torso, ch.suit, pass, () => {
+    X.save(); torso(); X.clip();
+    X.fillStyle = shade(ch.suit, -.16); X.fillRect(hp[0] - 90, hp[1] - 32, 180, 22);                 // kamar
+    X.fillStyle = C.ye; rr(hp[0] - 14, hp[1] - 31, 28, 20, 5); X.fill();
+    X.fillStyle = 'rgba(255,255,255,.85)'; X.fillRect(hp[0] - 90, (sc[1] + hp[1]) / 2 + 6, 180, 10);   // nur qaytaruvchi chiziq
+    X.fillStyle = shade(ch.suit, .25); rr(sc[0] + 10 + R.sc[0] * 0, sc[1] + 26, 34, 30, 6); X.fill(); // ko'krak cho'ntagi
+    X.strokeStyle = shade(ch.suit, -.3); X.lineWidth = 4; X.beginPath(); X.moveTo(sc[0], sc[1] - 6); X.lineTo(hp[0], hp[1] - 32); X.stroke();
+    X.fillStyle = 'rgba(255,255,255,.18)'; X.beginPath(); X.ellipse(sc[0] - 28, sc[1] + 40, 14, 40, -.2, 0, TAU); X.fill();
+    X.restore(); });
+  /* bosh */
+  const [hx, hy] = R.head, tn = P.turn, hr = 70, tl = P.tilt;
+  X.save(); X.translate(hx, hy); X.rotate(tl + P.lean * .5);
+  if (ch.feat === 'ponytail') { const sw = Math.sin(t * 7.5 + idx) * .25 + P.lean * 2 - tn * .3;
+    blob(() => { X.beginPath(); X.ellipse(-tn * 30 + 62, -6, 22, 50, .5 + sw, 0, TAU); }, ch.hair, pass); }
+  if (ch.feat === 'scarf') blob(() => { X.beginPath(); X.ellipse(0, 8, hr + 10, hr + 16, 0, 0, TAU); }, ch.hair, pass);
+  blob(() => { X.beginPath(); X.arc(0, 0, hr, 0, TAU); }, ch.skin, pass, () => {
+    const fx2 = tn * 22;
+    if (ch.feat === 'curly') { X.fillStyle = ch.hair; for (let k = 0; k < 7; k++) { X.beginPath(); X.arc(-56 + k * 18.6, -34 + Math.abs(k - 3) * 4, 15, 0, TAU); X.fill(); } }
+    if (ch.feat === 'bangs') { X.fillStyle = ch.hair; X.beginPath(); X.moveTo(-66, -20); X.quadraticCurveTo(-20 + fx2, 2, 10 + fx2, -26); X.quadraticCurveTo(40 + fx2, -4, 66, -20); X.lineTo(66, -60); X.lineTo(-66, -60); X.fill(); }
+    if (ch.feat === 'ponytail') { X.fillStyle = ch.hair; X.beginPath(); X.moveTo(-68, -12); X.quadraticCurveTo(fx2, -30, 68, -12); X.lineTo(68, -60); X.lineTo(-68, -60); X.fill(); }
+    // yuz
+    const ey = -4 + P.headY * .2, blink = (((t * 1000 + idx * 1777) % 3900) < 130) ? .12 : 1;
+    X.fillStyle = 'rgba(255,110,120,.35)'; X.beginPath(); X.arc(fx2 - 38, 22, 13, 0, TAU); X.arc(fx2 + 38, 22, 13, 0, TAU); X.fill();
+    for (const s of [-1, 1]) {
+      const ex = fx2 + s * 24;
+      if (P.wink > .5 && s > 0) { X.strokeStyle = ink; X.lineWidth = 6; X.lineCap = 'round'; X.beginPath(); X.moveTo(ex - 10, ey + 2); X.quadraticCurveTo(ex, ey - 8, ex + 10, ey + 2); X.stroke(); continue; }
+      X.fillStyle = ink; X.beginPath(); X.ellipse(ex, ey, 8.5, 12 * blink, 0, 0, TAU); X.fill();
+      if (blink > .5) { X.fillStyle = '#fff'; X.beginPath(); X.arc(ex + 3, ey - 4, 3.2, 0, TAU); X.fill(); }
+    }
+    if (ch.feat === 'glasses') { X.strokeStyle = ink; X.lineWidth = 5; X.beginPath(); X.arc(fx2 - 24, ey, 18, 0, TAU); X.moveTo(fx2 + 42, ey); X.arc(fx2 + 24, ey, 18, 0, TAU); X.moveTo(fx2 - 6, ey); X.lineTo(fx2 + 6, ey); X.stroke(); }
+    if (ch.feat === 'beard') { X.fillStyle = ch.hair; X.beginPath(); X.moveTo(-64, 8); X.quadraticCurveTo(-60, 70, fx2 * .5, 74); X.quadraticCurveTo(60, 70, 64, 8); X.quadraticCurveTo(fx2, 46, -64, 8); X.fill(); }
+    // og'iz
+    const j = P.joy, my = 30;
+    if (j > .62) { X.fillStyle = '#7a1f2e'; X.beginPath(); X.moveTo(fx2 - 20, my); X.quadraticCurveTo(fx2, my + 34 * j, fx2 + 20, my); X.closePath(); X.fill();
+      X.fillStyle = '#ff8fa0'; X.beginPath(); X.ellipse(fx2, my + 16 * j, 9, 6, 0, 0, TAU); X.fill(); X.strokeStyle = ink; X.lineWidth = 5; X.beginPath(); X.moveTo(fx2 - 20, my); X.quadraticCurveTo(fx2, my + 34 * j, fx2 + 20, my); X.closePath(); X.stroke(); }
+    else { X.strokeStyle = ink; X.lineWidth = 6; X.lineCap = 'round'; X.beginPath(); X.moveTo(fx2 - 16, my); X.quadraticCurveTo(fx2, my + 14 + 10 * j, fx2 + 16, my); X.stroke(); }
+    if (ch.feat === 'mustache') { X.fillStyle = ch.hair; X.beginPath(); X.ellipse(fx2 - 13, my - 6, 15, 7, .25, 0, TAU); X.ellipse(fx2 + 13, my - 6, 15, 7, -.25, 0, TAU); X.fill(); }
+  });
+  /* kaska */
+  blob(() => { X.beginPath(); X.moveTo(-74, -18); X.bezierCurveTo(-74, -110, 74, -110, 74, -18); X.closePath(); }, ch.hat, pass, () => {
+    X.fillStyle = 'rgba(255,255,255,.45)'; X.beginPath(); X.ellipse(-28 + tn * 10, -66, 18, 9, -.5, 0, TAU); X.fill();
+    X.fillStyle = shade(ch.hat, -.18); rr(-8 + tn * 16, -96, 16, 78, 8); X.fill(); });
+  blob(() => { rr(-90 + tn * 8, -30, 180, 22, 11); }, shade(ch.hat, -.08), pass);
+  X.restore();
+  /* qo'llar (gavda oldida) */
+  for (const S of ['L', 'R']) {
+    const Sh = R['s' + S], E = R['e' + S], Wr = R['w' + S];
+    limb([Sh, E, Wr], LW.arm, ch.suit, pass);
+    const fist = P['fist' + S] > .5, g = S === 'R' ? 1 : 0;
+    blob(() => { X.beginPath(); X.arc(Wr[0], Wr[1], fist ? 21 : 19, 0, TAU); }, ch.glove, pass, () => {
+      if (!fist) { X.strokeStyle = shade(ch.glove, -.35); X.lineWidth = 3; X.beginPath(); X.moveTo(Wr[0] - 7, Wr[1] + 4); X.lineTo(Wr[0] + 7, Wr[1] + 4); X.stroke(); } });
+    if (g && P.thumbR) blob(() => { rr(Wr[0] - 7, Wr[1] - 44, 15, 32, 7); }, ch.glove, pass);
+    if (g && P.peaceR) { blob(() => { X.save(); X.translate(Wr[0], Wr[1]); X.rotate(-.25); rr(-12, -52, 12, 40, 6); X.restore(); }, ch.glove, pass);
+      blob(() => { X.save(); X.translate(Wr[0], Wr[1]); X.rotate(.25); rr(1, -52, 12, 40, 6); X.restore(); }, ch.glove, pass); }
+  }
+}
+function drawCharacter(i, t, x, y, s) {
+  const ch = CREW[i], P = poseOf(i, t), R = rig(P);
+  X.save(); X.translate(x, y); X.scale(s, s);
+  X.fillStyle = 'rgba(20,30,60,.16)'; X.beginPath(); X.ellipse(0, 6, 150 + P.fxL + P.fxR, 26, 0, 0, TAU); X.fill();   // soya
+  if (P.spin > 0 && P.spin < 1) X.scale(Math.cos(P.spin * TAU) * .82 + .18 * Math.sign(Math.cos(P.spin * TAU)) || .18, 1);
+  X.save(); X.translate(9, 10); X.fillStyle = X.strokeStyle = 'rgba(25,20,50,.16)'; drawCrew(ch, P, R, t, i, -1); X.restore();  // stiker soyasi
+  drawCrew(ch, P, R, t, i, 0); drawCrew(ch, P, R, t, i, 1);
+  X.restore();
+  return R;
+}
+
+/* ======================= ZAVOD ======================= */
+/* qatlamlar parallaksi: kamera (cx, cy, z) har qatlamga p koeffitsient bilan ta'sir qiladi */
+let CAM = { cx: 0, cy: -330, z: 1 };
+function layer(p, fn) { const z = 1 + (CAM.z - 1) * p; X.save(); X.translate(W / 2, H / 2); X.scale(z, z); X.translate(-CAM.cx * p, -CAM.cy * p); fn(); X.restore(); }
+function drawWall(t) {
+  const lp = .55 + .45 * pulse(t, 4);
+  layer(.32, () => {
+    const g = X.createLinearGradient(0, -2600, 0, -300); g.addColorStop(0, '#d9f4f1'); g.addColorStop(1, '#f7f1e3');
+    X.fillStyle = g; X.fillRect(-3000, -3200, 6000, 3200);
+    /* derazalar */
+    for (let k = -6; k <= 6; k++) { const x = k * 300 - 110;
+      X.fillStyle = '#bfe9ff'; rr(x, -1500, 220, 520, 18); X.fill(); X.strokeStyle = '#8fb3c9'; X.lineWidth = 12; X.stroke();
+      X.strokeStyle = 'rgba(255,255,255,.7)'; X.lineWidth = 16; X.beginPath(); X.moveTo(x + 40, -1440); X.lineTo(x + 120, -1080); X.stroke();
+      X.strokeStyle = '#8fb3c9'; X.lineWidth = 8; X.beginPath(); X.moveTo(x + 110, -1500); X.lineTo(x + 110, -980); X.moveTo(x, -1240); X.lineTo(x + 220, -1240); X.stroke(); }
+    /* fermalar */
+    X.strokeStyle = '#9aa7c7'; X.lineWidth = 14;
+    for (let k = -10; k <= 10; k++) { X.beginPath(); X.moveTo(k * 260, -1880); X.lineTo(k * 260 + 130, -1700); X.lineTo(k * 260 + 260, -1880); X.stroke(); }
+    X.fillStyle = '#7f8db3'; X.fillRect(-3000, -1900, 6000, 26); X.fillRect(-3000, -1705, 6000, 20);
+    /* rangli devor yo'laklari */
+    const st = [C.tq, C.ye, C.or, C.co, C.li, C.cb];
+    for (let k = 0; k < 6; k++) { X.fillStyle = st[k]; X.fillRect(-3000, -900 + k * 22, 6000, 22); }
+    /* osma chiroqlar (zarbga mos yorishadi) */
+    for (let k = -7; k <= 7; k++) { const x = k * 260, ph = (k + 20) % 2 ? lp : .55 + .45 * pulse(t + SPB, 4);
+      X.strokeStyle = '#5b6584'; X.lineWidth = 6; X.beginPath(); X.moveTo(x, -1700); X.lineTo(x, -1560); X.stroke();
+      const hg = X.createRadialGradient(x, -1520, 10, x, -1480, 260); hg.addColorStop(0, `rgba(255,244,190,${.55 * ph})`); hg.addColorStop(1, 'rgba(255,244,190,0)');
+      X.fillStyle = hg; X.beginPath(); X.arc(x, -1480, 260, 0, TAU); X.fill();
+      X.fillStyle = '#3d4565'; X.beginPath(); X.moveTo(x - 70, -1520); X.lineTo(x - 30, -1565); X.lineTo(x + 30, -1565); X.lineTo(x + 70, -1520); X.fill();
+      X.fillStyle = `rgba(255,248,200,${.6 + .4 * ph})`; X.beginPath(); X.ellipse(x, -1518, 62, 12, 0, 0, TAU); X.fill(); }
+  });
+}
+function carShape(len, col, glass, wheels, t, spinW) {
+  /* yon ko'rinishdagi sedan/krossover silueti; origin — g'ildiraklar ostidagi markaz */
+  const L = len, h = L * .3;
+  const body = () => { X.beginPath();
+    X.moveTo(-L / 2, -h * .32); X.quadraticCurveTo(-L / 2, -h * .62, -L * .42, -h * .64);
+    X.lineTo(-L * .25, -h * .68); X.quadraticCurveTo(-L * .14, -h * 1.12, L * .04, -h * 1.12);
+    X.lineTo(L * .16, -h * 1.1); X.quadraticCurveTo(L * .27, -h * .78, L * .4, -h * .7);
+    X.quadraticCurveTo(L / 2, -h * .66, L / 2, -h * .4); X.lineTo(L / 2, -h * .2); X.quadraticCurveTo(L / 2, -h * .08, L * .45, -h * .08);
+    X.lineTo(-L * .46, -h * .08); X.quadraticCurveTo(-L / 2, -h * .08, -L / 2, -h * .32); X.closePath(); };
+  body(); X.fillStyle = col; X.fill(); X.strokeStyle = C.ink; X.lineWidth = 8; X.lineJoin = 'round'; X.stroke();
+  X.save(); body(); X.clip();
+  X.fillStyle = 'rgba(255,255,255,.35)'; X.fillRect(-L / 2, -h * .62, L, h * .1);
+  X.fillStyle = 'rgba(0,0,0,.12)'; X.fillRect(-L / 2, -h * .3, L, h * .3);
+  X.restore();
+  if (glass) { X.fillStyle = '#9ad9ff'; X.beginPath(); X.moveTo(-L * .2, -h * .7); X.quadraticCurveTo(-L * .12, -h * 1.04, L * .03, -h * 1.04); X.lineTo(L * .14, -h * 1.02); X.quadraticCurveTo(L * .22, -h * .8, L * .3, -h * .7); X.closePath(); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.stroke();
+    X.beginPath(); X.moveTo(L * .03, -h * 1.04); X.lineTo(L * .03, -h * .7); X.stroke();
+    X.strokeStyle = 'rgba(255,255,255,.8)'; X.lineWidth = 8; X.beginPath(); X.moveTo(-L * .1, -h * .95); X.lineTo(-L * .05, -h * .76); X.stroke(); }
+  X.fillStyle = '#fff3b0'; rr(L * .42, -h * .55, L * .07, h * .12, 8); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 4; X.stroke();
+  X.fillStyle = '#ff5a5a'; rr(-L * .5, -h * .55, L * .05, h * .12, 6); X.fill(); X.stroke();
+  X.strokeStyle = 'rgba(29,27,46,.5)'; X.lineWidth = 4; X.beginPath(); X.moveTo(L * .03, -h * .68); X.lineTo(L * .03, -h * .14); X.moveTo(-L * .2, -h * .68); X.lineTo(-L * .2, -h * .14); X.stroke();
+  if (wheels) for (const wx of [-L * .3, L * .3]) { X.fillStyle = C.ink; X.beginPath(); X.arc(wx, -h * .08, h * .27, 0, TAU); X.fill();
+    X.fillStyle = '#dfe6f2'; X.beginPath(); X.arc(wx, -h * .08, h * .15, 0, TAU); X.fill();
+    X.strokeStyle = '#8c97b0'; X.lineWidth = 5; for (let k = 0; k < 5; k++) { const a = k * TAU / 5 + spinW; X.beginPath(); X.moveTo(wx, -h * .08); X.lineTo(wx + Math.cos(a) * h * .14, -h * .08 + Math.sin(a) * h * .14); X.stroke(); } }
+}
+function robot(x, y, t, ph, col) {
+  /* sanoat robot qo'li: asos, ikki bo'g'in, qisqich — sekin tebranadi */
+  const a1 = -.5 + .28 * Math.sin(t * .55 + ph), a2 = 1.1 + .35 * Math.sin(t * .55 + ph + 1.3), a3 = .4 * Math.sin(t * .9 + ph);
+  X.save(); X.translate(x, y);
+  X.fillStyle = '#4b5373'; rr(-70, -30, 140, 34, 10); X.fill(); X.fillStyle = col; X.beginPath(); X.arc(0, -40, 36, PI, 0); X.fill();
+  X.lineCap = 'round'; const p1 = [Math.sin(a1) * 210, -40 - Math.cos(a1) * 210], p2 = [p1[0] + Math.sin(a1 + a2) * 170, p1[1] - Math.cos(a1 + a2) * 170];
+  for (const [w, c] of [[48, C.ink], [36, col]]) { X.strokeStyle = c; X.lineWidth = w; X.beginPath(); X.moveTo(0, -40); X.lineTo(...p1); X.lineTo(...p2); X.stroke(); }
+  for (const p of [[0, -40], p1]) { X.fillStyle = C.ink; X.beginPath(); X.arc(p[0], p[1], 26, 0, TAU); X.fill(); X.fillStyle = '#e9edf7'; X.beginPath(); X.arc(p[0], p[1], 15, 0, TAU); X.fill(); }
+  X.save(); X.translate(...p2); X.rotate(a1 + a2 + a3); X.fillStyle = C.ink; rr(-26, -10, 52, 26, 6); X.fill(); X.fillStyle = '#c4cbe0'; rr(-22, 10, 12, 34, 4); X.fill(); rr(10, 10, 12, 34, 4); X.fill(); X.restore();
+  X.restore();
+}
+function drawLine(t) {
+  layer(.55, () => {
+    /* orqa pol */
+    X.fillStyle = '#cfd6e6'; X.fillRect(-4000, -760, 8000, 1400);
+    /* konveyer va kuzovlar (sekin, faqat uzoqda) */
+    X.fillStyle = '#3e4766'; X.fillRect(-4000, -812, 8000, 46); X.fillStyle = '#626d92';
+    for (let k = -40; k < 40; k++) { const x = k * 90 + (t * 26) % 90; X.fillRect(x, -806, 40, 8); }
+    X.fillStyle = '#2b3150'; for (let k = -30; k < 30; k++) X.fillRect(k * 260 - 10, -766, 20, 70);
+    const cols = [C.co, C.tq, C.ye, C.cb, C.li, C.or];
+    for (let k = -8; k < 8; k++) { const x = ((k * 560 + t * 26) % 8960 + 8960) % 8960 - 4480;
+      X.save(); X.translate(x, -812); X.scale(.62, .62); carShape(520, shade(cols[(k + 16) % 6], .1), true, false, t, 0); X.restore(); }
+    for (let k = -4; k <= 4; k++) robot(k * 560 + 280, -1030 + 220, t, k * 1.7, k % 2 ? C.or : C.ye);
+    /* xavfsizlik to'sig'i */
+    X.fillStyle = '#ffd23f'; X.fillRect(-4000, -700, 8000, 16); X.fillStyle = C.ink; X.fillRect(-4000, -686, 8000, 4);
+    for (let k = -40; k < 40; k++) { X.fillStyle = '#ffd23f'; X.fillRect(k * 110, -700, 12, 74); }
+    X.fillStyle = '#ffd23f'; X.fillRect(-4000, -654, 8000, 12);
+  });
+}
+function hazard(x, y, w, h, s = 36) {
+  X.save(); X.beginPath(); X.rect(x, y, w, h); X.clip(); X.fillStyle = '#ffd23f'; X.fillRect(x, y, w, h); X.fillStyle = C.ink;
+  for (let k = -h; k < w + h; k += s * 2) { X.beginPath(); X.moveTo(x + k, y + h); X.lineTo(x + k + s, y + h); X.lineTo(x + k + s + h, y); X.lineTo(x + k + h, y); X.fill(); }
+  X.restore();
+}
+function drawCarStage(t) {
+  layer(.8, () => {
+    /* old pol */
+    const g = X.createLinearGradient(0, -640, 0, 900); g.addColorStop(0, '#e4e9f2'); g.addColorStop(1, '#c9d2e3');
+    X.fillStyle = g; X.fillRect(-4000, -640, 8000, 3000);
+    X.strokeStyle = 'rgba(120,135,170,.25)'; X.lineWidth = 3; for (let k = -30; k < 30; k++) { X.beginPath(); X.moveTo(k * 240, -640); X.lineTo(k * 420, 2000); X.stroke(); }
+    /* ko'rgazma podiumi va to'xtab turgan mashina (qimirlamaydi) */
+    X.fillStyle = '#9aa6c2'; X.beginPath(); X.ellipse(-120, -590, 560, 70, 0, 0, TAU); X.fill();
+    X.fillStyle = '#eef2fa'; X.beginPath(); X.ellipse(-120, -604, 560, 70, 0, 0, TAU); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke();
+    X.strokeStyle = 'rgba(25,195,181,.8)'; X.lineWidth = 8; X.beginPath(); X.ellipse(-120, -604, 520, 58, 0, 0, TAU); X.stroke();
+    X.save(); X.translate(-120, -600); carShape(900, '#ff5d6c', true, true, t, 0); X.restore();
+    /* asboblar stoli (o'ngda) va chap tomonda shinalar */
+    X.save(); X.translate(820, -560);
+    X.fillStyle = C.cb; rr(-150, -170, 300, 170, 14); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke();
+    X.fillStyle = '#e8edf7'; rr(-140, -300, 280, 130, 10); X.fill(); X.stroke();
+    for (let k = 0; k < 5; k++) { X.fillStyle = [C.or, C.ye, C.co, C.li, C.tq][k]; rr(-120 + k * 52, -280 + (k % 2) * 16, 18, 70, 6); X.fill(); }
+    for (let k = 0; k < 3; k++) { X.fillStyle = '#fff'; rr(-130, -150 + k * 50, 260, 6, 3); X.fill(); }
+    X.restore();
+    X.save(); X.translate(-1050, -560); for (let k = 0; k < 3; k++) { X.fillStyle = C.ink; X.beginPath(); X.ellipse(0, -40 - k * 56, 110, 30, 0, 0, TAU); X.fill(); X.fillStyle = '#5c6380'; X.beginPath(); X.ellipse(0, -46 - k * 56, 50, 12, 0, 0, TAU); X.fill(); } X.restore();
+  });
+}
+function drawFloor(t) {
+  layer(1, () => {
+    /* mashq maydoni: xavfsiz, mashinalardan uzoq — sariq-qora chegara */
+    X.fillStyle = '#bff0e7'; rr(-760, -250, 1520, 420, 40); X.fill();
+    hazard(-780, -270, 1560, 20); hazard(-780, 170, 1560, 20);
+    X.fillStyle = '#ffd23f'; X.fillRect(-780, -270, 20, 460); X.fillRect(760, -270, 20, 460);
+    X.strokeStyle = 'rgba(25,195,181,.6)'; X.lineWidth = 8; X.setLineDash([26, 20]); X.beginPath(); X.ellipse(0, -40, 520, 150, 0, 0, TAU); X.stroke(); X.setLineDash([]);
+    /* har bir ishchining joy belgisi */
+    for (const c of CREW) { X.fillStyle = shade(c.suit, .35); X.globalAlpha = .7; X.beginPath(); X.ellipse(c.x * (c.row ? .86 : 1), ROWY[c.row] + 4, 120 * ROWS[c.row], 24, 0, 0, TAU); X.fill(); X.globalAlpha = 1; }
+  });
+}
+function drawForeground(t) {
+  layer(1.3, () => {
+    for (const [x, y, c] of [[-560, 400, C.cb], [560, 410, C.co]]) { X.save(); X.translate(x, y);   // asbob qutilari
+      X.fillStyle = c; rr(-120, -110, 240, 110, 14); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 8; X.stroke();
+      X.fillStyle = shade(c, -.2); rr(-120, -110, 240, 30, 12); X.fill(); X.stroke(); X.strokeStyle = C.ink; X.lineWidth = 10; X.beginPath(); X.moveTo(-50, -110); X.lineTo(-50, -140); X.lineTo(50, -140); X.lineTo(50, -110); X.stroke();
+      X.fillStyle = '#fff'; rr(-20, -66, 40, 12, 6); X.fill(); X.restore(); }
+    hazard(-3000, 700, 6000, 26);
+    for (const [x, y] of [[-930, 330], [930, 330], [-1250, 260], [1250, 260], [-330, 440], [330, 450]]) {
+      X.save(); X.translate(x, y);
+      X.fillStyle = C.ink; rr(-70, -12, 140, 24, 8); X.fill();
+      X.fillStyle = C.or; X.beginPath(); X.moveTo(-50, -10); X.lineTo(-14, -170); X.lineTo(14, -170); X.lineTo(50, -10); X.closePath(); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke();
+      X.fillStyle = '#fff'; X.beginPath(); X.moveTo(-36, -64); X.lineTo(-25, -110); X.lineTo(25, -110); X.lineTo(36, -64); X.fill();
+      X.restore(); }
+  });
+}
+
+/* ======================= GRAFIK BEZAKLAR ======================= */
+function star(x, y, r, col, rot0) { X.save(); X.translate(x, y); X.rotate(rot0); X.beginPath();
+  for (let k = 0; k < 10; k++) { const rr2 = k % 2 ? r * .45 : r, a = k * PI / 5 - PI / 2; X.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2); }
+  X.closePath(); X.fillStyle = col; X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.lineJoin = 'round'; X.stroke(); X.restore(); }
+function note(x, y, r, col, rot0) { X.save(); X.translate(x, y); X.rotate(rot0); X.fillStyle = col; X.strokeStyle = C.ink; X.lineWidth = 6;
+  X.beginPath(); X.ellipse(0, 0, r, r * .75, -.4, 0, TAU); X.fill(); X.stroke(); X.fillRect(r * .7, -r * 3, r * .35, r * 3); X.strokeRect(r * .7, -r * 3, r * .35, r * 3);
+  X.beginPath(); X.moveTo(r * 1.05, -r * 3); X.quadraticCurveTo(r * 2.2, -r * 2.4, r * 1.7, -r * 1.4); X.lineWidth = 8; X.strokeStyle = C.ink; X.stroke(); X.restore(); }
+const FL = [C.ye, C.co, C.tq, C.li, C.or, C.cb];
+function flourishes(t, energy) {
+  /* har taktda 3 ta yulduz/nota guruh atrofida "pop" bo'ladi */
+  const b = bpos(t) - B.down, k0 = Math.floor(b / 4);
+  layer(1, () => {
+    for (let k = k0 - 1; k <= k0; k++) for (let j = 0; j < 3; j++) {
+      const tb = t - barT(k), seed = k * 7 + j * 131; if (tb < 0 || tb > 2.2) continue;
+      const side = j % 2 ? 1 : -1, x = side * (520 + 160 * hash(seed)), y = -620 + 520 * hash(seed + 3) - tb * 40;
+      const sc = back(tb / .35) * (1 - sm((tb - 1.6) / .6)) * energy, r = 26 + 16 * hash(seed + 5);
+      if (sc <= .01) continue;
+      X.save(); X.globalAlpha = clamp(sc); X.translate(x, y); X.scale(sc, sc);
+      (hash(seed + 9) > .5 ? star : note)(0, 0, r, FL[(seed >>> 0) % 6], (hash(seed + 11) - .5) + tb * .6 * side);
+      X.restore();
+    }
+  });
+}
+function burst(t, t0, x, y, scale = 1) {
+  /* rangli portlash: nurlar + doiralar (kuchli urg'ularda) */
+  const u = (t - t0) / .9; if (u < 0 || u > 1) return;
+  X.save(); X.translate(x, y); X.scale(scale, scale);
+  for (let k = 0; k < 14; k++) { const a = k * TAU / 14 + .2, r0 = 120 + 340 * eout(u), r1 = r0 + 140 * (1 - u);
+    X.strokeStyle = FL[k % 6]; X.lineWidth = 22 * (1 - u) + 2; X.lineCap = 'round'; X.beginPath(); X.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); X.lineTo(Math.cos(a) * r1, Math.sin(a) * r1); X.stroke(); }
+  for (let k = 0; k < 10; k++) { const a = k * TAU / 10, r = 200 + 420 * eout(u); X.fillStyle = FL[(k + 2) % 6]; X.globalAlpha = 1 - u; X.beginPath(); X.arc(Math.cos(a) * r, Math.sin(a) * r, 18 * (1 - u) + 4, 0, TAU); X.fill(); }
+  X.restore();
+}
+function motionLines(t, R, x, y, s, kind) {
+  /* harakat chiziqlari: qo'l/oyoq urg'usida qisqa yoylar */
+  if (!['raise', 'raiseStep', 'jacks', 'run', 'clap', 'cheer', 'wave', 'step'].includes(kind)) return;
+  const f = bpos(t) % 1, a = Math.exp(-f * 5); if (a < .08) return;
+  X.save(); X.translate(x, y); X.scale(s, s); X.strokeStyle = `rgba(29,27,46,${.55 * a})`; X.lineWidth = 7; X.lineCap = 'round';
+  for (const S of ['L', 'R']) { const w = R['w' + S], sg = S === 'L' ? -1 : 1;
+    for (let k = 0; k < 3; k++) { X.beginPath(); X.arc(w[0] + sg * 34, w[1] + (k - 1) * 22, 18 + k * 4, sg > 0 ? -.8 : PI - .8 + 1.6, sg > 0 ? .8 : PI + .8 - 1.6 + 1.6); X.stroke(); } }
+  X.restore();
+}
+
+/* ======================= OLDINGI KO'RINISH (yon kamera) ======================= */
+function walkX(i, t) {
+  /* kirish: ishchilar chap va o'ngdan zarbga qadam tashlab o'z joyiga keladi */
+  const c = CREW[i], from = c.x < 0 || (c.x === 0 && 0) ? -1 : 1, arrive = 5.25 + [1, 0, 1.5, 2.5, 2, 2.5, 3][i] * .5 + (i === 1 ? 1.5 : 0);
+  const start = arrive - 4.5, u = clamp((t - start) / (arrive - start));
+  return { x: c.x * (c.row ? .86 : 1) + from * (1300 + 120 * c.row) * (1 - eio(u)), walking: u > 0 && u < 1, u };
+}
+function drawFront(t, energy) {
+  drawWall(t); drawLine(t); drawCarStage(t); drawFloor(t);
+  const kind = SEG[segAt(t)][1];
+  layer(1, () => {
+    const order = [3, 4, 5, 6, 0, 1, 2];
+    for (const i of order) {
+      const c = CREW[i], s = ROWS[c.row];
+      let x = c.x * (c.row ? .86 : 1), y = ROWY[c.row];
+      if (t < 11.25) { const w = walkX(i, t); x = w.x; if (w.walking) { /* yurish: zarbda qadam */ } }
+      const R = drawCharacter(i, t, x, y, s);
+      if (t > 11.25) motionLines(t, R, x, y, s, kind);
+    }
+  });
+  drawForeground(t);
+}
+/* yurish pozasi: poseOf ichida walk segmentida qadamlar */
+const _exPose = exPose;
+exPose = function (kind, t, i, t0) {
+  const P = _exPose(kind, t, i, t0);
+  if (kind === 'walk') { const w = walkX(i, t);
+    if (w.walking) { const b = bpos(t), n = Math.floor(b), f = b - n, up = Math.sin(f * PI), L = n % 2 === 0;
+      P.liftL = L ? .45 * up : 0; P.liftR = L ? 0 : .45 * up; P.y = -10 * up; P.aL = .3 + (L ? -.35 : .35) * up; P.aR = .3 + (L ? .35 : -.35) * up; P.turn = CREW[i].x < 0 ? .6 : -.6; P.joy = .8; } }
+  return P;
+};
+
+/* ======================= TEPADAN KO'RINISH ======================= */
+function drawTop(t) {
+  /* zavod poli tepadan: mashq maydoni, joy belgilari, orqada mashina va konveyer — tartib oldingi ko'rinish bilan bir xil */
+  X.fillStyle = '#d7deea'; X.fillRect(-3000, -3000, 6000, 6000);
+  X.strokeStyle = 'rgba(120,135,170,.3)'; X.lineWidth = 4; for (let k = -20; k < 20; k++) { X.beginPath(); X.moveTo(k * 200, -3000); X.lineTo(k * 200, 3000); X.moveTo(-3000, k * 200); X.lineTo(3000, k * 200); X.stroke(); }
+  /* konveyer (shimolda) */
+  X.fillStyle = '#3e4766'; X.fillRect(-3000, -1420, 6000, 220);
+  const cols = [C.co, C.tq, C.ye, C.cb, C.li, C.or];
+  for (let k = -8; k < 8; k++) { const x = ((k * 560 + t * 26) % 8960 + 8960) % 8960 - 4480; X.fillStyle = cols[(k + 16) % 6]; rr(x - 200, -1395, 400, 170, 60); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke(); X.fillStyle = '#9ad9ff'; rr(x - 60, -1380, 110, 140, 30); X.fill(); }
+  hazard(-3000, -1180, 6000, 24);
+  /* podium va mashina (tepadan) */
+  X.fillStyle = '#eef2fa'; X.beginPath(); X.arc(-120, -760, 330, 0, TAU); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 8; X.stroke();
+  X.strokeStyle = C.tq; X.lineWidth = 9; X.beginPath(); X.arc(-120, -760, 300, 0, TAU); X.stroke();
+  X.save(); X.translate(-120, -760);
+  X.fillStyle = C.ink; for (const [wx, wy] of [[-170, -95], [170, -95], [-170, 95], [170, 95]]) { rr(wx - 40, wy - 18, 80, 36, 10); X.fill(); }
+  X.fillStyle = '#ff5d6c'; rr(-270, -100, 540, 200, 70); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 8; X.stroke();
+  X.fillStyle = '#9ad9ff'; rr(-110, -80, 230, 160, 40); X.fill(); X.stroke(); X.fillStyle = '#ff7d89'; rr(-60, -66, 120, 132, 26); X.fill();
+  X.fillStyle = 'rgba(255,255,255,.4)'; rr(-240, -80, 120, 24, 12); X.fill();
+  X.restore();
+  /* mashq maydoni */
+  X.fillStyle = '#bff0e7'; rr(-880, -500, 1760, 800, 50); X.fill();
+  hazard(-900, -520, 1800, 20); hazard(-900, 300, 1800, 20); X.fillStyle = '#ffd23f'; X.fillRect(-900, -520, 20, 840); X.fillRect(880, -520, 20, 840);
+  X.strokeStyle = 'rgba(25,195,181,.7)'; X.lineWidth = 10; X.setLineDash([30, 22]); X.beginPath(); X.ellipse(0, -120, 760, 330, 0, 0, TAU); X.stroke(); X.setLineDash([]);
+  /* ishchilar tepadan (oldingi qator janubda) */
+  const P0 = { 0: 0 }, b = bpos(t);
+  for (const i of [3, 4, 5, 6, 0, 1, 2]) {
+    const c = CREW[i], x = c.x * 1.15, y = c.row ? -300 : 60, P = poseOf(i, t);
+    X.fillStyle = shade(c.suit, .35); X.beginPath(); X.arc(x, y, 130, 0, TAU); X.fill();
+    X.save(); X.translate(x, y); X.rotate(P.twist * .5);
+    X.fillStyle = 'rgba(20,30,60,.18)'; X.beginPath(); X.ellipse(12, 16, 120, 60, 0, 0, TAU); X.fill();
+    for (const s of [-1, 1]) { X.fillStyle = C.paper; rr(s * 30 - 22, 30, 44, 62, 20); X.fill(); X.fillStyle = c.shoe; rr(s * 30 - 16, 40, 32, 48, 14); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.stroke(); }
+    // qo'llar ikki yonga yoyilgan (tepadan "+" shakli)
+    for (const s of [-1, 1]) { X.lineCap = 'round'; X.beginPath(); X.moveTo(s * 50, -2); X.lineTo(s * 168, -2);
+      X.strokeStyle = C.paper; X.lineWidth = 44; X.stroke(); X.strokeStyle = C.ink; X.lineWidth = 34; X.stroke(); X.strokeStyle = c.suit; X.lineWidth = 25; X.stroke();
+      X.fillStyle = C.paper; X.beginPath(); X.arc(s * 176, -2, 26, 0, TAU); X.fill(); X.fillStyle = c.glove; X.beginPath(); X.arc(s * 176, -2, 18, 0, TAU); X.fill(); X.lineWidth = 6; X.strokeStyle = C.ink; X.stroke(); }
+    X.fillStyle = C.paper; rr(-82, -40, 164, 82, 38); X.fill();
+    X.fillStyle = c.suit; rr(-72, -32, 144, 66, 30); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 8; X.stroke();
+    if (c.feat === 'ponytail') { X.fillStyle = c.hair; X.beginPath(); X.ellipse(0, 46 + 5 * Math.sin(t * 7), 15, 24, 0, 0, TAU); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 6; X.stroke(); }
+    X.fillStyle = C.paper; X.beginPath(); X.arc(0, -6, 52, 0, TAU); X.fill();
+    X.fillStyle = shade(c.hat, -.08); X.beginPath(); X.arc(0, -6, 44, 0, TAU); X.fill(); X.strokeStyle = C.ink; X.lineWidth = 7; X.stroke();
+    X.fillStyle = c.hat; X.beginPath(); X.arc(0, -10, 32, 0, TAU); X.fill(); X.stroke();
+    X.fillStyle = shade(c.hat, -.2); rr(-6, -42, 12, 64, 6); X.fill();
+    X.fillStyle = 'rgba(255,255,255,.5)'; X.beginPath(); X.ellipse(-13, -24, 11, 6, -.6, 0, TAU); X.fill();
+    X.restore();
+  }
+  /* ritmik halqalar */
+  const r = 620 + 60 * pulse(t, 3); X.strokeStyle = `rgba(255,138,31,${.35 * pulse(t, 3)})`; X.lineWidth = 14; X.beginPath(); X.ellipse(0, -110, r, r * .47, 0, 0, TAU); X.stroke();
+}
+
+/* ======================= KADRLAR (kamera rejasi) ======================= */
+/* [boshlanish, turi, kamera kalitlari [[u, cx, cy, z], ...], o'tish] */
+const MED = [0, -330, .98], WIDE = [-60, -560, .6];
+const SHOTS = [
+  [0, 'f', [[0, -80, -1150, .5], [.55, -60, -700, .56], [1, -40, -560, .62]], 'none'],
+  [9.25, 'f', [[0, -40, -560, .62], [1, 0, -380, .9]], 'cut'],
+  [17.25, 'f', [[0, 0, -330, 1.0], [1, 0, -320, 1.06]], 'drop'],
+  [23.25, 'f', [[0, 0, -440, 2.3], [1, 0, -430, 2.45]], 'whip'],
+  [25.25, 'f', [[0, -470, -330, 1.55], [1, 470, -330, 1.55]], 'cut'],
+  [37.25, 'f', [[0, -300, 20, 2.4], [1, 260, 20, 2.4]], 'cut'],
+  [41.25, 'f', [[0, -40, -520, .68], [1, -20, -470, .76]], 'cut'],
+  [51.25, 'f', [[0, 0, -330, .98], [1, 0, -350, 1.12]], 'cut'],
+  [61.25, 'f', [[0, -330, -430, 2.05], [.35, -330, -430, 2.05], [.6, 330, -430, 2.05], [1, 330, -430, 2.1]], 'whip'],
+  [67.25, 'f', [[0, -60, -330, 1.02], [1, 60, -330, 1.02]], 'cut'],
+  [77.25, 'f', [[0, 0, -480, .74], [1, 0, -460, .8]], 'cut'],
+  [81.25, 'f', [[0, -380, -360, 1.4], [1, 380, -360, 1.4]], 'cut'],
+  [89.25, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.1]], 'cut'],
+  [97.25, 'f', [[0, -80, -520, .7], [1, 80, -500, .74]], 'flash'],
+  [111.25, 'f', [[0, 0, -300, 2.2], [1, 0, -300, 2.4]], 'cut'],
+  [117.25, 'f', [[0, 0, -330, 1.0], [1, 0, -340, 1.1]], 'cut'],
+  [129.25, 'f', [[0, 0, -540, .66], [.3, 0, -360, .98], [1, 0, -340, 1.04]], 'drop'],
+  [141.25, 'f', [[0, -330, -400, 1.7], [.4, -330, -400, 1.7], [1, 0, -340, 1.0]], 'cut'],
+  [149.25, 'f', [[0, -360, -340, 1.3], [1, 360, -340, 1.3]], 'cut'],
+  [161.25, 'f', [[0, 0, -330, 1.0], [1, 0, -340, 1.06]], 'cut'],
+  [167.25, 'f', [[0, -360, -340, 1.35], [1, 360, -340, 1.35]], 'cut'],
+  [177.25, 'f', [[0, -146, -560, 1.45], [1, -146, -580, 1.55]], 'whip'],
+  [181.25, 't', [[0, 0, -90, .95, -.2], [1, 0, -110, 1.12, .2]], 'iris'],
+  [193.25, 'f', [[0, -220, -620, .56], [1, 220, -560, .6]], 'iris'],
+  [209.25, 'f', [[0, 0, -520, .66], [1, 0, -300, 1.3]], 'cut'],
+  [225.25, 'f', [[0, 0, -320, 1.0], [1, 0, -330, 1.08]], 'drop'],
+  [233.25, 'f', [[0, -300, -150, 1.9], [1, 300, -150, 1.9]], 'cut'],
+  [241.25, 'f', [[0, 0, -330, 1.0], [1, 0, -360, 1.1]], 'cut'],
+  [253.25, 'f', [[0, 0, -500, .72], [1, 0, -470, .8]], 'cut'],
+  [265.25, 'f', [[0, 0, -360, 1.0], [.75, 0, -380, 1.12], [1, 0, -460, .9]], 'drop'],
+  [273.25, 'f', [[0, 0, -440, .95], [.3, -40, -520, .78], [1, -40, -540, .74]], 'drop'],
+];
+const DROPS = [17.25, 129.25, 225.25, 273.25];
+function shotAt(t) { let k = 0; while (k < SHOTS.length - 1 && t >= SHOTS[k + 1][0]) k++; return k; }
+function camAt(t) {
+  const k = shotAt(t), S = SHOTS[k], t0 = S[0], t1 = k < SHOTS.length - 1 ? SHOTS[k + 1][0] : B.dur, u = (t - t0) / (t1 - t0), ks = S[2];
+  let j = 0; while (j < ks.length - 2 && u > ks[j + 1][0]) j++;
+  const a = ks[j], b2 = ks[j + 1], v = eio((u - a[0]) / (b2[0] - a[0] || 1));
+  const cam = { cx: lerp(a[1], b2[1], v), cy: lerp(a[2], b2[2], v), z: lerp(a[3], b2[3], v), r: lerp(a[4] || 0, b2[4] || 0, v), view: S[1], k, t0, tr: S[3] };
+  /* takt boshida kichik "punch" zoom; drop da kuchliroq */
+  const tb = t - barT(Math.floor((bpos(t) - B.down) / 4)), drop = DROPS.some(d => t >= d && t < d + 8);
+  cam.z *= 1 + (drop ? .03 : .014) * Math.exp(-tb * 6) * Math.sin(Math.min(tb * 18, PI));
+  /* whip: kesish atrofida tez gorizontal surilish */
+  if (S[3] === 'whip' && t - t0 < .22) cam.cx += (1 - eout((t - t0) / .22)) * 900 / cam.z;
+  if (k + 1 < SHOTS.length && SHOTS[k + 1][3] === 'whip' && t1 - t < .22) cam.cx -= eio(1 - (t1 - t) / .22) * 900 / cam.z;
+  if (cam.view === 'f' && cam.z < 1.3) cam.cy -= 60 * (1.3 - cam.z) / .3;
+  return cam;
+}
+
+/* ======================= KADR ======================= */
+function render(t) {
+  const cam = camAt(t); CAM = cam;
+  X.setTransform(1, 0, 0, 1, 0, 0); X.fillStyle = '#f7f1e3'; X.fillRect(0, 0, W, H);
+  const energy = t < 17.25 ? .5 : (t >= 97.25 && t < 129.25) || (t >= 193.25 && t < 209.25) ? .6 : 1;
+  if (cam.view === 't') {
+    X.save(); X.translate(W / 2, H / 2); X.rotate(cam.r); X.scale(cam.z, cam.z); X.translate(-cam.cx, -cam.cy); drawTop(t); X.restore();
+  } else {
+    drawFront(t, energy);
+    flourishes(t, energy);
+    layer(1, () => { for (const d of DROPS) burst(t, d, 0, -560, 1.3); burst(t, 178.25, -146, -560, .9); burst(t, 296.75, 0, -600, 1.4); });
+  }
+  /* iris o'tish (yon ↔ tepa) */
+  const k = cam.k, S = SHOTS[k];
+  if (S[3] === 'iris' && t - S[0] < .5) { const u = eio((t - S[0]) / .5); X.save(); X.globalCompositeOperation = 'destination-in'; X.setTransform(1, 0, 0, 1, 0, 0);
+    X.beginPath(); X.arc(W / 2, H * .55, 1300 * u + 1, 0, TAU); X.fill(); X.restore();
+    X.save(); X.globalCompositeOperation = 'destination-over'; X.setTransform(1, 0, 0, 1, 0, 0); X.fillStyle = C.tq; X.fillRect(0, 0, W, H); X.restore();
+    X.save(); X.setTransform(1, 0, 0, 1, 0, 0); X.strokeStyle = C.ye; X.lineWidth = 26; X.beginPath(); X.arc(W / 2, H * .55, 1300 * u + 1, 0, TAU); X.stroke(); X.restore(); }
+  /* post */
+  const sinceCut = t - S[0], dropFlash = DROPS.some(d => t >= d && t < d + .3) ? 1 - (t - DROPS.find(d => t >= d && t < d + .3)) / .3 : 0;
+  const flash = Math.max(S[3] === 'flash' && sinceCut < .35 ? .55 * (1 - sinceCut / .35) : 0, dropFlash * .6, t > 296.75 ? .5 * (1 - (t - 296.75) / .29) : 0);
+  const fadeIn = clamp(t / .6), fadeOut = 1;
+  post(t, Math.max(flash, 1 - fadeIn) * fadeOut);
+}
+/* post qatlam kanvasning o'zida (tez): iliq light leak, yengil vinyetka, plyonka donasi, oq chaqnash */
+const VIG = (() => { const g = X.createRadialGradient(W / 2, H / 2, H * .32, W / 2, H / 2, H * .62); g.addColorStop(0, 'rgba(20,20,40,0)'); g.addColorStop(1, 'rgba(20,20,40,.22)'); return g; })();
+const GC = document.createElement('canvas'); GC.width = 270; GC.height = 480; const GX = GC.getContext('2d'), GI = GX.createImageData(270, 480);
+function post(t, flash) {
+  X.setTransform(1, 0, 0, 1, 0, 0);
+  const x1 = W * (.25 + .2 * Math.sin(t * .23)), y1 = H * (.18 + .1 * Math.sin(t * .17));
+  X.globalCompositeOperation = 'screen'; let g = X.createRadialGradient(x1, y1, 0, x1, y1, 700); g.addColorStop(0, 'rgba(255,190,110,.16)'); g.addColorStop(1, 'rgba(255,190,110,0)');
+  X.fillStyle = g; X.fillRect(0, 0, W, H); X.globalCompositeOperation = 'source-over';
+  X.fillStyle = VIG; X.fillRect(0, 0, W, H);
+  const d = GI.data; let sd = (Math.floor(t * 24) * 9301 + 49297) | 0;
+  for (let i = 0; i < d.length; i += 4) { sd = (sd * 1103515245 + 12345) | 0; const v = (sd >>> 16) & 255; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+  GX.putImageData(GI, 0, 0); X.globalCompositeOperation = 'overlay'; X.globalAlpha = .06; X.imageSmoothingEnabled = false; X.drawImage(GC, 0, 0, W, H);
+  X.globalAlpha = 1; X.globalCompositeOperation = 'source-over'; X.imageSmoothingEnabled = true;
+  if (flash > 0) { X.fillStyle = `rgba(255,250,240,${clamp(flash)})`; X.fillRect(0, 0, W, H); }
+}
+/* kadr eksporti: subkadrlar kanvasda o'rtachalanadi (motion blur), JPEG qaytariladi */
+const ACC = document.createElement('canvas'); ACC.width = W; ACC.height = H; const AX = ACC.getContext('2d');
+window.frameJPEG = (ts, q = .95) => { ts.forEach((st, k) => { render(st); AX.globalAlpha = 1 / (k + 1); AX.drawImage(cv, 0, 0); }); AX.globalAlpha = 1; return ACC.toDataURL('image/jpeg', q); };
+window.seek = async t => { render(t); };
+window.TOTAL = B.dur;
+document.fonts.ready.then(() => { render(0); window.ready = true; });
+</script></body></html>
