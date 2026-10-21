@@ -1,6 +1,7 @@
 # Barcha gaplar qiz ovozida: qizning o'z gaplari (toza, tenglashtirilgan) + o'g'il bola gaplari Sarah (eleven_v4, uz) ovozida,
 # o'g'il bola gapirgan vaqtlarga qo'yiladi. Fon: asl musiqa (bed.wav), hushtak yo'q, oxirida olqish.
-import json, numpy as np, subprocess
+import json, sys, numpy as np, subprocess
+BED=sys.argv[1] if len(sys.argv)>1 else 'bed.wav'; MG=float(sys.argv[2]) if len(sys.argv)>2 else 1.0; OUTW=sys.argv[3] if len(sys.argv)>3 else 'mix_qiz.wav'
 SR=44100; Q='/home/user/Loyha-/audio/badantarbiya/qiz_ovozi/audio/'
 def load(p,ch=1,af='anull'):
     a=np.frombuffer(subprocess.run(['ffmpeg','-v','error','-i',p,'-af',af,'-f','f32le','-ac',str(ch),'-ar',str(SR),'-'],capture_output=True).stdout,np.float32).reshape(-1,ch).copy()
@@ -27,11 +28,11 @@ for sp in spans:
 vox.astype(np.float32).tofile('v.f32')
 subprocess.run(['ffmpeg','-v','error','-y','-f','f32le','-ar',str(SR),'-ac','1','-i','v.f32','-af','aecho=0.9:0.6:35|60:0.10|0.06','v_rev.wav'],check=True)
 vox=load('v_rev.wav')[:n]
-music=load('bed.wav',2); T=len(music); vo=np.zeros(T,np.float32); vo[:min(n,T)]=vox[:min(n,T)]
+music=load(BED,2)*MG; T=len(music); vo=np.zeros(T,np.float32); vo[:min(n,T)]=vox[:min(n,T)]
 act=(np.convolve(np.abs(vo),np.ones(2205)/2205,'same')>0.003).astype(np.float32)
 env=np.clip(np.convolve(act,np.ones(int(.35*SR))/int(.35*SR),'same')*1.5,0,1)
 fade=np.ones(T,np.float32); fe=int((T/SR-2.5)*SR); fade[fe:]=np.linspace(1,0,T-fe)
 out=music*((1-env*(1-10**(-9/20)))*fade)[:,None]+vo[:,None]
 ap=load('applause.mp3',2); i=int(288.2*SR); e=min(T,i+len(ap)); out[i:e]+=ap[:e-i]*0.45
 np.clip(out,-1,1).astype(np.float32).tofile('mix.f32')
-subprocess.run(['ffmpeg','-v','error','-y','-f','f32le','-ar',str(SR),'-ac','2','-i','mix.f32','mix_qiz.wav'],check=True)
+subprocess.run(['ffmpeg','-v','error','-y','-f','f32le','-ar',str(SR),'-ac','2','-i','mix.f32',OUTW],check=True)
