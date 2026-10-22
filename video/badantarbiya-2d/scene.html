@@ -61,7 +61,7 @@ const SEG = [
   [85.75, 'wide'], [87.75, 'shReady'], [94.25, 'shoulder'], [111.25, 'idle'], [113.75, 'fistReady'], [123.75, 'fist'],
   [141.75, 'idle'], [144.75, 'wide'], [146.75, 'hipsWide'], [153.25, 'waist'], [168.75, 'wide'], [170.75, 'spreadWide'], [176.25, 'twist'],
   [198.25, 'idle'], [202.25, 'wide'], [204.25, 'kneeReady'], [210.75, 'knees'], [225.75, 'idle'], [227.75, 'kneeTReady'], [233.25, 'kneesT'],
-  [253.75, 'idle'], [255.75, 'wider'], [257.75, 'lungeReady'], [265.25, 'lunge'], [279.75, 'thanks'], [288.25, 'pump'], [290.25, 'cheer'],
+  [253.75, 'idle'], [255.75, 'wider'], [257.75, 'lungeReady'], [265.25, 'lunge'], [279.75, 'thanks'], [288.75, 'pump'], [290.25, 'cheer'],
 ];
 /* har bir ishchining bitta qisqa "xarakter lahzasi" */
 const MOMENT = [
@@ -621,9 +621,9 @@ const SHOTS = [
   [265.25, 'f', [[0, 0, -500, .74], [1, 0, -470, .82]], 'cut'],
   [273.25, 'f', [[0, 0, -330, 1.0], [1, 0, -350, 1.08]], 'cut'],
   [279.75, 'f', [[0, 0, -400, 1.3], [1, 0, -400, 1.4]], 'cut'],
-  [288.25, 'f', [[0, 0, -380, 1.15], [.25, 0, -500, .85], [1, -30, -560, .72]], 'cut'],
+  [288.75, 'f', [[0, 0, -380, 1.15], [.25, 0, -500, .85], [1, -30, -560, .72]], 'cut'],
 ];
-const DROPS = [17.25, 129.25, 225.25, 288.25];
+const DROPS = [17.25, 129.25, 225.25, 288.75];
 function shotAt(t) { let k = 0; while (k < SHOTS.length - 1 && t >= SHOTS[k + 1][0]) k++; return k; }
 function camAt(t) {
   const k = shotAt(t), S = SHOTS[k], t0 = S[0], t1 = k < SHOTS.length - 1 ? SHOTS[k + 1][0] : B.dur, u = (t - t0) / (t1 - t0), ks = S[2];
