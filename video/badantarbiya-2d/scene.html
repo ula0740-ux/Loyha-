@@ -12,7 +12,12 @@ html,body{margin:0;background:#000;overflow:hidden}
 <script>
 /* Avtomobil zavodida stiker-odamchalar badantarbiyasi. Hammasi t dan hisoblanadi (seek(t)).
    Mashqlar audiodagi ko'rsatmalarga, harakatlar 120 BPM zarbiga, kadrlar musiqa bo'limlariga bog'langan. */
-const W = 1080, H = 1920, cv = document.getElementById('c'), X = cv.getContext('2d');
+/* o'lcham: standart 9:16 (1080x1920); ?w=1920&h=1080 — kompyuter ekrani (16:9) */
+const QS = new URLSearchParams(location.search), W = +(QS.get('w') || 1080), H = +(QS.get('h') || 1920), LAND = W > H;
+const ZK = 1;                         // gorizontal kadrda ham shu zoom: keng ekran guruhni va zavodni to'liq sig'diradi
+const cv = document.getElementById('c'); cv.width = W; cv.height = H;
+Object.assign(document.getElementById('stage').style, { width: W + 'px', height: H + 'px' });
+const X = cv.getContext('2d');
 const B = window.BEAT, SPB = 60 / B.bpm;
 const bpos = t => (t - B.off) / SPB;                       // zarb pozitsiyasi
 const barT = k => B.off + (B.down + 4 * k) * SPB;           // k-taktning boshi (1.25 + 2k)
@@ -632,6 +637,7 @@ function camAt(t) {
   if (S[3] === 'whip' && t - t0 < .22) cam.cx += (1 - eout((t - t0) / .22)) * 900 / cam.z;
   if (k + 1 < SHOTS.length && SHOTS[k + 1][3] === 'whip' && t1 - t < .22) cam.cx -= eio(1 - (t1 - t) / .22) * 900 / cam.z;
   if (cam.view === 'f' && cam.z < 1.3) { cam.cy -= 60 * (1.3 - cam.z) / .3; cam.z *= .9; }
+  cam.z *= ZK; if (LAND && cam.view === 'f') cam.cy += cam.cy > -200 && cam.z > 1.8 ? -110 : 20;   // keng ekranda oyoq yaqin planlari biroz yuqoriroq
   return cam;
 }
 
@@ -649,9 +655,9 @@ function render(t) {
   /* iris o'tish (yon ↔ tepa) */
   const k = cam.k, S = SHOTS[k];
   if (S[3] === 'iris' && t - S[0] < .5) { const u = eio((t - S[0]) / .5); X.save(); X.globalCompositeOperation = 'destination-in'; X.setTransform(1, 0, 0, 1, 0, 0);
-    X.beginPath(); X.arc(W / 2, H * .55, 1300 * u + 1, 0, TAU); X.fill(); X.restore();
+    X.beginPath(); X.arc(W / 2, H * .55, Math.hypot(W, H) * .68 * u + 1, 0, TAU); X.fill(); X.restore();
     X.save(); X.globalCompositeOperation = 'destination-over'; X.setTransform(1, 0, 0, 1, 0, 0); X.fillStyle = C.tq; X.fillRect(0, 0, W, H); X.restore();
-    X.save(); X.setTransform(1, 0, 0, 1, 0, 0); X.strokeStyle = C.ye; X.lineWidth = 26; X.beginPath(); X.arc(W / 2, H * .55, 1300 * u + 1, 0, TAU); X.stroke(); X.restore(); }
+    X.save(); X.setTransform(1, 0, 0, 1, 0, 0); X.strokeStyle = C.ye; X.lineWidth = 26; X.beginPath(); X.arc(W / 2, H * .55, Math.hypot(W, H) * .68 * u + 1, 0, TAU); X.stroke(); X.restore(); }
   /* post */
   const sinceCut = t - S[0], dropFlash = DROPS.some(d => t >= d && t < d + .3) ? 1 - (t - DROPS.find(d => t >= d && t < d + .3)) / .3 : 0;
   const flash = Math.max(S[3] === 'flash' && sinceCut < .35 ? .55 * (1 - sinceCut / .35) : 0, dropFlash * .6, 0);
@@ -659,8 +665,8 @@ function render(t) {
   post(t, Math.max(flash, 1 - fadeIn) * fadeOut);
 }
 /* post qatlam kanvasning o'zida (tez): iliq light leak, yengil vinyetka, plyonka donasi, oq chaqnash */
-const VIG = (() => { const g = X.createRadialGradient(W / 2, H / 2, H * .32, W / 2, H / 2, H * .62); g.addColorStop(0, 'rgba(20,20,40,0)'); g.addColorStop(1, 'rgba(20,20,40,.22)'); return g; })();
-const GC = document.createElement('canvas'); GC.width = 270; GC.height = 480; const GX = GC.getContext('2d'), GI = GX.createImageData(270, 480);
+const VIG = (() => { const g = X.createRadialGradient(W / 2, H / 2, Math.max(W, H) * .32, W / 2, H / 2, Math.max(W, H) * .62); g.addColorStop(0, 'rgba(20,20,40,0)'); g.addColorStop(1, 'rgba(20,20,40,.22)'); return g; })();
+const GC = document.createElement('canvas'); GC.width = W / 4; GC.height = H / 4; const GX = GC.getContext('2d'), GI = GX.createImageData(W / 4, H / 4);
 function post(t, flash) {
   X.setTransform(1, 0, 0, 1, 0, 0);
   const x1 = W * (.25 + .2 * Math.sin(t * .23)), y1 = H * (.18 + .1 * Math.sin(t * .17));
