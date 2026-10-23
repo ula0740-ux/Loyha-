@@ -47,13 +47,14 @@ def count_block(spacing=None):
         parts.append(np.pad(seg, (0, max(0, int(spacing * SR) - len(seg))))[:max(len(seg), int(spacing * SR))])
     return np.concatenate(parts + [a[cut:]])
 def line(fid):
-    if fid == 'f3':   # ko'rsatma + alohida yozilgan "Bo'shashmaymiz, ADM Jizzax xodimlari!" (ADM audio boshidagidek)
-        x = np.concatenate([tighten(load(M + 'lines/f3a.mp3', 1, TRIM + TONE)), np.zeros(int(.35 * SR), np.float32), tighten(load(M + 'lines/f3b.mp3', 1, TRIM + TONE))])
-    else: x = tighten(load(M + 'lines/' + fid + '.mp3', 1, TRIM + TONE))
+    # f3, f5: oxiridagi "ADM Jizzax xodimlari" — audio boshidagi (f0) bo'lakning aynan o'zi (laura_adm_same.py)
+    src = M + 'lines/' + (fid + '_full.wav' if fid in ('f3', 'f5') else fid + '.mp3')
+    x = tighten(load(src, 1, TRIM + TONE))
     return x * 10 ** ((-16.5 - lufs(x)) / 20)
 mode, mus, outp = sys.argv[1:4]
 cb = count_block(); cb = cb * 10 ** ((-16.5 - lufs(cb)) / 20)
-cbw = count_block(1.0); cbw = cbw * 10 ** ((-16.5 - lufs(cbw)) / 20)   # bel mashqi: sanoq oralari ~1 s
+# bel mashqi: Laura sanoqni o'zi sekinroq aytgan yozuv ("Bir. Ikki. Uch. To'rt.", oraliq ~0.8 s, bir maromda) — kesilmaydi, cho'zilmaydi
+cbw = load(M + 'counts/sekin.mp3', 1, TRIM + TONE); cbw = cbw * 10 ** ((-16.5 - lufs(cbw)) / 20)
 if mode == 'shablon':
     g = load('/tmp/claude-0/-home-user-Loyha-/c834dc26-1eb9-51ce-89e6-3a681ac8c16d/scratchpad/tpl3/laura_salom.mp3', 1, TRIM + TONE); g = tighten(g); g = g * 10 ** ((-16.5 - lufs(g)) / 20)
     v = np.concatenate([np.zeros(int(.5 * SR), np.float32), g, np.zeros(int(.35 * SR), np.float32), cb]); T = len(v) + int(1.2 * SR)
