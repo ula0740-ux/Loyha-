@@ -29,13 +29,17 @@ export const MODEL_CAPS: Record<string, ModelCaps> = {
 };
 
 /** Request body with only the parameters `model` supports. */
-export function ttsBody(text: string, model: string, o: { seed?: number; previousText?: string; nextText?: string } = {}) {
+/** ElevenLabs voice_settings (stability, similarity_boost, style, use_speaker_boost) — sent only when given. */
+export interface VoiceSettings { stability?: number; similarity_boost?: number; style?: number; use_speaker_boost?: boolean }
+
+export function ttsBody(text: string, model: string, o: { seed?: number; previousText?: string; nextText?: string; voiceSettings?: VoiceSettings } = {}) {
   const caps = MODEL_CAPS[model];
   const body: Record<string, unknown> = { text, model_id: model };
   if (caps?.uzLanguageCode) body.language_code = 'uz';
   if (caps?.seed && o.seed !== undefined) body.seed = o.seed;
   if (caps?.contextText && o.previousText) body.previous_text = o.previousText;
   if (caps?.contextText && o.nextText) body.next_text = o.nextText;
+  if (o.voiceSettings) body.voice_settings = o.voiceSettings;   // eleven_v4 accepted it in a live test (2026-10-23)
   return body;
 }
 
@@ -47,7 +51,7 @@ const key = () => {
 
 export interface Synth { mp3: Buffer; words: { text: string; start: number; end: number }[] }
 
-export interface SynthOpts { voice?: string; model?: string; seed?: number; previousText?: string; nextText?: string }
+export interface SynthOpts { voice?: string; model?: string; seed?: number; previousText?: string; nextText?: string; voiceSettings?: VoiceSettings }
 
 export async function synth(text: string, opts: SynthOpts = {}): Promise<Synth> {
   const model = opts.model || DEFAULT_MODEL;
