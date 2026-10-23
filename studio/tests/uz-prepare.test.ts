@@ -33,7 +33,7 @@ test('sʼh is two sounds, not the digraph sh', () => {
 test('numbers in Uzbek words', () => {
   assert.equal(cardinal(855), 'sakkiz yuz ellik besh');
   assert.equal(cardinal(2026), 'ikki ming yigirma olti');
-  assert.equal(cardinal(172), 'bir yuz yetmish ikki');
+  assert.equal(cardinal(172), 'yuz yetmish ikki');
   assert.equal(ordinal(2026), 'ikki ming yigirma oltinchi');
   assert.equal(ordinal(1), 'birinchi');
   assert.equal(ordinal(9), 'toʻqqizinchi');
@@ -130,4 +130,15 @@ test('variant F (chosen by ear): pause after ADM, sentence-final deep x ends wit
   assert.equal(prepareUzbek('ADM Jizzax. Hisobot tayyor.', 'latin', lex as never).tts, 'A-de-em, Jizzakh! Hisobot tayyor.');
   assert.equal(prepareUzbek('Jizzax xodimlariga xayr.', 'latin', { entries: {} }).tts, 'Jizzakh khodimlariga khayr.', 'only a word ending in x gets "!"');
   assert.equal(prepareUzbek('Jizzax, xodim.', 'latin', { entries: {} }, { xAsKh: false }).tts, 'Jizzax, xodim.');
+});
+
+test('yoʻ is й + ў, not ё (yoʻl, yoʻq, yoʻnalish)', () => {
+  assert.equal(latToCyr("yo‘l yo'q Yo‘nalish yoz"), 'йўл йўқ Йўналиш ёз');
+  assert.equal(cyrToLat('йўл йўқ Йўналиш ёз'), 'yoʻl yoʻq Yoʻnalish yoz');
+});
+
+test('ordinal before a word with a case ending (2026-yilda, 3-sinfga)', () => {
+  assert.equal(expandNumbers('2026-yilda').text, 'ikki ming yigirma oltinchi yilda');
+  assert.equal(expandNumbers('3-sinfga').text, 'uchinchi sinfga');
+  assert.equal(expandNumbers('2026-йилда').text, 'ikki ming yigirma oltinchi йилда');
 });

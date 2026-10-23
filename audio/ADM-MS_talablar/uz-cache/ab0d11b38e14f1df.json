@@ -1,0 +1,17 @@
+{
+ "i": 12,
+ "text": "Talab: Pi-ai yetti.",
+ "tts": "Talab: Pi-ai yetti.",
+ "hash": "ab0d11b38e14f1df",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/ab0d11b38e14f1df.mp3",
+ "duration": 2.35102,
+ "takes": 3,
+ "similarity": 0.875,
+ "problems": [
+  {
+   "expected": "piai",
+   "heard": "pa"
+  }
+ ],
+ "heard": "talab pa yetti"
+}
