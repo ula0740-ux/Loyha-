@@ -33,15 +33,27 @@ def stretch(x, dur):
     y = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 's.f32', '-af', f'atempo={max(.5, min(2, r)):.4f}', '-f', 'f32le', '-'], capture_output=True).stdout, np.float32)
     n = int(dur * SR); return np.pad(y, (0, max(0, n - len(y))))[:n]
 SLOW = .87   # foydalanuvchi: tabiiy sanoq yaxshi, lekin biroz tez — sanoq qismi 13% sekinroq (ohang balandligi o'zgarmaydi)
-def count_block(c=None):
+def count_block(spacing=None):
     """foydalanuvchi tanlagan Sanoq_1_tabiiy: bitta tabiiy yozuv; sanoq qismi atempo bilan sekinlashtiriladi, 'Qani-qani...' o'z tezligida"""
     a = load(M + 'counts/tabiiy.mp3', 1, TONE); w = json.load(open(M + 'counts/tabiiy.json'))
     cut = int((w[8]['start'] - .03) * SR); head = a[int(max(0, w[0]['start'] - .05) * SR):cut].copy(); head.astype(np.float32).tofile('s.f32')
     head = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 's.f32', '-af', f'atempo={SLOW}', '-f', 'f32le', '-'], capture_output=True).stdout, np.float32)
-    return np.concatenate([head, a[cut:]])
-def line(fid): x = tighten(load(M + 'lines/' + fid + '.mp3', 1, TRIM + TONE)); return x * 10 ** ((-16.5 - lufs(x)) / 20)
+    if not spacing: return np.concatenate([head, a[cut:]])
+    # bel mashqi: so'zlar cho'zilmaydi, faqat oralari uzaytiriladi (har so'z boshlanishi spacing s dan)
+    t0 = w[0]['start'] - .05; st = [(x['start'] - .05 - t0) / SLOW for x in w[:8]] + [len(head) / SR]
+    parts = []
+    for i in range(8):
+        seg = head[int(st[i] * SR):int(st[i + 1] * SR)].copy(); f = int(.015 * SR); seg[-f:] *= np.linspace(1, 0, f)
+        parts.append(np.pad(seg, (0, max(0, int(spacing * SR) - len(seg))))[:max(len(seg), int(spacing * SR))])
+    return np.concatenate(parts + [a[cut:]])
+def line(fid):
+    if fid == 'f3':   # ko'rsatma + alohida yozilgan "Bo'shashmaymiz, ADM Jizzax xodimlari!" (ADM audio boshidagidek)
+        x = np.concatenate([tighten(load(M + 'lines/f3a.mp3', 1, TRIM + TONE)), np.zeros(int(.35 * SR), np.float32), tighten(load(M + 'lines/f3b.mp3', 1, TRIM + TONE))])
+    else: x = tighten(load(M + 'lines/' + fid + '.mp3', 1, TRIM + TONE))
+    return x * 10 ** ((-16.5 - lufs(x)) / 20)
 mode, mus, outp = sys.argv[1:4]
 cb = count_block(); cb = cb * 10 ** ((-16.5 - lufs(cb)) / 20)
+cbw = count_block(1.0); cbw = cbw * 10 ** ((-16.5 - lufs(cbw)) / 20)   # bel mashqi: sanoq oralari ~1 s
 if mode == 'shablon':
     g = load('/tmp/claude-0/-home-user-Loyha-/c834dc26-1eb9-51ce-89e6-3a681ac8c16d/scratchpad/tpl3/laura_salom.mp3', 1, TRIM + TONE); g = tighten(g); g = g * 10 ** ((-16.5 - lufs(g)) / 20)
     v = np.concatenate([np.zeros(int(.5 * SR), np.float32), g, np.zeros(int(.35 * SR), np.float32), cb]); T = len(v) + int(1.2 * SR)
@@ -54,9 +66,9 @@ else:
         a = line(fid); st = max(at, prev + .6); i = int(st * SR); vo[i:i + len(a)] += a[:T - i]; prev = st + len(a) / SR; ends[fid] = prev
         print(f'{fid} {st:.2f}-{prev:.2f}')
     # sanoq faqat 2 mashqda: joyida yugurish (m1 dan keyin) va bel aylantirish (m5 dan keyin) — keyingi zarbdan
-    for after, nxt in (('m1', 51.62), ('m5', 166.62)):
-        st = B0 = .25 + .5 * np.ceil((ends[after] + .35 - .25) / .5); i = int(st * SR); vo[i:i + len(cb)] += cb
-        print(f'sanoq {st:.2f}-{st + len(cb) / SR:.2f} (keyingi gap {nxt})')
+    for after, nxt, blk in (('m1', 51.62, cb), ('m5', 166.62, cbw)):
+        st = .25 + .5 * np.ceil((ends[after] + .35 - .25) / .5); i = int(st * SR); vo[i:i + len(blk)] += blk
+        print(f'sanoq {st:.2f}-{st + len(blk) / SR:.2f} (keyingi gap {nxt})')
 vo.astype(np.float32).tofile('v.f32')
 subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 'v.f32', '-af', 'aecho=0.9:0.6:35|60:0.08|0.05', 'v_l.wav'], check=True)
 vo = load('v_l.wav')[:T]; vo = np.pad(vo, (0, T - len(vo)))

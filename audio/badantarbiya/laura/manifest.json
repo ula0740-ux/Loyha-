@@ -37,8 +37,9 @@
    "adm": true
   },
   "f3": {
-   "sim": 1,
-   "adm": true
+   "sim": 0.987,
+   "adm": false,
+   "text": "Bizda keyingi mashqimiz: oyoqlarimiz yelka kengligida, qoʻllarimiz esa ikki yonga yoygan holatda. Oʻng va chap tomonga qayrilib olamiz. Boʻshashmaymiz, ADM Jizzax!"
   },
   "m6": {
    "sim": 1,
@@ -54,7 +55,8 @@
   },
   "f5": {
    "sim": 1,
-   "adm": true
+   "adm": true,
+   "text": "Hammaga rahmat! Xavfsizlik qoidalariga rioya qilgan holda oʻz ish faoliyatingizni davom ettirishingiz mumkin. Olgʻa, ADM Jizzax!"
   }
  },
  "counts": [
