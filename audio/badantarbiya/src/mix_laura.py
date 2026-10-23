@@ -1,6 +1,6 @@
 # Laura versiyasi (2026-10-23): foydalanuvchi tanlagan 3-shablon ovozi, sanoq faqat 2 mashqda (yugurish, bel).
 # To'xtashlarni tuzatish: gaplar ichidagi 0.35 s dan uzun jimliklar 0.28 s gacha qisqartiriladi; sanoq so'zlari kesilmaydi —
-# har so'z keyingisigacha bo'lgan bo'lagi bilan olinadi va atempo bilan aniq 0.6 s ga moslanadi (foydalanuvchi namunasi ritmi).
+# sanoq — foydalanuvchi tanlagan tabiiy yozuv (Sanoq_1), biroz sekinlashtirilgan.
 #   python3 mix_laura.py shablon|toliq MUSIQA.wav OUT.wav
 import json, os, sys, subprocess, numpy as np
 SR = 44100; M = '/home/user/Loyha-/audio/badantarbiya/laura/'; MAN = json.load(open(M + 'manifest.json'))
@@ -32,17 +32,16 @@ def stretch(x, dur):
     r = len(x) / SR / dur; x.astype(np.float32).tofile('s.f32')
     y = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 's.f32', '-af', f'atempo={max(.5, min(2, r)):.4f}', '-f', 'f32le', '-'], capture_output=True).stdout, np.float32)
     n = int(dur * SR); return np.pad(y, (0, max(0, n - len(y))))[:n]
-def count_block(c):
-    a = load(M + c['file'], 1, TONE); w = c['words']; parts = []
-    for i in range(8):
-        s, e = w[i]['start'] - .03, w[i + 1]['start'] - .03
-        parts.append(stretch(a[int(s * SR):int(e * SR)].copy(), SPACE))
-    tail = tighten(a[int((w[8]['start'] - .03) * SR):]); f = int(.01 * SR)
-    for p in parts: p[:f] *= np.linspace(0, 1, f); p[-f:] *= np.linspace(1, 0, f)
-    return np.concatenate(parts + [tail])
+SLOW = .87   # foydalanuvchi: tabiiy sanoq yaxshi, lekin biroz tez — sanoq qismi 13% sekinroq (ohang balandligi o'zgarmaydi)
+def count_block(c=None):
+    """foydalanuvchi tanlagan Sanoq_1_tabiiy: bitta tabiiy yozuv; sanoq qismi atempo bilan sekinlashtiriladi, 'Qani-qani...' o'z tezligida"""
+    a = load(M + 'counts/tabiiy.mp3', 1, TONE); w = json.load(open(M + 'counts/tabiiy.json'))
+    cut = int((w[8]['start'] - .03) * SR); head = a[int(max(0, w[0]['start'] - .05) * SR):cut].copy(); head.astype(np.float32).tofile('s.f32')
+    head = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 's.f32', '-af', f'atempo={SLOW}', '-f', 'f32le', '-'], capture_output=True).stdout, np.float32)
+    return np.concatenate([head, a[cut:]])
 def line(fid): x = tighten(load(M + 'lines/' + fid + '.mp3', 1, TRIM + TONE)); return x * 10 ** ((-16.5 - lufs(x)) / 20)
 mode, mus, outp = sys.argv[1:4]
-cb = count_block(MAN['counts'][0]); cb = cb * 10 ** ((-16.5 - lufs(cb)) / 20)
+cb = count_block(); cb = cb * 10 ** ((-16.5 - lufs(cb)) / 20)
 if mode == 'shablon':
     g = load('/tmp/claude-0/-home-user-Loyha-/c834dc26-1eb9-51ce-89e6-3a681ac8c16d/scratchpad/tpl3/laura_salom.mp3', 1, TRIM + TONE); g = tighten(g); g = g * 10 ** ((-16.5 - lufs(g)) / 20)
     v = np.concatenate([np.zeros(int(.5 * SR), np.float32), g, np.zeros(int(.35 * SR), np.float32), cb]); T = len(v) + int(1.2 * SR)
