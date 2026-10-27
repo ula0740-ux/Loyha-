@@ -1,8 +1,8 @@
 # Foydalanuvchi (2026-10-23): "Audio boshida ADM qanday aytilgan bo'lsa, aynan o'sha talaffuzni namuna qilib ol."
 # f0 dagi "ADM Jizzax xodimlari" bo'lagi (Laura, aynan o'sha yozuv) f3 va f5 oxiriga qo'yiladi; kesish nuqtalari
 # so'zlar orasidagi eng jim joyga (energiya minimumiga) suriladi. Natija: laura/lines/f3_full.wav, f5_full.wav
-import json, subprocess, sys, numpy as np
-SR = 44100; L = '/home/user/Loyha-/audio/badantarbiya/laura/lines/'; W = json.load(open(sys.argv[1]))
+import json, os, subprocess, sys, numpy as np
+SR = 44100; L = '/home/user/Loyha-/audio/badantarbiya/' + os.environ.get('VDIR', 'laura') + '/lines/'; W = json.load(open(sys.argv[1]))
 def load(p):
     return np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-i', p, '-f', 'f32le', '-ac', '1', '-ar', str(SR), '-'], capture_output=True).stdout, np.float32).copy()
 def quiet(x, a, b):

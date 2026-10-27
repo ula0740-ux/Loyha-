@@ -3,7 +3,7 @@
 # sanoq — foydalanuvchi tanlagan tabiiy yozuv (Sanoq_1), biroz sekinlashtirilgan.
 #   python3 mix_laura.py shablon|toliq MUSIQA.wav OUT.wav
 import json, os, sys, subprocess, numpy as np
-SR = 44100; M = '/home/user/Loyha-/audio/badantarbiya/laura/'; MAN = json.load(open(M + 'manifest.json'))
+SR = 44100; M = '/home/user/Loyha-/audio/badantarbiya/' + os.environ.get('VDIR', 'laura') + '/'   # ovoz papkasi (laura, freya)
 TONE = 'highpass=f=90,highshelf=f=4000:g=-2.5,acompressor=threshold=-24dB:ratio=2.5:attack=6:release=120'
 TRIM = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,'
 SPACE = .6
