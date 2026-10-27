@@ -71,7 +71,10 @@ else:
         st = .25 + .5 * np.ceil((ends[after] + .35 - .25) / .5); i = int(st * SR); vo[i:i + len(blk)] += blk
         print(f'sanoq {st:.2f}-{st + len(blk) / SR:.2f} (keyingi gap {nxt})')
 vo.astype(np.float32).tofile('v.f32')
-subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 'v.f32', '-af', 'aecho=0.9:0.6:35|60:0.08|0.05', 'v_l.wav'], check=True)
+# foydalanuvchi (2026-10-27): "ovoz juda ingichka — quloqqa yoqadigan qil": ~1.2 yarim ton pastroq (tezlik o'zgarmaydi),
+# 'tana' (200-300 Hz) kuchaytiriladi, o'tkir 3-4 kHz va shivirlash yumshatiladi
+WARM = 'rubberband=pitch=0.933:tempo=1:pitchq=quality,equalizer=f=240:t=q:w=1:g=3,equalizer=f=3600:t=q:w=1.2:g=-2.5,highshelf=f=8000:g=-2,'
+subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '1', '-i', 'v.f32', '-af', WARM + 'aecho=0.9:0.6:35|60:0.08|0.05', 'v_l.wav'], check=True)
 vo = load('v_l.wav')[:T]; vo = np.pad(vo, (0, T - len(vo)))
 act = (np.convolve(np.abs(vo), np.ones(2205) / 2205, 'same') > 0.003).astype(np.float32)
 env = np.clip(np.convolve(act, np.ones(int(.35 * SR)) / int(.35 * SR), 'same') * 1.5, 0, 1)
