@@ -52,7 +52,8 @@ def line(fid):
     x = tighten(load(src, 1, TRIM + TONE))
     return x * 10 ** ((-16.5 - lufs(x)) / 20)
 mode, mus, outp = sys.argv[1:4]
-cb = count_block(); cb = cb * 10 ** ((-16.5 - lufs(cb)) / 20)
+# yugurish: agar ovoz papkasida tabiiy yozuv (counts/yugurish.mp3) bo'lsa — ishlovsiz, o'zi (Freya: "Bir! Ikki! ..." ~0.65 s, bir maromda)
+cb = load(M + 'counts/yugurish.mp3', 1, TRIM + TONE) if os.path.exists(M + 'counts/yugurish.mp3') else count_block(); cb = cb * 10 ** ((-16.5 - lufs(cb)) / 20)
 # bel mashqi: Laura sanoqni o'zi sekinroq aytgan yozuv ("Bir. Ikki. Uch. To'rt.", oraliq ~0.8 s, bir maromda) — kesilmaydi, cho'zilmaydi
 cbw = load(M + 'counts/sekin.mp3', 1, TRIM + TONE); cbw = cbw * 10 ** ((-16.5 - lufs(cbw)) / 20)
 if mode == 'shablon':
