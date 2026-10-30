@@ -1,0 +1,29 @@
+{
+ "i": 32,
+ "text": "Talab: Global Call to Actions, Pi-ai ikki va Pi-ai uch.",
+ "tts": "Talab: Global Call to Actions, Pi-ai ikki va Pi-ai uch.",
+ "hash": "640db30e4a07f133",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/640db30e4a07f133.mp3",
+ "duration": 5.485714,
+ "takes": 3,
+ "similarity": 0.74,
+ "problems": [
+  {
+   "expected": "piai",
+   "heard": "∅"
+  },
+  {
+   "expected": "ikki",
+   "heard": "pa1"
+  },
+  {
+   "expected": "piai",
+   "heard": "∅"
+  },
+  {
+   "expected": "uch",
+   "heard": "pa3"
+  }
+ ],
+ "heard": "talab global call to actions pa1 va pa3"
+}

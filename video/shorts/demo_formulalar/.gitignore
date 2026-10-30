@@ -1,0 +1,5 @@
+footage/
+*.wav
+part*.mp4
+parts.txt
+out_probe.png
