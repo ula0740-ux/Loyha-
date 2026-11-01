@@ -23,3 +23,8 @@ video/kia-sonet/swap/*.mp4
 
 # 120 MB master (GitHub 100 MB chegarasi) — repoda siqilgan nusxa turadi
 video/hrm-edolus/HRM_2026_Sentabr_EDOLUS.mp4
+
+# montaj: foydalanuvchi videolari, rasmlari va namuna (repoga kirmaydi)
+video/montaj/kirish/
+video/montaj/ish/
+video/montaj/tahlil/*.png
