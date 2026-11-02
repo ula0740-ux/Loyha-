@@ -1,10 +1,10 @@
-"""Montaj: "Birinchi qadamlar" — namuna (Sony kino-reklama) grammatikasida.
+"""Montaj: "Umarning hikoyalari" — namuna (Sony kino-reklama) grammatikasida.
 
 Namunaning 47 ta kesish nuqtasi va musiqasi aynan saqlanadi, shuning uchun har bir
 kesish musiqa zarbiga tushadi. Kadrlar: foydalanuvchi videolari va rasmlari.
 
   python3 montaj.py probe 3.5 12.5 ...   -> ish/probe/*.jpg (tekshiruv kadrlari)
-  python3 montaj.py render                -> chiqish/Birinchi_qadamlar.mp4
+  python3 montaj.py render                -> chiqish/Umarning_hikoyalari.mp4
 
 Manba: ish/src/<IMG>.mp4 (1080x1920, 30 fps, all-intra; tayyorlash buyrug'i README da).
 """
@@ -297,34 +297,38 @@ def env(t, a, b, fi=0.35, fo=0.35):
 def titles(x, t):
     # namunadagi "Cinema Line / FX3" kabi: ko'z kadri yonida
     a = env(t, 3.15, 4.2, .25, .2)
-    put_text(x, "KUZ", W * .16, H / 2, 30, .5, a * .9)
+    put_text(x, "UMAR", W * .16, H / 2, 30, .5, a * .9)
     put_text(x, "2026", W * .84, H / 2, 30, .5, a * .9)
     # "a film by / THOMAS GOH" o'rnida
     a = env(t, 8.3, 11.75, .6, .5)
-    put_text(x, "bir kichik", W * .19, H / 2, 30, .18, a * .9)
-    put_text(x, "QAHRAMON HAQIDA", W * .80, H / 2, 24, .42, a * .9, weight="Inter-Regular.otf")
-    # bo'lim nomlari
-    for t0, t1, word in [(12.35, 13.75, "KASHFIYOT"), (21.85, 23.65, "JASORAT"),
-                         (33.85, 36.15, "QUVONCH"), (48.15, 50.30, "QADAM")]:
+    put_text(x, "bir kuz kuni", W * .19, H / 2, 30, .14, a * .9)
+    put_text(x, "UMARNING HIKOYASI", W * .78, H / 2, 24, .36, a * .9, weight="Inter-Regular.otf")
+    # hikoyalar (bo'limlar)
+    for t0, t1, num, word in [(12.35, 13.75, "1-HIKOYA", "KASHFIYOT"), (21.85, 23.65, "2-HIKOYA", "JASORAT"),
+                              (33.85, 36.15, "3-HIKOYA", "QUVONCH"), (48.15, 50.30, "4-HIKOYA", "QADAM")]:
         a = env(t, t0, t1, .45, .35)
         if a > 0:
             k = (t - t0) / (t1 - t0)
+            put_text(x, num, W / 2, H / 2 - 74, 22, .55, a * .8 * ease((t - t0 - .12) / .45),
+                     weight="Inter-Regular.otf")
             put_text(x, word, W / 2, H / 2, 64, .42 + .14 * k, a * .92,
                      blur=max(0, 6 * (1 - (t - t0) / .45)), weight="Inter-ExtraLight.otf")
-    # epilog shiori
-    a = env(t, 62.15, 63.85, .5, .45)
-    put_text(x, "HAR BIR QADAM", W / 2, H / 2 - 30, 30, .45, a * .9, weight="Inter-Regular.otf")
-    put_text(x, "bir kashfiyot", W / 2, H / 2 + 30, 34, .12, a * .9, weight="Inter-Light.otf")
+    # epilog: kelajakdagi Umarga
+    a = env(t, 62.0, 63.9, .5, .45)
+    put_text(x, "UMAR,", W / 2, H / 2 - 32, 30, .45, a * .92, weight="Inter-Regular.otf")
+    put_text(x, "bu sening ilk qadamlaring", W / 2, H / 2 + 30, 34, .08, a * .92 * ease((t - 62.25) / .5),
+             weight="Inter-Light.otf")
     # yakuniy sarlavha (namunadagi logotip o'rnida)
     if t >= FINAL_T:
         u = t - FINAL_T
         a = ease(u / .5) * ease((DUR - t) / .35)
         glow = max(0.0, 1 - u / .9)
+        T = "UMARNING HIKOYALARI"
         if glow > 0:
-            put_text(x, "BIRINCHI QADAMLAR", W / 2, H / 2, 56, .30, a * glow * .8, blur=14,
+            put_text(x, T, W / 2, H / 2, 46, .24, a * glow * .8, blur=14,
                      weight="Inter-Regular.otf", color=(.35, .55, 1.0))
-        put_text(x, "BIRINCHI QADAMLAR", W / 2, H / 2, 56, .30, a * (1 - .6 * glow), weight="Inter-Regular.otf")
-        put_text(x, "2026", W / 2, H / 2 + 74, 22, .6, a * .7 * ease((u - .35) / .5))
+        put_text(x, T, W / 2, H / 2, 46, .24, a * (1 - .6 * glow), weight="Inter-Regular.otf")
+        put_text(x, "KUZ  2026", W / 2, H / 2 + 68, 22, .6, a * .7 * ease((u - .35) / .5))
 
 
 # ---------------------------------------------------------------- band (kino tasmasi)
@@ -413,7 +417,7 @@ def render():
             if k % 120 == 0:
                 print(f"{k}/{N}", flush=True)
     enc.stdin.close(); enc.wait()
-    final = os.path.join(HERE, "chiqish", "Birinchi_qadamlar.mp4")
+    final = os.path.join(HERE, "chiqish", "Umarning_hikoyalari.mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", master, "-i", REF, "-map", "0:v", "-map", "1:a",
                     "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-shortest", "-movflags", "+faststart",
                     final], check=True)

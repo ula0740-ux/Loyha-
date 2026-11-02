@@ -1,15 +1,15 @@
-# Montaj: "Birinchi qadamlar"
+# Montaj: "Umarning hikoyalari"
 
 - `namuna/namuna.mp4`: foydalanuvchi bergan namuna (Sony kino-reklama uslubi, "Olov, Havo, Suv, Yer"), 720×480, 24 fps, 66.8 s.
 - `tahlil/`: namuna tahlili. `ref.json` kesishlar (47 ta, o'rtacha 1.42 s), palitra va loudness (−15.9 LUFS); `beats.js` tempo (143.93 BPM).
 - `kirish/`: foydalanuvchi videolari (IMG_2026–2036) va rasmlari (rasm_01–10).
 - `montaj.py`: montaj dvigateli (Python + OpenCV, kadrma-kadr).
-- `chiqish/Birinchi_qadamlar.mp4`: tayyor montaj.
+- `chiqish/Umarning_hikoyalari.mp4`: tayyor montaj (~94 MB); `_yengil.mp4` (≤30 MB) telefon uchun.
 
 ## Uslub
 - Namunaning 47 ta kesish vaqti va musiqasi aynan saqlangan, shuning uchun har bir kesish zarbga tushadi.
-- Tuzilishi: kirish (16:9 kino oynasi, detallar) → "bir kichik / qahramon haqida" → 4 bo'lim:
-  KASHFIYOT (iliq oltin), JASORAT (sovuq po'lat), QUVONCH (firuza), QADAM (tuproq rangi, musiqa cho'qqisi) → tez kesishlar va oq chaqnashlar → epilog "Har bir qadam / bir kashfiyot" → "BIRINCHI QADAMLAR".
+- Tuzilishi: kirish (16:9 kino oynasi, detallar) → "bir kuz kuni / UMARNING HIKOYASI" → 4 hikoya:
+  KASHFIYOT (iliq oltin), JASORAT (sovuq po'lat), QUVONCH (firuza), QADAM (tuproq rangi, musiqa cho'qqisi) → tez kesishlar va oq chaqnashlar → epilog "UMAR, / bu sening ilk qadamlaring" → "UMARNING HIKOYALARI / KUZ 2026".
 - O'tishlar: zarbdagi punch-in, whip (21.6 s, 33.6 s), drop nur portlashi (12.1 s, 47.9 s), iliq nur oqimi, oq chaqnash.
 - Ko'rinish: har bo'limga alohida rang, halation, vinyetka, plyonka donadorligi.
 
