@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<title>Formulalar — kino uslubidagi short (demo)</title>
+<link rel="stylesheet" href="../../../assets/fonts/fonts.css">
+<style>
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#04070d;font-family:Montserrat,sans-serif;color:#fff}
+.L{position:absolute;inset:0}
+#cam{transform-origin:50% 45%}
+.clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;visibility:hidden}
+#shade{background:linear-gradient(180deg,rgba(0,0,0,.0) 50%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.9));z-index:20}
+#capbg{position:absolute;left:52px;right:52px;top:1388px;height:318px;z-index:25;border-radius:22px;background:rgba(4,8,14,.88);border-left:8px solid #5dff9a;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.cap{position:absolute;left:100px;right:90px;top:1468px;z-index:30;font-weight:900;font-size:72px;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase}
+.cap .g{color:#5dff9a}
+.tag{position:absolute;left:102px;top:1418px;z-index:30;font-family:'JetBrains Mono',monospace;font-size:30px;letter-spacing:.18em;color:#5dff9a;opacity:0}
+#intro{z-index:40;display:grid;place-content:center;text-align:center}
+#big{font-family:Unbounded,sans-serif;font-weight:900;font-size:128px;line-height:.9;letter-spacing:-.02em;color:#fff;text-shadow:0 0 60px rgba(93,255,154,.45)}
+#big .g{color:#5dff9a}
+#sub{margin-top:28px;font-family:'JetBrains Mono',monospace;font-size:38px;letter-spacing:.32em;color:#9fb3c8}
+#end{z-index:60;display:grid;place-content:center;text-align:center;opacity:0}
+#endT{font-family:Unbounded,sans-serif;font-weight:900;font-size:130px;letter-spacing:.02em}
+#endT b{color:#ff5a3c}
+#endS{margin-top:22px;font-size:40px;font-weight:600;color:#c9d6e4;letter-spacing:.04em}
+#iris{z-index:55;background:#04070d}
+#bar{position:absolute;left:0;top:0;height:8px;background:linear-gradient(90deg,#5dff9a,#2fd27a);z-index:70}
+</style></head>
+<body>
+<div id="stage">
+  <div id="cam" class="L">
+    <img class="clip" id="ca"><img class="clip" id="cb"><img class="clip" id="cc"><img class="clip" id="cd">
+  </div>
+  <div id="shade" class="L"></div>
+  <div id="capbg"></div>
+  <div class="tag" id="tA">01 · TAKT TIME</div>
+  <div class="cap" id="kA">Takt <span class="g">vaqti</span> — ishlab chiqarish ritmi</div>
+  <div class="tag" id="tB">02 · NATIJA</div>
+  <div class="cap" id="kB">Har <span class="g">675</span> soniyada bitta avtomobil</div>
+  <div class="tag" id="tC">03 · UPTIME</div>
+  <div class="cap" id="kC">Liniya <span class="g">haqiqatda</span> qancha ishlaydi?</div>
+  <div class="tag" id="tD">04 · FORMA 7</div>
+  <div class="cap" id="kD">7 formula. Bitta <span class="g">varaq</span>.</div>
+  <div id="intro" class="L"><div id="big"></div><div id="sub">ISHLAB CHIQARISH</div></div>
+  <div id="iris" class="L"></div>
+  <div id="end" class="L"><div id="endT"></div><div id="endS">Ishlab chiqarish formulalari</div></div>
+  <div id="bar"></div>
+</div>
+<script src="../../../.claude/skills/cinematic-shorts/lib/cinefx.js"></script>
+<script>
+const F = CineFX, $ = id => document.getElementById(id);
+const T = 13;
+const fx = F.mount($('stage'), {w: 1080, h: 1920, seed: 11});
+/* kliplar: footage/<x>/f_000001.jpg, 30 fps */
+const clips = {
+  a: {img: $('ca'), ft: F.Footage($('ca'), 'footage/a', 30, 90),  t0: 1.6, t1: 4.2, at: 0.0},
+  b: {img: $('cb'), ft: F.Footage($('cb'), 'footage/b', 30, 96),  t0: 4.2, t1: 6.8, at: 0.4},
+  c: {img: $('cc'), ft: F.Footage($('cc'), 'footage/c', 30, 126), t0: 6.8, t1: 9.4, at: 0.0},
+  d: {img: $('cd'), ft: F.Footage($('cd'), 'footage/d', 30, 108), t0: 9.4, t1: 11.6, at: 0.4},
+};
+const WHIPS = [4.2, 6.8];          /* whip-pan o'tishlari */
+const HITS = [1.6, 4.2, 6.8, 9.4, 11.2];
+/* C klipda speed ramp: tez → sekin (slow-mo) → tez */
+const RAMP_C = [[0, 1.5], [0.7, 1.5], [1.0, .3], [1.8, .3], [2.1, 1.9], [2.6, 1.9]];
+
+function clipLocal(c, t) {
+  const lt = t - c.t0;
+  if (c === clips.c) return F.ramp(Math.max(0, lt), RAMP_C);
+  return c.at + Math.max(0, lt);
+}
+
+window.seek = async (t) => {
+  /* --- kliplar va whip-pan --- */
+  /* whip-pan: kesish o'rtada, chiquvchi klip chapga uchadi, kiruvchi o'ngdan keladi, o'rtada kuchli blur */
+  let blur = 0, shift = 0;
+  for (const w of WHIPS) { const wp = F.whip(t, w, .38, 1); if (wp.active) { blur = Math.max(blur, wp.blur); shift = wp.x; } }
+  for (const k in clips) {
+    const c = clips[k], on = t >= c.t0 && t < c.t1;
+    c.img.style.visibility = on ? 'visible' : 'hidden';
+    c.img.style.transform = on && shift ? `translateX(${(shift * 100).toFixed(2)}%)` : 'none';
+    if (on) await c.ft.show(clipLocal(c, t));
+  }
+  /* --- kamera: har klipda log-zoom push-in + qo'l tebranishi + zarbalar --- */
+  const cur = Object.values(clips).find(c => t >= c.t0 && t < c.t1);
+  let z = 1;
+  if (cur) z = Math.exp(F.lerp(Math.log(1.0), Math.log(cur === clips.d ? 1.22 : 1.09), F.E.io(F.prog(t, cur.t0, cur.t1 - cur.t0))));
+  const sh = F.shake(t, 7, .8, 3);
+  let px = 0, py = 0, ps = 1;
+  for (const h of HITS) { const p = F.punch(t, h, 26, 8, 14); px += p.x; py += p.y; ps *= p.s; }
+  $('cam').style.transform = `translate(${(sh.x + px).toFixed(2)}px,${(sh.y + py).toFixed(2)}px) rotate(${sh.r.toFixed(3)}deg) scale(${(z * ps * 1.03).toFixed(4)})`;
+  $('cam').style.filter = blur > .5 ? `blur(${(blur * .35).toFixed(1)}px)` : 'none';
+  /* xromatik zarba kesishlarda */
+  let ch = 0; for (const h of HITS) ch += 14 * Math.exp(-Math.max(0, t - h) * 10) * (t >= h ? 1 : 0);
+  F.chroma($('cam'), ch);
+  if (ch > .05) $('cam').style.filter = ($('cam').style.filter === 'none' ? '' : $('cam').style.filter + ' ') + `drop-shadow(${ch.toFixed(1)}px 0 0 rgba(255,0,80,.6)) drop-shadow(${(-ch).toFixed(1)}px 0 0 rgba(0,220,255,.6))`;
+
+  /* --- intro: dekoder sarlavha --- */
+  const io = 1 - F.E.in(F.prog(t, 1.35, .3));
+  $('intro').style.opacity = io;
+  $('big').innerHTML = '';
+  if (t < 1.7) {
+    const tmp = document.createElement('span'); F.decode(tmp, t, .15, '7 FORMULA', {cps: 14});
+    $('big').innerHTML = tmp.textContent.replace('7', '<span class="g">7</span>');
+  }
+  $('big').style.transform = `scale(${(1 + .06 * F.E.out(F.prog(t, 0, 1.6))).toFixed(4)})`;
+  $('sub').style.opacity = F.E.out(F.prog(t, .7, .4)); $('sub').style.letterSpacing = (.6 - .28 * F.E.o5(F.prog(t, .7, .7))) + 'em';
+
+  /* --- sarlavhalar (maskadan ko'tarilish) --- */
+  const caps = [['kA', 'tA', 1.9, 3.85], ['kB', 'tB', 4.45, 6.45], ['kC', 'tC', 7.05, 9.0], ['kD', 'tD', 9.7, 10.9]];
+  for (const [k, tg, a, b] of caps) {
+    const vis = t > a - .05 && t < b + .6;
+    $(k).style.visibility = vis ? 'visible' : 'hidden';
+    if (vis) F.rise($(k), t, a, {stagger: .07, d: .6, rot: 7, outAt: b, outD: .3});
+    $(tg).style.opacity = F.E.out(F.prog(t, a - .1, .3)) * (1 - F.E.in(F.prog(t, b, .3)));
+    $(tg).style.transform = `translateX(${(-30 * (1 - F.E.o5(F.prog(t, a - .1, .5)))).toFixed(1)}px)`;
+  }
+  $('shade').style.opacity = F.E.out(F.prog(t, 1.6, .5)) * (1 - F.E.io(F.prog(t, 11.2, .6)));
+  const cb = F.spring(t, 1.75, 1.6, .55) * (1 - F.E.in(F.prog(t, 10.95, .3)));
+  $('capbg').style.opacity = Math.min(1, cb);
+  $('capbg').style.transform = `translateY(${(60 * (1 - cb)).toFixed(1)}px) scaleX(${(.9 + .1 * Math.min(1.05, cb)).toFixed(4)})`;
+  F.glitch($('kC'), t, 8.95, .2, 40);
+
+  /* --- final: iris yopilishi + logo --- */
+  const ir = F.E.io(F.prog(t, 11.1, .55));
+  $('iris').style.clipPath = `circle(${(ir * 120).toFixed(2)}% at 50% 45%)`;
+  $('end').style.opacity = F.E.out(F.prog(t, 11.45, .35));
+  const et = document.createElement('span'); F.decode(et, t, 11.45, 'ADM JIZZAX', {cps: 18});
+  $('endT').innerHTML = et.textContent.replace('ADM', '<b>ADM</b>');
+  $('endS').style.transform = `translateY(${(40 * (1 - F.E.o5(F.prog(t, 11.9, .6)))).toFixed(1)}px)`;
+  $('endS').style.opacity = F.E.out(F.prog(t, 11.9, .5));
+  $('bar').style.width = (t / T * 100).toFixed(2) + '%';
+
+  /* --- post: donadorlik, letterbox, light leak, flare, chaqnash, rang --- */
+  const lb = F.keys(t, [[0, 1], [1.5, 1], [2.3, .22], [10.9, .22], [12.6, 1]]);
+  const flA = t < 1.8 ? F.E.io(F.prog(t, .2, 1.3)) : (t > 11.4 ? F.E.io(F.prog(t, 11.4, 1.4)) : -1);
+  fx.frame(t, {
+    grain: .09, vignette: .9, letterbox: lb,
+    leak: (t > 1.6 && t < 4.2) || (t > 9.4 && t < 11.3) ? .55 : .18, leakHue: 140,
+    flare: flA >= 0 ? {x: 8 + 84 * flA, y: t < 2 ? 50 : 45, a: Math.sin(Math.PI * Math.min(1, flA)) * .95} : null,
+    flash: Math.max(F.flash(t, 9.4, .12), F.flash(t, 1.6, .1) * .8),
+    grade: 'cold', gradeAmt: .22,
+  });
+};
+
+/* yuklash: kliplarning birinchi kadrlari, shriftlar */
+(async () => {
+  await document.fonts.ready;
+  for (const k in clips) await clips[k].ft.show(0);
+  await window.seek(0);
+  window.ready = true;
+})();
+/* ko'rish rejimi: Space = play/pauza, ←/→ = kadr */
+let play = false, t0 = 0, cur = 0;
+addEventListener('keydown', e => {
+  if (e.code === 'Space') { play = !play; t0 = performance.now() / 1000 - cur; if (play) loop(); }
+  if (e.code === 'ArrowRight') { cur = Math.min(T, cur + 1 / 30); seek(cur); }
+  if (e.code === 'ArrowLeft') { cur = Math.max(0, cur - 1 / 30); seek(cur); }
+});
+async function loop() { if (!play) return; cur = (performance.now() / 1000 - t0) % T; await seek(cur); requestAnimationFrame(loop); }
+</script>
+</body></html>

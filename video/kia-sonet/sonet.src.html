@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kia Sonet — animatsiyali slayd</title>
+<style>
+@font-face{font-family:'Inter';src:local('Inter'),local('Inter Regular')}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:Inter,'Segoe UI',system-ui,sans-serif}
+#vp{position:fixed;inset:0;display:grid;place-items:center;background:#000}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:#f4f2ee;transform-origin:50% 50%}
+#world{position:absolute;inset:0;transform-origin:50% 64%}
+#card{position:absolute;left:390px;top:150px;width:1140px;height:600px;border-radius:6px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(40,30,20,.35)}
+#land{position:absolute;inset:0;width:100%;height:100%}
+#cardShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 60%,rgba(244,242,238,.0) 100%)}
+#shadow{position:absolute;left:745px;top:842px;width:430px;height:50px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0));filter:blur(6px)}
+#car{position:absolute;left:730px;top:455px;width:460px;transform-origin:50% 100%;will-change:transform}
+#glow{position:absolute;left:750px;top:560px;width:420px;height:60px;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(22% 55% at 14% 50%,rgba(255,60,30,.7),transparent 70%),radial-gradient(22% 55% at 86% 50%,rgba(255,60,30,.7),transparent 70%),radial-gradient(60% 30% at 50% 40%,rgba(255,40,20,.45),transparent 70%)}
+#hud{position:absolute;left:1240px;top:178px;width:270px;color:#6b6259;font-size:15px;line-height:1.45;text-align:right;letter-spacing:.01em}
+#brandTop{position:absolute;left:0;right:0;top:44px;text-align:center;font-size:13px;letter-spacing:.42em;color:#8d8378;font-weight:600}
+#title{position:absolute;left:150px;top:800px;font-size:96px;font-weight:300;letter-spacing:-.02em;color:#1d1b19}
+#title b{font-weight:700}
+#sub{position:absolute;left:156px;top:920px;font-size:22px;letter-spacing:.24em;color:#8d8378;text-transform:uppercase}
+#band{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none}
+#msg{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;color:#fff;font-size:34px;font-weight:400;letter-spacing:.01em;text-shadow:0 2px 6px rgba(0,0,0,.45),0 4px 30px rgba(0,0,0,.55);opacity:0}
+#msg b{font-weight:700}
+#black{position:absolute;inset:0;background:#000;pointer-events:none}
+#ui{position:fixed;right:18px;bottom:16px;display:flex;gap:8px;z-index:9}
+#ui button{font:600 13px/1 Inter,system-ui,sans-serif;color:#ddd;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:9px 14px;cursor:pointer}
+#ui button:hover{background:rgba(255,255,255,.16)}
+</style></head>
+<body>
+<div id="vp"><div id="stage">
+  <div id="brandTop">K I A&nbsp;&nbsp;·&nbsp;&nbsp;S O N E T</div>
+  <div id="world">
+    <div id="card"><canvas id="land" width="1140" height="600"></canvas><div id="cardShade"></div></div>
+    <div id="hud">Yangi avlod. Yangi yo'llar.<br>Har bir burilishda — ishonch.</div>
+    <div id="shadow"></div>
+    <img id="car" src="{{CAR}}" alt="Kia Sonet">
+    <div id="glow"></div>
+  </div>
+  <div id="title">Kia <b>Sonet</b></div>
+  <div id="sub">Yo'l sizni kutmoqda</div>
+  <div id="msg"></div>
+  <div id="black"></div>
+</div></div>
+<div id="ui"><button id="replay">↻ Qayta</button><button id="fs">⛶ To'liq ekran</button></div>
+<script>
+'use strict';
+const T = 7.2;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, d) => clamp((t - a) / d);
+const io = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const out = k => 1 - Math.pow(1 - k, 3);
+const o5 = k => 1 - Math.pow(1 - k, 5);
+const inq = k => k * k * k;
+function hash(n) { let h = Math.imul((n | 0) ^ 0x9e3779b9, 0x85ebca6b); h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35); h ^= h >>> 16; return (h >>> 0) / 2147483648 - 1; }
+function noise(x, s) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return lerp(hash(i + s * 997), hash(i + 1 + s * 997), u); }
+function fbm(x, s, o = 5) { let a = 0, amp = .5, fr = 1; for (let i = 0; i < o; i++) { a += amp * noise(x * fr, s + i * 13); amp *= .5; fr *= 2.03; } return a; }
+
+/* ---------- manzara: statik qatlam bir marta chiziladi ---------- */
+const LW = 1140, LH = 600, HZ = 300, VX = 560;   /* ufq va yo'qolish nuqtasi */
+const base = document.createElement('canvas'); base.width = LW; base.height = LH;
+(function paint() {
+  const g = base.getContext('2d');
+  /* osmon */
+  let gr = g.createLinearGradient(0, 0, 0, HZ);
+  gr.addColorStop(0, '#9fb8cf'); gr.addColorStop(.55, '#cbd8e2'); gr.addColorStop(1, '#eef0ee');
+  g.fillStyle = gr; g.fillRect(0, 0, LW, HZ + 2);
+  /* bulutlar */
+  for (let i = 0; i < 14; i++) {
+    const x = (hash(i * 7) * .5 + .5) * LW, y = 30 + (hash(i * 11) * .5 + .5) * 120, r = 60 + (hash(i * 3) * .5 + .5) * 140;
+    const c = g.createRadialGradient(x, y, 0, x, y, r); c.addColorStop(0, 'rgba(255,255,255,.55)'); c.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = c; g.beginPath(); g.ellipse(x, y, r * 1.8, r * .45, 0, 0, 7); g.fill();
+  }
+  /* tog'lar: uch qatlam, uzoqdan yaqinga */
+  const ranges = [
+    {s: 3, top: 70, amp: 150, base: HZ - 8, col: [150, 165, 182], snow: .55, fz: 1 / 210},
+    {s: 9, top: 120, amp: 120, base: HZ - 2, col: [104, 118, 134], snow: .62, fz: 1 / 150},
+    {s: 21, top: 205, amp: 70, base: HZ + 4, col: [74, 82, 92], snow: .8, fz: 1 / 95},
+  ];
+  const ridge = [];
+  for (const R of ranges) {
+    const ys = [];
+    for (let x = 0; x <= LW; x++) {
+      let h = fbm(x * R.fz, R.s);
+      if (R.s === 3) h += .35 * Math.exp(-Math.pow((x - 330) / 140, 2));    /* asosiy cho'qqi */
+      ys.push(R.top + (1 - clamp(h + .2, 0, 1.2)) * R.amp);
+    }
+    ridge.push(ys);
+    const img = g.getImageData(0, 0, LW, LH), d = img.data;
+    for (let x = 0; x < LW; x++) {
+      for (let y = Math.floor(ys[x]); y < R.base; y++) {
+        const k = (y - ys[x]) / (R.base - ys[x]);                       /* 0 = cho'qqi */
+        const slope = (ys[Math.min(LW, x + 2)] - ys[Math.max(0, x - 2)]);
+        const light = clamp(.75 - slope * .03 + (noise(x * .021 + y * .034, R.s + 5) + .5 * noise(x * .06 - y * .05, R.s + 6)) * .12, .35, 1.15);
+        const snowLine = R.snow * (1 + .25 * noise(x * .03, R.s + 2));
+        const isSnow = k < snowLine * (.55 + .45 * (1 - k)) && noise(x * .05 + y * .09, R.s + 7) > -.55 + k * 1.4;
+        let r, gg, b;
+        if (isSnow) { const s = 225 + 30 * light; r = s * .97; gg = s * .99; b = s; }
+        else { r = R.col[0] * light; gg = R.col[1] * light; b = R.col[2] * light; }
+        /* havo parda (aerial perspective) */
+        const haze = R.s === 3 ? .35 : R.s === 9 ? .18 : .06;
+        r = lerp(r, 214, haze); gg = lerp(gg, 224, haze); b = lerp(b, 232, haze);
+        const i = (y * LW + x) * 4; d[i] = r; d[i + 1] = gg; d[i + 2] = b; d[i + 3] = 255;
+      }
+    }
+    g.putImageData(img, 0, 0);
+  }
+  /* ko'l (chap) va undagi aks */
+  const lakeTop = HZ + 4, lakeBot = HZ + 92;
+  g.save();
+  g.beginPath(); g.moveTo(0, lakeTop); g.lineTo(VX - 60, lakeTop); g.lineTo(VX - 230, lakeBot); g.lineTo(0, lakeBot + 40); g.closePath(); g.clip();
+  g.translate(0, lakeTop * 2); g.scale(1, -1); g.globalAlpha = .55; g.filter = 'blur(2px)';
+  g.drawImage(base, 0, 0, LW, lakeTop, 0, 0, LW, lakeTop);
+  g.restore();
+  g.save();
+  g.beginPath(); g.moveTo(0, lakeTop); g.lineTo(VX - 60, lakeTop); g.lineTo(VX - 230, lakeBot); g.lineTo(0, lakeBot + 40); g.closePath(); g.clip();
+  gr = g.createLinearGradient(0, lakeTop, 0, lakeBot + 40); gr.addColorStop(0, 'rgba(120,160,190,.35)'); gr.addColorStop(1, 'rgba(70,110,140,.65)');
+  g.fillStyle = gr; g.fillRect(0, lakeTop, LW, 140);
+  g.strokeStyle = 'rgba(255,255,255,.18)'; g.lineWidth = 1;
+  for (let i = 0; i < 40; i++) { const y = lakeTop + 4 + i * 2.6, x = (hash(i * 5) * .5 + .5) * 400; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 30 + i * 2, y); g.stroke(); }
+  g.restore();
+  /* qor bilan qoplangan yer (o'ng va chap pastki) */
+  gr = g.createLinearGradient(0, HZ, 0, LH); gr.addColorStop(0, '#e7ebec'); gr.addColorStop(1, '#f7f8f8');
+  g.fillStyle = gr;
+  g.beginPath(); g.moveTo(VX + 40, HZ + 2); g.lineTo(LW, HZ + 2); g.lineTo(LW, LH); g.lineTo(VX + 330, LH); g.closePath(); g.fill();
+  g.beginPath(); g.moveTo(0, lakeBot + 40); g.lineTo(VX - 230, lakeBot); g.lineTo(VX - 60, HZ + 4); g.lineTo(VX - 330, LH); g.lineTo(0, LH); g.closePath(); g.fill();
+  /* archalar (o'ng tomonda o'rmon) */
+  function pine(x, y, h) {
+    g.fillStyle = `rgb(${28 + hash(x | 0) * 6},${46 + hash(y | 0) * 6},${40})`;
+    for (let k = 0; k < 4; k++) {
+      const yy = y - h * (.25 + k * .22), w = h * (.34 - k * .07);
+      g.beginPath(); g.moveTo(x, yy - h * .28); g.lineTo(x - w, yy + h * .12); g.lineTo(x + w, yy + h * .12); g.closePath(); g.fill();
+    }
+    if (h > 70) return;
+    g.fillStyle = 'rgba(255,255,255,.55)';
+    g.beginPath(); g.moveTo(x, y - h * .98); g.lineTo(x - h * .08, y - h * .78); g.lineTo(x + h * .08, y - h * .78); g.closePath(); g.fill();
+  }
+  const trees = [];
+  for (let i = 0; i < 70; i++) {
+    const d = i / 70, x = VX + 70 + d * 520 + hash(i * 17) * 30, y = HZ + 2 + d * d * 300, h = 26 + d * d * 300 + hash(i * 3) * 12;
+    trees.push([x, y, h]);
+  }
+  for (let i = 0; i < 40; i++) {
+    const d = i / 40, x = 40 + hash(i * 23) * 420, y = HZ + 6 + (hash(i * 9) * .5 + .5) * 18, h = 14 + hash(i * 5) * 8 + 14;
+    trees.push([x, y, h]);
+  }
+  trees.sort((a, b) => a[1] - b[1]).forEach(t => pine(t[0], t[1], t[2]));
+})();
+
+/* yo'l: har kadrda chiziladi (chiziqlar oqadi) */
+const land = $('land'), lg = land.getContext('2d');
+function roadAt(y) { /* y bo'yicha yo'lning chap/o'ng cheti */
+  const k = (y - HZ) / (LH - HZ);
+  return [VX - 10 - k * 330, VX + 10 + k * 330];
+}
+function drawLand(t) {
+  lg.drawImage(base, 0, 0);
+  /* asfalt */
+  const gr = lg.createLinearGradient(0, HZ, 0, LH); gr.addColorStop(0, '#9a9590'); gr.addColorStop(1, '#5c5854');
+  lg.fillStyle = gr;
+  lg.beginPath(); lg.moveTo(VX - 10, HZ); lg.lineTo(VX + 10, HZ); lg.lineTo(VX + 340, LH); lg.lineTo(VX - 340, LH); lg.closePath(); lg.fill();
+  /* chet chiziqlar */
+  lg.strokeStyle = 'rgba(245,245,240,.9)'; lg.lineWidth = 1.5;
+  for (const s of [-1, 1]) { lg.beginPath(); lg.moveTo(VX + s * 8, HZ); lg.lineTo(VX + s * 318, LH); lg.stroke(); }
+  /* o'rta uzuq chiziqlar: z bo'yicha oqim (perspektiva) */
+  const speed = 2.2, ph = (t * speed) % 1;
+  lg.fillStyle = '#e8c35a';
+  for (let i = 0; i < 14; i++) {
+    const z0 = (i + ph) / 14, z1 = (i + ph + .45) / 14;           /* 0 = ufq, 1 = old */
+    const y0 = HZ + Math.pow(z0, 2.2) * (LH - HZ), y1 = HZ + Math.pow(Math.min(1, z1), 2.2) * (LH - HZ);
+    const w0 = .6 + z0 * 7, w1 = .6 + Math.min(1, z1) * 7;
+    lg.beginPath(); lg.moveTo(VX - w0, y0); lg.lineTo(VX + w0, y0); lg.lineTo(VX + w1, y1); lg.lineTo(VX - w1, y1); lg.closePath(); lg.fill();
+  }
+  /* harakat xiraligi: pastki qismda yengil gorizontal tezlik izlari */
+  lg.fillStyle = 'rgba(255,255,255,.05)';
+  for (let i = 0; i < 18; i++) { const y = LH - 150 + i * 8, x = (hash(i * 31 + Math.floor(t * 30)) * .5 + .5) * LW; lg.fillRect(x, y, 80, 1); }
+  /* quyosh nuri */
+  const sx = 860, sy = 70, r = lg.createRadialGradient(sx, sy, 0, sx, sy, 380);
+  r.addColorStop(0, 'rgba(255,240,215,.55)'); r.addColorStop(1, 'rgba(255,240,215,0)');
+  lg.fillStyle = r; lg.fillRect(0, 0, LW, LH);
+}
+
+/* ---------- vaqt chizig'i ---------- */
+function render(t) {
+  /* 1) kamera: mashinaning stop-chiroqlariga yaqin → orqaga */
+  const pull = io(prog(t, .45, 1.9));
+  const zoom = Math.exp(lerp(Math.log(2.75), Math.log(1), pull));
+  const fx = lerp(0, 0, pull), fy = lerp(-120, 0, pull);
+  const drift = 1 + .025 * prog(t, 2.35, 3);                   /* sekin dolly-in */
+  $('world').style.transform = `translate(${fx}px,${fy}px) scale(${(zoom * drift).toFixed(4)})`;
+  /* 2) kartochka manzarasi paydo bo'ladi */
+  const cardIn = out(prog(t, 1.0, 1.2));
+  $('card').style.opacity = cardIn;
+  $('card').style.transform = `scale(${(1.06 - .06 * cardIn).toFixed(4)})`;
+  drawLand(t);
+  /* 3) mashina: suspenziya tebranishi va yo'lda yengil chayqalish */
+  const bob = Math.sin(t * 11) * 1.4 + Math.sin(t * 4.3) * 1.1, sway = Math.sin(t * 1.3) * 3;
+  $('car').style.transform = `translate(${sway.toFixed(2)}px,${bob.toFixed(2)}px)`;
+  $('shadow').style.transform = `translateX(${sway.toFixed(2)}px) scaleX(${(1 + bob * .004).toFixed(4)})`;
+  $('glow').style.opacity = .55 + .25 * Math.sin(t * 2.2) ** 2;
+  $('glow').style.transform = `translate(${sway.toFixed(2)}px,${bob.toFixed(2)}px)`;
+  /* 4) matnlar */
+  const tIn = o5(prog(t, 2.5, .9)), tOut = inq(prog(t, 4.6, .4));
+  $('title').style.opacity = tIn * (1 - tOut);
+  $('title').style.transform = `translateY(${(40 * (1 - tIn)).toFixed(1)}px)`;
+  $('title').style.filter = `blur(${(8 * (1 - tIn)).toFixed(2)}px)`;
+  $('sub').style.opacity = o5(prog(t, 2.85, .8)) * (1 - tOut);
+  $('sub').style.letterSpacing = (.5 - .26 * o5(prog(t, 2.85, 1.1))).toFixed(3) + 'em';
+  $('hud').style.opacity = o5(prog(t, 3.1, .8)) * (1 - tOut);
+  $('brandTop').style.opacity = o5(prog(t, 2.2, .8)) * (1 - tOut);
+  /* 5) final: xiralashuv → tasma → qora */
+  const bl = io(prog(t, 4.7, .6));
+  $('world').style.filter = bl > 0 ? `blur(${(14 * bl).toFixed(2)}px) brightness(${(1 - .12 * bl).toFixed(3)})` : 'none';
+  const band = io(prog(t, 5.9, .55)), close = inq(prog(t, 6.55, .4));
+  const half = lerp(540, 150, band) * (1 - close);
+  $('stage').style.clipPath = `inset(${(540 - half).toFixed(1)}px 0 ${(540 - half).toFixed(1)}px 0)`;
+  const m = $('msg');
+  if (t < 5.75) m.innerHTML = '<b>Kia Sonet</b> — shunchaki avtomobil emas.';
+  else m.innerHTML = 'Bu — <b>his-tuyg‘u</b>.';
+  const m1 = o5(prog(t, 4.95, .45)) * (1 - inq(prog(t, 5.55, .2))), m2 = o5(prog(t, 5.8, .4)) * (1 - inq(prog(t, 6.45, .2)));
+  m.style.opacity = t < 5.75 ? m1 : m2;
+  $('black').style.opacity = 1 - out(prog(t, 0, .45)) + close;
+}
+
+/* ---------- ijro ---------- */
+let t0 = null, playing = true;
+function loop(now) {
+  if (!playing) return;
+  if (t0 === null) t0 = now;
+  const t = Math.min(T, (now - t0) / 1000);
+  render(t);
+  if (t < T && playing) requestAnimationFrame(loop);
+}
+function play() { t0 = null; playing = true; requestAnimationFrame(loop); }
+$('replay').onclick = play;
+$('fs').onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
+addEventListener('keydown', e => { if (e.code === 'Space' || e.code === 'Enter' || e.key === 'r') play(); });
+function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080); $('stage').style.transform = `scale(${s})`; }
+addEventListener('resize', fit); fit();
+window.seek = async t => { playing = false; $('ui').style.display = 'none'; render(t); };         /* render_short.py uchun */
+$('car').decode().then(() => { render(0); window.ready = true; if (!/render/.test(location.search)) play(); });
+</script>
+</body></html>

@@ -1,0 +1,17 @@
+{
+ "i": 7,
+ "text": "Korxonaning aniq qadriyatlari esa uning tasdiqlangan hujjatlaridan olinadi.",
+ "tts": "Korkhonaning aniq qadriyatlari esa uning tasdiqlangan hujjatlaridan olinadi.",
+ "hash": "aeaf3887da29d9c5",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/aeaf3887da29d9c5.mp3",
+ "duration": 5.32898,
+ "takes": 1,
+ "similarity": 0.9864864864864865,
+ "problems": [
+  {
+   "expected": "korxonaning",
+   "heard": "qorxonaning"
+  }
+ ],
+ "heard": "qorxonaning aniq qadriyatlari esa uning tasdiqlangan hujjatlaridan olinadi"
+}

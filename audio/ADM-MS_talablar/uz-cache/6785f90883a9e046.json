@@ -1,0 +1,17 @@
+{
+ "i": 10,
+ "text": "Lavozimiga tegishli rol, vakolat va javobgarliklarni biladi, talab — Pi Ay yetti.",
+ "tts": "Lavozimiga tegishli rol, vakolat va javobgarliklarni biladi, talab — Pi Ay yetti.",
+ "hash": "6785f90883a9e046",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6785f90883a9e046.mp3",
+ "duration": 7.314286,
+ "takes": 3,
+ "similarity": 0.9605263157894737,
+ "problems": [
+  {
+   "expected": "ay",
+   "heard": "∅"
+  }
+ ],
+ "heard": "lavozimiga tegishli rol vakolat va javobgarliklarni biladi talab pi yetti"
+}
