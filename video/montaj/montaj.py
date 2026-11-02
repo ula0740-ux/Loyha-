@@ -89,17 +89,17 @@ BLOOMS = [12.083, 47.875]          # nur portlashi (drop)
 LEAKS = [(12.083, 1.8), (47.875, 2.4), (7.833, 2.0)]
 
 # ---------------------------------------------------------------- grades
-G = {
-    "amber":  dict(mix=[[1.10, .16, 0], [.06, .84, 0], [0, .10, .62]], sat=.72, exp=-.30, con=1.22,
-                   sh=(.05, .025, -.01), hi=(.07, .035, -.03), fade=.012),
-    "golden": dict(mix=[[1.06, .12, 0], [.03, .94, .03], [0, .08, .80]], sat=.86, exp=-.05, con=1.14,
-                   sh=(-.01, .015, .035), hi=(.06, .03, -.03), fade=.01),
-    "steel":  dict(mix=[[.90, .08, .02], [.02, .90, .08], [.02, .10, .98]], sat=.52, exp=-.12, con=1.16,
-                   sh=(0, .015, .05), hi=(-.01, .015, .04), fade=.012),
-    "teal":   dict(mix=[[.84, .10, .06], [0, .94, .10], [0, .16, 1.04]], sat=.82, exp=-.08, con=1.16,
-                   sh=(-.02, .02, .05), hi=(.035, .02, 0), fade=.01),
-    "earth":  dict(mix=[[1.06, .14, 0], [.06, .84, .05], [.02, .10, .70]], sat=.70, exp=-.12, con=1.20,
-                   sh=(.04, .02, 0), hi=(.07, .04, -.01), fade=.012),
+G = {  # tabiiy, tiniq ranglar: bo'limlar orasida faqat yengil iliq/sovuq farq
+    "amber":  dict(mix=[[1.04, .02, 0], [0, 1.0, 0], [0, 0, .95]], sat=1.04, exp=0, con=1.08,
+                   sh=(.004, .002, 0), hi=(.012, .006, -.004), fade=0),
+    "golden": dict(mix=[[1.04, .02, 0], [0, 1.0, 0], [0, 0, .95]], sat=1.10, exp=0, con=1.08,
+                   sh=(0, .002, .004), hi=(.012, .006, -.006), fade=0),
+    "steel":  dict(mix=[[.98, 0, 0], [0, 1.0, 0], [0, 0, 1.03]], sat=1.03, exp=0, con=1.08,
+                   sh=(0, .002, .006), hi=(0, .002, .006), fade=0),
+    "teal":   dict(mix=[[.98, 0, 0], [0, 1.01, 0], [0, 0, 1.04]], sat=1.10, exp=0, con=1.08,
+                   sh=(-.002, .002, .006), hi=(.004, .004, 0), fade=0),
+    "earth":  dict(mix=[[1.03, .02, 0], [0, .99, 0], [0, 0, .95]], sat=1.06, exp=0, con=1.09,
+                   sh=(.004, .002, 0), hi=(.01, .006, 0), fade=0),
 }
 
 
@@ -126,6 +126,9 @@ _caps = {}
 
 @lru_cache(maxsize=64)
 def vframe(name, n):
+    sr = os.path.join(HERE, "ish", "sr", name, f"{n:05d}.png")
+    if os.path.exists(sr):  # Real-ESRGAN bilan tiniqlashtirilgan kadr (sr.py)
+        return cv2.imread(sr)
     cap = _caps.get(name)
     if cap is None:
         cap = _caps[name] = cv2.VideoCapture(os.path.join(HERE, "ish", "src", name + ".mp4"))
@@ -176,13 +179,13 @@ def frame_shot(i, t):
     sc = H / vh
     sc *= 1 + punch * math.exp(-u / 0.16)     # zarbda "punch-in"
     M = np.float32([[sc, 0, W / 2 - sc * cx], [0, sc, H / 2 - sc * cy]])
-    return cv2.warpAffine(img, M, (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+    return cv2.warpAffine(img, M, (W, H), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REFLECT)
 
 
 # ---------------------------------------------------------------- look
 _yy, _xx = np.mgrid[0:H, 0:W].astype(np.float32)
 _r = np.sqrt(((_xx - W / 2) / (W * .62)) ** 2 + ((_yy - H / 2) / (H * .62)) ** 2)
-VIGN = (1 - 0.42 * np.clip(_r - 0.35, 0, 1) ** 1.6)[..., None].astype(np.float32)
+VIGN = (1 - 0.18 * np.clip(_r - 0.35, 0, 1) ** 1.6)[..., None].astype(np.float32)
 del _yy, _xx, _r
 
 
@@ -202,20 +205,34 @@ def grade(rgb, g):
     return x
 
 
-TARGET = {"amber": .30, "golden": .40, "steel": .36, "teal": .37, "earth": .36}
+TARGET = {"amber": .40, "golden": .45, "steel": .43, "teal": .44, "earth": .43}
 
 
 @lru_cache(maxsize=64)
-def shot_gain(i):
-    """Har kadr uchun doimiy ekspozitsiya: manbalar yorug'ligi har xil, bo'lim bir tekis ko'rinsin."""
+def shot_levels(i):
+    """Har kadr uchun doimiy darajalar: xira (tumanli) manbani tozalaydi, yorug'likni tekislaydi."""
     st, name = S[i][0], S[i][1]
     if name in ("black", "white"):
-        return 1.0
+        return 0.0, 1.0, 1.0
     t = (st + CUTS[i + 1]) / 2
     rgb = frame_shot(i, t)[::8, ::8, ::-1].astype(np.float32) / 255.0
-    g = G[S[i][8]]
-    m = float((grade(rgb, g) @ np.float32([.2126, .7152, .0722])).mean())
-    return float(np.clip((TARGET[S[i][8]] / max(m, 1e-3)) ** 0.8, 0.62, 1.25))
+    y = grade(rgb, G[S[i][8]]) @ np.float32([.2126, .7152, .0722])
+    lo = min(float(np.percentile(y, 0.5)), 0.10) * 0.8
+    hi = max(float(np.percentile(y, 99.7)), 0.80)
+    hi = hi + (1 - hi) * 0.25
+    m = float(((y - lo) / (hi - lo)).mean())
+    g = float(np.clip((TARGET[S[i][8]] / max(m, 1e-3)) ** 0.6, 0.88, 1.15))
+    return lo, hi, g
+
+
+_LV = {}
+
+
+def levels(x, i):
+    if i not in _LV:
+        _LV[i] = shot_levels(i)
+    lo, hi, g = _LV[i]
+    return (x - lo) / (hi - lo) * g
 
 
 def halation(x):
@@ -223,7 +240,7 @@ def halation(x):
     hl = np.clip(small - 0.80, 0, None)
     hl = cv2.GaussianBlur(hl, (0, 0), 6)
     hl = cv2.resize(hl, (W, H), interpolation=cv2.INTER_LINEAR)
-    return x + hl * np.float32([1.0, .55, .35]) * 0.55
+    return x + hl * np.float32([1.0, .6, .4]) * 0.18
 
 
 GRAIN = []
@@ -239,7 +256,7 @@ def leak(t, t0, dur):
     u = (t - t0) / dur
     if u < 0 or u > 1:
         return None
-    a = math.sin(math.pi * u) ** 1.5 * 0.30
+    a = math.sin(math.pi * u) ** 1.5 * 0.16
     cx = W * (-0.1 + 1.2 * u); cy = H * (0.25 + 0.3 * u)
     small = np.zeros((H // 8, W // 8), np.float32)
     cv2.circle(small, (int(cx / 8), int(cy / 8)), int(W / 8 * 0.55), 1.0, -1)
@@ -301,8 +318,9 @@ def titles(x, t):
     put_text(x, "2026", W * .84, H / 2, 30, .5, a * .9)
     # "a film by / THOMAS GOH" o'rnida
     a = env(t, 8.3, 11.75, .6, .5)
-    put_text(x, "bir kuz kuni", W * .19, H / 2, 30, .14, a * .9)
-    put_text(x, "UMARNING HIKOYASI", W * .78, H / 2, 24, .36, a * .9, weight="Inter-Regular.otf")
+    put_text(x, "Ilk qadamlaring muborak, Umar", W / 2, H / 2 - 22, 38, .06, a * .95)
+    put_text(x, "UMARNING HIKOYASI", W / 2, H / 2 + 40, 22, .45, a * .8 * ease((t - 8.7) / .6),
+             weight="Inter-Regular.otf")
     # hikoyalar (bo'limlar)
     for t0, t1, num, word in [(12.35, 13.75, "1-HIKOYA", "KASHFIYOT"), (21.85, 23.65, "2-HIKOYA", "JASORAT"),
                               (33.85, 36.15, "3-HIKOYA", "QUVONCH"), (48.15, 50.30, "4-HIKOYA", "QADAM")]:
@@ -349,7 +367,7 @@ def render_frame(n):
         x = np.zeros((H, W, 3), np.float32)
         titles(x, t)
         x = halation(x) * 1.0
-        x += GRAIN[n % len(GRAIN)][..., None] * 0.02
+        x += GRAIN[n % len(GRAIN)][..., None] * 0.006
         return (np.clip(x, 0, 1) * 255 + 0.5).astype(np.uint8)[..., ::-1]
 
     i = shot_at(t)
@@ -364,8 +382,11 @@ def render_frame(n):
             k = int(1 + q * 140)
             bgr = np.roll(bgr, int(dx), axis=1)
             bgr = cv2.blur(bgr, (k | 1, 1))
+    if S[i][1] not in ("black", "white"):
+        bl = cv2.GaussianBlur(bgr, (0, 0), 1.1)
+        bgr = cv2.addWeighted(bgr, 1.3, bl, -0.3, 0)
     rgb = bgr[..., ::-1].astype(np.float32) / 255.0
-    x = grade(rgb, G[S[i][8]]) * shot_gain(i)
+    x = levels(grade(rgb, G[S[i][8]]), i)
     x = halation(x)
     for t0, d in LEAKS:
         L = leak(t, t0, d)
@@ -380,7 +401,7 @@ def render_frame(n):
     if i > 0 and S[i - 1][1] == "white" and S[i][1] != "white":
         x = x + (1 - x) * 0.6 * math.exp(-(t - S[i][0]) / .05)
     x *= VIGN
-    x += GRAIN[n % len(GRAIN)][..., None] * 0.028
+    x += GRAIN[n % len(GRAIN)][..., None] * 0.006
     x = np.clip(x, 0, 1)
     titles(x, t)
     # 6.25-7.83 qora pauza: oldingi kadrdan qisqa so'nish
