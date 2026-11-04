@@ -1,0 +1,426 @@
+<title>Yig'uv paneli</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: andon-board — one dashboard; signal counter left, conveyor chart right, models below; edit drawer hidden in presentation mode */
+:root{
+  --bg:#0e1621; --panel:#151f2c; --panel2:#1b2735; --line:#263446; --fg:#e9eef4; --muted:#8798ad;
+  --accent:#ffb21e; --accent-ink:#1a1204; --ok:#3ccf91; --bad:#ff6b5b;
+  --s1:#ffb21e; --s2:#2ec4b6; --s3:#5aa9ff; --s4:#ff6b5b; --s5:#b48cff; --s6:#9bd35a; --s7:#f28ac0; --s8:#d9c28c;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#eceff3; --panel:#ffffff; --panel2:#f5f7fa; --line:#d7dde5; --fg:#101a26; --muted:#5d6b7c;
+  --accent:#e09400; --accent-ink:#1a1204; --ok:#14935c; --bad:#d6402f;
+  --s1:#e09400; --s2:#0f9e92; --s3:#2f7fe0; --s4:#e0503f; --s5:#8a5ee0; --s6:#5f9e22; --s7:#d4588f; --s8:#a88a45;
+  color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#eceff3; --panel:#ffffff; --panel2:#f5f7fa; --line:#d7dde5; --fg:#101a26; --muted:#5d6b7c;
+  --accent:#e09400; --accent-ink:#1a1204; --ok:#14935c; --bad:#d6402f;
+  --s1:#e09400; --s2:#0f9e92; --s3:#2f7fe0; --s4:#e0503f; --s5:#8a5ee0; --s6:#5f9e22; --s7:#d4588f; --s8:#a88a45;
+  color-scheme:light}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body)}
+.wrap{max-width:1280px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+.stripe{height:6px;border-radius:3px;background:repeating-linear-gradient(-45deg,var(--accent) 0 10px,transparent 10px 20px);opacity:.85}
+header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;justify-content:space-between}
+.brand{display:grid;gap:2px;min-width:0}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font:800 clamp(30px,5vw,46px)/1 var(--display);letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+h1 span{color:var(--accent)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 13px/1 var(--body);padding:9px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--fg);font:600 13px/1 var(--body);padding:11px 14px;border-radius:10px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid{display:grid;gap:16px;grid-template-columns:minmax(0,5fr) minmax(0,8fr)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0;display:grid;gap:12px;align-content:start}
+.ptitle{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ptitle h2{margin:0;font:700 20px/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase}
+.ptitle small{font:500 11px/1 var(--mono);color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+/* andon counter */
+.andon{position:relative;overflow:hidden}
+.andon .ptitle{padding-right:26px}
+.andon .lamp{position:absolute;top:18px;right:18px;width:12px;height:12px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 25%,transparent),0 0 18px var(--ok)}
+.big{font:800 clamp(72px,11vw,132px)/.85 var(--display);letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:var(--accent)}
+.unit{font:500 13px/1 var(--mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.ruler{height:10px;background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 10px);border-bottom:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{background:var(--panel2);border-radius:12px;padding:12px;display:grid;gap:4px;min-width:0}
+.kpi b{font:700 28px/1 var(--display);font-variant-numeric:tabular-nums;letter-spacing:.01em;overflow-wrap:anywhere}
+.kpi span{font:500 12px/1.3 var(--body);color:var(--muted)}
+.delta.up{color:var(--ok)}.delta.down{color:var(--bad)}
+.planrow{display:flex;gap:14px;align-items:center}
+.planrow svg{flex:none}
+.planrow p{margin:0;color:var(--muted);font-size:13px}
+.planrow p b{color:var(--fg);font:700 22px/1 var(--display);display:block}
+/* charts */
+.chart{position:relative;min-width:0}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.axis text,.lbl{fill:var(--muted);font:500 11px var(--mono)}
+.gridline{stroke:var(--line);stroke-width:1}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font:500 12px/1.4 var(--body);padding:8px 10px;border-radius:8px;max-width:220px;transform:translate(-50%,-100%);white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.models{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:20px;align-items:center}
+.mlist{display:grid;gap:10px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:baseline}
+.mrow .name{font-weight:600;overflow-wrap:anywhere}
+.mrow .num{font:700 20px/1 var(--display);font-variant-numeric:tabular-nums}
+.mrow .num small{font:500 12px var(--mono);color:var(--muted);margin-left:6px}
+.bar{grid-column:1/-1;height:8px;border-radius:4px;background:var(--panel2);overflow:hidden}
+.bar div{height:100%;border-radius:4px}
+.empty{border:1px dashed var(--line);border-radius:16px;padding:28px;text-align:center;display:grid;gap:10px;justify-items:center;color:var(--muted)}
+.empty h2{margin:0;color:var(--fg);font:700 26px/1.1 var(--display);text-transform:uppercase;letter-spacing:.03em}
+.badge{display:inline-block;font:600 11px/1 var(--mono);letter-spacing:.12em;padding:6px 8px;border-radius:6px;background:var(--bad);color:#fff;text-transform:uppercase}
+/* editor */
+.editor{border-color:var(--accent)}
+.erow{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+label{display:grid;gap:5px;font:500 12px/1 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+input{font:500 16px/1.2 var(--body);color:var(--fg);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+input[type=number]{width:110px;font-variant-numeric:tabular-nums}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.mgrid label{background:var(--panel2);padding:10px;border-radius:12px;text-transform:none;letter-spacing:0;font:600 14px/1.2 var(--body);color:var(--fg)}
+.mgrid input{width:100%;background:var(--panel)}
+.note{font-size:13px;color:var(--muted);margin:0}
+.msg{font-size:13px;margin:0;min-height:1.3em}
+.recent{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12px/1 var(--mono);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--fg);cursor:pointer}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--muted);font:500 11px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+body.present .edit-only{display:none!important}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.models{grid-template-columns:minmax(0,1fr)}.models svg.donut{max-width:220px;margin:0 auto}}
+@media (prefers-reduced-motion:no-preference){.andon .lamp{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{opacity:.45}}}
+</style>
+
+<div class="wrap">
+  <div class="stripe" aria-hidden="true"></div>
+  <header>
+    <div class="brand">
+      <span class="eyebrow" id="factoryName">Yig'uv sexi</span>
+      <h1>Yig'uv <span>paneli</span></h1>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Davr">
+        <button id="p-day" data-p="day">Bugun</button>
+        <button id="p-week" data-p="week">7 kun</button>
+        <button id="p-month" data-p="month" aria-pressed="true">Oy</button>
+        <button id="p-year" data-p="year">Yil</button>
+        <button id="p-all" data-p="all">Hammasi</button>
+      </div>
+      <button class="btn primary edit-only" id="openEditor">+ Kiritish</button>
+      <button class="btn" id="presentBtn">Taqdimot</button>
+    </div>
+  </header>
+
+  <section class="panel editor edit-only" id="editor" hidden>
+    <div class="ptitle"><h2>Kunlik natija</h2><small>faqat siz ko'rasiz</small></div>
+    <div class="erow">
+      <label for="eDate">Sana<input type="date" id="eDate"></label>
+      <label for="eNewModel">Yangi model<input id="eNewModel" placeholder="masalan, Sedan S" maxlength="40"></label>
+      <button class="btn" id="addModel">Model qo'shish</button>
+      <label for="ePlan">Oylik reja, dona<input type="number" id="ePlan" min="0" step="1" placeholder="—"></label>
+    </div>
+    <div class="mgrid" id="mgrid"></div>
+    <div class="erow">
+      <button class="btn primary" id="saveDay">Saqlash</button>
+      <button class="btn" id="closeEditor">Yopish</button>
+      <p class="msg" id="msg" role="status"></p>
+    </div>
+    <p class="note">Shu sanaga har model bo'yicha yig'ilgan sonni yozing. Bo'sh qoldirilgan model 0 hisoblanadi. Avvalgi kunni tuzatish uchun pastdagi sanani bosing.</p>
+    <div class="recent" id="recent"></div>
+  </section>
+
+  <section class="empty" id="emptyState" hidden>
+    <h2>Hali ma'lumot yo'q</h2>
+    <p>"+ Kiritish" tugmasini bosing, sanani tanlang va har model bo'yicha yig'ilgan avtomobillar sonini yozing. Diagrammalar shu zahoti chiziladi.</p>
+    <button class="btn" id="demoBtn">Namuna ma'lumot bilan ko'rish</button>
+  </section>
+
+  <div id="dash" class="grid">
+    <section class="panel andon">
+      <span class="lamp" aria-hidden="true"></span>
+      <div class="ptitle"><h2 id="periodTitle">Shu oy</h2><small id="periodRange">—</small></div>
+      <div><div class="big" id="total">—</div><div class="unit">avtomobil yig'ildi <span id="demoTag"></span></div></div>
+      <div class="ruler" aria-hidden="true"></div>
+      <div class="planrow" id="planRow" hidden>
+        <svg id="ring" width="74" height="74" viewBox="0 0 74 74" aria-hidden="true"></svg>
+        <p><b id="planPct">—</b>reja bajarilishi (<span id="planVal">—</span> dona)</p>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><b id="kAvg">—</b><span>kunlik o'rtacha</span></div>
+        <div class="kpi"><b id="kBest">—</b><span id="kBestL">eng yaxshi kun</span></div>
+        <div class="kpi"><b id="kTop">—</b><span>eng ko'p yig'ilgan model</span></div>
+        <div class="kpi"><b id="kDelta" class="delta">—</b><span id="kDeltaL">oldingi davrga nisbatan</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="ptitle"><h2>Yig'uv dinamikasi</h2><small id="dynUnit">kunlar bo'yicha, dona</small></div>
+      <div class="chart" id="dynChart"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="panel" style="grid-column:1/-1">
+      <div class="ptitle"><h2>Modellar bo'yicha</h2><small>ulush va soni</small></div>
+      <div class="models">
+        <div class="chart"><svg class="donut" id="donut" viewBox="0 0 220 220" role="img" aria-label="Modellar ulushi"></svg></div>
+        <div class="mlist" id="mlist"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer><span id="stamp">—</span><span id="src">Manba: qo'lda kiritilgan kunlik natijalar</span></footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const SER = ["--s1","--s2","--s3","--s4","--s5","--s6","--s7","--s8"];
+  const fmt = n => Math.round(n).toLocaleString("uz-UZ").replace(/,/g, " ");
+  const iso = d => d.toISOString().slice(0,10);
+  const parse = s => new Date(s + "T00:00:00Z");
+  const addDays = (d,n) => new Date(d.getTime() + n*864e5);
+  const OY = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+  const nice = s => { const d = parse(s); return d.getUTCDate() + "-" + OY[d.getUTCMonth()]; };
+
+  let state = { models: [], plan: 0, factory: "", days: {} };
+  let demo = false, period = "month", db = null, canWrite = false;
+
+  // ---------- namuna (faqat ko'rish uchun, saqlanmaydi) ----------
+  function demoData(){
+    let s = 7; const r = () => (s = (s*16807) % 2147483647) / 2147483647;
+    const models = ["Model A","Model B","Model C","Model D"], base = [140,95,60,30], days = {};
+    const today = parse(iso(new Date()));
+    for (let i = 120; i >= 0; i--){
+      const d = addDays(today, -i); if (d.getUTCDay() === 0) continue;
+      const m = {}; models.forEach((k,j) => m[k] = Math.round(base[j]*(0.75 + 0.5*r()) * (1 + (120-i)/600)));
+      days[iso(d)] = m;
+    }
+    return { models, plan: 8000, factory: "Namuna zavod", days };
+  }
+
+  // ---------- davr ----------
+  function range(){
+    const today = parse(iso(new Date()));
+    const y = today.getUTCFullYear(), m = today.getUTCMonth();
+    if (period === "day") return [today, today, "Bugun"];
+    if (period === "week") return [addDays(today,-6), today, "Oxirgi 7 kun"];
+    if (period === "month") return [new Date(Date.UTC(y,m,1)), today, "Shu oy"];
+    if (period === "year") return [new Date(Date.UTC(y,0,1)), today, y + "-yil"];
+    const keys = Object.keys(state.days).sort();
+    return [keys.length ? parse(keys[0]) : today, today, "Butun davr"];
+  }
+  const inRange = (k,a,b) => { const d = parse(k); return d >= a && d <= b; };
+  const sumDay = m => Object.values(m || {}).reduce((x,y) => x + (+y||0), 0);
+
+  // ---------- chizish ----------
+  function render(){
+    const has = Object.keys(state.days).length > 0;
+    $("emptyState").hidden = has;
+    $("dash").hidden = !has;
+    $("demoTag").innerHTML = demo ? '<span class="badge">namuna</span>' : "";
+    $("factoryName").textContent = state.factory || "Yig'uv sexi";
+    $("src").textContent = demo ? "Namuna ma'lumot: haqiqiy raqamlar emas" : "Manba: qo'lda kiritilgan kunlik natijalar";
+    document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.p === period));
+    if (!has) return;
+
+    const [a,b,label] = range();
+    const keys = Object.keys(state.days).filter(k => inRange(k,a,b)).sort();
+    const models = [...new Set([...state.models, ...keys.flatMap(k => Object.keys(state.days[k]))])];
+    const color = m => css(SER[models.indexOf(m) % SER.length]);
+    const total = keys.reduce((s,k) => s + sumDay(state.days[k]), 0);
+    $("periodTitle").textContent = label;
+    $("periodRange").textContent = keys.length ? nice(keys[0]) + " — " + nice(keys[keys.length-1]) : "ma'lumot yo'q";
+    $("total").textContent = fmt(total);
+
+    // KPI
+    const perDay = keys.map(k => [k, sumDay(state.days[k])]);
+    $("kAvg").textContent = perDay.length ? fmt(total / perDay.length) : "—";
+    const best = perDay.reduce((m,x) => x[1] > (m?.[1] ?? -1) ? x : m, null);
+    $("kBest").textContent = best ? fmt(best[1]) : "—";
+    $("kBestL").textContent = best ? "eng yaxshi kun, " + nice(best[0]) : "eng yaxshi kun";
+    const byModel = {}; keys.forEach(k => Object.entries(state.days[k]).forEach(([m,v]) => byModel[m] = (byModel[m]||0) + (+v||0)));
+    const ranked = models.map(m => [m, byModel[m]||0]).filter(x => x[1] > 0).sort((x,y) => y[1]-x[1]);
+    $("kTop").textContent = ranked[0] ? ranked[0][0] : "—";
+    const span = Math.round((b - a)/864e5) + 1, pa = addDays(a,-span), pb = addDays(a,-1);
+    const prev = Object.keys(state.days).filter(k => inRange(k,pa,pb)).reduce((s,k) => s + sumDay(state.days[k]), 0);
+    const dEl = $("kDelta"); dEl.className = "delta";
+    if (period !== "all" && prev > 0){ const p = (total - prev)/prev*100; dEl.textContent = (p>=0?"+":"") + p.toFixed(1) + "%"; dEl.classList.add(p>=0?"up":"down"); }
+    else dEl.textContent = "—";
+
+    // reja
+    const months = period === "month" ? 1 : period === "year" ? (b.getUTCMonth()+1) : 0;
+    const planRow = $("planRow");
+    if (state.plan > 0 && months){
+      const plan = state.plan * months, pct = total/plan*100;
+      planRow.hidden = false; $("planPct").textContent = pct.toFixed(1) + "%"; $("planVal").textContent = fmt(plan);
+      const r = 30, c = 2*Math.PI*r, f = Math.min(pct,100)/100;
+      $("ring").innerHTML = `<circle cx="37" cy="37" r="${r}" fill="none" stroke="${css("--line")}" stroke-width="8"/>`+
+        `<circle cx="37" cy="37" r="${r}" fill="none" stroke="${css(pct>=100?"--ok":"--accent")}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c*f} ${c}" transform="rotate(-90 37 37)"/>`;
+    } else planRow.hidden = true;
+
+    drawDyn(keys, models, color);
+    drawModels(ranked, total, color);
+    $("stamp").textContent = "Yangilandi: " + new Date().toLocaleString("uz-UZ");
+    renderRecent();
+  }
+
+  function drawDyn(keys, models, color){
+    const box = $("dynChart"), W = Math.max(box.clientWidth, 300), H = Math.round(Math.min(340, Math.max(220, W*0.42)));
+    // yil yoki uzun davr: oylar bo'yicha
+    const monthly = keys.length > 62;
+    $("dynUnit").textContent = monthly ? "oylar bo'yicha, dona" : "kunlar bo'yicha, dona";
+    const buckets = new Map();
+    keys.forEach(k => { const g = monthly ? k.slice(0,7) : k; const m = buckets.get(g) || {}; Object.entries(state.days[k]).forEach(([n,v]) => m[n] = (m[n]||0) + (+v||0)); buckets.set(g, m); });
+    const cols = [...buckets.entries()];
+    const P = {l:44, r:8, t:12, b:28}, iw = W-P.l-P.r, ih = H-P.t-P.b;
+    const max = Math.max(1, ...cols.map(([,m]) => sumDay(m)));
+    const step = Math.pow(10, Math.floor(Math.log10(max))), nm = Math.ceil(max/step)*step, ticks = [0, nm/2, nm];
+    const bw = iw / Math.max(cols.length,1), gap = Math.min(6, bw*0.25);
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Yig'uv dinamikasi">`;
+    ticks.forEach(t => { const y = P.t + ih - t/nm*ih; s += `<line class="gridline" x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}"/><text class="lbl" x="${P.l-8}" y="${y+4}" text-anchor="end">${fmt(t)}</text>`; });
+    const every = Math.ceil(cols.length / Math.max(1, Math.floor(iw/56)));
+    cols.forEach(([g,m],i) => {
+      let y0 = P.t + ih; const x = P.l + i*bw + gap/2, w = Math.max(1, bw-gap);
+      models.forEach(n => { const v = m[n]||0; if (!v) return; const h = v/nm*ih; y0 -= h; s += `<rect x="${x}" y="${y0}" width="${w}" height="${h}" fill="${color(n)}" rx="${Math.min(2,w/4)}"/>`; });
+      s += `<rect class="hit" data-i="${i}" x="${P.l+i*bw}" y="${P.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
+      if (i % every === 0){ const lab = monthly ? OY[+g.slice(5,7)-1].slice(0,3) : (cols.length > 14 ? String(+g.slice(8,10)) : nice(g)); s += `<text class="lbl" x="${x+w/2}" y="${H-8}" text-anchor="middle">${lab}</text>`; }
+    });
+    s += `</svg><div class="tip" hidden></div>`;
+    box.innerHTML = s;
+    const tip = box.querySelector(".tip");
+    box.querySelectorAll(".hit").forEach(h => {
+      const show = () => { const [g,m] = cols[+h.dataset.i]; const name = monthly ? OY[+g.slice(5,7)-1] + " " + g.slice(0,4) : nice(g);
+        tip.textContent = ""; const t = document.createElement("b"); t.textContent = name + ": " + fmt(sumDay(m)) + " dona"; tip.append(t);
+        models.forEach(n => { if (m[n]) { const d = document.createElement("div"); d.textContent = n + " — " + fmt(m[n]); tip.append(d); } });
+        const r = box.getBoundingClientRect(), hr = h.getBoundingClientRect(); let x = hr.left - r.left + hr.width/2;
+        tip.hidden = false; const tw = tip.offsetWidth; x = Math.max(tw/2, Math.min(r.width - tw/2, x)); tip.style.left = x + "px"; tip.style.top = "8px"; };
+      h.addEventListener("mouseenter", show); h.addEventListener("click", show);
+      h.addEventListener("mouseleave", () => tip.hidden = true);
+    });
+    const lg = $("legend"); lg.textContent = "";
+    models.forEach(n => { const sp = document.createElement("span"); const i = document.createElement("i"); i.style.background = color(n); sp.append(i, document.createTextNode(n)); lg.append(sp); });
+  }
+
+  function drawModels(ranked, total, color){
+    const svg = $("donut"); let s = "", a0 = -Math.PI/2; const R = 100, r = 66, cx = 110, cy = 110;
+    if (!total){ s = `<circle cx="110" cy="110" r="83" fill="none" stroke="${css("--line")}" stroke-width="34"/>`; }
+    ranked.forEach(([n,v]) => {
+      const a1 = a0 + v/total*2*Math.PI, large = a1-a0 > Math.PI ? 1 : 0;
+      const p = (rr,a) => [cx + rr*Math.cos(a), cy + rr*Math.sin(a)];
+      if (ranked.length === 1){ s += `<circle cx="${cx}" cy="${cy}" r="${(R+r)/2}" fill="none" stroke="${color(n)}" stroke-width="${R-r}"/>`; }
+      else { const [x1,y1]=p(R,a0),[x2,y2]=p(R,a1),[x3,y3]=p(r,a1),[x4,y4]=p(r,a0);
+        s += `<path d="M${x1} ${y1}A${R} ${R} 0 ${large} 1 ${x2} ${y2}L${x3} ${y3}A${r} ${r} 0 ${large} 0 ${x4} ${y4}Z" fill="${color(n)}" stroke="${css("--panel")}" stroke-width="2"/>`; }
+      a0 = a1;
+    });
+    s += `<text x="110" y="108" text-anchor="middle" style="font:800 34px var(--display);fill:var(--fg)">${ranked.length}</text><text class="lbl" x="110" y="128" text-anchor="middle">MODEL</text>`;
+    svg.innerHTML = s;
+    const list = $("mlist"); list.textContent = "";
+    const top = ranked[0]?.[1] || 1;
+    ranked.forEach(([n,v]) => {
+      const row = document.createElement("div"); row.className = "mrow";
+      const nm = document.createElement("span"); nm.className = "name"; nm.textContent = n;
+      const num = document.createElement("span"); num.className = "num"; num.textContent = fmt(v);
+      const sm = document.createElement("small"); sm.textContent = (v/total*100).toFixed(1) + "%"; num.append(sm);
+      const bar = document.createElement("div"); bar.className = "bar"; const f = document.createElement("div"); f.style.width = (v/top*100) + "%"; f.style.background = color(n); bar.append(f);
+      row.append(nm, num, bar); list.append(row);
+    });
+    if (!ranked.length){ const p = document.createElement("p"); p.className = "note"; p.textContent = "Bu davrda yig'ilgan avtomobil yo'q."; list.append(p); }
+  }
+
+  // ---------- kiritish ----------
+  function fillEditor(){
+    const date = $("eDate").value; const day = state.days[date] || {};
+    const g = $("mgrid"); g.textContent = "";
+    state.models.forEach((m,i) => {
+      const l = document.createElement("label"); l.htmlFor = "m-" + i; l.textContent = m;
+      const inp = document.createElement("input"); inp.type = "number"; inp.min = "0"; inp.step = "1"; inp.id = "m-" + i; inp.dataset.model = m; inp.placeholder = "0";
+      if (day[m] != null) inp.value = day[m];
+      l.append(inp); g.append(l);
+    });
+    if (!state.models.length){ const p = document.createElement("p"); p.className = "note"; p.textContent = "Avval yig'iladigan modellarni qo'shing: nomini yozib, \"Model qo'shish\"ni bosing."; g.append(p); }
+    $("ePlan").value = state.plan || "";
+  }
+  function renderRecent(){
+    const rc = $("recent"); rc.textContent = "";
+    Object.keys(state.days).sort().slice(-10).reverse().forEach(k => {
+      const c = document.createElement("button"); c.className = "chip"; c.textContent = nice(k) + " · " + fmt(sumDay(state.days[k]));
+      c.addEventListener("click", () => { $("eDate").value = k; fillEditor(); }); rc.append(c);
+    });
+  }
+  const say = (t, bad) => { const m = $("msg"); m.textContent = t; m.style.color = bad ? "var(--bad)" : "var(--ok)"; };
+
+  async function saveSettings(){
+    if (!db) return;
+    await db.doc("settings/main").set({ models: state.models, plan: state.plan, factory: state.factory });
+  }
+  $("addModel").addEventListener("click", async () => {
+    const v = $("eNewModel").value.trim(); if (!v) return;
+    if (state.models.includes(v)) { say("Bu model allaqachon bor.", true); return; }
+    if (demo) exitDemo();
+    state.models.push(v); $("eNewModel").value = ""; fillEditor();
+    try { await saveSettings(); say("Model qo'shildi: " + v); } catch(e){ say("Saqlanmadi: " + (e.message||e.code), true); }
+  });
+  $("saveDay").addEventListener("click", async () => {
+    const date = $("eDate").value; if (!date) { say("Sanani tanlang.", true); return; }
+    if (demo) exitDemo();
+    const m = {}; document.querySelectorAll("#mgrid input").forEach(i => { const v = Math.max(0, Math.round(+i.value||0)); if (v) m[i.dataset.model] = v; });
+    const plan = Math.max(0, Math.round(+$("ePlan").value||0));
+    state.days[date] = m; if (!Object.keys(m).length) delete state.days[date];
+    const planChanged = plan !== state.plan; state.plan = plan;
+    render();
+    if (!db) { say("Saqlash bu ko'rinishda ishlamaydi: panelni claude.ai da oching.", true); return; }
+    try {
+      const ref = db.doc("days/" + date);
+      if (Object.keys(m).length) await ref.set({ date, models: m }); else await ref.delete();
+      if (planChanged) await saveSettings();
+      say(nice(date) + " saqlandi: " + fmt(sumDay(m)) + " dona.");
+    } catch(e){ say(e.code === "invalid_argument" ? "Sizda o'zgartirish huquqi yo'q." : "Saqlanmadi, qayta urinib ko'ring.", true); }
+  });
+
+  function exitDemo(){ if (!demo) return; demo = false; state = { models: [], plan: 0, factory: "", days: {} }; applyLive(); }
+  $("demoBtn").addEventListener("click", () => { demo = true; state = demoData(); render(); });
+  $("openEditor").addEventListener("click", () => { $("editor").hidden = false; if (!$("eDate").value) $("eDate").value = iso(new Date()); fillEditor(); $("eDate").focus(); });
+  $("closeEditor").addEventListener("click", () => $("editor").hidden = true);
+  $("eDate").addEventListener("change", fillEditor);
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { period = b.dataset.p; render(); }));
+  function setPresent(on){ document.body.classList.toggle("present", on); $("presentBtn").textContent = on ? "Tahrirlash" : "Taqdimot"; }
+  $("presentBtn").addEventListener("click", () => { const on = !document.body.classList.contains("present"); setPresent(on); try { history.replaceState(null, "", on ? "#taqdimot" : "#"); } catch(e){} });
+  if (location.hash === "#taqdimot") setPresent(true);
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(render, 120); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", render);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  // ---------- ma'lumot ombori ----------
+  let live = { settings: null, days: {} };
+  function applyLive(){
+    if (demo) return;
+    const st = live.settings || {};
+    state = { models: Array.isArray(st.models) ? st.models.filter(x => typeof x === "string") : [], plan: +st.plan || 0, factory: typeof st.factory === "string" ? st.factory : "", days: live.days };
+    Object.values(state.days).forEach(m => Object.keys(m).forEach(k => { if (!state.models.includes(k)) state.models.push(k); }));
+    render();
+  }
+  render();
+  (async () => {
+    try {
+      db = await window.claude?.use?.("db");
+      const user = await window.claude?.use?.("user");
+      canWrite = user ? ((await user.canEdit?.()) ?? true) : true;
+      if (!canWrite) setPresent(true), document.querySelectorAll(".edit-only").forEach(e => e.remove()), $("presentBtn").remove();
+    } catch(e){ db = null; }
+    if (!db) return;
+    db.doc("settings/main").onSnapshot(s => { live.settings = s.exists ? s.data() : null; applyLive(); }, () => {});
+    db.collection("days").onSnapshot(q => {
+      const d = {}; q.docs.forEach(doc => { const v = doc.data(); if (v && v.models && typeof v.models === "object") { const m = {}; Object.entries(v.models).forEach(([k,n]) => { if (typeof k === "string" && isFinite(+n)) m[k] = +n; }); d[doc.id] = m; } });
+      live.days = d; applyLive();
+    }, () => {});
+  })();
+})();
+</script>
