@@ -20,3 +20,6 @@ video/pptx-film/out/
 
 # montaj: oraliq fayllar (manbadan qayta yasaladi)
 video/montaj/ish/
+
+# zavod Excel namunalari (VIN va boshqa ichki ma'lumot, repoga kirmaydi)
+dashboard/namuna_excel/
