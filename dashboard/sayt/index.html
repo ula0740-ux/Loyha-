@@ -259,6 +259,9 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
 .rc{display:grid;gap:8px}.rch{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.big2{font:900 34px/1 var(--disp);font-stretch:115%}.rc .ax{font:600 11px var(--body);fill:#5d6b7c}.rc .bv{font:800 12px var(--body);fill:#0c1a2b}.ccs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.cc{display:grid;gap:4px;justify-items:center;text-align:center;font-size:11px;font-weight:700;color:var(--muted)}.cc .chip{font-size:13px}
 .grow .rc .gb{animation:growY .9s cubic-bezier(.22,1,.36,1) both;transform-box:fill-box;transform-origin:bottom}.grow .rc .gb.neg{transform-origin:top}.cc b{color:var(--ink);font-size:12px}.cc em{font-style:normal;font-size:12px}@keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 .sect h2{color:#fff!important;text-shadow:0 2px 12px rgba(0,30,50,.35)}.sect .leg,.sect>.leg span,#panel>.muted.small{color:rgba(255,255,255,.85)}
+.rcb{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px;align-items:center}.rgw{display:grid;gap:6px;justify-items:center}.ring{width:100%;max-width:150px}.rv{font:900 26px var(--disp)}.okf{fill:var(--ok)}.badf{fill:var(--bad)}.rc .ax{font:600 11px var(--body);fill:#5d6b7c}.rc .bv{font:800 12px var(--body);fill:#0c1a2b}
+.grow .rg{animation:ringIn 1.1s cubic-bezier(.22,1,.36,1) both}@keyframes ringIn{from{stroke-dasharray:0 400}}
+.grow .rc .gb{transform-origin:bottom}
 </style>
 </head>
 <body>
@@ -484,31 +487,37 @@ function last3(D){
 function cumTo(ds, xs){ var ym = ds.slice(0,7), a = 0, pl = 0;
   xs.forEach(function(k){ for (var d = 1; d <= +ds.slice(8); d++){ var x = ym + '-' + ('0'+d).slice(-2); a += factSex(x, k).a; pl += dayPlanSex(x, k); } });
   return {a:a, pl:pl, d:Math.round(a - pl)}; }
+function ring(c, col){
+  var r = 52, C = 2 * Math.PI * r, pct = c.pl ? c.a / c.pl : 0, k = Math.min(1, pct), d = c.d, ok = d >= 0;
+  return '<svg viewBox="0 0 140 140" class="ring" role="img" aria-label="oy boshidan reja bajarilishi">' +
+    '<circle cx="70" cy="70" r="' + r + '" fill="none" stroke="rgba(12,26,43,.10)" stroke-width="14"/>' +
+    '<circle class="rg" cx="70" cy="70" r="' + r + '" fill="none" stroke="' + (ok ? 'var(--ok)' : 'var(--bad)') + '" stroke-width="14" stroke-linecap="round" stroke-dasharray="' + (C * k) + ' ' + C + '" transform="rotate(-90 70 70)"/>' +
+    '<text x="70" y="66" text-anchor="middle" class="rv ' + (ok ? 'okf' : 'badf') + '">' + (c.pl ? sg(d) : '—') + '</text>' +
+    '<text x="70" y="86" text-anchor="middle" class="ax">' + (c.pl ? Math.round(pct * 100) + '% · ' + (ok ? 'oldinda' : 'orqada') : 'reja yo\'q') + '</text></svg>';
+}
 function recentChart(title, col, xs, days){
-  var data = days.map(function(ds){ var a = 0, b = 0, pl = 0; xs.forEach(function(k){ var v = factSex(ds, k); a += v.a; b += v.b; pl += dayPlanSex(ds, k); });
-    return {ds:ds, a:a, b:b, pl:pl, c:cumTo(ds, xs)}; });
-  var last = data[data.length-1], W0 = 420, H0 = 200, P = {l:8, r:8, t:26, b:26}, iw = W0 - P.l - P.r, ih = H0 - P.t - P.b;
-  var mx = Math.max.apply(null, data.map(function(x){ return Math.abs(x.c.d); }).concat([1])) * 1.1;
-  var allNeg = data.every(function(x){ return x.c.d <= 0; }), allPos = data.every(function(x){ return x.c.d >= 0; });
-  var y0 = allNeg ? P.t + 4 : allPos ? P.t + ih : P.t + ih / 2, span = (allNeg || allPos) ? ih - 4 : ih / 2;
-  var Y = function(v){ return y0 - v / mx * span; }, bw = iw / data.length, g = '';
-  g += '<line x1="' + P.l + '" x2="' + (W0-P.r) + '" y1="' + y0 + '" y2="' + y0 + '" stroke="#0c1a2b" stroke-width="1.5"/><text x="' + (W0-P.r) + '" y="' + (y0 - 5) + '" text-anchor="end" class="ax">reja</text>';
+  var data = days.map(function(ds){ var a = 0, pl = 0; xs.forEach(function(k){ a += factSex(ds, k).a; pl += dayPlanSex(ds, k); }); return {ds:ds, a:a, pl:pl}; });
+  var last = days[days.length-1], c = cumTo(last, xs);
+  var W0 = 300, H0 = 190, P = {l:6, r:6, t:22, b:24}, iw = W0 - P.l - P.r, ih = H0 - P.t - P.b;
+  var mx = Math.max.apply(null, data.map(function(x){ return Math.max(x.a, x.pl); }).concat([1])) * 1.12;
+  var Y = function(v){ return P.t + ih - v / mx * ih; }, bw = iw / data.length, g = '';
+  g += '<line x1="' + P.l + '" x2="' + (W0-P.r) + '" y1="' + (P.t+ih) + '" y2="' + (P.t+ih) + '" stroke="rgba(12,26,43,.25)"/>';
   data.forEach(function(x, i){
-    var cx = P.l + i * bw + bw / 2, w = Math.min(64, bw * .5), d = x.c.d, yv = Y(d), top = Math.min(yv, y0), hh = Math.max(2, Math.abs(yv - y0));
-    var c = !x.c.pl ? '#b7c2cf' : d >= 0 ? 'var(--ok)' : 'var(--bad)';
-    g += '<rect class="gb' + (d < 0 ? ' neg' : '') + '" x="' + (cx - w/2) + '" y="' + top + '" width="' + w + '" height="' + hh + '" rx="7" fill="' + c + '"/>';
-    g += '<text x="' + cx + '" y="' + (d >= 0 ? top - 7 : top + hh + 16) + '" text-anchor="middle" class="bv">' + (x.c.pl ? sg(d) : '—') + '</text>';
-    g += '<text x="' + cx + '" y="' + (d >= 0 ? y0 + 16 : y0 - 7) + '" text-anchor="middle" class="ax">' + nice(x.ds) + 'gacha</text>';
+    var cx = P.l + i * bw + bw / 2, w = Math.min(30, bw * .3);
+    var hp = P.t + ih - Y(x.pl), ha = P.t + ih - Y(x.a);
+    g += '<rect class="gb" x="' + (cx - w - 2) + '" y="' + Y(x.pl) + '" width="' + w + '" height="' + Math.max(hp, 0) + '" rx="5" fill="#7d8fa3"/>';
+    g += '<rect class="gb" x="' + (cx + 2) + '" y="' + Y(x.a) + '" width="' + w + '" height="' + Math.max(ha, 0) + '" rx="5" fill="' + (x.pl && x.a < x.pl ? 'var(--bad)' : col) + '"/>';
+    g += '<text x="' + (cx - w/2 - 2) + '" y="' + (Y(x.pl) - 5) + '" text-anchor="middle" class="ax">' + f(x.pl) + '</text>';
+    g += '<text x="' + (cx + w/2 + 2) + '" y="' + (Y(x.a) - 5) + '" text-anchor="middle" class="bv">' + f(x.a) + '</text>';
+    g += '<text x="' + cx + '" y="' + (H0 - 6) + '" text-anchor="middle" class="ax">' + nice(x.ds) + ', ' + WD[dow(x.ds)] + '</text>';
   });
-  var chips = data.map(function(x){ return '<div class="cc"><span>' + nice(x.ds) + ', ' + WD[dow(x.ds)] + '</span><b>630: ' + f(x.a) + (x.pl ? ' / reja ' + f(x.pl) : '') + '</b>' + (x.pl ? '<em class="' + (x.a >= x.pl ? 'ok-t' : 'bad-t') + '">kun: ' + sg(x.a - x.pl) + '</em>' : '') + '</div>'; }).join('');
-  var d = last.c.d;
-  return '<div class="card rc"><div class="rch"><span class="tag" style="background:' + col + '">' + title + '</span>' +
-    (last.c.pl ? '<span class="big2 ' + (d >= 0 ? 'ok-t' : 'bad-t') + '">' + sg(d) + '</span><span class="muted small">' + nice(last.ds) + 'gacha ' + (d >= 0 ? 'oldinda' : 'orqada') + '<br>630: ' + f(last.c.a) + ' · reja: ' + f(last.c.pl) + '</span>' : '<span class="muted small">oylik reja kiritilmagan</span>') +
-    '</div><svg viewBox="0 0 ' + W0 + ' ' + H0 + '" width="100%" role="img" aria-label="' + title + ' oxirgi 3 kun">' + g + '</svg><div class="ccs">' + chips + '</div></div>';
+  return '<div class="card rc"><div class="rch"><span class="tag" style="background:' + col + '">' + title + '</span><span class="muted small">oxirgi 3 kun · reja va fakt (630)</span></div>' +
+    '<div class="rcb"><svg viewBox="0 0 ' + W0 + ' ' + H0 + '" width="100%" role="img" aria-label="' + title + ' oxirgi 3 kun reja va fakt">' + g + '</svg>' +
+    '<div class="rgw">' + ring(c, col) + '<div class="muted small" style="text-align:center">oy boshidan ' + nice(last) + 'gacha<br>fakt <b>' + f(c.a) + '</b> · reja <b>' + f(c.pl) + '</b></div></div></div></div>';
 }
 function recentBlock(D){
   var days = last3(D);
-  return '<div><div class="sect" style="margin:0 0 12px"><h2>Oxirgi 3 kun · shu kungacha rejaga nisbatan</h2><div class="leg" style="margin:0"><span><i style="background:var(--ok)"></i>oldinda</span><span><i style="background:var(--bad)"></i>orqada</span><span>ustun = oy boshidan o\'sha kungacha 630 − reja</span></div></div>' +
+  return '<div><div class="sect" style="margin:0 0 12px"><h2>Oxirgi 3 kun · reja va fakt</h2><div class="leg" style="margin:0"><span><i style="background:#7d8fa3"></i>reja</span><span><i style="background:var(--c630)"></i>fakt (630)</span><span><i style="background:var(--bad)"></i>rejadan kam</span><span>aylana: oy boshidan shu kungacha</span></div></div>' +
     '<div class="r3">' + recentChart('CKD', 'var(--ckd)', ['CKD'], days) + recentChart('SKD', 'var(--skd)', ['SKD'], days) + recentChart('Jami', '#0c1a2b', ['CKD','SKD'], days) + '</div></div>';
 }
 /* ---------------- MQS qismi */
