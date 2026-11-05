@@ -266,6 +266,75 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
 #pmain{display:grid;gap:18px;min-width:0}
 .seg.gl>button{color:rgba(255,255,255,.82)}.seg.gl>button.on{color:#fff}
 .rcb{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}
+
+/* ===================== OQ va QORA mavzu (Sales Dashboard namunasi) ===================== */
+html[data-theme]{--ok:#15a06a;--bad:#e5483a}
+html[data-theme="light"]{--bg:#eceef1;--card:#ffffff;--ink:#0d0e10;--muted:#70757d;--line:#e4e6ea;--soft:#f3f4f6;--road:#0d0e10;--ok-s:#dff4ea;--bad-s:#fde6e3;--warn-s:#fff2db;--ckd-s:#e8edff}
+html[data-theme="dark"]{--bg:#09090b;--card:#151518;--ink:#ececef;--muted:#8d8f98;--line:#26262b;--soft:#1d1d21;--road:#000;--ok-s:rgba(21,160,106,.16);--bad-s:rgba(229,72,58,.16);--warn-s:rgba(240,165,0,.14);--ckd-s:rgba(47,99,255,.16);--skd-s:rgba(139,92,246,.16);color-scheme:dark}
+html[data-theme],html[data-theme] body{background:var(--bg);color:var(--ink)}
+html[data-theme="light"] body::before{background:radial-gradient(40% 40% at 15% 10%,#ffffff,transparent 70%),radial-gradient(40% 40% at 90% 90%,#dfe3e8,transparent 70%),linear-gradient(160deg,#f3f4f6,#e6e8ec);filter:blur(30px)}
+html[data-theme="dark"] body::before{background:radial-gradient(40% 40% at 15% 10%,#1b1b20,transparent 70%),radial-gradient(40% 40% at 90% 90%,#121216,transparent 70%),linear-gradient(160deg,#0c0c0e,#060607);filter:blur(30px)}
+html[data-theme] body::after{background:transparent}
+html[data-theme] .logo{color:var(--ink)}
+html[data-theme="light"] .logo i{background:#0d0e10;border-color:#0d0e10}
+html[data-theme="dark"] .logo i{background:#fff;color:#000;border-color:#fff}
+/* qobiq va kartalar */
+html[data-theme] #panel,html[data-theme] #admin{background:color-mix(in srgb,var(--card) 55%,transparent);border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.08)}
+html[data-theme="dark"] #panel,html[data-theme="dark"] #admin{box-shadow:0 20px 60px rgba(0,0,0,.6)}
+html[data-theme] .card,html[data-theme] .cat{background:var(--card);border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05)}
+html[data-theme="dark"] .card,html[data-theme="dark"] .cat{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 10px 30px rgba(0,0,0,.4)}
+html[data-theme] .cat.cp{background:var(--ckd-s)}html[data-theme] .cat.ct2{background:var(--warn-s)}
+html[data-theme] .sc.dark{background:#0d0e10;border-color:#0d0e10;color:#fff}
+html[data-theme="dark"] .sc.dark{background:#ececef;border-color:#ececef;color:#0d0e10}
+html[data-theme="dark"] .sc.dark .when span,html[data-theme="dark"] .sc.dark .ev .lab,html[data-theme="dark"] .sc.dark .meta{color:#5c5f66}
+html[data-theme="dark"] .sc.dark .meta b{color:#0d0e10}html[data-theme="dark"] .sc.dark .trk .lane{background:#d4d5da}html[data-theme="dark"] .sc.dark .trk .mk{background:#0d0e10}html[data-theme="dark"] .sc.dark .trk .mk span{color:#5c5f66}
+html[data-theme="dark"] .sc.dark .mq{background:rgba(229,72,58,.12)}html[data-theme="dark"] .sc.dark .mq b{color:#d33a2c}html[data-theme="dark"] .sc.dark .mq span{color:#d33a2c}html[data-theme="dark"] .sc.dark .mq em{color:#5c5f66}
+html[data-theme="dark"] .sc.dark .chip.ok{background:#d6efe3;color:#0d7a4f}html[data-theme="dark"] .sc.dark .chip.bad{background:#f8d9d5;color:#c23324}
+html[data-theme] .day,html[data-theme] .mo,html[data-theme] .sp div,html[data-theme] .pl,html[data-theme] .pv{background:var(--soft)}
+html[data-theme] .day.ok,html[data-theme] .mo.ok{background:var(--ok-s)}html[data-theme] .day.bad,html[data-theme] .mo.bad{background:var(--bad-s)}
+html[data-theme] .day.off{background:transparent;border-color:var(--line)}html[data-theme] .day.sel,html[data-theme] .mo.cur{border-color:var(--ink)}
+html[data-theme] .mq{background:var(--bad-s)}
+html[data-theme] .tr,html[data-theme] .card .tr{background:var(--soft)}
+html[data-theme] .trk .lane,html[data-theme] .br .b,html[data-theme] .split{background:var(--soft)}
+html[data-theme] .trk .mk{background:var(--ink)}
+html[data-theme] input,html[data-theme] select{background:var(--soft);border-color:var(--line);color:var(--ink)}
+html[data-theme] .pl input,html[data-theme] .ed,html[data-theme] .pv .row input,html[data-theme] .pv .row select{background:var(--card)}
+html[data-theme] table.t td,html[data-theme] table.t th{border-color:var(--line)}
+html[data-theme] .rt tr.tot td{border-top-color:var(--ink)}
+html[data-theme] .calnav button{background:var(--card);border-color:var(--line);color:var(--ink)}
+html[data-theme] .btn{background:var(--card);border-color:var(--line);color:var(--ink)}
+html[data-theme] .btn.p{background:var(--ink);border-color:var(--ink);color:var(--card)}
+html[data-theme] .drop{border-color:var(--line)}html[data-theme] .drop b{color:var(--ink)}
+html[data-theme] .empty{border-color:var(--line);color:var(--muted)}
+html[data-theme] .sect h2{color:var(--ink)!important;text-shadow:none}
+html[data-theme] .sect .leg,html[data-theme] .sect>.leg span,html[data-theme] #panel .muted.small{color:var(--muted)}
+html[data-theme] .tag[style*="#0c1a2b"]{background:var(--ink)!important;color:var(--card)}
+html[data-theme] .cal .wd,html[data-theme] .day .d{color:var(--muted)}
+html[data-theme] .rc .ax{fill:var(--muted)}html[data-theme] .rc .bv{fill:var(--ink)}
+html[data-theme="dark"] .ring circle:first-child{stroke:rgba(255,255,255,.08)}
+html[data-theme="dark"] .rc .gb[fill="#7d8fa3"]{fill:#4a4d55}
+html[data-theme="dark"] .day.fut .v,html[data-theme="dark"] .mo.fut .v{color:#4a4c53}
+/* menyular */
+html[data-theme] .tabs.gl,html[data-theme] .seg.gl,html[data-theme] #topRight .seg{background:color-mix(in srgb,var(--card) 80%,transparent);border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.05)}
+html[data-theme] .tabs.gl>button,html[data-theme] .seg.gl>button,html[data-theme] #sexSeg>button{color:var(--muted)}
+html[data-theme="light"] .tabs.gl>button.on,html[data-theme="light"] .seg.gl>button.on,html[data-theme="light"] #sexSeg>button.on{color:#fff}
+html[data-theme="dark"] .tabs.gl>button.on,html[data-theme="dark"] .seg.gl>button.on,html[data-theme="dark"] #sexSeg>button.on{color:#0d0e10}
+html[data-theme] .seg:not(.gl){background:var(--soft)}
+html[data-theme] .glider{background:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+html[data-theme] .glider::before,html[data-theme] .glider::after{display:none}
+html[data-theme] .side,html[data-theme] .side.gl{background:color-mix(in srgb,var(--card) 85%,transparent);border:1px solid var(--line);box-shadow:none}
+html[data-theme] .side>button{color:var(--muted)}
+html[data-theme="light"] .side>button.on{color:#fff}html[data-theme="dark"] .side>button.on{color:#0d0e10}
+html[data-theme] .side .note{color:var(--muted)}html[data-theme] .side hr{border-color:var(--line)}
+/* mavzu tugmasi */
+.themeBtn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;font-size:18px}
+.themeBtn:hover{transform:rotate(-12deg)}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+html[data-theme="light"] .sc.dark .mq{background:rgba(255,138,125,.14)}html[data-theme="light"] .sc.dark .mq b,html[data-theme="light"] .sc.dark .mq span{color:#ff8a7d}html[data-theme="light"] .sc.dark .mq em{color:#b9bcc4}
+html[data-theme="light"] .sc.dark .trk .lane{background:#2a2b30}html[data-theme="light"] .sc.dark .trk .mk{background:#fff}
+html[data-theme="dark"] .sc .trk svg{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="dark"] .tr .rk[style*="var(--ink)"]{color:#0d0e10}
+html[data-theme="dark"] .cell.sD{background:transparent;border-color:#3a3a40}html[data-theme="dark"] .cell.s1{background:#1f3b2e;color:#7fdcb0}
 </style>
 </head>
 <body>
@@ -278,7 +347,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
         <button id="tabAdmin" hidden>⚙ Boshqaruv</button>
       </div>
     </div>
-    <div class="row" id="topRight">
+    <div class="row" id="topRight"><button class="themeBtn" id="themeBtn" aria-label="Oq / qora mavzu" title="Oq / qora mavzu">☾</button>
       <div class="seg gl" id="sexSeg"><button data-s="CKD" class="on">CKD sexi</button><button data-s="SKD">SKD sexi</button></div>
     </div>
   </div>
@@ -846,6 +915,24 @@ function ghost(el){
   document.body.appendChild(g); setTimeout(function(){ g.remove(); }, 650);
 }
 function swap(el, render){ ghost(el); render(); enter(el); }
+
+/* ---------------- oq / qora mavzu (aylana bo'lib yoyiladi) */
+(function(){
+  var root = document.documentElement, btn = document.getElementById('themeBtn');
+  var saved = null; try { saved = localStorage.getItem('admTheme'); } catch(e){}
+  var set = function(t){ root.setAttribute('data-theme', t); btn.textContent = t === 'dark' ? '☀' : '☾'; try { localStorage.setItem('admTheme', t); } catch(e){} };
+  set(saved === 'dark' ? 'dark' : 'light');
+  btn.onclick = function(){
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches){ set(next); return; }
+    var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    document.startViewTransition(function(){ set(next); }).ready.then(function(){
+      root.animate({ clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + end + 'px at ' + x + 'px ' + y + 'px)'] },
+        { duration: 650, easing: 'cubic-bezier(.4,0,.2,1)', pseudoElement: '::view-transition-new(root)' });
+    });
+  };
+})();
 /* ---------------- ko'rinish almashinuvi */
 function show(v){
   var cur = $(S.view === 'admin' ? 'admin' : 'panel');
