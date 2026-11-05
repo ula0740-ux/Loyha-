@@ -148,6 +148,34 @@ table.t th{font:700 11px var(--body);color:var(--muted);letter-spacing:.05em;tex
 .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .login{max-width:440px;margin:40px auto}
 @media (max-width:1100px){.score,.k3,.r3,.mid,.two,.plans{grid-template-columns:minmax(0,1fr)}.yr{grid-template-columns:repeat(6,minmax(0,1fr))}.lay{grid-template-columns:minmax(0,1fr)}.sch{overflow-x:auto;grid-template-columns:100px repeat(31,40px)}}
+
+/* ---- glassy navigatsiya: sirpanuvchi yorug' tomchi ---- */
+.gl{position:relative;isolation:isolate}
+.tabs.gl,.seg.gl{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 30px rgba(12,26,43,.08),inset 0 1px 0 rgba(255,255,255,.9);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%)}
+.side.gl{background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.gl>button{position:relative;z-index:2;transition:color .35s ease}
+.gl>button.on{background:transparent!important}
+.glider{position:absolute;z-index:1;left:0;top:0;border-radius:12px;pointer-events:none;
+  background:linear-gradient(180deg,#1d3150,#0c1a2b);
+  box-shadow:0 0 0 1px rgba(91,134,255,.35),0 6px 18px rgba(47,99,255,.35),inset 0 1px 0 rgba(255,255,255,.18);
+  transition:transform .55s cubic-bezier(.34,1.56,.64,1),width .55s cubic-bezier(.34,1.56,.64,1),height .4s ease}
+.seg .glider{border-radius:999px}
+.glider::before{content:"";position:absolute;left:50%;top:-7px;width:28px;height:7px;transform:translateX(-50%);border-radius:7px 7px 0 0;background:#5b86ff;box-shadow:0 0 14px 4px rgba(91,134,255,.75)}
+.glider::after{content:"";position:absolute;left:50%;top:100%;width:70%;height:22px;transform:translateX(-50%);background:radial-gradient(50% 100% at 50% 0,rgba(91,134,255,.55),transparent);filter:blur(4px)}
+.side .glider::before{left:-6px;top:50%;width:6px;height:26px;transform:translateY(-50%);border-radius:6px 0 0 6px}
+.side .glider::after{display:none}
+.glider.pop{animation:glPop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes glPop{0%{filter:brightness(1)}35%{filter:brightness(1.35)}100%{filter:brightness(1)}}
+/* sahifa almashinuvi */
+.enter{animation:enterUp .5s cubic-bezier(.22,1,.36,1) both}
+.enter>*{animation:enterUp .55s cubic-bezier(.22,1,.36,1) both}
+.enter>*:nth-child(2){animation-delay:.05s}.enter>*:nth-child(3){animation-delay:.1s}.enter>*:nth-child(4){animation-delay:.15s}.enter>*:nth-child(5){animation-delay:.2s}
+@keyframes enterUp{from{opacity:0;transform:translateY(14px) scale(.99);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.card,.cat{transition:transform .25s ease,box-shadow .25s ease}
+.card:hover{box-shadow:0 10px 30px rgba(12,26,43,.07)}
+.day,.mo{transition:transform .2s ease,box-shadow .2s ease}
+.day:hover,.mo:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(12,26,43,.10)}
+@media (prefers-reduced-motion:reduce){.glider,.glider.pop,.enter,.enter>*,.day,.mo{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -155,13 +183,13 @@ table.t th{font:700 11px var(--body);color:var(--muted);letter-spacing:.05em;tex
   <div class="top">
     <div class="lft">
       <div class="logo"><i>ADM</i>ADM JIZZAX AJ</div>
-      <div class="tabs" id="tabs">
+      <div class="tabs gl" id="tabs">
         <button id="tabPanel" class="on">▦ Panel</button>
         <button id="tabAdmin" hidden>⚙ Boshqaruv</button>
       </div>
     </div>
     <div class="row" id="topRight">
-      <div class="seg" id="sexSeg"><button data-s="ALL" class="on">Jami</button><button data-s="CKD">CKD</button><button data-s="SKD">SKD</button></div>
+      <div class="seg gl" id="sexSeg"><button data-s="ALL" class="on">Jami</button><button data-s="CKD">CKD</button><button data-s="SKD">SKD</button></div>
     </div>
   </div>
 
@@ -466,9 +494,9 @@ function renderAdmin(){
     $('lgGo').onclick = go; $('lgPin').onkeydown = function(e){ if (e.key === 'Enter') go(); };
     return;
   }
-  el.innerHTML = '<div class="lay"><div class="side">' + MENU.map(function(m){ return '<button data-a="' + m[0] + '" class="' + (S.aview === m[0] ? 'on' : '') + '">' + m[1] + '</button>'; }).join('') +
+  el.innerHTML = '<div class="lay"><div class="side gl">' + MENU.map(function(m){ return '<button data-a="' + m[0] + '" class="' + (S.aview === m[0] ? 'on' : '') + '">' + m[1] + '</button>'; }).join('') +
     '<hr><div class="note">Kirgan: <b>' + esc(S.kim) + '</b>. Excel fayllarning o\'zi saqlanmaydi — faqat natijalar.</div></div><div class="amain" id="amain"></div></div>';
-  el.querySelectorAll('[data-a]').forEach(function(b){ b.onclick = function(){ S.aview = b.getAttribute('data-a'); renderAdmin(); }; });
+  el.querySelectorAll('[data-a]').forEach(function(b){ b.onclick = function(){ S.aview = b.getAttribute('data-a'); renderAdmin(); enter($('amain')); }; });
   ({reja: aReja, natija: aNatija, mqs: aMqs, tarjima: aTarjima, tarix: aTarix, pin: aPin})[S.aview]();
 }
 function reload(){ return run('getData').then(function(d){ S.data = d; index(); }); }
@@ -619,6 +647,35 @@ function aPin(){
   $('pGo').onclick = function(){ var n = $('pNew').value; run('setPin', $('pOld').value, n, S.kim).then(function(){ S.pin = n; toast('PIN o\'zgartirildi.'); }).catch(function(e){ toast(e.message, true); }); };
 }
 
+
+/* ---------------- glassy sirpanuvchi indikator */
+function glide(box, animate){
+  if (!box) return;
+  var g = box.querySelector(':scope>.glider');
+  if (!g){ g = document.createElement('span'); g.className = 'glider'; box.prepend(g); animate = false; }
+  var on = box.querySelector(':scope>button.on'); if (!on){ g.style.opacity = 0; return; }
+  g.style.opacity = 1;
+  if (!animate){ g.style.transition = 'none'; }
+  g.style.width = on.offsetWidth + 'px'; g.style.height = on.offsetHeight + 'px';
+  g.style.transform = 'translate(' + on.offsetLeft + 'px,' + on.offsetTop + 'px)';
+  if (!animate){ void g.offsetWidth; g.style.transition = ''; }
+  else { g.classList.remove('pop'); void g.offsetWidth; g.classList.add('pop'); }
+}
+function glideAll(animate){ document.querySelectorAll('.gl').forEach(function(b){ glide(b, animate); }); }
+var lastGl = {};
+function glideKeep(){ document.querySelectorAll('.gl').forEach(function(b){
+  var id = b.id || (b.classList.contains('side') ? 'side' : ''), on = b.querySelector(':scope>button.on');
+  var key = on ? on.textContent : ''; var prev = lastGl[id];
+  var has = b.querySelector(':scope>.glider');
+  if (prev && prev.key !== key && id && has){ glide(b, true); }
+  else if (prev && prev.key !== key && id){ var g = document.createElement('span'); g.className = 'glider'; g.style.transition = 'none';
+    g.style.width = prev.w + 'px'; g.style.height = prev.h + 'px'; g.style.transform = 'translate(' + prev.x + 'px,' + prev.y + 'px)'; b.prepend(g); void g.offsetWidth; g.style.transition = ''; glide(b, true); }
+  else glide(b, false);
+  if (on) lastGl[id] = {key:key, w:on.offsetWidth, h:on.offsetHeight, x:on.offsetLeft, y:on.offsetTop};
+}); }
+window.addEventListener('resize', function(){ glideAll(false); });
+new MutationObserver(function(){ clearTimeout(glideKeep.t); glideKeep.t = setTimeout(glideKeep, 0); }).observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
+function enter(el){ el.classList.remove('enter'); void el.offsetWidth; el.classList.add('enter'); }
 /* ---------------- ko'rinish almashinuvi */
 function show(v){
   S.view = v;
@@ -626,6 +683,7 @@ function show(v){
   $('tabPanel').classList.toggle('on', v === 'panel'); $('tabAdmin').classList.toggle('on', v === 'admin');
   $('sexSeg').hidden = v !== 'panel';
   if (v === 'panel') renderPanel(); else renderAdmin();
+  enter($(v === 'panel' ? 'panel' : 'admin'));
 }
 $('tabPanel').onclick = function(){ show('panel'); };
 $('tabAdmin').onclick = function(){ show('admin'); };

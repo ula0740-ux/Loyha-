@@ -1,0 +1,15 @@
+const { chromium } = require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1600,height:900},deviceScaleFactor:1.25});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('http://127.0.0.1:8790/');await p.waitForSelector('.score');await p.waitForTimeout(700);
+const O=process.argv[2];
+await p.screenshot({path:O+'/fx0.png',clip:{x:0,y:0,width:1600,height:130}});
+await p.click('#sexSeg button[data-s="SKD"]');await p.waitForTimeout(180);
+await p.screenshot({path:O+'/fx1.png',clip:{x:0,y:0,width:1600,height:130}});
+await p.waitForTimeout(600);
+await p.screenshot({path:O+'/fx2.png',clip:{x:0,y:0,width:1600,height:130}});
+await p.click('#tabAdmin');await p.waitForTimeout(150);
+await p.screenshot({path:O+'/fx3.png',clip:{x:0,y:0,width:1600,height:500}});
+await p.waitForTimeout(800);
+await p.screenshot({path:O+'/fx4.png',clip:{x:0,y:0,width:1600,height:500}});
+console.log('gliders',await p.$$eval('.glider',g=>g.length),'errors',errs);await b.close();})();
