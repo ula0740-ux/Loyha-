@@ -41,8 +41,10 @@ const URL = 'http://127.0.0.1:' + (process.env.PORT || 8790) + '/#boshqaruv';
   await p.click('.side button[data-a="reja"]'); await p.waitForTimeout(300);
   await p.screenshot({ path: OUT + '/t_admin_reja.png', fullPage: true });
   // panel
-  await p.click('#tabPanel'); await p.waitForTimeout(400);
-  await p.click('button[data-day="2026-11-04"]'); await p.waitForTimeout(1200);
+  await p.click('#tabPanel'); await p.waitForTimeout(700);
+  await p.click('[data-pv="kalendar"]'); await p.waitForTimeout(700);
+  await p.click('button[data-day="2026-11-04"]'); await p.waitForTimeout(500);
+  await p.click('[data-pv="umumiy"]'); await p.waitForTimeout(1200);
   await p.screenshot({ path: OUT + '/t_panel.png', fullPage: true });
   console.log('kun karta:', (await p.locator('.score .sc').first().innerText()).replace(/\n/g, ' | '));
   // telefon kengligi
