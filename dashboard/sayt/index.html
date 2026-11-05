@@ -209,6 +209,52 @@ input,select{background:rgba(255,255,255,.7)}
 .grow .br .b i,.grow .trk .fill,.grow .split i{animation:growX .9s cubic-bezier(.22,1,.36,1) both;transform-origin:left}
 @keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){body::before,.leave,.enter>*,.enter .card,.enter .cat,.grow .br .b i,.grow .trk .fill,.grow .split i{animation:none!important}}
+
+/* ==== V2: chuqur ko'k xira fon + shisha qobiq (foydalanuvchi namunasi bo'yicha) ==== */
+html,body{background:#0b3954}
+body::before{content:"";position:fixed;inset:-8%;z-index:-2;animation:bgDrift 40s ease-in-out infinite alternate;
+  background:
+   radial-gradient(14% 38% at 64% 30%,rgba(225,245,255,.75),transparent 70%),
+   radial-gradient(9% 30% at 78% 28%,rgba(255,255,255,.6),transparent 70%),
+   radial-gradient(12% 34% at 90% 40%,rgba(190,235,255,.55),transparent 70%),
+   radial-gradient(25% 14% at 50% 92%,rgba(160,215,235,.5),transparent 70%),
+   radial-gradient(18% 30% at 72% 22%,rgba(210,240,255,.55),transparent 70%),
+   radial-gradient(10% 22% at 86% 30%,rgba(255,255,255,.45),transparent 70%),
+   radial-gradient(30% 25% at 30% 75%,rgba(120,200,230,.45),transparent 70%),
+   radial-gradient(45% 40% at 10% 15%,#1f7fb0,transparent 70%),
+   radial-gradient(50% 45% at 95% 90%,#0f6a8a,transparent 70%),
+   repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 2px,transparent 2px 120px),
+   linear-gradient(160deg,#0e5a82 0%,#0a3d5c 45%,#0b4f6a 100%);
+  filter:blur(28px) saturate(130%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,30,48,.15),rgba(6,30,48,.35))}
+.logo{color:#fff}.logo i{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35)}
+.tabs.gl,.seg.gl,#topRight .seg{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 30px rgba(0,20,40,.25)}
+.tabs.gl>button,#sexSeg>button{color:rgba(255,255,255,.75)}.tabs.gl>button.on,#sexSeg>button.on{color:#fff}
+.glider{background:linear-gradient(180deg,#36b4ea,#1785c2);box-shadow:0 0 0 1px rgba(255,255,255,.35),0 6px 22px rgba(54,180,234,.55),inset 0 1px 0 rgba(255,255,255,.4)}
+.glider::before{background:#bfeaff;box-shadow:0 0 14px 4px rgba(120,210,255,.9)}
+.glider::after{background:radial-gradient(50% 100% at 50% 0,rgba(120,210,255,.6),transparent)}
+/* katta shisha qobiq */
+#panel,#admin{position:relative;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);border-radius:30px;padding:22px;
+  -webkit-backdrop-filter:blur(26px) saturate(140%);backdrop-filter:blur(26px) saturate(140%);box-shadow:0 30px 80px rgba(0,25,45,.35),inset 0 1px 0 rgba(255,255,255,.45)}
+.card,.cat{background:rgba(255,255,255,.66);border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(0,40,70,.12),inset 0 1px 0 rgba(255,255,255,.95)}
+.cat.cp{background:rgba(224,236,255,.72)}.cat.ct2{background:rgba(255,243,220,.75)}
+.sc.dark{background:rgba(8,40,62,.72);border-color:rgba(255,255,255,.18)}
+.sect h2{color:#0b2a40}
+/* yon menyu: to'q shisha, oq yozuv, ko'k tanlov */
+.side,.side.gl{background:rgba(6,40,62,.38);border:1px solid rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.side>button{color:rgba(255,255,255,.8)}.side>button.on{color:#fff}
+.side .note{color:rgba(255,255,255,.7)}.side hr{border-color:rgba(255,255,255,.2)}
+.side .glider{border-radius:14px}
+/* o'tish: eski sahifa ustma-ust xira "sharpa" bo'lib eriydi, yangisi tiniqlashadi */
+.ghost{position:fixed;z-index:30;pointer-events:none;margin:0;animation:ghostOut .55s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes ghostOut{0%{opacity:1;filter:blur(0)}100%{opacity:0;filter:blur(18px) brightness(1.15);transform:scale(1.015) translateX(-24px)}}
+.enter>*{animation:frostIn2 .7s cubic-bezier(.22,1,.36,1) both}
+.enter .card,.enter .cat{animation:frostIn2 .75s cubic-bezier(.22,1,.36,1) both}
+@keyframes frostIn2{0%{opacity:0;filter:blur(18px);transform:translateX(26px) scale(.985)}55%{opacity:1}100%{opacity:1;filter:none;transform:none}}
+.leave{animation:none}
+@media (prefers-reduced-motion:reduce){.ghost{display:none}.enter>*,.enter .card,.enter .cat{animation:none!important}}
+@media (max-width:700px){#panel,#admin{padding:12px;border-radius:22px}}
+.ev .n{white-space:nowrap;font-size:clamp(30px,3.4vw,54px)}.dark .ev .n{font-size:clamp(28px,2.9vw,44px)}
 </style>
 </head>
 <body>
@@ -717,15 +763,19 @@ function countUp(root){
   });
 }
 function enter(el){ el.classList.remove('enter', 'grow'); void el.offsetWidth; el.classList.add('enter', 'grow'); countUp(el); setTimeout(function(){ el.classList.remove('grow'); }, 1200); }
-function swap(el, render){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || el.hidden){ render(); enter(el); return; }
-  el.classList.add('leave');
-  setTimeout(function(){ el.classList.remove('leave'); render(); enter(el); }, 260);
+function ghost(el){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || el.hidden) return;
+  var r = el.getBoundingClientRect(), vh = window.innerHeight; if (r.bottom < 0 || r.top > vh) return;
+  var g = el.cloneNode(true); g.removeAttribute('id'); g.querySelectorAll('[id]').forEach(function(x){ x.removeAttribute('id'); });
+  g.classList.remove('enter','grow','leave'); g.classList.add('ghost');
+  g.style.left = r.left + 'px'; g.style.top = r.top + 'px'; g.style.width = r.width + 'px'; g.style.height = Math.min(r.height, vh - r.top + 40) + 'px'; g.style.overflow = 'hidden';
+  document.body.appendChild(g); setTimeout(function(){ g.remove(); }, 650);
 }
+function swap(el, render){ ghost(el); render(); enter(el); }
 /* ---------------- ko'rinish almashinuvi */
 function show(v){
   var cur = $(S.view === 'admin' ? 'admin' : 'panel');
-  if (S.view !== v && !cur.hidden && !matchMedia('(prefers-reduced-motion: reduce)').matches){ cur.classList.add('leave'); setTimeout(function(){ cur.classList.remove('leave'); show2(v); }, 260); return; }
+  if (S.view !== v) ghost(cur);
   show2(v);
 }
 function show2(v){
