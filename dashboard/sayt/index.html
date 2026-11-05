@@ -460,7 +460,7 @@ function loadDayMqs(D){
     var el = $('dayMqs'); if (!el || S.sel !== D) return;
     el.innerHTML = '<hr><div class="sub" style="margin:8px 0">MQS · ' + r.total + ' ta nuqson <span>' + r.cars + ' ta avto</span></div><table class="t"><tr><th>Vaqt</th><th>Sex</th><th>Model</th><th>Nuqson</th></tr>' +
       r.list.slice(0, 6).map(function(x){ return '<tr><td>' + esc(x[0]) + '</td><td><span class="tag" style="background:' + (x[1] === 'CKD' ? 'var(--ckd)' : 'var(--skd)') + '">' + esc(x[1]) + '</span></td><td>' + esc(x[2]) + '</td><td>' + esc(x[4]) + '</td></tr>'; }).join('') +
-      '</table>' + (r.list.length > 6 ? '<div class="muted small" style="margin-top:6px">… yana ' + (r.total - 6) + ' ta — pastdagi MQS qismida</div>' : '');
+      '</table>' + (r.list.length > 6 ? '<div class="muted small" style="margin-top:6px">… yana ' + (r.total - 6) + ' ta — chapdagi "MQS ma\'lumotlari" qismida</div>' : '');
   }).catch(function(){});
 }
 
