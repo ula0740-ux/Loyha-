@@ -176,6 +176,39 @@ table.t th{font:700 11px var(--body);color:var(--muted);letter-spacing:.05em;tex
 .day,.mo{transition:transform .2s ease,box-shadow .2s ease}
 .day:hover,.mo:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(12,26,43,.10)}
 @media (prefers-reduced-motion:reduce){.glider,.glider.pop,.enter,.enter>*,.day,.mo{transition:none!important;animation:none!important}}
+
+/* ---- shaffof shisha fon (Admin Dashboard V2 uslubi) ---- */
+:root{--card:rgba(255,255,255,.62);--soft:rgba(255,255,255,.55);--line:rgba(255,255,255,.7);--bg:#cfe3ee}
+html,body{background:#cfe3ee}
+body::before{content:"";position:fixed;inset:-10%;z-index:-2;
+  background:radial-gradient(40% 45% at 15% 20%,#7fc4d8 0,transparent 70%),radial-gradient(45% 50% at 85% 15%,#5b86ff 0,transparent 70%),
+  radial-gradient(50% 55% at 70% 85%,#2fb7a8 0,transparent 70%),radial-gradient(40% 40% at 20% 90%,#a9c9ff 0,transparent 70%),linear-gradient(135deg,#dbeef5,#b9d4ea);
+  filter:blur(40px) saturate(120%);animation:bgDrift 28s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(255,255,255,.18)}
+@keyframes bgDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3%,2%,0) scale(1.06)}}
+.card,.side,.cat,.tabs,.seg{-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+.card,.side{background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 40px rgba(20,60,90,.10),inset 0 1px 0 rgba(255,255,255,.9)}
+.sc.dark{background:rgba(16,34,56,.78);border-color:rgba(255,255,255,.12)}
+.cat.cp{background:rgba(227,234,255,.72);border:1px solid rgba(255,255,255,.7)}.cat.ct2{background:rgba(255,241,214,.75);border:1px solid rgba(255,255,255,.7)}
+.day,.mo,.sp div,.pl,.pv,.mq{background-color:rgba(255,255,255,.5)}
+.day.ok,.mo.ok{background:rgba(217,243,231,.85)}.day.bad,.mo.bad{background:rgba(253,227,223,.85)}.mq{background:rgba(253,227,223,.8)}
+.day.off{background:transparent;border-color:rgba(255,255,255,.8)}
+.tr,.card .tr{background:rgba(255,255,255,.75)}
+input,select{background:rgba(255,255,255,.7)}
+.trk .lane,.br .b{background:rgba(255,255,255,.65)}
+/* sahifa almashinuvi: eski sahifa muzli shishaga aylanib eriydi, yangisi tiniqlashib chiqadi */
+.leave{animation:frostOut .28s ease-in both;pointer-events:none}
+@keyframes frostOut{to{opacity:0;filter:blur(14px) saturate(140%);transform:scale(.985)}}
+.enter>*{animation:frostIn .6s cubic-bezier(.22,1,.36,1) both}
+@keyframes frostIn{0%{opacity:0;filter:blur(16px);transform:translateY(18px) scale(.97)}60%{opacity:1}100%{opacity:1;filter:none;transform:none}}
+.enter .card,.enter .cat{animation:frostIn .65s cubic-bezier(.22,1,.36,1) both}
+.enter .score>*:nth-child(1),.enter .k3>*:nth-child(1),.enter .r3>*:nth-child(1){animation-delay:.04s}
+.enter .score>*:nth-child(2),.enter .k3>*:nth-child(2),.enter .r3>*:nth-child(2){animation-delay:.12s}
+.enter .score>*:nth-child(3),.enter .k3>*:nth-child(3),.enter .r3>*:nth-child(3){animation-delay:.2s}
+.enter .mid>*:nth-child(2){animation-delay:.14s}
+.grow .br .b i,.grow .trk .fill,.grow .split i{animation:growX .9s cubic-bezier(.22,1,.36,1) both;transform-origin:left}
+@keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){body::before,.leave,.enter>*,.enter .card,.enter .cat,.grow .br .b i,.grow .trk .fill,.grow .split i{animation:none!important}}
 </style>
 </head>
 <body>
@@ -321,7 +354,7 @@ function renderPanel(){
   h += '<div id="mqsSec"></div>';
   h += '<div class="muted small">Manba: yuklangan 630, 700 va MQS fayllari · reja va ish grafigi qo\'lda kiritiladi · yangilandi: ' + esc(today) + '</div>';
   $('panel').innerHTML = h;
-  $('panel').querySelectorAll('[data-day]').forEach(function(b){ b.onclick = function(){ S.sel = b.getAttribute('data-day'); S.mq = {mode:'kun'}; renderPanel(); }; });
+  $('panel').querySelectorAll('[data-day]').forEach(function(b){ b.onclick = function(){ S.sel = b.getAttribute('data-day'); S.mq = {mode:'kun'}; renderPanel(); countUp($('panel')); }; });
   $('panel').querySelectorAll('[data-mo]').forEach(function(b){ b.onclick = function(){ var mk = b.getAttribute('data-mo'); var ds = S.ix.dates.filter(function(d){ return d.slice(0,7) === mk; }); S.sel = ds.length ? ds[ds.length-1] : mk + '-01'; S.mq = {mode:'oy'}; renderPanel(); }; });
   $('calPrev').onclick = function(){ moveMonth(-1); }; $('calNext').onclick = function(){ moveMonth(1); };
   loadDayMqs(D); renderMqsSection();
@@ -496,7 +529,7 @@ function renderAdmin(){
   }
   el.innerHTML = '<div class="lay"><div class="side gl">' + MENU.map(function(m){ return '<button data-a="' + m[0] + '" class="' + (S.aview === m[0] ? 'on' : '') + '">' + m[1] + '</button>'; }).join('') +
     '<hr><div class="note">Kirgan: <b>' + esc(S.kim) + '</b>. Excel fayllarning o\'zi saqlanmaydi — faqat natijalar.</div></div><div class="amain" id="amain"></div></div>';
-  el.querySelectorAll('[data-a]').forEach(function(b){ b.onclick = function(){ S.aview = b.getAttribute('data-a'); renderAdmin(); enter($('amain')); }; });
+  el.querySelectorAll('[data-a]').forEach(function(b){ b.onclick = function(){ if (S.aview === b.getAttribute('data-a')) return; var k = b.getAttribute('data-a'); el.querySelectorAll('[data-a]').forEach(function(x){ x.classList.toggle('on', x === b); }); swap($('amain'), function(){ S.aview = k; renderAdmin(); }); }; });
   ({reja: aReja, natija: aNatija, mqs: aMqs, tarjima: aTarjima, tarix: aTarix, pin: aPin})[S.aview]();
 }
 function reload(){ return run('getData').then(function(d){ S.data = d; index(); }); }
@@ -675,9 +708,27 @@ function glideKeep(){ document.querySelectorAll('.gl').forEach(function(b){
 }); }
 window.addEventListener('resize', function(){ glideAll(false); });
 new MutationObserver(function(){ clearTimeout(glideKeep.t); glideKeep.t = setTimeout(glideKeep, 0); }).observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
-function enter(el){ el.classList.remove('enter'); void el.offsetWidth; el.classList.add('enter'); }
+function countUp(root){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  root.querySelectorAll('.ev .n, .mbig, .cat .n, .sp b').forEach(function(el){
+    var txt = el.textContent, num = +txt.replace(/[^\d]/g, ''); if (!num || !/^[\d\s]+$/.test(txt.trim())) return;
+    var t0 = performance.now(), dur = 900;
+    (function step(t){ var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = f(num * e); if (k < 1) requestAnimationFrame(step); else el.textContent = txt; })(t0);
+  });
+}
+function enter(el){ el.classList.remove('enter', 'grow'); void el.offsetWidth; el.classList.add('enter', 'grow'); countUp(el); setTimeout(function(){ el.classList.remove('grow'); }, 1200); }
+function swap(el, render){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || el.hidden){ render(); enter(el); return; }
+  el.classList.add('leave');
+  setTimeout(function(){ el.classList.remove('leave'); render(); enter(el); }, 260);
+}
 /* ---------------- ko'rinish almashinuvi */
 function show(v){
+  var cur = $(S.view === 'admin' ? 'admin' : 'panel');
+  if (S.view !== v && !cur.hidden && !matchMedia('(prefers-reduced-motion: reduce)').matches){ cur.classList.add('leave'); setTimeout(function(){ cur.classList.remove('leave'); show2(v); }, 260); return; }
+  show2(v);
+}
+function show2(v){
   S.view = v;
   $('panel').hidden = v !== 'panel'; $('admin').hidden = v !== 'admin';
   $('tabPanel').classList.toggle('on', v === 'panel'); $('tabAdmin').classList.toggle('on', v === 'admin');
@@ -688,7 +739,7 @@ function show(v){
 $('tabPanel').onclick = function(){ show('panel'); };
 $('tabAdmin').onclick = function(){ show('admin'); };
 $('tabAdmin').hidden = !window.SHOW_ADMIN;
-document.querySelectorAll('#sexSeg button').forEach(function(b){ b.onclick = function(){ S.sex = b.getAttribute('data-s'); document.querySelectorAll('#sexSeg button').forEach(function(x){ x.classList.toggle('on', x === b); }); renderPanel(); }; });
+document.querySelectorAll('#sexSeg button').forEach(function(b){ b.onclick = function(){ S.sex = b.getAttribute('data-s'); document.querySelectorAll('#sexSeg button').forEach(function(x){ x.classList.toggle('on', x === b); }); swap($('panel'), renderPanel); }; });
 
 run('getData').then(function(d){
   S.data = d; index();
