@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Manrope:wght@400;500;600;700;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f2f4f7;--card:#fff;--ink:#0c1a2b;--muted:#6b7a8c;--line:#e1e6ec;--soft:#f3f5f8;--road:#1d2a3a;
+--ok:#12a36b;--ok-s:#d9f3e7;--bad:#e5483a;--bad-s:#fde3df;--warn:#b87500;--warn-s:#fff1d6;
+--c630:#2f63ff;--c700:#14b8a6;--ckd:#2f63ff;--ckd-s:#e3eaff;--skd:#8b5cf6;--skd-s:#efe8ff;
+--disp:"Archivo","Arial Black",sans-serif;--body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+[hidden]{display:none!important}
+#panel{display:grid;gap:18px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2.5px solid var(--c630);outline-offset:2px}
+input,select{font:inherit;color:var(--ink);background:var(--soft);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.wrap{max-width:1600px;margin:0 auto;padding:24px 28px 40px;display:grid;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.lft{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.logo{font:900 28px/1 var(--disp);font-stretch:125%;display:flex;align-items:center;gap:12px}
+.logo i{width:36px;height:36px;border-radius:10px;background:var(--ink);display:grid;place-items:center;color:#fff;font:900 12px var(--disp);font-style:normal}
+.tabs{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px}
+.tabs button{border:0;background:none;padding:9px 16px;border-radius:12px;font-weight:800;color:var(--muted)}
+.tabs button.on{background:var(--ink);color:#fff}
+.seg{display:flex;background:#e6eaf0;border-radius:999px;padding:4px}
+.seg button{border:0;background:none;padding:8px 15px;border-radius:999px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button.on{background:var(--ink);color:#fff}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 16px;font-weight:800;font-size:14px}
+.btn.p{background:var(--ink);color:#fff;border-color:var(--ink)}.btn.b{background:var(--c630);color:#fff;border-color:var(--c630)}
+.btn:disabled{opacity:.5;cursor:default}
+.card{background:var(--card);border-radius:22px;padding:22px;min-width:0}
+.ct{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.ct h2{margin:0;font:800 20px var(--disp);font-stretch:115%}.ct span{color:var(--muted);font-size:13px;font-weight:600}
+.muted{color:var(--muted)}.small{font-size:12px}
+.chip{display:inline-block;font:800 14px var(--disp);font-stretch:110%;border-radius:999px;padding:4px 11px}
+.chip.ok{background:var(--ok-s);color:var(--ok)}.chip.bad{background:var(--bad-s);color:var(--bad)}.chip.nil{background:var(--soft);color:var(--muted)}
+.code{font:900 12px var(--disp);color:#fff;border-radius:6px;padding:3px 7px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;z-index:50;max-width:90vw}
+.toast.err{background:var(--bad)}
+.loading{padding:40px;text-align:center;color:var(--muted);font-weight:700}
+/* score */
+.score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.sc{display:grid;gap:14px;align-content:start}
+.sc.dark{background:var(--road);color:#fff}
+.when{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.when b{font:900 21px var(--disp);font-stretch:120%;text-transform:uppercase}
+.when span{font-weight:700;font-size:13px;color:var(--muted)}.dark .when span{color:#9fb0c4}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ev{display:grid;gap:6px;min-width:0}
+.ev .lab{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:var(--muted)}.dark .ev .lab{color:#9fb0c4}
+.ev .n{font:900 54px/.95 var(--disp);font-stretch:115%;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.dark .ev .n{font-size:44px;font-stretch:106%}
+.ev .chip{justify-self:start}
+.dark .chip.ok{background:rgba(74,222,154,.16);color:#4ade9a}.dark .chip.bad{background:rgba(255,138,125,.16);color:#ff8a7d}.dark .chip.nil{background:#26354a;color:#9fb0c4}
+.trk{position:relative;height:40px}
+.trk .lane{position:absolute;left:0;right:0;top:14px;height:14px;border-radius:7px;background:#eef1f5}.dark .trk .lane{background:#2b3a4d}
+.trk .fill{position:absolute;left:0;top:14px;height:14px;border-radius:7px;background:linear-gradient(90deg,#2f63ff,#5b86ff)}
+.trk .mk{position:absolute;top:4px;width:2px;height:34px;background:var(--ink)}.dark .trk .mk{background:#fff}
+.trk .mk span{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font:700 11px var(--body);white-space:nowrap;color:var(--muted)}.dark .trk .mk span{color:#cfd8e3}
+.trk svg{position:absolute;top:6px;width:34px;height:28px;transform:translateX(-60%)}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:600;color:var(--muted);flex-wrap:wrap}.dark .meta{color:#9fb0c4}.meta b{color:var(--ink)}.dark .meta b{color:#fff}
+.mq{display:flex;align-items:center;gap:12px;background:var(--bad-s);border-radius:14px;padding:9px 14px}.dark .mq{background:rgba(255,138,125,.12)}
+.mq b{font:900 28px/1 var(--disp);font-stretch:115%;color:var(--bad)}.dark .mq b{color:#ff8a7d}
+.mq span{font-size:13px;font-weight:700;color:var(--bad)}.dark .mq span{color:#ffb3aa}
+.mq em{margin-left:auto;font-style:normal;font-size:12px;font-weight:700;color:var(--muted)}.dark .mq em{color:#cfd8e3}
+/* calendar */
+.mid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.calnav{display:flex;align-items:center;gap:6px}
+.calnav button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
+.wd{font-weight:700;font-size:12px;color:var(--muted);text-align:center}
+.day{position:relative;border-radius:13px;padding:8px 10px;min-height:70px;display:grid;align-content:space-between;background:var(--soft);border:2px solid transparent;text-align:left}
+.day .d{font-weight:700;font-size:12px;color:var(--muted)}.day .v{font:800 20px var(--disp);font-stretch:110%}.day .p{font-weight:700;font-size:11px}
+.day .q{position:absolute;top:7px;right:8px;min-width:22px;height:22px;border-radius:11px;background:var(--bad);color:#fff;font:800 11px/22px var(--body);text-align:center;padding:0 6px}
+.day.ok{background:var(--ok-s)}.day.ok .p{color:var(--ok)}.day.bad{background:var(--bad-s)}.day.bad .p{color:var(--bad)}
+.day.off{background:transparent;border:2px dashed var(--line)}.day.fut .v{color:#c3ccd6}
+.day.sel{border-color:var(--ink);box-shadow:0 6px 16px rgba(12,26,43,.14)}
+.day.today .d::after{content:" · bugun";color:var(--c630)}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:12px;font-weight:600;color:var(--muted)}.leg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px}
+.det{display:grid;gap:14px;align-content:start}
+.sp{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sp div{border-radius:14px;padding:12px 14px;background:var(--soft)}
+.sp b{font:900 28px var(--disp);font-stretch:115%;display:block}.sp span{font-size:12px;font-weight:700;color:var(--muted)}
+.bars{display:grid;gap:9px}
+.br{display:grid;grid-template-columns:minmax(80px,140px) 1fr 54px;gap:10px;align-items:center;font-weight:700;font-size:14px}
+.br>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br .b{height:12px;border-radius:6px;background:#eef1f5;overflow:hidden;display:flex}.br .b i{height:100%}
+.br em{font:800 17px var(--disp);font-stretch:110%;font-style:normal;text-align:right}
+hr{border:0;border-top:1px solid var(--line);margin:2px 0}
+.sub{font:800 15px var(--disp);font-stretch:112%;display:flex;justify-content:space-between;gap:8px}.sub span{font:600 12px var(--body);color:var(--muted)}
+table.t{width:100%;border-collapse:collapse;font-size:13px}table.t td,table.t th{padding:7px 6px;border-top:1px solid var(--line);text-align:left;font-weight:600}
+table.t th{font:700 11px var(--body);color:var(--muted);letter-spacing:.05em;text-transform:uppercase;border-top:0}
+.tag{font:800 10px var(--body);letter-spacing:.08em;border-radius:6px;padding:3px 7px;color:#fff}
+/* year */
+.yr{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px}
+.mo{border-radius:14px;padding:10px;background:var(--soft);display:grid;gap:3px;border:2px solid transparent;text-align:left}
+.mo .d{font-weight:800;font-size:12px;color:var(--muted)}.mo .v{font:800 18px var(--disp);font-stretch:108%}.mo .p{font-weight:700;font-size:11px}.mo .qq{font-weight:700;font-size:11px;color:var(--bad)}
+.mo.ok{background:var(--ok-s)}.mo.ok .p{color:var(--ok)}.mo.bad{background:var(--bad-s)}.mo.bad .p{color:var(--bad)}.mo.cur{border-color:var(--ink)}.mo.fut .v{color:#c3ccd6}
+/* mqs */
+.sect{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.sect h2{margin:0;font:900 25px var(--disp);font-stretch:118%}
+.k3,.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.mbig{font:900 66px/.9 var(--disp);font-stretch:118%;letter-spacing:-.02em}
+.split{display:flex;height:20px;border-radius:10px;overflow:hidden;margin:14px 0 8px;background:var(--soft)}.split i{display:block;height:100%}
+.legend2{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:14px;flex-wrap:wrap}
+.cat{border-radius:22px;padding:22px;display:grid;gap:12px;align-content:start}
+.cat.cp{background:var(--ckd-s)}.cat.ct2{background:var(--warn-s)}
+.cat h3{margin:0;font:800 21px var(--disp);font-stretch:115%;display:flex;justify-content:space-between;align-items:baseline;gap:8px}.cat h3 small{font:700 13px var(--body);color:var(--muted)}
+.cat .n{font:900 54px/.9 var(--disp);font-stretch:118%}
+.topl{display:grid;gap:9px}
+.tr{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;background:#fff;border-radius:14px;padding:11px 14px;font-weight:700}
+.tr .rk{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:900 16px var(--disp);color:#fff}
+.tr em{font:900 23px var(--disp);font-stretch:112%;font-style:normal}.tr small{display:block;font-weight:600;color:var(--muted);font-size:12px}
+.card .tr{background:var(--soft)}
+.range{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.empty{padding:22px;border:2px dashed var(--line);border-radius:18px;text-align:center;color:var(--muted);font-weight:700}
+/* admin */
+.lay{display:grid;grid-template-columns:240px minmax(0,1fr);gap:18px;align-items:start}
+.side{background:var(--card);border-radius:22px;padding:12px;display:grid;gap:4px}
+.side button{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;font-weight:700;color:var(--muted);border:0;background:none;text-align:left}
+.side button.on{background:var(--ink);color:#fff}
+.side .note{font-size:12px;color:var(--muted);padding:8px 12px;font-weight:600}
+.amain{display:grid;gap:18px}
+.form{display:grid;gap:12px}
+.f{display:grid;gap:6px}.f label{font:700 12px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pl{border-radius:18px;padding:16px;display:grid;gap:10px}.pl.c{background:var(--ckd-s)}.pl.s{background:var(--skd-s)}.pl.t{background:var(--soft)}
+.pl .h{display:flex;justify-content:space-between;font-weight:800}.pl .h span{color:var(--muted);font-size:12px}
+.pl input{font:800 28px var(--disp);font-stretch:112%;background:#fff;width:100%}
+.pl .r{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted)}.pl .r b{color:var(--ink)}
+.sch{display:grid;grid-template-columns:100px repeat(31,minmax(0,1fr));gap:4px;align-items:stretch}
+.sch .hd{font:700 11px var(--body);color:var(--muted);text-align:center;display:grid}.sch .hd b{font:800 13px var(--disp);color:var(--ink)}.sch .hd.we b{color:var(--bad)}
+.sch .rl{display:flex;flex-direction:column;justify-content:center;font-weight:800;font-size:14px}.sch .rl span{font:600 11px var(--body);color:var(--muted)}
+.cell{height:48px;border-radius:9px;display:grid;place-items:center;font:900 15px var(--disp);border:0}
+.cell.s2{background:#12a36b;color:#fff}.cell.s1{background:#cfe7da;color:#0d6b47}.cell.sQ{background:var(--warn-s);color:var(--warn)}
+.cell.sX{background:var(--bad-s);color:var(--bad)}.cell.sD{background:#fff;border:1.5px dashed #cfd6df;color:#a7b2bf}
+.drop{border:2px dashed #c5cfdb;border-radius:18px;padding:22px;text-align:center;font-weight:700;color:var(--muted);display:grid;gap:6px;cursor:pointer}
+.drop.over{border-color:var(--c630);background:#eef3ff}.drop b{color:var(--ink);font-size:16px}
+.pv{display:grid;gap:10px;background:var(--soft);border-radius:16px;padding:14px}
+.pv .h{display:flex;justify-content:space-between;gap:10px;font-weight:800;flex-wrap:wrap}
+.pv .row input,.pv .row select{background:#fff}
+.ok-t{color:var(--ok);font-weight:800}.bad-t{color:var(--bad);font-weight:800}
+.ed{width:90px;text-align:right;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.login{max-width:440px;margin:40px auto}
+@media (max-width:1100px){.score,.k3,.r3,.mid,.two,.plans{grid-template-columns:minmax(0,1fr)}.yr{grid-template-columns:repeat(6,minmax(0,1fr))}.lay{grid-template-columns:minmax(0,1fr)}.sch{overflow-x:auto;grid-template-columns:100px repeat(31,40px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="lft">
+      <div class="logo"><i>ADM</i>ADM JIZZAX AJ</div>
+      <div class="tabs" id="tabs">
+        <button id="tabPanel" class="on">▦ Panel</button>
+        <button id="tabAdmin" hidden>⚙ Boshqaruv</button>
+      </div>
+    </div>
+    <div class="row" id="topRight">
+      <div class="seg" id="sexSeg"><button data-s="ALL" class="on">Jami</button><button data-s="CKD">CKD</button><button data-s="SKD">SKD</button></div>
+    </div>
+  </div>
+
+  <div id="panel"><div class="loading">Yuklanmoqda…</div></div>
+  <div id="admin" hidden></div>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>window.SHOW_ADMIN = <?= showAdmin ?>;</script>
+<script>
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+var f = function(n){ return Math.round(n).toLocaleString('ru-RU').replace(/ |,/g,' '); };
+var sg = function(n){ return (n >= 0 ? '+' : '−') + f(Math.abs(n)); };
+var OY = ['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+var OYQ = ['Yan','Fev','Mar','Apr','May','Iyun','Iyul','Avg','Sen','Okt','Noy','Dek'];
+var HAF = ['dushanba','seshanba','chorshanba','payshanba','juma','shanba','yakshanba'];
+var WD = ['Du','Se','Ch','Pa','Ju','Sh','Ya'];
+var W = {'2':1,'1':1,'Q':0.5,'X':0,'D':0};
+
+function run(fn){
+  var args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function(res, rej){
+    var r = google.script.run.withSuccessHandler(res).withFailureHandler(function(e){ rej(e && e.message ? e : new Error(String(e))); });
+    r[fn].apply(r, args);
+  });
+}
+function toast(msg, err){ var t = $('toast'); t.textContent = msg; t.className = 'toast' + (err ? ' err' : ''); t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function(){ t.hidden = true; }, err ? 6000 : 3500); }
+
+/* ---------------- sana yordamchilari */
+function ymd(d){ return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2); }
+function parseD(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function dim(ym){ var p = ym.split('-'); return new Date(+p[0], +p[1], 0).getDate(); }
+function dow(s){ return (parseD(s).getDay() + 6) % 7; }
+function nice(s){ var d = parseD(s); return d.getDate() + '-' + OY[d.getMonth()]; }
+function ymAdd(ym, k){ var p = ym.split('-'); var d = new Date(+p[0], +p[1]-1+k, 1); return ymd(d).slice(0,7); }
+
+/* ---------------- holat */
+var S = { data:null, sex:'ALL', sel:null, view:'panel', mq:{mode:'kun', from:'', to:''},
+          pin:null, kim:'', aview:'reja', amonth:null, ix:null, gEdit:null };
+
+function index(){
+  var D = S.data, ix = { day:{}, mq:{}, reja:{}, graf:{}, oylik:{}, dates:[] };
+  D.days.forEach(function(r){
+    var o = (ix.day[r[0]] = ix.day[r[0]] || {});
+    var x = (o[r[1]] = o[r[1]] || {a:0, b:0, m:{}, t:false});
+    var a = +r[3] || 0, b = +r[4] || 0;
+    x.a += a; x.b += b; var m = (x.m[r[2]] = x.m[r[2]] || {a:0, b:0}); m.a += a; m.b += b;
+    if (r[5]) x.t = true;
+  });
+  D.mqsDays.forEach(function(r){ var o = (ix.mq[r[0]] = ix.mq[r[0]] || {}); o[r[1]] = {n:+r[2], p:+r[3], t:+r[4]}; });
+  D.reja.forEach(function(r){ ix.reja[r[0] + '|' + r[1]] = +r[2] || 0; });
+  D.grafik.forEach(function(r){ ix.graf[r[0] + '|' + r[1]] = r[2].split(','); });
+  D.oylik.forEach(function(r){ ix.oylik[r[0] + '|' + r[1]] = {a: r[2] === '' ? null : +r[2], b: r[3] === '' ? null : +r[3], q: r[4] === '' ? null : +r[4]}; });
+  ix.dates = Object.keys(ix.day).sort();
+  S.ix = ix;
+}
+function sexes(){ return S.sex === 'ALL' ? ['CKD','SKD'] : [S.sex]; }
+function grafik(ym, sex){
+  var g = S.ix.graf[ym + '|' + sex]; if (g && g.length === dim(ym)) return g;
+  var out = []; for (var d = 1; d <= dim(ym); d++){ var w = dow(ym + '-' + ('0'+d).slice(-2)); out.push(w < 5 ? '2' : w === 5 ? '1' : 'D'); }
+  return out;
+}
+function planMonth(ym){ return sexes().reduce(function(s, x){ return s + (S.ix.reja[ym + '|' + x] || 0); }, 0); }
+function dayPlan(date){
+  var ym = date.slice(0,7), d = +date.slice(8);
+  return sexes().reduce(function(s, x){
+    var pm = S.ix.reja[ym + '|' + x] || 0; if (!pm) return s;
+    var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + W[c]; }, 0);
+    return s + (tot ? pm * W[g[d-1]] / tot : 0);
+  }, 0);
+}
+function isOff(date){ var ym = date.slice(0,7), d = +date.slice(8); return sexes().every(function(x){ return W[grafik(ym, x)[d-1]] === 0; }); }
+function fact(date){
+  var o = S.ix.day[date] || {}, r = {a:0, b:0, m:{}, has:false, t:false, sx:{}};
+  sexes().forEach(function(x){ var v = o[x]; if (!v) return; r.has = true; r.a += v.a; r.b += v.b; if (v.t) r.t = true; r.sx[x] = v;
+    Object.keys(v.m).forEach(function(m){ var q = (r.m[m] = r.m[m] || {a:0, b:0}); q.a += v.m[m].a; q.b += v.m[m].b; }); });
+  return r;
+}
+function mqsN(date){ var o = S.ix.mq[date] || {}; return sexes().reduce(function(s, x){ return s + (o[x] ? o[x].n : 0); }, 0); }
+function monthSum(ym, upto){
+  var a = 0, b = 0, q = 0, has = false, last = upto || (ym + '-' + ('0'+dim(ym)).slice(-2));
+  S.ix.dates.forEach(function(d){ if (d.slice(0,7) === ym && d <= last){ var v = fact(d); if (v.has){ has = true; a += v.a; b += v.b; } } });
+  Object.keys(S.ix.mq).forEach(function(d){ if (d.slice(0,7) === ym && d <= last) q += mqsN(d); });
+  var manual = false;
+  if (!has){ sexes().forEach(function(x){ var m = S.ix.oylik[ym + '|' + x]; if (m){ manual = true; a += m.a || 0; b += m.b || 0; if (!q) q += m.q || 0; } }); }
+  return {a:a, b:b, q:q, has: has || manual, manual: manual};
+}
+function planTo(date){ var ym = date.slice(0,7), s = 0; for (var d = 1; d <= +date.slice(8); d++) s += dayPlan(ym + '-' + ('0'+d).slice(-2)); return s; }
+function workLeft(date){ var ym = date.slice(0,7), s = 0, pm = planMonth(ym); for (var d = +date.slice(8)+1; d <= dim(ym); d++){ var dp = dayPlan(ym + '-' + ('0'+d).slice(-2)); if (dp > 0) s++; } return s; }
+
+/* ---------------- panel */
+var CAR = function(dark){ var b = dark ? '#ffffff' : '#0c1a2b'; return '<svg viewBox="0 0 54 44"><rect x="4" y="14" width="46" height="18" rx="7" fill="'+b+'"/><path d="M13 14l6-9h16l7 9z" fill="'+b+'"/><path d="M20 7h6v7h-9zM29 7h5l5 7h-10z" fill="#9fb8ff"/><circle cx="15" cy="33" r="6" fill="#0c1a2b" stroke="#fff" stroke-width="2.5"/><circle cx="39" cy="33" r="6" fill="#0c1a2b" stroke="#fff" stroke-width="2.5"/><rect x="45" y="19" width="5" height="4" rx="1.5" fill="#ffd36b"/></svg>'; };
+function chip(v, pl){ if (!pl) return '<span class="chip nil">reja kiritilmagan</span>'; var d = v - pl; return '<span class="chip ' + (d >= 0 ? 'ok' : 'bad') + '">' + sg(d) + ' ' + (d >= 0 ? 'oldinda' : 'orqada') + '</span>'; }
+function track(v, pl, max, dark, lab){
+  if (!max) return '';
+  var fp = Math.min(100, v / max * 100), pp = Math.min(100, pl / max * 100);
+  return '<div class="trk"><div class="lane"></div><div class="fill" style="width:' + fp + '%"></div><div class="mk" style="left:' + pp + '%"><span>' + lab + '</span></div>' + CAR(dark).replace('<svg ', '<svg style="left:' + fp + '%" ') + '</div>';
+}
+function scard(dark, when, sub, a, b, pl, max, lab, meta, q){
+  var per = a ? (q / a * 100).toFixed(1) : '—';
+  return '<div class="card sc' + (dark ? ' dark' : '') + '"><div class="when"><b>' + when + '</b><span>' + sub + '</span></div>' +
+    '<div class="pair"><div class="ev"><span class="lab"><span class="code" style="background:var(--c630)">630</span>ishlab chiqarildi</span><span class="n">' + f(a) + '</span>' + chip(a, pl) + '</div>' +
+    '<div class="ev"><span class="lab"><span class="code" style="background:var(--c700)">700</span>omborga</span><span class="n">' + f(b) + '</span>' + chip(b, pl) + '</div></div>' +
+    track(a, pl, max, dark, lab) + '<div class="meta"><span>reja: <b>' + (pl ? f(pl) : '—') + '</b></span><span>' + meta + '</span></div>' +
+    '<div class="mq"><b>' + f(q) + '</b><span>MQS nuqson</span><em>' + per + ' / 100 avto</em></div></div>';
+}
+
+function renderPanel(){
+  var D = S.sel, ym = D.slice(0,7), y = D.slice(0,4), today = S.data.bugun;
+  var k = fact(D), kp = dayPlan(D), kq = mqsN(D);
+  var ms = monthSum(ym, D), mp = planTo(D), pm = planMonth(ym), left = workLeft(D);
+  var need = left ? Math.max(0, Math.ceil((pm - ms.a) / left)) : 0;
+  var ya = 0, yb = 0, yq = 0, yp = 0, yfull = 0;
+  for (var m = 1; m <= 12; m++){
+    var mk = y + '-' + ('0'+m).slice(-2); yfull += planMonth(mk);
+    if (mk < ym){ var s = monthSum(mk); ya += s.a; yb += s.b; yq += s.q; yp += planMonth(mk); }
+  }
+  ya += ms.a; yb += ms.b; yq += ms.q; yp += mp;
+  var h = '<div class="score">' +
+    scard(false, 'Kun', nice(D) + ', ' + HAF[dow(D)], k.a, k.b, kp, Math.max(kp * 1.3, k.a, 1), 'kunlik reja', kp ? 'bajarildi: <b>' + Math.round(k.a / kp * 100) + '%</b>' : (isOff(D) ? 'ish kuni emas' : ''), kq) +
+    scard(false, 'Oy', OY[+ym.slice(5)-1] + ' · ' + nice(D) + 'gacha', ms.a, ms.b, mp, pm, 'bugungacha reja', pm ? 'kuniga kerak: <b>' + f(need) + '</b>' + (ms.manual ? ' · qo\'lda' : '') : '', ms.q) +
+    scard(true, 'Yil', y + (yfull ? ' · reja ' + f(yfull) : ''), ya, yb, yp, yfull, 'bugungacha reja', yfull ? 'bajarildi: <b>' + (ya / yfull * 100).toFixed(1) + '%</b>' : '', yq) +
+    '</div>';
+  h += '<div class="mid">' + calendar(ym, today) + '<div class="card det" id="dayDet">' + dayDetail(D) + '</div></div>';
+  h += yearStrip(y, ym, today);
+  h += '<div id="mqsSec"></div>';
+  h += '<div class="muted small">Manba: yuklangan 630, 700 va MQS fayllari · reja va ish grafigi qo\'lda kiritiladi · yangilandi: ' + esc(today) + '</div>';
+  $('panel').innerHTML = h;
+  $('panel').querySelectorAll('[data-day]').forEach(function(b){ b.onclick = function(){ S.sel = b.getAttribute('data-day'); S.mq = {mode:'kun'}; renderPanel(); }; });
+  $('panel').querySelectorAll('[data-mo]').forEach(function(b){ b.onclick = function(){ var mk = b.getAttribute('data-mo'); var ds = S.ix.dates.filter(function(d){ return d.slice(0,7) === mk; }); S.sel = ds.length ? ds[ds.length-1] : mk + '-01'; S.mq = {mode:'oy'}; renderPanel(); }; });
+  $('calPrev').onclick = function(){ moveMonth(-1); }; $('calNext').onclick = function(){ moveMonth(1); };
+  loadDayMqs(D); renderMqsSection();
+}
+function moveMonth(k){ var ym = ymAdd(S.sel.slice(0,7), k); var ds = S.ix.dates.filter(function(d){ return d.slice(0,7) === ym; }); S.sel = ds.length ? ds[ds.length-1] : ym + '-01'; renderPanel(); }
+
+function calendar(ym, today){
+  var h = '<div class="card"><div class="ct"><h2>' + OY[+ym.slice(5)-1][0].toUpperCase() + OY[+ym.slice(5)-1].slice(1) + ' ' + ym.slice(0,4) + ' · har kun</h2><div class="calnav"><button id="calPrev" aria-label="Oldingi oy">‹</button><button id="calNext" aria-label="Keyingi oy">›</button></div></div><div class="cal">';
+  h += WD.map(function(x){ return '<div class="wd">' + x + '</div>'; }).join('');
+  for (var i = 0; i < dow(ym + '-01'); i++) h += '<div></div>';
+  for (var d = 1; d <= dim(ym); d++){
+    var ds = ym + '-' + ('0'+d).slice(-2), v = fact(ds), pl = dayPlan(ds), q = mqsN(ds), c = 'day', val, p;
+    if (v.has){ var df = v.a - pl; c += pl ? (df >= 0 ? ' ok' : ' bad') : ''; val = f(v.a); p = pl ? sg(df) : (v.t ? 'tuzatildi' : ''); }
+    else if (isOff(ds)){ c += ' off'; val = ''; p = ''; }
+    else { c += ' fut'; val = pl ? f(pl) : '—'; p = ds > today ? 'reja' : 'ma\'lumot yo\'q'; }
+    if (ds === S.sel) c += ' sel'; if (ds === today) c += ' today';
+    h += '<button class="' + c + '" data-day="' + ds + '">' + (q ? '<span class="q">' + q + '</span>' : '') + '<span class="d">' + d + '</span><span class="v">' + val + '</span><span class="p">' + p + '</span></button>';
+  }
+  h += '</div><div class="leg"><span><i style="background:var(--ok-s);border:1px solid var(--ok)"></i>rejadan ko\'p</span><span><i style="background:var(--bad-s);border:1px solid var(--bad)"></i>rejadan kam</span><span><i style="background:var(--bad);border-radius:6px"></i>MQS nuqsonlar soni</span><span>katta raqam = 630</span></div></div>';
+  return h;
+}
+
+function dayDetail(D){
+  var v = fact(D), pl = dayPlan(D);
+  var h = '<div class="ct" style="margin:0"><h2>' + nice(D) + ', ' + HAF[dow(D)] + '</h2><span>tanlangan kun</span></div>';
+  if (!v.has) return h + '<div class="empty">Bu kun uchun 630 / 700 ma\'lumoti yo\'q.</div><div id="dayMqs"></div>';
+  h += '<div class="sp"><div><b>' + f(v.a) + '</b><span>630 · reja ' + (pl ? f(pl) : '—') + (pl ? ' · <span style="color:' + (v.a >= pl ? 'var(--ok)' : 'var(--bad)') + '">' + sg(v.a - pl) + '</span>' : '') + '</span></div><div><b>' + f(v.b) + '</b><span>700 · omborga topshirildi</span></div>';
+  if (S.sex === 'ALL') h += '<div><b style="color:var(--ckd)">' + f(v.sx.CKD ? v.sx.CKD.a : 0) + '</b><span>CKD · 630</span></div><div><b style="color:var(--skd)">' + f(v.sx.SKD ? v.sx.SKD.a : 0) + '</b><span>SKD · 630</span></div>';
+  h += '</div>';
+  var ms = Object.keys(v.m).map(function(m){ return [m, v.m[m].a, v.m[m].b]; }).sort(function(a, b){ return b[1] - a[1] || b[2] - a[2]; }).filter(function(x){ return x[1] > 0; }).slice(0, 8);
+  var mx = Math.max.apply(null, ms.map(function(x){ return x[1]; }).concat([1]));
+  h += '<hr><div class="sub">Modellar <span>630</span></div><div class="bars">' + ms.map(function(x){
+    return '<div class="br"><span title="' + esc(x[0]) + '">' + esc(x[0]) + '</span><span class="b"><i style="width:' + (x[1] / mx * 100) + '%;background:var(--c630)"></i></span><em>' + f(x[1]) + '</em></div>';
+  }).join('') + '</div><div id="dayMqs"></div>';
+  return h;
+}
+function loadDayMqs(D){
+  if (!mqsN(D)) return;
+  run('getMqs', D, D, S.sex).then(function(r){
+    var el = $('dayMqs'); if (!el || S.sel !== D) return;
+    el.innerHTML = '<hr><div class="sub" style="margin:8px 0">MQS · ' + r.total + ' ta nuqson <span>' + r.cars + ' ta avto</span></div><table class="t"><tr><th>Vaqt</th><th>Sex</th><th>Model</th><th>Nuqson</th></tr>' +
+      r.list.slice(0, 6).map(function(x){ return '<tr><td>' + esc(x[0]) + '</td><td><span class="tag" style="background:' + (x[1] === 'CKD' ? 'var(--ckd)' : 'var(--skd)') + '">' + esc(x[1]) + '</span></td><td>' + esc(x[2]) + '</td><td>' + esc(x[4]) + '</td></tr>'; }).join('') +
+      '</table>' + (r.list.length > 6 ? '<div class="muted small" style="margin-top:6px">… yana ' + (r.total - 6) + ' ta — pastdagi MQS qismida</div>' : '');
+  }).catch(function(){});
+}
+
+function yearStrip(y, ym, today){
+  var h = '<div class="card"><div class="ct"><h2>' + y + ' · har oy</h2><span>oyni bosing — kalendar o\'sha oyga o\'tadi</span></div><div class="yr">';
+  for (var m = 1; m <= 12; m++){
+    var mk = y + '-' + ('0'+m).slice(-2), s = monthSum(mk), pm = planMonth(mk), cur = mk === today.slice(0,7);
+    var pl = cur ? planTo(today) : pm, c = 'mo';
+    if (!s.has){ h += '<button class="mo fut' + (mk === ym ? ' cur' : '') + '" data-mo="' + mk + '"><span class="d">' + OYQ[m-1] + '</span><span class="v">' + (pm ? f(pm) : '—') + '</span><span class="p muted">' + (pm ? 'reja' : '') + '</span><span class="qq">&nbsp;</span></button>'; continue; }
+    var d = s.a - pl; if (pl) c += d >= 0 ? ' ok' : ' bad'; if (mk === ym) c += ' cur';
+    h += '<button class="' + c + '" data-mo="' + mk + '"><span class="d">' + OYQ[m-1] + (cur ? ' · joriy' : '') + (s.manual ? ' · qo\'lda' : '') + '</span><span class="v">' + f(s.a) + '</span><span class="p">' + (pl ? sg(d) + ' · ' + Math.round(s.a / pl * 100) + '%' : 'reja yo\'q') + '</span><span class="qq">' + (s.q ? 'MQS ' + f(s.q) : '&nbsp;') + '</span></button>';
+  }
+  return h + '</div></div>';
+}
+
+/* ---------------- MQS qismi */
+function mqsRange(){
+  var D = S.sel, m = S.mq.mode;
+  if (m === 'kun') return [D, D, nice(D)];
+  if (m === 'oy') return [D.slice(0,7) + '-01', D.slice(0,7) + '-31', OY[+D.slice(5,7)-1] + ' ' + D.slice(0,4)];
+  if (m === 'yil') return [D.slice(0,4) + '-01-01', D.slice(0,4) + '-12-31', D.slice(0,4) + '-yil'];
+  var a = S.mq.from || D, b = S.mq.to || D; if (a > b){ var t = a; a = b; b = t; }
+  return [a, b, nice(a) + ' — ' + nice(b)];
+}
+function renderMqsSection(target){
+  var el = target || $('mqsSec'); if (!el) return;
+  var R = mqsRange();
+  el.innerHTML = '<div class="sect"><h2>MQS ma\'lumotlari · ' + esc(R[2]) + '</h2><div class="range"><div class="seg" id="mqSeg">' +
+    [['kun','Kun'],['oy','Oy'],['yil','Yil'],['ora','Oraliq']].map(function(x){ return '<button data-m="' + x[0] + '" class="' + (S.mq.mode === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div>' +
+    (S.mq.mode === 'ora' ? '<input type="date" id="mqFrom" value="' + R[0] + '"><span class="muted">—</span><input type="date" id="mqTo" value="' + R[1] + '">' : '') +
+    '</div></div><div id="mqBody" style="display:grid;gap:18px;margin-top:14px"><div class="loading">Yuklanmoqda…</div></div>';
+  el.querySelectorAll('#mqSeg button').forEach(function(b){ b.onclick = function(){ S.mq = {mode: b.getAttribute('data-m'), from: S.mq.from, to: S.mq.to}; renderMqsSection(target); }; });
+  if (S.mq.mode === 'ora'){ ['mqFrom','mqTo'].forEach(function(id){ $(id).onchange = function(){ S.mq.from = $('mqFrom').value; S.mq.to = $('mqTo').value; renderMqsSection(target); }; }); }
+  run('getMqs', R[0], R[1], S.sex).then(function(r){ var b = el.querySelector('#mqBody'); if (!b) return; b.innerHTML = mqsBody(r, S.mq.mode === 'kun');
+      var mb = b.querySelector('.moreBtn'); if (mb) mb.onclick = function(){ var open = mb.getAttribute('data-o') === '1'; b.querySelectorAll('tr.more').forEach(function(t){ t.hidden = open; }); mb.setAttribute('data-o', open ? '0' : '1'); mb.textContent = open ? 'Hammasini ko\'rsatish (' + mb.getAttribute('data-n') + ')' : 'Yig\'ish'; }; })
+    .catch(function(e){ var b = el.querySelector('#mqBody'); if (b) b.innerHTML = '<div class="empty">MQS o\'qilmadi: ' + esc(e.message) + '</div>'; });
+}
+function topRows(list, col, tag){
+  if (!list.length) return '<div class="muted small">nuqson yo\'q</div>';
+  return '<div class="topl">' + list.map(function(x, i){ return '<div class="tr"><span class="rk" style="background:' + col + '">' + (i+1) + '</span><span>' + esc(x[0]) + (tag ? '<small>' + tag(x[0]) + '</small>' : '') + '</span><em>' + f(x[1]) + '</em></div>'; }).join('') + '</div>';
+}
+function barList(list, col){
+  if (!list.length) return '<div class="muted small">—</div>';
+  var mx = list[0][1] || 1;
+  return '<div class="bars">' + list.map(function(x){ return '<div class="br"><span title="' + esc(x[0]) + '">' + esc(x[0]) + '</span><span class="b"><i style="width:' + (x[1] / mx * 100) + '%;background:' + col + '"></i></span><em>' + f(x[1]) + '</em></div>'; }).join('') + '</div>';
+}
+function mqsBody(r, withList){
+  if (!r.total) return '<div class="empty">Bu davr uchun MQS ma\'lumoti yo\'q. MQS faylini Boshqaruv → "MQS ma\'lumotlari" bo\'limida yuklang.</div>';
+  var tset = {}; r.topT.forEach(function(x){ tset[x[0]] = 1; });
+  var h = '<div class="k3"><div class="card"><div class="muted" style="font-weight:700;font-size:14px">jami nuqson</div><div class="mbig">' + f(r.total) + '</div>' +
+    '<div class="muted" style="font-weight:700;font-size:14px;margin-top:8px">' + f(r.cars) + ' ta avtomobilda · har avtoda o\'rtacha ' + (r.cars ? (r.total / r.cars).toFixed(1) : '—') + ' ta · ochiq: ' + f(r.open) + '</div>' +
+    '<div class="split"><i style="width:' + (r.P / r.total * 100) + '%;background:var(--c630)"></i><i style="width:' + (r.T / r.total * 100) + '%;background:#f0a500"></i></div>' +
+    '<div class="legend2"><span style="color:var(--c630)">Ishlab chiqarish ' + f(r.P) + ' · ' + Math.round(r.P / r.total * 100) + '%</span><span style="color:var(--warn)">Ta\'minot ' + f(r.T) + ' · ' + Math.round(r.T / r.total * 100) + '%</span></div></div>' +
+    '<div class="cat cp"><h3>Ishlab chiqarish <small>' + f(r.Pc) + ' ta avto</small></h3><div class="n" style="color:var(--c630)">' + f(r.P) + '</div><div class="muted" style="font-weight:700">Top-3 nuqson</div>' + topRows(r.topP, 'var(--c630)') + '</div>' +
+    '<div class="cat ct2"><h3>Ta\'minot muammosi <small>' + f(r.Tc) + ' ta avto</small></h3><div class="n" style="color:var(--warn)">' + f(r.T) + '</div><div class="muted" style="font-weight:700">Top-3 nuqson</div>' + topRows(r.topT, '#f0a500') + '</div></div>';
+  h += '<div class="r3"><div class="card"><div class="ct"><h2>Umumiy top-3 nuqson</h2><span>' + (r.other ? '"Boshqa nuqsonlar" (' + f(r.other) + ') hisobga olinmaydi' : '') + '</span></div>' + topRows(r.top, 'var(--ink)', function(n){ return tset[n] ? 'ta\'minot' : 'ishlab chiqarish'; }) + '</div>' +
+    '<div class="card"><div class="ct"><h2>Modellar bo\'yicha</h2><span>nuqsonlar soni</span></div>' + barList(r.models, 'var(--bad)') + '</div>' +
+    '<div class="card"><div class="ct"><h2>Eng ko\'p joy</h2><span>detal bo\'yicha</span></div>' + barList(r.parts, 'var(--skd)') + '</div></div>';
+  if (withList && r.list.length){
+    h += '<div class="card"><div class="ct"><h2>Nuqsonlar ro\'yxati</h2><span>' + f(r.total) + ' ta' + (r.total > r.list.length ? ', birinchi ' + r.list.length : '') + '</span></div><div style="overflow-x:auto"><table class="t"><tr><th>Vaqt</th><th>Sex</th><th>Model</th><th>Turi</th><th>Nuqson</th><th>Detal</th><th>Holat</th></tr>' +
+      r.list.map(function(x, i){ return '<tr' + (i >= 15 ? ' class="more" hidden' : '') + '><td>' + esc(x[0]) + '</td><td>' + esc(x[1]) + '</td><td>' + esc(x[2]) + '</td><td>' + esc(x[3]) + '</td><td>' + esc(x[4]) + '</td><td>' + esc(x[5]) + '</td><td>' + (x[6] === 'open' ? '<span class="bad-t">ochiq</span>' : '<span class="ok-t">yopilgan</span>') + '</td></tr>'; }).join('') + '</table></div>' + (r.list.length > 15 ? '<button class="btn moreBtn" style="margin-top:10px" data-n="' + r.list.length + '">Hammasini ko\'rsatish (' + r.list.length + ')</button>' : '') + '</div>';
+  }
+  return h;
+}
+
+/* ---------------- Excel o'qish */
+function readBook(file){
+  return file.arrayBuffer().then(function(buf){ return XLSX.read(buf, {type:'array', cellDates:true}); });
+}
+function cellDate(v){
+  if (v instanceof Date) return ymd(v) + ' ' + ('0'+v.getHours()).slice(-2) + ':' + ('0'+v.getMinutes()).slice(-2) + ':' + ('0'+v.getSeconds()).slice(-2);
+  var s = String(v || '').trim(), m;
+  if ((m = s.match(/^(\d{4})-(\d{2})-(\d{2})(.*)$/))) return m[1] + '-' + m[2] + '-' + m[3] + (m[4] || '');
+  if ((m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})(.*)$/))) return m[3] + '-' + m[2] + '-' + m[1] + (m[4] || '');
+  return '';
+}
+function parseFile(file){
+  return readBook(file).then(function(wb){
+    var ws = wb.Sheets[wb.SheetNames[0]];
+    var aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:''});
+    var name = file.name;
+    var hdrM = aoa.findIndex(function(r){ return r.some(function(c){ return String(c).trim() === 'Fault name'; }); });
+    if (hdrM >= 0){
+      var H = aoa[hdrM].map(function(c){ return String(c).trim(); }), c = function(n){ return H.indexOf(n); };
+      var rows = aoa.slice(hdrM + 1).filter(function(r){ return r[c('Fault name')] || r[c('Vin')]; }).map(function(r){
+        var plant = String(r[c('Plant')] || '').toUpperCase().indexOf('CKD') >= 0 ? 'CKD' : 'SKD';
+        return [cellDate(r[c('Defect date')]), plant, String(r[c('Model')] || '').trim(), String(r[c('Prod team')] || '').trim(),
+                String(r[c('Nuqson nomlari')] || '').trim(), String(r[c('Fault name')] || '').trim(), String(r[c('Level 2')] || '').trim(),
+                String(r[c('Vin')] || '').trim(), String(r[c('Defect status')] || '').trim()];
+      }).filter(function(r){ return r[0]; });
+      return {kind:'mqs', name:name, rows:rows};
+    }
+    var hi = aoa.findIndex(function(r){ return r.some(function(c){ return String(c).trim() === '№ кузова'; }); });
+    if (hi < 0) throw new Error(name + ': fayl tanilmadi ("№ кузова" yoki "Fault name" ustuni topilmadi).');
+    var Hd = aoa[hi].map(function(c){ return String(c).trim(); }), ci = function(n){ return Hd.indexOf(n); };
+    var mc = ci('Бренд (Модель)'); if (mc >= 0 && Hd[mc+1] === '') mc++;
+    var vc = ci('№ кузова'), md = ci('Модификация'), rc = ci('Цвет'), rs = ci('растаможен');
+    var title = String((aoa[0] || [])[0] || '');
+    var last = Hd.filter(function(x){ return x; }).slice(-1)[0] || '';
+    var tur = (name.match(/(^|\D)(630|700)(\D|$)/) || [])[2] || (/630/.test(last) ? '630' : /ЦОП|700/i.test(last) ? '700' : '');
+    var sex = /CKD/i.test(title) ? 'CKD' : /SKD/i.test(title) ? 'SKD' : '';
+    var dm = name.match(/(\d{2})\.(\d{2})\.(\d{4})/);
+    var rows2 = aoa.slice(hi + 1).filter(function(r){ return String(r[vc] || '').trim().length > 5; }).map(function(r){
+      return [String(r[vc]).trim(), String(r[mc] || '').trim(), String(r[md] || '').trim(), String(r[rc] || '').trim(), +r[rs] === 1];
+    });
+    return {kind:'event', name:name, tur:tur, sex:sex || 'SKD', sana: dm ? dm[3] + '-' + dm[2] + '-' + dm[1] : S.data.bugun, rows:rows2};
+  });
+}
+
+/* ---------------- boshqaruv */
+var MENU = [['reja','📅 Reja va ish grafigi'],['natija','✎ Natijalar va fayllar'],['mqs','◎ MQS ma\'lumotlari'],['tarjima','Aa Nuqson nomlari'],['tarix','↺ O\'zgarishlar tarixi'],['pin','🔑 PIN-kod']];
+function renderAdmin(){
+  var el = $('admin');
+  if (!S.pin){
+    var first = !S.data.hasPin;
+    el.innerHTML = '<div class="card login"><div class="ct"><h2>' + (first ? 'Boshqaruv PIN-kodini o\'rnating' : 'Boshqaruvga kirish') + '</h2></div><div class="form">' +
+      '<div class="f"><label for="lgKim">Ismingiz</label><input id="lgKim" placeholder="masalan, Aziz" value="' + esc(S.kim) + '"></div>' +
+      '<div class="f"><label for="lgPin">' + (first ? 'Yangi PIN (kamida 4 belgi)' : 'PIN') + '</label><input id="lgPin" type="password" autocomplete="current-password"></div>' +
+      '<button class="btn p" id="lgGo">' + (first ? 'O\'rnatish va kirish' : 'Kirish') + '</button>' +
+      '<div class="muted small">PIN-kodni kimga bersangiz, o\'sha odam ma\'lumot yuklay va tuzata oladi. Har bir o\'zgarish ism bilan tarixga yoziladi.</div></div></div>';
+    var go = function(){
+      var pin = $('lgPin').value, kim = $('lgKim').value.trim();
+      if (!kim){ toast('Ismingizni yozing.', true); return; }
+      (first ? run('setPin', '', pin, kim) : run('login', pin)).then(function(){ S.pin = pin; S.kim = kim; S.data.hasPin = true; renderAdmin(); })
+        .catch(function(e){ toast(e.message, true); });
+    };
+    $('lgGo').onclick = go; $('lgPin').onkeydown = function(e){ if (e.key === 'Enter') go(); };
+    return;
+  }
+  el.innerHTML = '<div class="lay"><div class="side">' + MENU.map(function(m){ return '<button data-a="' + m[0] + '" class="' + (S.aview === m[0] ? 'on' : '') + '">' + m[1] + '</button>'; }).join('') +
+    '<hr><div class="note">Kirgan: <b>' + esc(S.kim) + '</b>. Excel fayllarning o\'zi saqlanmaydi — faqat natijalar.</div></div><div class="amain" id="amain"></div></div>';
+  el.querySelectorAll('[data-a]').forEach(function(b){ b.onclick = function(){ S.aview = b.getAttribute('data-a'); renderAdmin(); }; });
+  ({reja: aReja, natija: aNatija, mqs: aMqs, tarjima: aTarjima, tarix: aTarix, pin: aPin})[S.aview]();
+}
+function reload(){ return run('getData').then(function(d){ S.data = d; index(); }); }
+
+function aReja(){
+  var ym = S.amonth || S.sel.slice(0,7); S.amonth = ym;
+  if (!S.gEdit || S.gEdit.ym !== ym) S.gEdit = {ym: ym, CKD: grafikRaw(ym, 'CKD').slice(), SKD: grafikRaw(ym, 'SKD').slice(), dirty:false};
+  var G = S.gEdit, n = dim(ym);
+  var wsum = function(x){ return G[x].reduce(function(a, c){ return a + W[c]; }, 0); };
+  var pv = function(x){ var v = S.ix.reja[ym + '|' + x]; return v === undefined ? '' : v; };
+  var h = '<div class="card"><div class="ct"><h2>Oylik reja</h2><div class="calnav"><button id="rPrev">‹</button><b style="padding:0 8px">' + OY[+ym.slice(5)-1] + ' ' + ym.slice(0,4) + '</b><button id="rNext">›</button></div></div><div class="plans">' +
+    ['CKD','SKD'].map(function(x){ var w = wsum(x); return '<div class="pl ' + (x === 'CKD' ? 'c' : 's') + '"><div class="h">' + x + ' sexi<span>' + w + ' ish kuni (vazn)</span></div><input id="pl' + x + '" type="number" min="0" step="1" value="' + pv(x) + '" placeholder="—"><div class="r">kunlik reja (o\'rtacha)<b id="pd' + x + '">' + (pv(x) && w ? f(pv(x) / w) + ' dona' : '—') + '</b></div></div>'; }).join('') +
+    '<div class="pl t"><div class="h">Jami zavod<span>avtomatik</span></div><input disabled id="plT" value="' + ((+pv('CKD') || 0) + (+pv('SKD') || 0) || '') + '"><div class="r">kunlik reja ish grafigidan hisoblanadi<b></b></div></div></div></div>';
+  h += '<div class="card"><div class="ct"><h2>Ish grafigi</h2><span>katakni bosing: 2 → 1 → Q → × → dam</span></div><div style="overflow-x:auto"><div class="sch"><div></div>';
+  for (var d = 1; d <= 31; d++){ if (d > n){ h += '<div></div>'; continue; } var w = dow(ym + '-' + ('0'+d).slice(-2)); h += '<div class="hd' + (w === 6 ? ' we' : '') + '"><b>' + d + '</b>' + WD[w] + '</div>'; }
+  ['CKD','SKD'].forEach(function(x){
+    h += '<div class="rl">' + x + ' sexi<span>' + wsum(x) + ' ish kuni</span></div>';
+    for (var d2 = 1; d2 <= 31; d2++){ if (d2 > n){ h += '<div></div>'; continue; } var c = G[x][d2-1]; h += '<button class="cell s' + c + '" data-g="' + x + '|' + (d2-1) + '">' + ({'2':'2','1':'1','Q':'Q','X':'×','D':''})[c] + '</button>'; }
+  });
+  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>2 · ikki smena</span><span><i style="background:#cfe7da"></i>1 · bir smena</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>Q · qisqartirilgan (yarim reja)</span><span><i style="background:var(--bad-s);border:1px solid var(--bad)"></i>× · to\'xtash</span><span><i style="border:1.5px dashed #b9c3cf"></i>dam olish</span></div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn" id="gTpl">Hafta shablonini qo\'llash: Du–Ju 2 smena, Sh 1 smena, Ya dam</button><button class="btn" id="gCopy">O\'tgan oydan nusxa olish</button><button class="btn p" id="gSave">Reja va grafikni saqlash</button></div></div>';
+  $('amain').innerHTML = h;
+  $('rPrev').onclick = function(){ S.amonth = ymAdd(ym, -1); aReja(); }; $('rNext').onclick = function(){ S.amonth = ymAdd(ym, 1); aReja(); };
+  var order = ['2','1','Q','X','D'];
+  document.querySelectorAll('[data-g]').forEach(function(b){ b.onclick = function(){ var p = b.getAttribute('data-g').split('|'); var a = G[p[0]]; a[+p[1]] = order[(order.indexOf(a[+p[1]]) + 1) % 5]; G.dirty = true; aReja(); }; });
+  $('gTpl').onclick = function(){ ['CKD','SKD'].forEach(function(x){ for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); G[x][i] = w < 5 ? '2' : w === 5 ? '1' : 'D'; } }); G.dirty = true; aReja(); };
+  $('gCopy').onclick = function(){ var pr = ymAdd(ym, -1); ['CKD','SKD'].forEach(function(x){ var g = grafikRaw(pr, x); for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); var src = g.filter(function(c, j){ return dow(pr + '-' + ('0'+(j+1)).slice(-2)) === w; })[0]; G[x][i] = src || G[x][i]; } }); G.dirty = true; aReja(); };
+  ['CKD','SKD'].forEach(function(x){ $('pl' + x).oninput = function(){ var w = wsum(x), v = +this.value; $('pd' + x).textContent = v && w ? f(v / w) + ' dona' : '—'; $('plT').value = (+$('plCKD').value || 0) + (+$('plSKD').value || 0) || ''; }; });
+  $('gSave').onclick = function(){
+    var btn = this; btn.disabled = true;
+    Promise.all([run('saveReja', S.pin, S.kim, ym, 'CKD', $('plCKD').value), run('saveReja', S.pin, S.kim, ym, 'SKD', $('plSKD').value),
+                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', G.CKD.join(',')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', G.SKD.join(','))])
+      .then(reload).then(function(){ S.gEdit = null; toast('Saqlandi: ' + OY[+ym.slice(5)-1] + ' rejasi va ish grafigi.'); aReja(); })
+      .catch(function(e){ btn.disabled = false; toast(e.message, true); });
+  };
+}
+function grafikRaw(ym, x){ var g = S.ix.graf[ym + '|' + x]; if (g && g.length === dim(ym)) return g; var out = []; for (var d = 1; d <= dim(ym); d++){ var w = dow(ym + '-' + ('0'+d).slice(-2)); out.push(w < 5 ? '2' : w === 5 ? '1' : 'D'); } return out; }
+
+function dropZone(id, label){
+  return '<label class="drop" id="' + id + '"><b>' + label + '</b>yoki bosib tanlang · .xlsx · bir nechta faylni birdan tashlash mumkin<input type="file" accept=".xlsx,.xls" multiple hidden></label><div id="' + id + 'Pv" style="display:grid;gap:10px;margin-top:12px"></div>';
+}
+function bindDrop(id){
+  var z = $(id), inp = z.querySelector('input');
+  var handle = function(files){ Array.prototype.forEach.call(files, function(file){ parseFile(file).then(function(p){ previewCard(id + 'Pv', p); }).catch(function(e){ toast(e.message, true); }); }); };
+  inp.onchange = function(){ handle(inp.files); inp.value = ''; };
+  z.ondragover = function(e){ e.preventDefault(); z.classList.add('over'); };
+  z.ondragleave = function(){ z.classList.remove('over'); };
+  z.ondrop = function(e){ e.preventDefault(); z.classList.remove('over'); handle(e.dataTransfer.files); };
+}
+function previewCard(boxId, p){
+  var box = $(boxId), card = document.createElement('div'); card.className = 'pv';
+  if (p.kind === 'mqs'){
+    var dates = {}, P = 0; p.rows.forEach(function(r){ dates[r[0].slice(0,10)] = 1; if (r[3] === 'Production') P++; });
+    var ds = Object.keys(dates).sort();
+    card.innerHTML = '<div class="h"><span>MQS · ' + esc(p.name) + '</span><span class="muted">' + p.rows.length + ' ta nuqson</span></div>' +
+      '<div class="muted small">Sana: ' + ds.map(nice).join(', ') + ' · ishlab chiqarish ' + P + ', ta\'minot ' + (p.rows.length - P) + '. Shu sanalarning avvalgi MQS ma\'lumoti yangi fayl bilan almashadi.</div>' +
+      '<div class="row"><button class="btn p">Tasdiqlash va yuklash</button><button class="btn">Bekor qilish</button></div>';
+    var bs = card.querySelectorAll('button');
+    bs[1].onclick = function(){ card.remove(); };
+    bs[0].onclick = function(){ bs[0].disabled = true; bs[0].textContent = 'Yuklanmoqda…';
+      run('uploadMqs', {pin:S.pin, kim:S.kim, fayl:p.name, rows:p.rows}).then(function(r){ card.innerHTML = '<div class="ok-t">✓ ' + esc(p.name) + ': ' + r.jami + ' ta nuqson yuklandi (' + r.sanalar.map(nice).join(', ') + ').</div>'; return reload(); })
+        .catch(function(e){ bs[0].disabled = false; bs[0].textContent = 'Tasdiqlash va yuklash'; toast(e.message, true); }); };
+  } else {
+    var mc = {}; p.rows.forEach(function(r){ mc[r[1]] = (mc[r[1]] || 0) + 1; });
+    var top = Object.keys(mc).sort(function(a, b){ return mc[b] - mc[a]; }).slice(0, 5).map(function(m){ return esc(m) + ' ' + mc[m]; }).join(' · ');
+    card.innerHTML = '<div class="h"><span>' + esc(p.name) + '</span><span class="muted">' + p.rows.length + ' ta avtomobil</span></div>' +
+      '<div class="row"><div class="f"><label>Turi</label><select class="pTur"><option value="630"' + (p.tur === '630' ? ' selected' : '') + '>630 · ishlab chiqarildi</option><option value="700"' + (p.tur === '700' ? ' selected' : '') + '>700 · omborga topshirildi</option></select></div>' +
+      '<div class="f"><label>Sex</label><select class="pSex"><option' + (p.sex === 'SKD' ? ' selected' : '') + '>SKD</option><option' + (p.sex === 'CKD' ? ' selected' : '') + '>CKD</option></select></div>' +
+      '<div class="f"><label>Sana</label><input type="date" class="pSana" value="' + p.sana + '"></div>' +
+      '<label class="row" style="align-items:center;gap:6px;font-weight:700;font-size:13px"><input type="checkbox" class="pBaza"> boshlang\'ich qoldiq (hech bir kunga sanalmasin)</label></div>' +
+      '<div class="muted small">Modellar: ' + top + '. VIN bo\'yicha har avtomobil bir marta sanaladi: avval kelgan avtomobillar takror hisoblanmaydi.</div>' +
+      '<div class="row"><button class="btn p">Tasdiqlash va yuklash</button><button class="btn">Bekor qilish</button></div>';
+    var b2 = card.querySelectorAll('button');
+    b2[1].onclick = function(){ card.remove(); };
+    b2[0].onclick = function(){
+      var tur = card.querySelector('.pTur').value, sex = card.querySelector('.pSex').value, sana = card.querySelector('.pSana').value, baza = card.querySelector('.pBaza').checked;
+      if (!tur || !sana){ toast('Turi va sanani tanlang.', true); return; }
+      b2[0].disabled = true; b2[0].textContent = 'Yuklanmoqda…';
+      run('uploadEvent', {pin:S.pin, kim:S.kim, tur:tur, sex:sex, sana:sana, baza:baza, fayl:p.name, rows:p.rows}).then(function(r){
+        card.innerHTML = '<div class="ok-t">✓ ' + esc(p.name) + ' (' + tur + ', ' + sex + ', ' + (baza ? 'boshlang\'ich qoldiq' : nice(sana)) + '): ' + r.jami + ' ta avtomobil, ' + r.yangi + ' tasi yangi' + (r.qayta ? ', ' + r.qayta + ' tasi shu sana uchun yangilandi' : '') + (r.takror ? ', ' + r.takror + ' tasi avval sanalgan' : '') + '.</div>';
+        return reload();
+      }).catch(function(e){ b2[0].disabled = false; b2[0].textContent = 'Tasdiqlash va yuklash'; toast(e.message, true); });
+    };
+  }
+  box.prepend(card);
+}
+
+function aNatija(){
+  var h = '<div class="card"><div class="ct"><h2>630 / 700 fayllarini yuklash</h2><span>fayl nomidan sana va tur aniqlanadi, masalan 630__04.11.2026.xlsx</span></div>' + dropZone('dzEv', 'Faylni shu yerga tashlang') + '</div>';
+  h += '<div class="card"><div class="ct"><h2>Kunlik natijani tuzatish</h2><span>xato bo\'lsa — qo\'lda o\'zgartiring</span></div><div class="row"><div class="f"><label>Sana</label><input type="date" id="tzS" value="' + S.sel + '"></div><div class="f"><label>Sex</label><select id="tzX"><option>SKD</option><option>CKD</option></select></div><button class="btn" id="tzLoad">Ochish</button></div><div id="tzBox" style="margin-top:12px"></div></div>';
+  h += '<div class="two"><div class="card"><div class="ct"><h2>O\'tgan oyni qo\'lda kiritish</h2><span>Excel bo\'lmagan oylar uchun</span></div><div class="form"><div class="row"><div class="f"><label>Oy</label><input type="month" id="oyM" value="' + ymAdd(S.sel.slice(0,7), -1) + '"></div><div class="f"><label>Sex</label><select id="oyX"><option>SKD</option><option>CKD</option></select></div></div>' +
+    '<div class="row"><div class="f"><label>630 jami</label><input type="number" min="0" id="oyA" class="ed"></div><div class="f"><label>700 jami</label><input type="number" min="0" id="oyB" class="ed"></div><div class="f"><label>MQS nuqson</label><input type="number" min="0" id="oyQ" class="ed"></div><div class="f"><label>Reja</label><input type="number" min="0" id="oyR" class="ed"></div></div>' +
+    '<div class="row"><button class="btn p" id="oySave">Oyni saqlash</button><span class="muted small">Panelda bu oy "qo\'lda" belgisi bilan ko\'rinadi. O\'sha oy uchun kunlik fayl yuklansa, kunlik ma\'lumot ustun bo\'ladi.</span></div></div></div>' +
+    '<div class="card"><div class="ct"><h2>Yuklangan fayllar</h2><span>oxirgi ' + S.data.fayllar.length + '</span></div><div style="overflow-x:auto;max-height:420px"><table class="t"><tr><th>Vaqt</th><th>Fayl</th><th>Tur</th><th>Sana</th><th>Qator</th><th>Yangi</th><th>Kim</th></tr>' +
+    S.data.fayllar.map(function(r){ return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + ' ' + esc(r[3]) + '</td><td>' + esc(r[4]) + '</td><td>' + esc(r[5]) + '</td><td>' + esc(r[6]) + '</td><td>' + esc(r[7]) + '</td></tr>'; }).join('') +
+    '</table></div><div class="muted small" style="margin-top:8px">Excel fayllar saytda saqlanmaydi, shuning uchun joy egallamaydi: faqat natijalar (har avtomobil bitta qator) Google jadvalda turadi.</div></div></div>';
+  $('amain').innerHTML = h;
+  bindDrop('dzEv');
+  var fillOy = function(){ var k = $('oyM').value + '|' + $('oyX').value, m = S.ix.oylik[k] || {}; $('oyA').value = m.a == null ? '' : m.a; $('oyB').value = m.b == null ? '' : m.b; $('oyQ').value = m.q == null ? '' : m.q; $('oyR').value = S.ix.reja[k] === undefined ? '' : S.ix.reja[k]; };
+  $('oyM').onchange = fillOy; $('oyX').onchange = fillOy; fillOy();
+  $('oySave').onclick = function(){ var oy = $('oyM').value, x = $('oyX').value; if (!oy){ toast('Oyni tanlang.', true); return; }
+    Promise.all([run('saveOylik', S.pin, S.kim, {oy:oy, sex:x, e630:$('oyA').value, e700:$('oyB').value, mqs:$('oyQ').value}), run('saveReja', S.pin, S.kim, oy, x, $('oyR').value)])
+      .then(reload).then(function(){ toast(OY[+oy.slice(5)-1] + ' ' + oy.slice(0,4) + ' (' + x + ') saqlandi.'); }).catch(function(e){ toast(e.message, true); }); };
+  $('tzLoad').onclick = function(){
+    var sana = $('tzS').value, sex = $('tzX').value; if (!sana) return;
+    $('tzBox').innerHTML = '<div class="loading">Yuklanmoqda…</div>';
+    run('getDay', sana, sex).then(function(d){
+      var ms = Object.keys(d).sort();
+      var row = function(m){ var o = d[m] || {a:0, b:0, ta:'', tb:''}; return '<tr data-m="' + esc(m) + '"><td>' + esc(m) + '</td><td>' + o.a + '</td><td><input class="ed" data-t="630" type="number" min="0" value="' + o.ta + '" placeholder="—"></td><td>' + o.b + '</td><td><input class="ed" data-t="700" type="number" min="0" value="' + o.tb + '" placeholder="—"></td></tr>'; };
+      $('tzBox').innerHTML = '<div style="overflow-x:auto"><table class="t" id="tzT"><tr><th>Model</th><th>630 (Excel)</th><th>630 tuzatish</th><th>700 (Excel)</th><th>700 tuzatish</th></tr>' + ms.map(row).join('') + '</table></div>' +
+        '<div class="row" style="margin-top:10px"><input id="tzNew" placeholder="yangi model nomi"><button class="btn" id="tzAdd">+ model</button><button class="btn p" id="tzSave">O\'zgarishlarni saqlash</button></div><div class="muted small" style="margin-top:6px">Tuzatish maydonini bo\'sh qoldirsangiz, Excel\'dagi raqam ishlatiladi. Excel\'ni qayta yuklasangiz ham tuzatish saqlanib qoladi.</div>';
+      $('tzAdd').onclick = function(){ var m = $('tzNew').value.trim(); if (!m) return; $('tzT').insertAdjacentHTML('beforeend', row(m)); $('tzNew').value = ''; };
+      $('tzSave').onclick = function(){
+        var list = [];
+        document.querySelectorAll('#tzT tr[data-m]').forEach(function(tr){ var m = tr.getAttribute('data-m'), o = d[m] || {ta:'', tb:''};
+          tr.querySelectorAll('input').forEach(function(inp){ var t = inp.getAttribute('data-t'), old = t === '630' ? o.ta : o.tb; if (String(inp.value) !== String(old)) list.push({sana:sana, sex:sex, model:m, tur:t, son:inp.value}); }); });
+        if (!list.length){ toast('O\'zgarish yo\'q.'); return; }
+        run('saveTuzatish', S.pin, S.kim, list).then(reload).then(function(){ toast(nice(sana) + ' (' + sex + '): ' + list.length + ' ta tuzatish saqlandi.'); $('tzLoad').onclick(); }).catch(function(e){ toast(e.message, true); });
+      };
+    }).catch(function(e){ toast(e.message, true); });
+  };
+}
+
+function aMqs(){
+  $('amain').innerHTML = '<div class="card"><div class="ct"><h2>MQS faylini yuklash</h2><span>"Prod team": Production = ishlab chiqarish, Supplier = ta\'minot</span></div>' + dropZone('dzMq', 'MQS faylini shu yerga tashlang') + '</div><div id="aMqsSec"></div>';
+  bindDrop('dzMq');
+  renderMqsSection($('aMqsSec'));
+}
+function aTarjima(){
+  $('amain').innerHTML = '<div class="card"><div class="loading">Yuklanmoqda…</div></div>';
+  run('getTarjima').then(function(list){
+    $('amain').innerHTML = '<div class="card"><div class="ct"><h2>Nuqson nomlari (tarjima)</h2><span>faylda o\'zbekcha nom bo\'lmasa, shu ro\'yxatdan olinadi</span></div><div style="overflow-x:auto"><table class="t" id="trT"><tr><th>Fault name (fayldagi)</th><th>O\'zbekcha nomi</th></tr>' +
+      list.map(function(r){ return '<tr><td>' + esc(r[0]) + '</td><td><input style="width:100%" value="' + esc(r[1]) + '" placeholder="tarjima yozing"></td></tr>'; }).join('') +
+      '</table></div><div class="row" style="margin-top:12px"><button class="btn p" id="trSave">Saqlash</button><span class="muted small">O\'zgarish o\'tgan sanalarga ham darhol qo\'llanadi.</span></div></div>';
+    $('trSave').onclick = function(){ var out = []; document.querySelectorAll('#trT tr').forEach(function(tr, i){ if (!i) return; out.push([tr.cells[0].textContent, tr.querySelector('input').value.trim()]); });
+      run('saveTarjima', S.pin, S.kim, out).then(function(){ toast('Tarjimalar saqlandi.'); }).catch(function(e){ toast(e.message, true); }); };
+  }).catch(function(e){ toast(e.message, true); });
+}
+function aTarix(){
+  $('amain').innerHTML = '<div class="card"><div class="loading">Yuklanmoqda…</div></div>';
+  run('getTarix', S.pin).then(function(list){
+    $('amain').innerHTML = '<div class="card"><div class="ct"><h2>O\'zgarishlar tarixi</h2><span>oxirgi ' + list.length + '</span></div><div style="overflow-x:auto"><table class="t"><tr><th>Vaqt</th><th>Kim</th><th>Amal</th><th>Tafsilot</th></tr>' +
+      list.map(function(r){ return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>'; }).join('') + '</table></div></div>';
+  }).catch(function(e){ toast(e.message, true); });
+}
+function aPin(){
+  $('amain').innerHTML = '<div class="card" style="max-width:480px"><div class="ct"><h2>PIN-kodni o\'zgartirish</h2></div><div class="form"><div class="f"><label>Joriy PIN</label><input type="password" id="pOld"></div><div class="f"><label>Yangi PIN</label><input type="password" id="pNew"></div><button class="btn p" id="pGo">O\'zgartirish</button><div class="muted small">Yangi PIN-kodni yurituvchilarga ayting. Eski PIN darhol ishlamay qoladi.</div></div></div>';
+  $('pGo').onclick = function(){ var n = $('pNew').value; run('setPin', $('pOld').value, n, S.kim).then(function(){ S.pin = n; toast('PIN o\'zgartirildi.'); }).catch(function(e){ toast(e.message, true); }); };
+}
+
+/* ---------------- ko'rinish almashinuvi */
+function show(v){
+  S.view = v;
+  $('panel').hidden = v !== 'panel'; $('admin').hidden = v !== 'admin';
+  $('tabPanel').classList.toggle('on', v === 'panel'); $('tabAdmin').classList.toggle('on', v === 'admin');
+  $('sexSeg').hidden = v !== 'panel';
+  if (v === 'panel') renderPanel(); else renderAdmin();
+}
+$('tabPanel').onclick = function(){ show('panel'); };
+$('tabAdmin').onclick = function(){ show('admin'); };
+$('tabAdmin').hidden = !window.SHOW_ADMIN;
+document.querySelectorAll('#sexSeg button').forEach(function(b){ b.onclick = function(){ S.sex = b.getAttribute('data-s'); document.querySelectorAll('#sexSeg button').forEach(function(x){ x.classList.toggle('on', x === b); }); renderPanel(); }; });
+
+run('getData').then(function(d){
+  S.data = d; index();
+  var past = S.ix.dates.filter(function(x){ return x <= d.bugun; });
+  S.sel = past.length ? past[past.length-1] : d.bugun;
+  show(window.SHOW_ADMIN && location.hash === '#boshqaruv' ? 'admin' : 'panel');
+}).catch(function(e){ $('panel').innerHTML = '<div class="empty">Ma\'lumot o\'qilmadi: ' + esc(e.message) + '</div>'; });
+})();
+</script>
+</body>
+</html>
