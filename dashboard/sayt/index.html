@@ -255,6 +255,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
 @media (prefers-reduced-motion:reduce){.ghost{display:none}.enter>*,.enter .card,.enter .cat{animation:none!important}}
 @media (max-width:700px){#panel,#admin{padding:12px;border-radius:22px}}
 .ev .n{white-space:nowrap;font-size:clamp(30px,3.4vw,54px)}.dark .ev .n{font-size:clamp(28px,2.9vw,44px)}
+.rt th,.rt td{text-align:right;white-space:nowrap}.rt th:first-child,.rt td:first-child{text-align:left}.rt .dh{text-align:center;border-bottom:1px solid var(--line)}.rt .mh{background:rgba(47,99,255,.08);border-radius:8px 8px 0 0}.rt tr.tot td{border-top:2px solid var(--ink);font-weight:800}.rt td{font-size:14px}
 </style>
 </head>
 <body>
@@ -395,6 +396,7 @@ function renderPanel(){
     scard(false, 'Oy', OY[+ym.slice(5)-1] + ' · ' + nice(D) + 'gacha', ms.a, ms.b, mp, pm, 'bugungacha reja', pm ? 'kuniga kerak: <b>' + f(need) + '</b>' + (ms.manual ? ' · qo\'lda' : '') : '', ms.q) +
     scard(true, 'Yil', y + (yfull ? ' · reja ' + f(yfull) : ''), ya, yb, yp, yfull, 'bugungacha reja', yfull ? 'bajarildi: <b>' + (ya / yfull * 100).toFixed(1) + '%</b>' : '', yq) +
     '</div>';
+  h += recentBlock(D);
   h += '<div class="mid">' + calendar(ym, today) + '<div class="card det" id="dayDet">' + dayDetail(D) + '</div></div>';
   h += yearStrip(y, ym, today);
   h += '<div id="mqsSec"></div>';
@@ -459,6 +461,43 @@ function yearStrip(y, ym, today){
   return h + '</div></div>';
 }
 
+
+/* ---------------- oxirgi 3 kun + oy bo'yicha holat (CKD, SKD, Jami) */
+function dayPlanSex(date, x){
+  var ym = date.slice(0,7), d = +date.slice(8), pm = S.ix.reja[ym + '|' + x] || 0; if (!pm) return 0;
+  var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + W[c]; }, 0);
+  return tot ? pm * W[g[d-1]] / tot : 0;
+}
+function factSex(date, x){ var o = (S.ix.day[date] || {})[x]; return o ? {a:o.a, b:o.b, has:true} : {a:0, b:0, has:false}; }
+function last3(D){
+  var out = [], d = parseD(D), guard = 0;
+  while (out.length < 3 && guard++ < 40){
+    var ds = ymd(d), work = ['CKD','SKD'].some(function(x){ return dayPlanSex(ds, x) > 0 || factSex(ds, x).has; });
+    if (work) out.unshift(ds);
+    d.setDate(d.getDate() - 1);
+  }
+  return out;
+}
+function diffCell(v, pl){ if (!pl) return '<span class="muted">—</span>'; var df = Math.round(v - pl); return '<b class="' + (df >= 0 ? 'ok-t' : 'bad-t') + '">' + sg(df) + '</b>'; }
+function recentBlock(D){
+  var days = last3(D), ym = D.slice(0,7), rows = [['CKD','CKD','var(--ckd)'],['SKD','SKD','var(--skd)'],['Jami',null,'var(--ink)']];
+  var get = function(ds, x){ var xs = x ? [x] : ['CKD','SKD'], a = 0, b = 0, pl = 0;
+    xs.forEach(function(k){ var v = factSex(ds, k); a += v.a; b += v.b; pl += dayPlanSex(ds, k); }); return {a:a, b:b, pl:pl}; };
+  var mtd = function(x){ var xs = x ? [x] : ['CKD','SKD'], a = 0, b = 0, pl = 0, pm = 0;
+    xs.forEach(function(k){ pm += S.ix.reja[ym + '|' + k] || 0;
+      for (var d = 1; d <= +D.slice(8); d++){ var ds = ym + '-' + ('0'+d).slice(-2), v = factSex(ds, k); a += v.a; b += v.b; pl += dayPlanSex(ds, k); } });
+    return {a:a, b:b, pl:pl, pm:pm}; };
+  var h = '<div class="card"><div class="ct"><h2>Oxirgi 3 kun va oy holati</h2><span>' + OY[+ym.slice(5)-1] + ' rejasi bo\'yicha ' + nice(D) + 'gacha</span></div><div style="overflow-x:auto"><table class="t rt"><tr><th rowspan="2">Sex</th>' +
+    days.map(function(ds){ return '<th colspan="3" class="dh">' + nice(ds) + ', ' + WD[dow(ds)] + '</th>'; }).join('') + '<th colspan="4" class="dh mh">Oy boshidan</th></tr><tr>' +
+    days.map(function(){ return '<th>630</th><th>700</th><th>farq</th>'; }).join('') + '<th>630</th><th>reja</th><th>holat</th><th>oylik reja</th></tr>';
+  rows.forEach(function(r){
+    var m = mtd(r[1]), df = Math.round(m.a - m.pl);
+    h += '<tr' + (r[1] ? '' : ' class="tot"') + '><td><span class="tag" style="background:' + r[2] + '">' + r[0] + '</span></td>' +
+      days.map(function(ds){ var v = get(ds, r[1]); return '<td>' + f(v.a) + '</td><td class="muted">' + f(v.b) + '</td><td>' + diffCell(v.a, v.pl) + '</td>'; }).join('') +
+      '<td><b>' + f(m.a) + '</b></td><td>' + (m.pl ? f(m.pl) : '—') + '</td><td>' + (m.pm ? '<span class="chip ' + (df >= 0 ? 'ok' : 'bad') + '">' + sg(df) + ' ' + (df >= 0 ? 'oldinda' : 'orqada') + '</span>' : '<span class="muted small">reja yo\'q</span>') + '</td><td>' + (m.pm ? f(m.pm) + ' <span class="muted small">(' + Math.round(m.a / m.pm * 100) + '%)</span>' : '—') + '</td></tr>';
+  });
+  return h + '</table></div><div class="muted small" style="margin-top:8px">farq = 630 − o\'sha kungi reja (ish grafigidan). Holat = oy boshidan 630 − bugungacha reja.</div></div>';
+}
 /* ---------------- MQS qismi */
 function mqsRange(){
   var D = S.sel, m = S.mq.mode;
