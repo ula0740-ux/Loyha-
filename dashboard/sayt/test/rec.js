@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
   const p = await c.newPage();
   const w = t => p.waitForTimeout(t);
   await p.goto('http://127.0.0.1:8790/'); await p.waitForSelector('.score'); await w(900);
-  for (const s of ['CKD', 'SKD', 'ALL']) { await p.click(`#sexSeg button[data-s="${s}"]`); await w(900); }
+  for (const s of ['SKD', 'CKD']) { await p.click(`#sexSeg button[data-s="${s}"]`); await w(900); }
   await p.click('#tabAdmin'); await w(800);
   await p.fill('#lgKim', 'Sinov'); await p.fill('#lgPin', '1234'); await p.click('#lgGo'); await w(1000);
   for (const a of ['natija', 'mqs', 'tarix', 'reja']) { await p.click(`.side button[data-a="${a}"]`); await w(900); }

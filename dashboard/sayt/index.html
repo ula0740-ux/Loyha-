@@ -265,6 +265,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
 .r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}@media (max-width:1100px){.r2{grid-template-columns:minmax(0,1fr)}}
 #pmain{display:grid;gap:18px;min-width:0}
 .seg.gl>button{color:rgba(255,255,255,.82)}.seg.gl>button.on{color:#fff}
+.rcb{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}
 </style>
 </head>
 <body>
@@ -278,7 +279,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
       </div>
     </div>
     <div class="row" id="topRight">
-      <div class="seg gl" id="sexSeg"><button data-s="ALL" class="on">Jami</button><button data-s="CKD">CKD</button><button data-s="SKD">SKD</button></div>
+      <div class="seg gl" id="sexSeg"><button data-s="CKD" class="on">CKD sexi</button><button data-s="SKD">SKD sexi</button></div>
     </div>
   </div>
 
@@ -319,7 +320,7 @@ function nice(s){ var d = parseD(s); return d.getDate() + '-' + OY[d.getMonth()]
 function ymAdd(ym, k){ var p = ym.split('-'); var d = new Date(+p[0], +p[1]-1+k, 1); return ymd(d).slice(0,7); }
 
 /* ---------------- holat */
-var S = { data:null, sex:'ALL', sel:null, view:'panel', mq:{mode:'kun', from:'', to:''},
+var S = { data:null, sex:'CKD', sel:null, view:'panel', mq:{mode:'kun', from:'', to:''},
           pin:null, kim:'', aview:'reja', amonth:null, ix:null, gEdit:null };
 
 function index(){
@@ -507,12 +508,12 @@ function ring(c, col){
 function recentChart(title, col, xs, days){
   var data = days.map(function(ds){ var a = 0, pl = 0; xs.forEach(function(k){ a += factSex(ds, k).a; pl += dayPlanSex(ds, k); }); return {ds:ds, a:a, pl:pl}; });
   var last = days[days.length-1], c = cumTo(last, xs);
-  var W0 = 300, H0 = 190, P = {l:6, r:6, t:22, b:24}, iw = W0 - P.l - P.r, ih = H0 - P.t - P.b;
+  var W0 = 760, H0 = 200, P = {l:6, r:6, t:22, b:24}, iw = W0 - P.l - P.r, ih = H0 - P.t - P.b;
   var mx = Math.max.apply(null, data.map(function(x){ return Math.max(x.a, x.pl); }).concat([1])) * 1.12;
   var Y = function(v){ return P.t + ih - v / mx * ih; }, bw = iw / data.length, g = '';
   g += '<line x1="' + P.l + '" x2="' + (W0-P.r) + '" y1="' + (P.t+ih) + '" y2="' + (P.t+ih) + '" stroke="rgba(12,26,43,.25)"/>';
   data.forEach(function(x, i){
-    var cx = P.l + i * bw + bw / 2, w = Math.min(30, bw * .3);
+    var cx = P.l + i * bw + bw / 2, w = Math.min(46, bw * .22);
     var hp = P.t + ih - Y(x.pl), ha = P.t + ih - Y(x.a);
     g += '<rect class="gb" x="' + (cx - w - 2) + '" y="' + Y(x.pl) + '" width="' + w + '" height="' + Math.max(hp, 0) + '" rx="5" fill="#7d8fa3"/>';
     g += '<rect class="gb" x="' + (cx + 2) + '" y="' + Y(x.a) + '" width="' + w + '" height="' + Math.max(ha, 0) + '" rx="5" fill="' + (x.pl && x.a < x.pl ? 'var(--bad)' : col) + '"/>';
@@ -526,8 +527,8 @@ function recentChart(title, col, xs, days){
 }
 function recentBlock(D){
   var days = last3(D);
-  return '<div><div class="sect" style="margin:0 0 12px"><h2>Oxirgi 3 kun · reja va fakt</h2><div class="leg" style="margin:0"><span><i style="background:#7d8fa3"></i>reja</span><span><i style="background:var(--c630)"></i>fakt (630)</span><span><i style="background:var(--bad)"></i>rejadan kam</span><span>aylana: oy boshidan shu kungacha</span></div></div>' +
-    '<div class="r2">' + recentChart('CKD', 'var(--ckd)', ['CKD'], days) + recentChart('SKD', 'var(--skd)', ['SKD'], days) + '</div></div>';
+  return '<div><div class="sect" style="margin:0 0 12px"><h2>Oxirgi 3 kun · reja va fakt · ' + S.sex + '</h2><div class="leg" style="margin:0"><span><i style="background:#7d8fa3"></i>reja</span><span><i style="background:var(--c630)"></i>fakt (630)</span><span><i style="background:var(--bad)"></i>rejadan kam</span><span>aylana: oy boshidan shu kungacha</span></div></div>' +
+    '<div>' + (S.sex === 'SKD' ? recentChart('SKD sexi', 'var(--skd)', ['SKD'], days) : recentChart('CKD sexi', 'var(--ckd)', ['CKD'], days)) + '</div></div>';
 }
 /* ---------------- MQS qismi */
 function mqsRange(){
