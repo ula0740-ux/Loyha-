@@ -262,6 +262,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradi
 .rcb{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px;align-items:center}.rgw{display:grid;gap:6px;justify-items:center}.ring{width:100%;max-width:150px}.rv{font:900 26px var(--disp)}.okf{fill:var(--ok)}.badf{fill:var(--bad)}.rc .ax{font:600 11px var(--body);fill:#5d6b7c}.rc .bv{font:800 12px var(--body);fill:#0c1a2b}
 .grow .rg{animation:ringIn 1.1s cubic-bezier(.22,1,.36,1) both}@keyframes ringIn{from{stroke-dasharray:0 400}}
 .grow .rc .gb{transform-origin:bottom}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}@media (max-width:1100px){.r2{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -518,7 +519,7 @@ function recentChart(title, col, xs, days){
 function recentBlock(D){
   var days = last3(D);
   return '<div><div class="sect" style="margin:0 0 12px"><h2>Oxirgi 3 kun · reja va fakt</h2><div class="leg" style="margin:0"><span><i style="background:#7d8fa3"></i>reja</span><span><i style="background:var(--c630)"></i>fakt (630)</span><span><i style="background:var(--bad)"></i>rejadan kam</span><span>aylana: oy boshidan shu kungacha</span></div></div>' +
-    '<div class="r3">' + recentChart('CKD', 'var(--ckd)', ['CKD'], days) + recentChart('SKD', 'var(--skd)', ['SKD'], days) + recentChart('Jami', '#0c1a2b', ['CKD','SKD'], days) + '</div></div>';
+    '<div class="r2">' + recentChart('CKD', 'var(--ckd)', ['CKD'], days) + recentChart('SKD', 'var(--skd)', ['SKD'], days) + '</div></div>';
 }
 /* ---------------- MQS qismi */
 function mqsRange(){
