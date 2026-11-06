@@ -344,6 +344,12 @@ body::before{animation:none!important;filter:none!important}
 @keyframes frostIn2{0%{opacity:0;transform:translateX(16px)}100%{opacity:1;transform:none}}
 @keyframes ghostOut{0%{opacity:1}100%{opacity:0;transform:translateX(-16px)}}
 input.cell{width:100%;padding:0;text-align:center;font:900 15px var(--disp);border:0;-moz-appearance:textfield}input.cell::-webkit-outer-spin-button,input.cell::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}input.cell:focus{outline:2.5px solid var(--c630);outline-offset:1px}input.cell.sD{border:1.5px dashed #cfd6df}
+input.cell{height:52px;font-size:14px;letter-spacing:-.02em;cursor:text;transition:outline-color .15s}
+input.cell.chg{outline:2.5px solid #2f63ff;outline-offset:1px;box-shadow:0 0 0 4px rgba(47,99,255,.15)}
+input.cell.bad{outline:2.5px solid var(--bad)!important}
+.gbar{position:sticky;bottom:12px;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.12);font-size:14px;color:var(--muted)}
+.gbar.on{border-color:#2f63ff;color:var(--ink)}
+.gbar .btn:disabled{opacity:.45}
 </style>
 </head>
 <body>
@@ -739,41 +745,75 @@ function reload(){ MQC = {}; return run('getData').then(function(d){ S.data = d;
 
 function aReja(){
   var ym = S.amonth || S.sel.slice(0,7); S.amonth = ym;
-  if (!S.gEdit || S.gEdit.ym !== ym) S.gEdit = {ym: ym, CKD: grafikRaw(ym, 'CKD').slice(), SKD: grafikRaw(ym, 'SKD').slice(), dirty:false};
+  var pv = function(x){ var v = S.ix.reja[ym + '|' + x]; return v === undefined ? '' : String(v); };
+  if (!S.gEdit || S.gEdit.ym !== ym){
+    var o = {CKD: grafikRaw(ym, 'CKD').map(Number), SKD: grafikRaw(ym, 'SKD').map(Number)};
+    S.gEdit = {ym: ym, CKD: o.CKD.slice(), SKD: o.SKD.slice(), orig: o, plan: {CKD: pv('CKD'), SKD: pv('SKD')}, plan0: {CKD: pv('CKD'), SKD: pv('SKD')}};
+  }
   var G = S.gEdit, n = dim(ym);
   var wsum = function(x){ return G[x].reduce(function(a, c){ return a + (+c || 0); }, 0); };
   var wdays = function(x){ return G[x].filter(function(c){ return +c > 0; }).length; };
-  var pv = function(x){ var v = S.ix.reja[ym + '|' + x]; return v === undefined ? '' : v; };
+  var cls = function(v){ return v <= 0 ? 'sD' : v < 8 ? 'sQ' : v < 16 ? 's1' : 's2'; };
   var h = '<div class="card"><div class="ct"><h2>Oylik reja</h2><div class="calnav"><button id="rPrev">‹</button><b style="padding:0 8px">' + OY[+ym.slice(5)-1] + ' ' + ym.slice(0,4) + '</b><button id="rNext">›</button></div></div><div class="plans">' +
-    ['CKD','SKD'].map(function(x){ var w = wsum(x); return '<div class="pl ' + (x === 'CKD' ? 'c' : 's') + '"><div class="h">' + x + ' sexi<span>' + wdays(x) + ' ish kuni · ' + f(w) + ' soat</span></div><input id="pl' + x + '" type="number" min="0" step="1" value="' + pv(x) + '" placeholder="—"><div class="r">soatiga reja<b id="pd' + x + '">' + (pv(x) && w ? (pv(x) / w).toFixed(1) + ' dona' : '—') + '</b></div></div>'; }).join('') +
-    '<div class="pl t"><div class="h">Jami zavod<span>avtomatik</span></div><input disabled id="plT" value="' + ((+pv('CKD') || 0) + (+pv('SKD') || 0) || '') + '"><div class="r">kunlik reja ish grafigidan hisoblanadi<b></b></div></div></div></div>';
-  h += '<div class="card"><div class="ct"><h2>Ish grafigi · soat</h2><span>har kunga necha soat ishlashini yozing · 0 = dam olish</span></div><div style="overflow-x:auto"><div class="sch"><div></div>';
+    ['CKD','SKD'].map(function(x){ return '<div class="pl ' + (x === 'CKD' ? 'c' : 's') + '"><div class="h">' + x + ' sexi<span id="ps' + x + '"></span></div><input id="pl' + x + '" type="text" inputmode="numeric" value="' + G.plan[x] + '" placeholder="—"><div class="r">soatiga reja<b id="pd' + x + '">—</b></div></div>'; }).join('') +
+    '<div class="pl t"><div class="h">Jami zavod<span>avtomatik</span></div><input disabled id="plT"><div class="r">kunlik reja ish grafigidan hisoblanadi<b></b></div></div></div></div>';
+  h += '<div class="card"><div class="ct"><h2>Ish grafigi · soat</h2><span>katakka bosing va soatni yozing · Enter / ← → ↑ ↓ bilan yuring · 0 yoki bo\'sh = dam olish</span></div>' +
+    '<div class="row" style="margin-bottom:12px;align-items:center;gap:8px"><span style="font-weight:700">Tez to\'ldirish:</span><label class="small muted">Du–Ju <input id="tWd" type="text" inputmode="decimal" value="' + TPL.wd + '" style="width:64px"> soat</label><label class="small muted">Sh <input id="tSh" type="text" inputmode="decimal" value="' + TPL.sh + '" style="width:64px"> soat</label><span class="small muted">Ya dam</span>' +
+    '<select id="tSx"><option value="both">ikkala sex</option><option value="CKD">faqat CKD</option><option value="SKD">faqat SKD</option></select><button class="btn" id="gTpl">Qo\'llash</button><button class="btn" id="gCopy">O\'tgan oydan nusxa</button></div>' +
+    '<div style="overflow-x:auto"><div class="sch"><div></div>';
   for (var d = 1; d <= 31; d++){ if (d > n){ h += '<div></div>'; continue; } var w = dow(ym + '-' + ('0'+d).slice(-2)); h += '<div class="hd' + (w === 6 ? ' we' : '') + '"><b>' + d + '</b>' + WD[w] + '</div>'; }
-  ['CKD','SKD'].forEach(function(x){
-    h += '<div class="rl">' + x + ' sexi<span>' + wdays(x) + ' kun · ' + f(wsum(x)) + ' soat</span></div>';
-    for (var d2 = 1; d2 <= 31; d2++){ if (d2 > n){ h += '<div></div>'; continue; } var c = +G[x][d2-1] || 0, cl = c <= 0 ? 'sD' : c < 8 ? 'sQ' : c < 16 ? 's1' : 's2'; h += '<input class="cell ' + cl + '" type="number" min="0" max="24" step="0.5" inputmode="decimal" data-g="' + x + '|' + (d2-1) + '" value="' + (c || '') + '" placeholder="" aria-label="' + x + ' ' + d2 + '-kun, soat">'; }
+  ['CKD','SKD'].forEach(function(x, r){
+    h += '<div class="rl">' + x + ' sexi<span id="rs' + x + '"></span></div>';
+    for (var d2 = 1; d2 <= 31; d2++){ if (d2 > n){ h += '<div></div>'; continue; } var c = +G[x][d2-1] || 0;
+      h += '<input class="cell ' + cls(c) + (c !== G.orig[x][d2-1] ? ' chg' : '') + '" type="text" inputmode="decimal" maxlength="4" autocomplete="off" data-x="' + x + '" data-r="' + r + '" data-i="' + (d2-1) + '" value="' + (c || '') + '" aria-label="' + x + ' ' + d2 + '-kun, soat">'; }
   });
-  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>16 soat va ko\'p</span><span><i style="background:#cfe7da"></i>8–15 soat</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>8 soatdan kam</span><span><i style="border:1.5px dashed #b9c3cf"></i>0 · dam olish</span><span>kunlik reja shu soatlarga mutanosib taqsimlanadi</span></div>' +
-    '<div class="row" style="margin-top:14px;align-items:center"><span style="font-weight:700">Shablon:</span><label class="small muted">Du–Ju <input id="tWd" type="number" min="0" max="24" step="0.5" value="' + TPL.wd + '" style="width:70px"> soat</label><label class="small muted">Sh <input id="tSh" type="number" min="0" max="24" step="0.5" value="' + TPL.sh + '" style="width:70px"> soat</label><span class="small muted">Ya dam</span><button class="btn" id="gTpl">Shablonni qo\'llash</button><button class="btn" id="gCopy">O\'tgan oydan nusxa olish</button><button class="btn p" id="gSave">Reja va grafikni saqlash</button></div></div>';
+  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>16 soat va ko\'p</span><span><i style="background:#cfe7da"></i>8–15 soat</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>8 soatdan kam</span><span><i style="border:1.5px dashed #b9c3cf"></i>dam olish</span><span><i style="outline:2px solid #2f63ff"></i>o\'zgartirilgan, hali tasdiqlanmagan</span></div></div>';
+  h += '<div class="gbar" id="gBar"><span id="gCnt"></span><div class="row"><button class="btn" id="gUndo">Bekor qilish</button><button class="btn p" id="gSave">✓ Tasdiqlash va saqlash</button></div></div>';
   $('amain').innerHTML = h;
-  $('rPrev').onclick = function(){ S.amonth = ymAdd(ym, -1); aReja(); }; $('rNext').onclick = function(){ S.amonth = ymAdd(ym, 1); aReja(); };
-  document.querySelectorAll('input[data-g]').forEach(function(b){
-    b.onfocus = function(){ b.select(); };
-    b.onchange = function(){ var p = b.getAttribute('data-g').split('|'), v = Math.min(24, Math.max(0, Math.round((+b.value || 0) * 2) / 2)); G[p[0]][+p[1]] = v; G.dirty = true;
-      b.value = v || ''; b.className = 'cell ' + (v <= 0 ? 'sD' : v < 8 ? 'sQ' : v < 16 ? 's1' : 's2');
-      ['CKD','SKD'].forEach(function(x){ var w = wsum(x), pvv = +$('pl' + x).value; $('pd' + x).textContent = pvv && w ? (pvv / w).toFixed(1) + ' dona' : '—'; }); };
-    b.onkeydown = function(e){ if (e.key === 'Enter'){ b.onchange(); var nx = b.nextElementSibling; while (nx && nx.tagName !== 'INPUT') nx = nx.nextElementSibling; if (nx) nx.focus(); } };
-  });
-  $('gTpl').onclick = function(){ TPL.wd = Math.min(24, Math.max(0, +$('tWd').value || 0)); TPL.sh = Math.min(24, Math.max(0, +$('tSh').value || 0)); ['CKD','SKD'].forEach(function(x){ for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); G[x][i] = w < 5 ? TPL.wd : w === 5 ? TPL.sh : 0; } }); G.dirty = true; aReja(); };
-  $('gCopy').onclick = function(){ var pr = ymAdd(ym, -1); ['CKD','SKD'].forEach(function(x){ var g = grafikRaw(pr, x); for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); var src = g.filter(function(c, j){ return dow(pr + '-' + ('0'+(j+1)).slice(-2)) === w; })[0]; G[x][i] = src || G[x][i]; } }); G.dirty = true; aReja(); };
-  ['CKD','SKD'].forEach(function(x){ $('pl' + x).oninput = function(){ var w = wsum(x), v = +this.value; $('pd' + x).textContent = v && w ? (v / w).toFixed(1) + ' dona' : '—'; $('plT').value = (+$('plCKD').value || 0) + (+$('plSKD').value || 0) || ''; }; });
-  $('gSave').onclick = function(){
-    var btn = this; btn.disabled = true;
-    Promise.all([run('saveReja', S.pin, S.kim, ym, 'CKD', $('plCKD').value), run('saveReja', S.pin, S.kim, ym, 'SKD', $('plSKD').value),
-                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', 'h:' + G.CKD.join(',')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', 'h:' + G.SKD.join(','))])
-      .then(reload).then(function(){ S.gEdit = null; toast('Saqlandi: ' + OY[+ym.slice(5)-1] + ' rejasi va ish grafigi.'); aReja(); })
-      .catch(function(e){ btn.disabled = false; toast(e.message, true); });
+
+  var changes = function(){ var c = 0; ['CKD','SKD'].forEach(function(x){ G[x].forEach(function(v, i){ if (+v !== +G.orig[x][i]) c++; }); if (String(G.plan[x]) !== String(G.plan0[x])) c++; }); return c; };
+  var refresh = function(){
+    ['CKD','SKD'].forEach(function(x){ var w = wsum(x), p = +G.plan[x] || 0;
+      $('ps' + x).textContent = wdays(x) + ' ish kuni · ' + f(w) + ' soat'; $('rs' + x).textContent = wdays(x) + ' kun · ' + f(w) + ' soat';
+      $('pd' + x).textContent = p && w ? (p / w).toFixed(1) + ' dona' : '—'; });
+    $('plT').value = (+G.plan.CKD || 0) + (+G.plan.SKD || 0) || '';
+    var c = changes(); $('gCnt').innerHTML = c ? '<b>' + c + ' ta o\'zgarish</b> — hali saqlanmagan. Hammasini o\'zgartirib bo\'lgach, tasdiqlang.' : 'O\'zgarish yo\'q';
+    $('gBar').classList.toggle('on', c > 0); $('gSave').disabled = !c; $('gUndo').disabled = !c;
   };
+  var parse = function(t){ t = String(t).replace(',', '.').trim(); if (t === '') return 0; var v = +t; if (!isFinite(v)) return null; return Math.min(24, Math.max(0, Math.round(v * 2) / 2)); };
+  var cells = Array.prototype.slice.call(document.querySelectorAll('input.cell'));
+  var at = function(r, i){ return cells.filter(function(c){ return +c.getAttribute('data-r') === r && +c.getAttribute('data-i') === i; })[0]; };
+  cells.forEach(function(b){
+    var x = b.getAttribute('data-x'), r = +b.getAttribute('data-r'), i = +b.getAttribute('data-i');
+    b.onfocus = function(){ b.select(); };
+    b.oninput = function(){ var v = parse(b.value); if (v === null){ b.classList.add('bad'); return; } b.classList.remove('bad');
+      G[x][i] = v; b.className = 'cell ' + cls(v) + (v !== G.orig[x][i] ? ' chg' : ''); refresh(); };
+    b.onblur = function(){ var v = parse(b.value); if (v === null) v = G[x][i]; b.value = v || ''; b.classList.remove('bad'); };
+    b.onkeydown = function(e){
+      var t = null;
+      if (e.key === 'Enter' || (e.key === 'ArrowRight' && b.selectionStart === b.value.length)) t = at(r, i + 1) || at(r + 1, 0);
+      else if (e.key === 'ArrowLeft' && b.selectionStart === 0) t = at(r, i - 1);
+      else if (e.key === 'ArrowDown') t = at(r + 1, i); else if (e.key === 'ArrowUp') t = at(r - 1, i);
+      if (t){ e.preventDefault(); t.focus(); }
+    };
+  });
+  ['CKD','SKD'].forEach(function(x){ $('pl' + x).oninput = function(){ G.plan[x] = this.value.replace(/[^\d]/g, ''); if (this.value !== G.plan[x]) this.value = G.plan[x]; refresh(); }; });
+  var guard = function(go){ if (changes()){ toast('Avval o\'zgarishlarni tasdiqlang yoki bekor qiling.', true); return; } go(); };
+  $('rPrev').onclick = function(){ guard(function(){ S.amonth = ymAdd(ym, -1); aReja(); }); };
+  $('rNext').onclick = function(){ guard(function(){ S.amonth = ymAdd(ym, 1); aReja(); }); };
+  $('gTpl').onclick = function(){ var a = parse($('tWd').value), b = parse($('tSh').value); if (a === null || b === null){ toast('Soatni raqam bilan yozing.', true); return; }
+    TPL.wd = a; TPL.sh = b; var sx = $('tSx').value, xs = sx === 'both' ? ['CKD','SKD'] : [sx];
+    xs.forEach(function(x){ for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); G[x][i] = w < 5 ? a : w === 5 ? b : 0; } }); aReja(); };
+  $('gCopy').onclick = function(){ var pr = ymAdd(ym, -1); ['CKD','SKD'].forEach(function(x){ var g = grafikRaw(pr, x).map(Number); for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); var src = g.filter(function(c, j){ return dow(pr + '-' + ('0'+(j+1)).slice(-2)) === w; })[0]; if (src !== undefined) G[x][i] = src; } }); aReja(); };
+  $('gUndo').onclick = function(){ S.gEdit = null; aReja(); toast('O\'zgarishlar bekor qilindi.'); };
+  $('gSave').onclick = function(){
+    var btn = this; btn.disabled = true; btn.textContent = 'Saqlanmoqda…';
+    Promise.all([run('saveReja', S.pin, S.kim, ym, 'CKD', G.plan.CKD), run('saveReja', S.pin, S.kim, ym, 'SKD', G.plan.SKD),
+                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', 'h:' + G.CKD.join(',')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', 'h:' + G.SKD.join(','))])
+      .then(reload).then(function(){ S.gEdit = null; toast('Tasdiqlandi: ' + OY[+ym.slice(5)-1] + ' rejasi va ish grafigi saqlandi.'); aReja(); })
+      .catch(function(e){ btn.disabled = false; btn.textContent = '✓ Tasdiqlash va saqlash'; toast(e.message, true); });
+  };
+  refresh();
 }
 function grafikRaw(ym, x){ var g = S.ix.graf[ym + '|' + x]; if (g && g.length === dim(ym)) return g; return defGraf(ym); }
 

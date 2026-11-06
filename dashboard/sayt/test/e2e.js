@@ -14,7 +14,7 @@ const URL = 'http://127.0.0.1:' + (process.env.PORT || 8790) + '/#boshqaruv';
   await p.fill('#lgKim', 'Sinov'); await p.fill('#lgPin', '1234'); await p.click('#lgGo');
   await p.waitForSelector('#amain');
   // reja
-  await p.fill('#plCKD', '4700'); await p.fill('#plSKD', '3100');
+  await p.fill('#plCKD', '4700'); await p.fill('#plSKD', '3100'); await p.waitForTimeout(100);
   await p.click('#gSave'); await p.waitForTimeout(600); console.log('reja:', await toast());
   // 630 + 700
   await p.click('.side button[data-a="natija"]'); await p.waitForSelector('#dzEv');
