@@ -335,6 +335,14 @@ html[data-theme="light"] .sc.dark .trk .lane{background:#2a2b30}html[data-theme=
 html[data-theme="dark"] .sc .trk svg{filter:invert(1) hue-rotate(180deg)}
 html[data-theme="dark"] .tr .rk[style*="var(--ink)"]{color:#0d0e10}
 html[data-theme="dark"] .cell.sD{background:transparent;border-color:#3a3a40}html[data-theme="dark"] .cell.s1{background:#1f3b2e;color:#7fdcb0}
+
+/* ---- tezlik: og'ir effektlarni o'chirish ---- */
+body::before{animation:none!important;filter:none!important}
+.card,.side,.cat,.tabs,.seg,#panel,#admin,.tabs.gl,.seg.gl,.side.gl{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.ghost{animation-duration:.35s!important}
+.enter>*,.enter .card,.enter .cat{animation-duration:.4s!important;filter:none}
+@keyframes frostIn2{0%{opacity:0;transform:translateX(16px)}100%{opacity:1;transform:none}}
+@keyframes ghostOut{0%{opacity:1}100%{opacity:0;transform:translateX(-16px)}}
 </style>
 </head>
 <body>
@@ -371,6 +379,8 @@ var HAF = ['dushanba','seshanba','chorshanba','payshanba','juma','shanba','yaksh
 var WD = ['Du','Se','Ch','Pa','Ju','Sh','Ya'];
 var W = {'2':1,'1':1,'Q':0.5,'X':0,'D':0};
 
+var MQC = {};
+function runMqs(a, b, x){ var k = a + '|' + b + '|' + x; if (MQC[k]) return Promise.resolve(MQC[k]); return run('getMqs', a, b, x).then(function(r){ MQC[k] = r; return r; }); }
 function run(fn){
   var args = Array.prototype.slice.call(arguments, 1);
   return new Promise(function(res, rej){
@@ -526,7 +536,7 @@ function dayDetail(D){
 }
 function loadDayMqs(D){
   if (!mqsN(D)) return;
-  run('getMqs', D, D, S.sex).then(function(r){
+  runMqs(D, D, S.sex).then(function(r){
     var el = $('dayMqs'); if (!el || S.sel !== D) return;
     el.innerHTML = '<hr><div class="sub" style="margin:8px 0">MQS · ' + r.total + ' ta nuqson <span>' + r.cars + ' ta avto</span></div><table class="t"><tr><th>Vaqt</th><th>Sex</th><th>Model</th><th>Nuqson</th></tr>' +
       r.list.slice(0, 6).map(function(x){ return '<tr><td>' + esc(x[0]) + '</td><td><span class="tag" style="background:' + (x[1] === 'CKD' ? 'var(--ckd)' : 'var(--skd)') + '">' + esc(x[1]) + '</span></td><td>' + esc(x[2]) + '</td><td>' + esc(x[4]) + '</td></tr>'; }).join('') +
@@ -620,7 +630,7 @@ function renderMqsSection(target){
   el.querySelectorAll('#mqSx button').forEach(function(b){ b.onclick = function(){ if (S.mqSex === b.getAttribute('data-x')) return; S.mqSex = b.getAttribute('data-x'); ghost(el); renderMqsSection(target); enter(el); }; });
   el.querySelectorAll('#mqSeg button').forEach(function(b){ b.onclick = function(){ S.mq = {mode: b.getAttribute('data-m'), from: S.mq.from, to: S.mq.to}; renderMqsSection(target); }; });
   if (S.mq.mode === 'ora'){ ['mqFrom','mqTo'].forEach(function(id){ $(id).onchange = function(){ S.mq.from = $('mqFrom').value; S.mq.to = $('mqTo').value; renderMqsSection(target); }; }); }
-  run('getMqs', R[0], R[1], mqx).then(function(r){ var b = el.querySelector('#mqBody'); if (!b) return; b.innerHTML = mqsBody(r, S.mq.mode === 'kun');
+  runMqs(R[0], R[1], mqx).then(function(r){ var b = el.querySelector('#mqBody'); if (!b) return; b.innerHTML = mqsBody(r, S.mq.mode === 'kun');
       var mb = b.querySelector('.moreBtn'); if (mb) mb.onclick = function(){ var open = mb.getAttribute('data-o') === '1'; b.querySelectorAll('tr.more').forEach(function(t){ t.hidden = open; }); mb.setAttribute('data-o', open ? '0' : '1'); mb.textContent = open ? 'Hammasini ko\'rsatish (' + mb.getAttribute('data-n') + ')' : 'Yig\'ish'; }; })
     .catch(function(e){ var b = el.querySelector('#mqBody'); if (b) b.innerHTML = '<div class="empty">MQS o\'qilmadi: ' + esc(e.message) + '</div>'; });
 }
@@ -721,7 +731,7 @@ function renderAdmin(){
   el.querySelectorAll('[data-a]').forEach(function(b){ b.onclick = function(){ if (S.aview === b.getAttribute('data-a')) return; var k = b.getAttribute('data-a'); el.querySelectorAll('[data-a]').forEach(function(x){ x.classList.toggle('on', x === b); }); swap($('amain'), function(){ S.aview = k; renderAdmin(); }); }; });
   ({reja: aReja, natija: aNatija, mqs: aMqs, tarjima: aTarjima, tarix: aTarix, pin: aPin})[S.aview]();
 }
-function reload(){ return run('getData').then(function(d){ S.data = d; index(); }); }
+function reload(){ MQC = {}; return run('getData').then(function(d){ S.data = d; index(); }); }
 
 function aReja(){
   var ym = S.amonth || S.sel.slice(0,7); S.amonth = ym;
@@ -896,7 +906,7 @@ function glideKeep(){ document.querySelectorAll('.gl').forEach(function(b){
   if (on) lastGl[id] = {key:key, w:on.offsetWidth, h:on.offsetHeight, x:on.offsetLeft, y:on.offsetTop};
 }); }
 window.addEventListener('resize', function(){ glideAll(false); });
-new MutationObserver(function(){ clearTimeout(glideKeep.t); glideKeep.t = setTimeout(glideKeep, 0); }).observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
+var glQ = false; new MutationObserver(function(muts){ if (glQ) return; for (var i = 0; i < muts.length; i++){ var t = muts[i].target; if (t.closest && t.closest('.gl')){ glQ = true; requestAnimationFrame(function(){ glQ = false; glideKeep(); }); return; } } }).observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
 function countUp(root){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   root.querySelectorAll('.ev .n, .mbig, .cat .n, .sp b').forEach(function(el){

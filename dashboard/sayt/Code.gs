@@ -62,7 +62,12 @@ function sheet_(name) {
   return sh;
 }
 
+var MEM_ = {};
 function rows_(name) {
+  if (MEM_[name]) return MEM_[name].map(function (r) { return r.slice(); });
+  var out = rows0_(name); MEM_[name] = out; return out.map(function (r) { return r.slice(); });
+}
+function rows0_(name) {
   var sh = sheet_(name), n = sh.getLastRow();
   if (n < 2) return [];
   return sh.getRange(2, 1, n - 1, HEAD[name].length).getValues().map(function (r) {
@@ -71,6 +76,7 @@ function rows_(name) {
 }
 
 function write_(name, data) {
+  delete MEM_[name]; bust_();
   var sh = sheet_(name), w = HEAD[name].length, n = sh.getLastRow();
   if (n > 1) sh.getRange(2, 1, n - 1, w).clearContent();
   if (!data.length) return;
@@ -82,6 +88,7 @@ function write_(name, data) {
 
 function append_(name, data) {
   if (!data.length) return;
+  delete MEM_[name]; if (name !== 'Tarix') bust_();
   var sh = sheet_(name), w = HEAD[name].length, n = sh.getLastRow();
   if (sh.getMaxRows() < n + data.length) sh.insertRowsAfter(sh.getMaxRows(), n + data.length - sh.getMaxRows());
   sh.getRange(n + 1, 1, data.length, w).setNumberFormat('@').setValues(data.map(function (r) {
@@ -122,7 +129,15 @@ function login(pin) { pin_(pin); return true; }
 /* ------------------------------------------------------------------ o'qish */
 
 /** Panel uchun hamma narsa (MQS tafsilotlarisiz). */
+function bust_() { try { CacheService.getScriptCache().remove('getData'); } catch (e) {} }
 function getData() {
+  var c = CacheService.getScriptCache(), hit = c.get('getData');
+  if (hit) { var o = JSON.parse(hit); o.bugun = Utilities.formatDate(new Date(), 'Asia/Tashkent', 'yyyy-MM-dd'); return o; }
+  var d = getData0_();
+  try { var j = JSON.stringify(d); if (j.length < 95000) c.put('getData', j, 600); } catch (e) {}
+  return d;
+}
+function getData0_() {
   var kun = rows_('Kunlik');
   var tuz = rows_('Tuzatish');
   // tuzatishlarni qo'llash: kalit sana|sex|model

@@ -33,6 +33,7 @@ const ctx = {
   Utilities: { formatDate(d, tz, fmt) { const t = new Date(d.getTime() + 5 * 3600e3);
     const s = { yyyy: t.getUTCFullYear(), MM: pad(t.getUTCMonth() + 1), dd: pad(t.getUTCDate()), HH: pad(t.getUTCHours()), mm: pad(t.getUTCMinutes()) };
     return fmt.replace('yyyy', s.yyyy).replace('MM', s.MM).replace('dd', s.dd).replace('HH', s.HH).replace('mm', s.mm); } },
+  CacheService: { getScriptCache: () => ({ get: () => null, put() {}, remove() {} }) },
   HtmlService: {}, console
 };
 vm.createContext(ctx);
