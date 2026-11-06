@@ -50,3 +50,9 @@ Keyingi kunlardan boshlab faqat yangi paydo bo'lgan avtomobillar o'sha kunga yoz
 ## Kodni yangilash
 Yangi `Code.gs` / `index.html` kelganda: Apps Script'da ichini almashtiring → 💾 →
 **Deploy → Manage deployments → ✎ → Version: New version → Deploy**. Havola o'zgarmaydi.
+
+## Dizayn yangilanishi (2026-11-06)
+- `index.html`: Home Control uslubidagi shisha kartalar, KPI qatori, "Oy davomida" chiziqli grafigi, "Modellar bo'yicha" paneli; asosiy navigatsiya — A variant (yonuvchi kontur).
+- `Code.gs`: o'zgarmadi (server funksiyalari avvalgidek).
+- `nav-variantlar.html`: to'rt navigatsiya variantining (A, B, C, D) alohida namunasi — brauzerda ochib ko'rish uchun, Apps Script'ga qo'yish shart emas.
+- `arxiv/`: o'zgarishdan oldingi `index.html` va `Code.gs` nusxalari. Eskisiga qaytish uchun shu fayllarni Apps Script'ga qo'ying.

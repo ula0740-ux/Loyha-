@@ -17,7 +17,7 @@ const URL = 'http://127.0.0.1:' + (process.env.PORT || 8790) + '/#boshqaruv';
   await p.fill('#plCKD', '4700'); await p.fill('#plSKD', '3100'); await p.waitForTimeout(100);
   await p.click('#gSave'); await p.waitForTimeout(600); console.log('reja:', await toast());
   // 630 + 700
-  await p.click('.side button[data-a="natija"]'); await p.waitForSelector('#dzEv');
+  await p.click('#gnav [data-a="natija"]'); await p.waitForSelector('#dzEv');
   await p.setInputFiles('#dzEv input', [path.join(X, '630__04.11.2026.xlsx'), path.join(X, '700__04.11.2026.xlsx')]);
   await p.waitForFunction(() => document.querySelectorAll('#dzEvPv .pv').length === 2, null, { timeout: 15000 });
   await p.screenshot({ path: OUT + '/t_preview.png' });
@@ -32,13 +32,13 @@ const URL = 'http://127.0.0.1:' + (process.env.PORT || 8790) + '/#boshqaruv';
   await p.locator('#tzT tr[data-m="TIGGO 7"] input[data-t="630"]').fill('16');
   await p.click('#tzSave'); await p.waitForTimeout(800); console.log('tuzatish:', await toast());
   // MQS
-  await p.click('.side button[data-a="mqs"]'); await p.waitForSelector('#dzMq');
+  await p.click('#gnav [data-a="mqs"]'); await p.waitForSelector('#dzMq');
   await p.setInputFiles('#dzMq input', [path.join(X, 'MQS__04.11.2026.xlsx')]);
   await p.waitForSelector('#dzMqPv .pv button.btn.p'); await p.locator('#dzMqPv .pv button.btn.p').click(); await p.waitForTimeout(900);
   console.log('mqs:', await p.locator('#dzMqPv').innerText());
   await p.screenshot({ path: OUT + '/t_admin_mqs.png', fullPage: true });
   // reja sahifasi skrinshoti
-  await p.click('.side button[data-a="reja"]'); await p.waitForTimeout(300);
+  await p.click('#gnav [data-a="reja"]'); await p.waitForTimeout(300);
   await p.screenshot({ path: OUT + '/t_admin_reja.png', fullPage: true });
   // panel
   await p.click('#tabPanel'); await p.waitForTimeout(700);
