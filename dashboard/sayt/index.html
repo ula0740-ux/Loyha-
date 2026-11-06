@@ -449,22 +449,23 @@ html[data-theme="glass"] .drop{border-color:rgba(255,255,255,.18)}html[data-them
 @keyframes gnPop{0%{transform:translateY(2px) scale(.9)}100%{transform:translateY(-2px) scale(1)}}
 @media (prefers-reduced-motion:reduce){.gn-i,.gn-ic,.gn-dot{transition:none!important;animation:none!important}}
 @media (max-width:700px){.gn-track{height:58px;padding:0 8px}.gn-i{min-width:74px;padding:0 10px;gap:6px}.gn-ic svg{width:20px;height:20px}.gn-lb{font-size:11px}}
-/* vertikal (yon) holat: odatda faqat belgilar, sichqoncha yoki fokus kelganda to'liq ochiladi */
-.gnav.gn-v{width:72px;max-width:none;border-radius:24px;overflow:hidden;position:sticky;top:16px;align-self:start;z-index:30;
-  transition:width .34s cubic-bezier(.3,.7,.2,1),background-color .3s ease,box-shadow .3s ease}
-.gnav.gn-v:hover,.gnav.gn-v:has(.gn-i:focus-visible){width:212px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 22px 50px rgba(0,0,0,.45)}
-.gn-v .gn-track{flex-direction:column;height:auto;width:100%;min-width:0;padding:22px 0;gap:10px}
-.gn-v .gn-i{display:flex;align-items:center;justify-content:flex-start;gap:14px;min-width:0;height:52px;padding:0 16px 0 25px;border-radius:18px;text-align:left;overflow:hidden;white-space:nowrap}
+/* vertikal (yon) holat: tanlanmagan bo'limlar faqat belgi, tanlangani yozuvi bilan tashqariga chiqib turadi */
+.gnav.gn-v{width:72px;max-width:none;border-radius:24px;overflow:visible;position:sticky;top:16px;align-self:start;z-index:30}
+.gn-v .gn-track{flex-direction:column;align-items:flex-start;height:auto;width:100%;min-width:0;padding:22px 0;gap:10px}
+.gn-v .gn-i{display:flex;align-items:center;justify-content:flex-start;gap:12px;width:72px;min-width:0;height:52px;padding:0 0 0 25px;border-radius:18px;text-align:left;white-space:nowrap}
+.gn-v .gn-i.on{width:max-content;padding-right:22px}
 .gn-v .gn-ic{flex:none}
-.gn-v .gn-lb{font-size:14px;font-weight:700;opacity:0;transform:translateX(-8px);transition:opacity .18s ease,transform .24s ease}
-.gnav.gn-v:hover .gn-lb,.gnav.gn-v:has(.gn-i:focus-visible) .gn-lb{opacity:1;transform:none;transition-delay:.08s}
+.gn-v .gn-i:not(.on) .gn-lb{display:none}
+.gn-v .gn-i.on .gn-lb{font-size:14px;font-weight:700;animation:gnLb .3s .14s ease both}
+@keyframes gnLb{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 .gn-v .gn-dot{left:11px;top:50%;margin:-2px 0 0 0}
+.gn-bgp{fill:var(--gn-tab,rgba(22,26,26,.9))}
 .gn-v .gn-i.on .gn-ic{transform:translateX(1px)}
 .gn-v .gn-i:hover .gn-ic{transform:translateX(1px)}
 .gn-v .gn-i.gn-drop .gn-ic{animation:gnDropX .42s cubic-bezier(.3,.7,.2,1)}
 @keyframes gnDropX{0%{transform:translateX(14px);opacity:0}100%{transform:none;opacity:1}}
 .gn-v .gn-i.gn-pop .gn-ic{animation:none}
-@media (prefers-reduced-motion:reduce){.gnav.gn-v,.gn-v .gn-lb{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.gn-v .gn-lb{animation:none!important}}
 /*GN-CSS-END*/
 
 /* ===================== V3: Home Control uslubi (2026-11-06) ===================== */
@@ -536,7 +537,7 @@ html[data-theme="dark"]{--lc:#4cc3ec}
 /* oq va qora mavzu */
 html[data-theme="dark"] .kpi.t1{background:rgba(64,128,190,.16)}html[data-theme="dark"] .kpi.t2{background:rgba(40,150,140,.15)}html[data-theme="dark"] .kpi.t3{background:rgba(70,150,80,.15)}html[data-theme="dark"] .kpi.t4{background:rgba(170,100,70,.17)}
 html[data-theme="light"] .gnav{--gn-bg:rgba(255,255,255,.86);--gn-bd:rgba(13,14,16,.09);--gn-fill:#10b39b;--gn-ink:#0d0e10;--gn-mute:#70757d;--gn-line:#10b39b;--gn-glow:rgba(16,179,155,.38);box-shadow:0 1px 2px rgba(0,0,0,.04),0 10px 26px rgba(0,0,0,.07)}
-html[data-theme="glass"] .gnav.gn-v:hover,html[data-theme="glass"] .gnav.gn-v:has(.gn-i:focus-visible){background:rgba(22,26,26,.86)}
+html[data-theme="light"] .gnav{--gn-tab:rgba(255,255,255,.97)}html[data-theme="dark"] .gnav{--gn-tab:rgba(24,24,28,.97)}
 html[data-theme="dark"] .gnav{--gn-bg:rgba(21,21,24,.92);--gn-bd:rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.45)}
 /* shisha mavzu: qora-yashil qoramtir fon, shaffof kartalar */
 html[data-theme="glass"] body::before{filter:blur(15px) saturate(105%) brightness(.78)!important}
@@ -560,7 +561,7 @@ html[data-theme="dark"] .lcs button.on{color:#0d0e10}html[data-theme="light"] .l
 @media (max-width:700px){.wrap{padding:16px 16px 32px}.phead h1{font-size:27px}.kpis{gap:10px}.kpi{padding:13px 14px}.kv{font-size:24px}.kh{font-size:12px}.kh i{width:28px;height:28px}.mrow{grid-template-columns:minmax(70px,100px) minmax(0,1fr) 44px}}
 @media (max-width:420px){.kpis{grid-template-columns:minmax(0,1fr)}}
 /* yon navigatsiya bilan maket */
-.shell{display:grid;grid-template-columns:72px minmax(0,1fr);gap:18px;align-items:start}
+.shell{display:grid;grid-template-columns:72px minmax(0,1fr);column-gap:78px;row-gap:16px;align-items:start}
 .shell.nonav{grid-template-columns:minmax(0,1fr)}
 .mainCol{display:grid;gap:16px;min-width:0}
 @media (max-width:999px){.shell{grid-template-columns:minmax(0,1fr)}}
@@ -661,11 +662,11 @@ function GlowNav(root, onSelect, label){
   var RM = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : {matches:false};
   root.classList.add('gnav');
   root.innerHTML = '<div class="gn-track" role="tablist" aria-label="' + (label || 'Bo\'limlar') + '"></div>';
-  var track = root.firstChild, list = [], active = null, st = null, raf = 0, svg, pFill, pGlow, pLine, gradL;
+  var track = root.firstChild, list = [], active = null, st = null, raf = 0, svg, pFill, pBg, pGlow, pLine, gradL;
   var DUR = 380;   // kontur harakati (namunaga qarab sozlangan)
   function btn(id){ return track.querySelector('.gn-i[data-id="' + id + '"]'); }
   function isV(){ return root.classList.contains('gn-v'); }
-  function aim(id){ var b = btn(id); if (!b) return null; if (isV()) return {cx: b.offsetTop + b.offsetHeight / 2, hw: b.offsetHeight / 2 + 1}; return {cx: b.offsetLeft + b.offsetWidth / 2, hw: Math.max(34, b.offsetWidth / 2 + 14)}; }
+  function aim(id){ var b = btn(id); if (!b) return null; if (isV()) return {cx: b.offsetTop + b.offsetHeight / 2, hw: b.offsetHeight / 2 + 1, xr: b.offsetLeft + b.offsetWidth}; return {cx: b.offsetLeft + b.offsetWidth / 2, hw: Math.max(34, b.offsetWidth / 2 + 14), xr: 0}; }
   function bell(u){ if (u <= -1 || u >= 1) return 0; var b = (1 + Math.cos(Math.PI * u)) / 2; return 1 - Math.pow(1 - b, 1.7); }
   function paint(){
     if (!st || !svg) return;
@@ -688,12 +689,12 @@ function GlowNav(root, onSelect, label){
     var a = Math.max(x0, cx - hw), b = Math.min(x1, cx + hw);
     for (var u = a; u <= b + .01; u += step){ fill += (fill ? 'L' : 'M') + u.toFixed(1) + ' ' + y(u).toFixed(2); }
     if (fill) fill += 'L' + b.toFixed(1) + ' ' + yb + 'L' + a.toFixed(1) + ' ' + yb + 'Z';
-    pLine.setAttribute('d', d); pGlow.setAttribute('d', d); pFill.setAttribute('d', fill);
+    pLine.setAttribute('d', d); pGlow.setAttribute('d', d); pFill.setAttribute('d', fill); pBg.setAttribute('d', '');
   }
   // vertikal (yon menyu): chiziq chap chekka bo'ylab yuradi va tanlangan bo'lim atrofida o'ngga bo'rtadi
   function paintV(W, H){
     gradL.setAttribute('x2', 0); gradL.setAttribute('y2', H);
-    var i = 1.6, R = Math.min(24, W / 2), xt = W - 3.5, cy = st.cx, h2 = st.hw, sc = 13, rr = 18;
+    var i = 1.6, R = Math.min(24, W / 2), xt = Math.max(W - 3.5, (st.xr || 0) - 1.5), cy = st.cx, h2 = st.hw, sc = 13, rr = 18;
     var xc = function(a){
       if (a < i + R){ var d = i + R - a; return i + R - Math.sqrt(Math.max(0, R * R - d * d)); }
       if (a > H - i - R){ var d2 = a - (H - i - R); return i + R - Math.sqrt(Math.max(0, R * R - d2 * d2)); }
@@ -709,17 +710,17 @@ function GlowNav(root, onSelect, label){
       'L' + P(x1 + k1 * 1.4, bot) + 'C' + P(x1 + k1 * 0.4, bot) + ' ' + P(x1, a1 - (a1 - bot) * 0.6) + ' ' + P(x1, a1);
     d += (d ? 'L' : 'M') + P(x0, a0) + tab;
     for (var u = a1 + 1.5; u <= ae; u += 1.5) d += 'L' + P(xc(u), u);
-    pLine.setAttribute('d', d); pGlow.setAttribute('d', d); pFill.setAttribute('d', 'M' + P(x0, a0) + tab + 'Z');
+    pLine.setAttribute('d', d); pGlow.setAttribute('d', d); pFill.setAttribute('d', 'M' + P(x0, a0) + tab + 'Z'); pBg.setAttribute('d', 'M' + P(x0, a0) + tab + 'Z');
   }
   function go(to, animate){
     cancelAnimationFrame(raf);
     if (!to) return;
     raf = 0;
-    if (!st || !animate || RM.matches){ st = {cx: to.cx, hw: to.hw}; paint(); return; }
-    var from = {cx: st.cx, hw: st.hw}, t0 = performance.now();
+    if (!st || !animate || RM.matches){ st = {cx: to.cx, hw: to.hw, xr: to.xr}; paint(); return; }
+    var from = {cx: st.cx, hw: st.hw, xr: st.xr || to.xr}, t0 = performance.now();
     (function step(t){
       var k = Math.min(1, (t - t0) / DUR), e = 1 - Math.pow(1 - k, 4), tg = aim(active) || to;   // maqsad har kadrda qayta o'lchanadi
-      st = {cx: from.cx + (tg.cx - from.cx) * e, hw: from.hw + (tg.hw - from.hw) * e}; paint();
+      st = {cx: from.cx + (tg.cx - from.cx) * e, hw: from.hw + (tg.hw - from.hw) * e, xr: from.xr + (tg.xr - from.xr) * e}; paint();
       raf = k < 1 ? requestAnimationFrame(step) : 0;
     })(t0);
   }
@@ -747,9 +748,9 @@ function GlowNav(root, onSelect, label){
       track.innerHTML = '<svg class="gn-svg" aria-hidden="true" focusable="false"><defs>' +
         '<linearGradient id="' + uid + 'L" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="0"><stop offset="0" style="stop-color:var(--gn-line);stop-opacity:.15"/><stop offset=".06" style="stop-color:var(--gn-line);stop-opacity:1"/><stop offset=".94" style="stop-color:var(--gn-line);stop-opacity:1"/><stop offset="1" style="stop-color:var(--gn-line);stop-opacity:.15"/></linearGradient>' +
         '<linearGradient id="' + uid + 'F" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gn-fill);stop-opacity:.22"/><stop offset=".65" style="stop-color:var(--gn-fill);stop-opacity:.07"/><stop offset="1" style="stop-color:var(--gn-line);stop-opacity:.10"/></linearGradient></defs>' +
-        '<path class="gn-fill" fill="url(#' + uid + 'F)"/><path class="gn-glow"/><path class="gn-line" stroke="url(#' + uid + 'L)"/></svg>' +
+        '<path class="gn-bgp"/><path class="gn-fill" fill="url(#' + uid + 'F)"/><path class="gn-glow"/><path class="gn-line" stroke="url(#' + uid + 'L)"/></svg>' +
         items.map(function(x){ return '<button type="button" role="tab" class="gn-i" data-id="' + x.id + '"' + (x.attr || '') + ' title="' + x.label + '" aria-selected="false" tabindex="-1"><span class="gn-ic">' + navIco(x.icon) + '</span><span class="gn-dot"></span><span class="gn-lb">' + x.label + '</span></button>'; }).join('');
-      svg = track.querySelector('svg'); pFill = svg.querySelector('.gn-fill'); pGlow = svg.querySelector('.gn-glow'); pLine = svg.querySelector('.gn-line'); gradL = svg.querySelector('linearGradient');
+      svg = track.querySelector('svg'); pFill = svg.querySelector('.gn-fill'); pBg = svg.querySelector('.gn-bgp'); pGlow = svg.querySelector('.gn-glow'); pLine = svg.querySelector('.gn-line'); gradL = svg.querySelector('linearGradient');
     }
     set(act, false);
   }
