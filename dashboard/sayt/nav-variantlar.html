@@ -48,6 +48,22 @@ h1{margin:0;font:900 30px/1.1 var(--disp);font-stretch:118%}
 @keyframes gnPop{0%{transform:translateY(2px) scale(.9)}100%{transform:translateY(-2px) scale(1)}}
 @media (prefers-reduced-motion:reduce){.gn-i,.gn-ic,.gn-dot{transition:none!important;animation:none!important}}
 @media (max-width:700px){.gn-track{height:58px;padding:0 8px}.gn-i{min-width:74px;padding:0 10px;gap:6px}.gn-ic svg{width:20px;height:20px}.gn-lb{font-size:11px}}
+/* vertikal (yon) holat: odatda faqat belgilar, sichqoncha yoki fokus kelganda to'liq ochiladi */
+.gnav.gn-v{width:72px;max-width:none;border-radius:24px;overflow:hidden;position:sticky;top:16px;align-self:start;z-index:30;
+  transition:width .34s cubic-bezier(.3,.7,.2,1),background-color .3s ease,box-shadow .3s ease}
+.gnav.gn-v:hover,.gnav.gn-v:has(.gn-i:focus-visible){width:212px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 22px 50px rgba(0,0,0,.45)}
+.gn-v .gn-track{flex-direction:column;height:auto;width:100%;min-width:0;padding:22px 0;gap:10px}
+.gn-v .gn-i{display:flex;align-items:center;justify-content:flex-start;gap:14px;min-width:0;height:52px;padding:0 16px 0 25px;border-radius:18px;text-align:left;overflow:hidden;white-space:nowrap}
+.gn-v .gn-ic{flex:none}
+.gn-v .gn-lb{font-size:14px;font-weight:700;opacity:0;transform:translateX(-8px);transition:opacity .18s ease,transform .24s ease}
+.gnav.gn-v:hover .gn-lb,.gnav.gn-v:has(.gn-i:focus-visible) .gn-lb{opacity:1;transform:none;transition-delay:.08s}
+.gn-v .gn-dot{left:11px;top:50%;margin:-2px 0 0 0}
+.gn-v .gn-i.on .gn-ic{transform:translateX(1px)}
+.gn-v .gn-i:hover .gn-ic{transform:translateX(1px)}
+.gn-v .gn-i.gn-drop .gn-ic{animation:gnDropX .42s cubic-bezier(.3,.7,.2,1)}
+@keyframes gnDropX{0%{transform:translateX(14px);opacity:0}100%{transform:none;opacity:1}}
+.gn-v .gn-i.gn-pop .gn-ic{animation:none}
+@media (prefers-reduced-motion:reduce){.gnav.gn-v,.gn-v .gn-lb{transition:none!important}}
 /*GN-CSS-END*/
 
 
@@ -157,13 +173,18 @@ function GlowNav(root, onSelect, label){
   var track = root.firstChild, list = [], active = null, st = null, raf = 0, svg, pFill, pGlow, pLine, gradL;
   var DUR = 380;   // kontur harakati (namunaga qarab sozlangan)
   function btn(id){ return track.querySelector('.gn-i[data-id="' + id + '"]'); }
-  function aim(id){ var b = btn(id); if (!b) return null; return {cx: b.offsetLeft + b.offsetWidth / 2, hw: Math.max(34, b.offsetWidth / 2 + 14)}; }
+  function isV(){ return root.classList.contains('gn-v'); }
+  function aim(id){ var b = btn(id); if (!b) return null; if (isV()) return {cx: b.offsetTop + b.offsetHeight / 2, hw: b.offsetHeight / 2 + 1}; return {cx: b.offsetLeft + b.offsetWidth / 2, hw: Math.max(34, b.offsetWidth / 2 + 14)}; }
   function bell(u){ if (u <= -1 || u >= 1) return 0; var b = (1 + Math.cos(Math.PI * u)) / 2; return 1 - Math.pow(1 - b, 1.7); }
   function paint(){
     if (!st || !svg) return;
     var W = track.offsetWidth, H = track.offsetHeight; if (!W || !H) return;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var gF = svg.querySelectorAll('linearGradient')[1];
+    if (isV()){ gF.setAttribute('x1', 1); gF.setAttribute('y1', 0); gF.setAttribute('x2', 0); gF.setAttribute('y2', 0); paintV(W, H); return; }
+    gF.setAttribute('x1', 0); gF.setAttribute('y1', 0); gF.setAttribute('x2', 0); gF.setAttribute('y2', 1);
+    gradL.setAttribute('x2', W); gradL.setAttribute('y2', 0);
     var i = 1.6, r = H / 2 - i, yb = H - i, yt = 3.5, cx = st.cx, hw = st.hw;
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); gradL.setAttribute('x2', W);
     var y = function(x){
       var base = yb;
       if (x < i + r){ var d = i + r - x; base = H / 2 + Math.sqrt(Math.max(0, r * r - d * d)); }
@@ -178,18 +199,41 @@ function GlowNav(root, onSelect, label){
     if (fill) fill += 'L' + b.toFixed(1) + ' ' + yb + 'L' + a.toFixed(1) + ' ' + yb + 'Z';
     pLine.setAttribute('d', d); pGlow.setAttribute('d', d); pFill.setAttribute('d', fill);
   }
+  // vertikal (yon menyu): chiziq chap chekka bo'ylab yuradi va tanlangan bo'lim atrofida o'ngga bo'rtadi
+  function paintV(W, H){
+    gradL.setAttribute('x2', 0); gradL.setAttribute('y2', H);
+    var i = 1.6, R = Math.min(24, W / 2), xt = W - 3.5, cy = st.cx, h2 = st.hw, sc = 13, rr = 18;
+    var xc = function(a){
+      if (a < i + R){ var d = i + R - a; return i + R - Math.sqrt(Math.max(0, R * R - d * d)); }
+      if (a > H - i - R){ var d2 = a - (H - i - R); return i + R - Math.sqrt(Math.max(0, R * R - d2 * d2)); }
+      return i;
+    };
+    var top = cy - h2, bot = cy + h2, a0 = Math.max(i + 2, top - sc), a1 = Math.min(H - i - 2, bot + sc);
+    var as = i + R * 0.3, ae = H - i - R * 0.3, d = '', P = function(x, y){ return x.toFixed(2) + ' ' + y.toFixed(2); };
+    for (var a = as; a < a0; a += 1.5) d += (d ? 'L' : 'M') + P(xc(a), a);
+    var x0 = xc(a0), x1 = xc(a1), k0 = Math.min(sc, top - a0 + 4), k1 = Math.min(sc, a1 - bot + 4);
+    var tab = 'C' + P(x0, a0 + (top - a0) * 0.6) + ' ' + P(x0 + k0 * 0.4, top) + ' ' + P(x0 + k0 * 1.4, top) +
+      'L' + P(xt - rr, top) + 'C' + P(xt - rr * 0.45, top) + ' ' + P(xt, top + rr * 0.45) + ' ' + P(xt, top + rr) +
+      'L' + P(xt, bot - rr) + 'C' + P(xt, bot - rr * 0.45) + ' ' + P(xt - rr * 0.45, bot) + ' ' + P(xt - rr, bot) +
+      'L' + P(x1 + k1 * 1.4, bot) + 'C' + P(x1 + k1 * 0.4, bot) + ' ' + P(x1, a1 - (a1 - bot) * 0.6) + ' ' + P(x1, a1);
+    d += (d ? 'L' : 'M') + P(x0, a0) + tab;
+    for (var u = a1 + 1.5; u <= ae; u += 1.5) d += 'L' + P(xc(u), u);
+    pLine.setAttribute('d', d); pGlow.setAttribute('d', d); pFill.setAttribute('d', 'M' + P(x0, a0) + tab + 'Z');
+  }
   function go(to, animate){
     cancelAnimationFrame(raf);
     if (!to) return;
+    raf = 0;
     if (!st || !animate || RM.matches){ st = {cx: to.cx, hw: to.hw}; paint(); return; }
     var from = {cx: st.cx, hw: st.hw}, t0 = performance.now();
     (function step(t){
-      var k = Math.min(1, (t - t0) / DUR), e = 1 - Math.pow(1 - k, 4);
-      st = {cx: from.cx + (to.cx - from.cx) * e, hw: from.hw + (to.hw - from.hw) * e}; paint();
-      if (k < 1) raf = requestAnimationFrame(step);
+      var k = Math.min(1, (t - t0) / DUR), e = 1 - Math.pow(1 - k, 4), tg = aim(active) || to;   // maqsad har kadrda qayta o'lchanadi
+      st = {cx: from.cx + (tg.cx - from.cx) * e, hw: from.hw + (tg.hw - from.hw) * e}; paint();
+      raf = k < 1 ? requestAnimationFrame(step) : 0;
     })(t0);
   }
   function reveal(b){
+    if (isV()) return;
     var L = b.offsetLeft, R = L + b.offsetWidth, s = root.scrollLeft, w = root.clientWidth;
     if (L - 16 < s) root.scrollTo({left: L - 16, behavior: RM.matches ? 'auto' : 'smooth'});
     else if (R + 16 > s + w) root.scrollTo({left: R + 16 - w, behavior: RM.matches ? 'auto' : 'smooth'});
@@ -213,7 +257,7 @@ function GlowNav(root, onSelect, label){
         '<linearGradient id="' + uid + 'L" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="0"><stop offset="0" style="stop-color:var(--gn-line);stop-opacity:.15"/><stop offset=".06" style="stop-color:var(--gn-line);stop-opacity:1"/><stop offset=".94" style="stop-color:var(--gn-line);stop-opacity:1"/><stop offset="1" style="stop-color:var(--gn-line);stop-opacity:.15"/></linearGradient>' +
         '<linearGradient id="' + uid + 'F" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gn-fill);stop-opacity:.22"/><stop offset=".65" style="stop-color:var(--gn-fill);stop-opacity:.07"/><stop offset="1" style="stop-color:var(--gn-line);stop-opacity:.10"/></linearGradient></defs>' +
         '<path class="gn-fill" fill="url(#' + uid + 'F)"/><path class="gn-glow"/><path class="gn-line" stroke="url(#' + uid + 'L)"/></svg>' +
-        items.map(function(x){ return '<button type="button" role="tab" class="gn-i" data-id="' + x.id + '"' + (x.attr || '') + ' aria-selected="false" tabindex="-1"><span class="gn-ic">' + navIco(x.icon) + '</span><span class="gn-dot"></span><span class="gn-lb">' + x.label + '</span></button>'; }).join('');
+        items.map(function(x){ return '<button type="button" role="tab" class="gn-i" data-id="' + x.id + '"' + (x.attr || '') + ' title="' + x.label + '" aria-selected="false" tabindex="-1"><span class="gn-ic">' + navIco(x.icon) + '</span><span class="gn-dot"></span><span class="gn-lb">' + x.label + '</span></button>'; }).join('');
       svg = track.querySelector('svg'); pFill = svg.querySelector('.gn-fill'); pGlow = svg.querySelector('.gn-glow'); pLine = svg.querySelector('.gn-line'); gradL = svg.querySelector('linearGradient');
     }
     set(act, false);
@@ -225,10 +269,10 @@ function GlowNav(root, onSelect, label){
   });
   track.addEventListener('keydown', function(e){
     var bs = [].slice.call(track.querySelectorAll('.gn-i')), k = bs.indexOf(document.activeElement); if (k < 0) return;
-    var n = e.key === 'ArrowRight' ? k + 1 : e.key === 'ArrowLeft' ? k - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? bs.length - 1 : -2;
+    var n = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? k + 1 : (e.key === 'ArrowLeft' || e.key === 'ArrowUp') ? k - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? bs.length - 1 : -2;
     if (n === -2) return; e.preventDefault(); n = (n + bs.length) % bs.length; bs[n].focus(); bs[n].click();
   });
-  var snap = function(){ if (active) go(aim(active), false); };
+  var snap = function(){ if (active && !raf) go(aim(active), false); };
   if (window.ResizeObserver) new ResizeObserver(snap).observe(track); else window.addEventListener('resize', snap);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(snap);
   return {setItems: setItems, set: function(id, anim){ if (id !== active) set(id, anim !== false); }, get: function(){ return active; }, el: root};
