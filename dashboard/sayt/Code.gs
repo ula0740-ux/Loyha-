@@ -71,7 +71,11 @@ function rows0_(name) {
   var sh = sheet_(name), n = sh.getLastRow();
   if (n < 2) return [];
   return sh.getRange(2, 1, n - 1, HEAD[name].length).getValues().map(function (r) {
-    return r.map(function (v) { return v === null || v === undefined ? '' : String(v); });
+    return r.map(function (v) {
+      if (v === null || v === undefined) return '';
+      if (Object.prototype.toString.call(v) === '[object Date]') return Utilities.formatDate(v, 'Asia/Tashkent', 'yyyy-MM-dd HH:mm').replace(' 00:00', '');
+      return String(v);
+    });
   });
 }
 
@@ -82,7 +86,11 @@ function write_(name, data) {
   if (!data.length) return;
   if (sh.getMaxRows() < data.length + 1) sh.insertRowsAfter(sh.getMaxRows(), data.length + 1 - sh.getMaxRows());
   sh.getRange(2, 1, data.length, w).setNumberFormat('@').setValues(data.map(function (r) {
-    return r.map(function (v) { return v === null || v === undefined ? '' : String(v); });
+    return r.map(function (v) {
+      if (v === null || v === undefined) return '';
+      if (Object.prototype.toString.call(v) === '[object Date]') return Utilities.formatDate(v, 'Asia/Tashkent', 'yyyy-MM-dd HH:mm').replace(' 00:00', '');
+      return String(v);
+    });
   }));
 }
 
@@ -92,7 +100,11 @@ function append_(name, data) {
   var sh = sheet_(name), w = HEAD[name].length, n = sh.getLastRow();
   if (sh.getMaxRows() < n + data.length) sh.insertRowsAfter(sh.getMaxRows(), n + data.length - sh.getMaxRows());
   sh.getRange(n + 1, 1, data.length, w).setNumberFormat('@').setValues(data.map(function (r) {
-    return r.map(function (v) { return v === null || v === undefined ? '' : String(v); });
+    return r.map(function (v) {
+      if (v === null || v === undefined) return '';
+      if (Object.prototype.toString.call(v) === '[object Date]') return Utilities.formatDate(v, 'Asia/Tashkent', 'yyyy-MM-dd HH:mm').replace(' 00:00', '');
+      return String(v);
+    });
   }));
 }
 
