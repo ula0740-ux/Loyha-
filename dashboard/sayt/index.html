@@ -466,7 +466,11 @@ var S = { data:null, sex:'CKD', sel:null, view:'panel', mq:{mode:'kun', from:'',
           pin:null, kim:'', aview:'reja', amonth:null, ix:null, gEdit:null };
 
 function index(){
-  var D = S.data, ix = { day:{}, mq:{}, reja:{}, graf:{}, oylik:{}, dates:[] };
+  var D = S.data; ['days','mqsDays','reja','grafik','oylik','fayllar'].forEach(function(k){ if (!Array.isArray(D[k])) D[k] = []; D[k] = D[k].filter(function(r){ return Array.isArray(r) && typeof r[0] === 'string' && r[0]; }); });
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(D.bugun || '')) D.bugun = ymd(new Date());
+  var okD = function(r){ return /^\d{4}-\d{2}-\d{2}$/.test(r[0]); }, okM = function(r){ return /^\d{4}-\d{2}$/.test(r[0]); };
+  D.days = D.days.filter(okD); D.mqsDays = D.mqsDays.filter(okD); D.reja = D.reja.filter(okM); D.grafik = D.grafik.filter(okM); D.oylik = D.oylik.filter(okM);
+  var ix = { day:{}, mq:{}, reja:{}, graf:{}, oylik:{}, dates:[] };
   D.days.forEach(function(r){
     var o = (ix.day[r[0]] = ix.day[r[0]] || {});
     var x = (o[r[1]] = o[r[1]] || {a:0, b:0, m:{}, t:false});
@@ -1091,7 +1095,7 @@ run('getData').then(function(d){
   var past = S.ix.dates.filter(function(x){ return x <= d.bugun; });
   S.sel = past.length ? past[past.length-1] : d.bugun;
   show(window.SHOW_ADMIN && location.hash === '#boshqaruv' ? 'admin' : 'panel');
-}).catch(function(e){ $('panel').innerHTML = '<div class="empty">Ma\'lumot o\'qilmadi: ' + esc(e.message) + '</div>'; });
+}).catch(function(e){ var st = String(e && e.stack || '').split('\n').slice(0, 3).join(' | '); $('panel').innerHTML = '<div class="empty">Ma\'lumot o\'qilmadi: ' + esc(e.message) + '<br><small style="opacity:.7">' + esc(st) + '</small></div>'; });
 })();
 </script>
 </body>

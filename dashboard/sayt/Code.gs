@@ -131,9 +131,11 @@ function login(pin) { pin_(pin); return true; }
 /** Panel uchun hamma narsa (MQS tafsilotlarisiz). */
 function bust_() { try { CacheService.getScriptCache().remove('getData'); } catch (e) {} }
 function getData() {
-  var c = CacheService.getScriptCache(), hit = c.get('getData');
-  if (hit) { var o = JSON.parse(hit); o.bugun = Utilities.formatDate(new Date(), 'Asia/Tashkent', 'yyyy-MM-dd'); return o; }
-  var d = getData0_();
+  var c = CacheService.getScriptCache(), hit = null;
+  try { hit = c.get('getData'); } catch (e) {}
+  if (hit) { try { var o = JSON.parse(hit); o.bugun = Utilities.formatDate(new Date(), 'Asia/Tashkent', 'yyyy-MM-dd'); return o; } catch (e) {} }
+  var d;
+  try { d = getData0_(); } catch (e) { throw new Error('Server: ' + e.message + ' | ' + String(e.stack || '').split('\n').slice(0, 3).join(' | ')); }
   try { var j = JSON.stringify(d); if (j.length < 95000) c.put('getData', j, 600); } catch (e) {}
   return d;
 }
