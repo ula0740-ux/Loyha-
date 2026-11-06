@@ -350,6 +350,71 @@ input.cell.bad{outline:2.5px solid var(--bad)!important}
 .gbar{position:sticky;bottom:12px;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.12);font-size:14px;color:var(--muted)}
 .gbar.on{border-color:#2f63ff;color:var(--ink)}
 .gbar .btn:disabled{opacity:.45}
+
+/* ===== shishali o'tish (Home Control uslubi) ===== */
+.dOut{transition:opacity .19s ease,filter .19s ease,transform .19s ease;opacity:0;filter:blur(10px);transform:scale(.995)}
+.dIn{animation:dIn .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes dIn{from{opacity:0;filter:blur(12px);transform:scale(.99)}to{opacity:1;filter:none;transform:none}}
+.dIn .card,.dIn .cat{animation:none}
+.glider.pop{animation:none}
+/* ===================== SHISHA mavzu ===================== */
+html[data-theme="glass"]{--bg:#121417;--card:rgba(30,34,40,.55);--ink:#eef1f4;--muted:#9aa3ad;--line:rgba(255,255,255,.10);--soft:rgba(255,255,255,.06);
+  --ok:#3fd492;--bad:#ff7a6b;--ok-s:rgba(63,212,146,.14);--bad-s:rgba(255,122,107,.14);--warn-s:rgba(255,190,90,.12);--ckd-s:rgba(70,140,255,.16);--skd-s:rgba(160,120,255,.16);--c630:#4ba3ff;color-scheme:dark}
+html[data-theme="glass"]{background:#121417;color:var(--ink)}html[data-theme="glass"] body{background:transparent!important;color:var(--ink)}
+html[data-theme="glass"] body::before{content:"";position:fixed;inset:0;z-index:-2;filter:blur(18px) saturate(110%);transform:scale(1.05);
+  background:
+   radial-gradient(20% 60% at 16% 38%,rgba(255,222,175,.55),transparent 70%),
+   radial-gradient(12% 45% at 30% 30%,rgba(255,238,210,.40),transparent 70%),
+   radial-gradient(10% 40% at 86% 34%,rgba(255,230,195,.30),transparent 70%),
+   radial-gradient(30% 28% at 72% 74%,rgba(150,110,70,.55),transparent 70%),
+   radial-gradient(16% 26% at 58% 58%,rgba(90,130,80,.45),transparent 70%),
+   radial-gradient(40% 20% at 40% 92%,rgba(120,90,60,.45),transparent 70%),
+   repeating-linear-gradient(90deg,rgba(255,240,220,.10) 0 4px,transparent 4px 38px),
+   linear-gradient(180deg,#3a342d 0%,#29261f 45%,#2f2922 75%,#4a3b2c 100%)}
+html[data-theme="glass"] body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,12,14,.30),rgba(10,12,14,.45))}
+html[data-theme="glass"] .card,html[data-theme="glass"] .cat,html[data-theme="glass"] .side,html[data-theme="glass"] .tabs.gl,html[data-theme="glass"] .seg.gl,html[data-theme="glass"] #panel,html[data-theme="glass"] #admin,html[data-theme="glass"] .themeBtn,html[data-theme="glass"] .gbar{
+  -webkit-backdrop-filter:blur(16px) saturate(140%)!important;backdrop-filter:blur(16px) saturate(140%)!important}
+html[data-theme="glass"] #panel,html[data-theme="glass"] #admin{background:rgba(20,22,25,.18);border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06)}
+html[data-theme="glass"] .card,html[data-theme="glass"] .cat{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.25)}
+html[data-theme="glass"] .score>.sc:nth-child(1){background:linear-gradient(160deg,rgba(60,110,170,.42),rgba(40,70,110,.30))}
+html[data-theme="glass"] .score>.sc:nth-child(2){background:linear-gradient(160deg,rgba(60,130,90,.40),rgba(40,90,60,.28))}
+html[data-theme="glass"] .score>.sc.dark{background:linear-gradient(160deg,rgba(150,90,60,.42),rgba(100,60,40,.30));color:var(--ink)}
+html[data-theme="glass"] .sc.dark .when span,html[data-theme="glass"] .sc.dark .ev .lab,html[data-theme="glass"] .sc.dark .meta{color:var(--muted)}
+html[data-theme="glass"] .sc.dark .meta b{color:var(--ink)}
+html[data-theme="glass"] .cat.cp{background:linear-gradient(160deg,rgba(60,110,170,.40),rgba(40,70,110,.28))}
+html[data-theme="glass"] .cat.ct2{background:linear-gradient(160deg,rgba(150,110,50,.40),rgba(100,70,30,.28))}
+html[data-theme="glass"] .day,html[data-theme="glass"] .mo,html[data-theme="glass"] .sp div,html[data-theme="glass"] .pl,html[data-theme="glass"] .pv,html[data-theme="glass"] .tr,html[data-theme="glass"] .card .tr{background:rgba(255,255,255,.06)}
+html[data-theme="glass"] .day.ok,html[data-theme="glass"] .mo.ok{background:rgba(63,212,146,.16)}html[data-theme="glass"] .day.bad,html[data-theme="glass"] .mo.bad{background:rgba(255,122,107,.16)}
+html[data-theme="glass"] .day.off{background:transparent;border-color:rgba(255,255,255,.12)}html[data-theme="glass"] .day.sel,html[data-theme="glass"] .mo.cur{border-color:#7cc4ff}
+html[data-theme="glass"] .day.fut .v,html[data-theme="glass"] .mo.fut .v{color:#5c636b}
+html[data-theme="glass"] .mq{background:rgba(255,122,107,.14)}html[data-theme="glass"] .mq b,html[data-theme="glass"] .mq span{color:#ff9a8e}
+html[data-theme="glass"] .trk .lane,html[data-theme="glass"] .br .b,html[data-theme="glass"] .split{background:rgba(255,255,255,.10)}
+html[data-theme="glass"] .trk .mk{background:#fff}html[data-theme="glass"] .trk .mk span{color:#cfd6de}
+html[data-theme="glass"] .sc .trk svg{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="glass"] input,html[data-theme="glass"] select{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:var(--ink)}
+html[data-theme="glass"] .btn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:var(--ink)}
+html[data-theme="glass"] .btn.p,html[data-theme="glass"] .btn.b{background:#2f9bff;border-color:#2f9bff;color:#fff}
+html[data-theme="glass"] .tabs.gl,html[data-theme="glass"] .seg.gl,html[data-theme="glass"] #topRight .seg{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)}
+html[data-theme="glass"] .tabs.gl>button,html[data-theme="glass"] .seg.gl>button,html[data-theme="glass"] #sexSeg>button,html[data-theme="glass"] .side>button{color:#aab3bd}
+html[data-theme="glass"] .tabs.gl>button.on,html[data-theme="glass"] .seg.gl>button.on,html[data-theme="glass"] #sexSeg>button.on,html[data-theme="glass"] .side>button.on{color:#fff}
+html[data-theme="glass"] .glider{background:linear-gradient(180deg,#45adff,#1e88e5)!important;box-shadow:0 0 0 1px rgba(255,255,255,.25),0 6px 22px rgba(47,155,255,.45),inset 0 1px 0 rgba(255,255,255,.35)!important;border-radius:999px}
+html[data-theme="glass"] .side .glider{border-radius:14px}
+html[data-theme="glass"] .glider::before,html[data-theme="glass"] .glider::after{display:none!important}
+html[data-theme="glass"] .side{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+html[data-theme="glass"] .logo{color:#fff}html[data-theme="glass"] .logo i{background:#2f9bff;border-color:#2f9bff;color:#fff}
+html[data-theme="glass"] .themeBtn{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#fff}
+html[data-theme="glass"] .sect h2{color:#fff!important;text-shadow:none}
+html[data-theme="glass"] .sect .leg,html[data-theme="glass"] #panel .muted.small,html[data-theme="glass"] .side .note{color:var(--muted)}
+html[data-theme="glass"] table.t td,html[data-theme="glass"] table.t th{border-color:rgba(255,255,255,.08)}
+html[data-theme="glass"] .rc .ax{fill:#9aa3ad}html[data-theme="glass"] .rc .bv{fill:#fff}html[data-theme="glass"] .rc .gb[fill="#7d8fa3"]{fill:#55606c}
+html[data-theme="glass"] .ring circle:first-child{stroke:rgba(255,255,255,.10)}
+html[data-theme="glass"] .tr .rk[style*="var(--ink)"]{color:#121417}
+html[data-theme="glass"] .tag[style*="#0c1a2b"]{background:#fff!important;color:#121417}
+html[data-theme="glass"] .calnav button{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:#fff}
+html[data-theme="glass"] .cell.sD,html[data-theme="glass"] input.cell.sD{background:transparent;border-color:rgba(255,255,255,.18)}
+html[data-theme="glass"] .cell.s1{background:#1f4a37;color:#8fe3b8}html[data-theme="glass"] .cell.sQ{background:rgba(255,190,90,.18);color:#ffd08a}
+html[data-theme="glass"] .gbar{background:rgba(20,24,28,.75);border-color:rgba(255,255,255,.12)}
+html[data-theme="glass"] .drop{border-color:rgba(255,255,255,.18)}html[data-theme="glass"] .empty{border-color:rgba(255,255,255,.15)}
 </style>
 </head>
 <body>
@@ -631,7 +696,7 @@ function mqsRange(){
 function renderMqsSection(target){
   var el = target || $('mqsSec'); if (!el) return;
   var R = mqsRange();
-  var mqx = S.mqSex || 'CKD';
+  var mqx = S.mqSex || (S.sex === 'SKD' ? 'SKD' : 'CKD');
   el.innerHTML = '<div class="sect"><h2>MQS ma\'lumotlari · ' + mqx + ' · ' + esc(R[2]) + '</h2><div class="range"><div class="seg gl" id="mqSx">' +
     [['CKD','CKD sexi'],['SKD','SKD sexi']].map(function(x){ return '<button data-x="' + x[0] + '" class="' + (mqx === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div><div class="seg gl" id="mqSeg">' +
     [['kun','Kun'],['oy','Oy'],['yil','Yil'],['ora','Oraliq']].map(function(x){ return '<button data-m="' + x[0] + '" class="' + (S.mq.mode === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div>' +
@@ -654,7 +719,7 @@ function barList(list, col){
   return '<div class="bars">' + list.map(function(x){ return '<div class="br"><span title="' + esc(x[0]) + '">' + esc(x[0]) + '</span><span class="b"><i style="width:' + (x[1] / mx * 100) + '%;background:' + col + '"></i></span><em>' + f(x[1]) + '</em></div>'; }).join('') + '</div>';
 }
 function mqsBody(r, withList){
-  if (!r.total) return '<div class="empty">' + (S.mqSex || 'CKD') + ' sexi uchun bu davrda MQS ma\'lumoti yo\'q. MQS faylini Boshqaruv → "MQS ma\'lumotlari" bo\'limida yuklang.</div>';
+  if (!r.total) return '<div class="empty">' + (S.mqSex || (S.sex === 'SKD' ? 'SKD' : 'CKD')) + ' sexi uchun bu davrda MQS ma\'lumoti yo\'q. MQS faylini Boshqaruv → "MQS ma\'lumotlari" bo\'limida yuklang.</div>';
   var tset = {}; r.topT.forEach(function(x){ tset[x[0]] = 1; });
   var h = '<div class="k3"><div class="card"><div class="muted" style="font-weight:700;font-size:14px">jami nuqson</div><div class="mbig">' + f(r.total) + '</div>' +
     '<div class="muted" style="font-weight:700;font-size:14px;margin-top:8px">' + f(r.cars) + ' ta avtomobilda · har avtoda o\'rtacha ' + (r.cars ? (r.total / r.cars).toFixed(1) : '—') + ' ta · ochiq: ' + f(r.open) + '</div>' +
@@ -938,10 +1003,23 @@ function glide(box, animate){
   var on = box.querySelector(':scope>button.on'); if (!on){ g.style.opacity = 0; return; }
   g.style.opacity = 1;
   if (!animate){ g.style.transition = 'none'; }
+  g.dataset.prev = g.style.transform; g.dataset.pw = parseFloat(g.style.width) || on.offsetWidth; g.dataset.ph = parseFloat(g.style.height) || on.offsetHeight;
   g.style.width = on.offsetWidth + 'px'; g.style.height = on.offsetHeight + 'px';
   g.style.transform = 'translate(' + on.offsetLeft + 'px,' + on.offsetTop + 'px)';
-  if (!animate){ void g.offsetWidth; g.style.transition = ''; }
-  else { g.classList.remove('pop'); void g.offsetWidth; g.classList.add('pop'); }
+  if (!animate){ void g.offsetWidth; g.style.transition = ''; return; }
+  // cho'ziluvchi tomchi: avval eski va yangi tugma orasini qoplaydi, keyin yangisiga qisqaradi
+  var m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)/.exec(g.dataset.prev || ''), vert = box.classList.contains('side');
+  if (m && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var px = +m[1], py = +m[2], pw = +g.dataset.pw, ph = +g.dataset.ph, nx = on.offsetLeft, ny = on.offsetTop, nw = on.offsetWidth, nh = on.offsetHeight;
+    g.style.transition = 'none';
+    g.style.transform = 'translate(' + px + 'px,' + py + 'px)'; g.style.width = pw + 'px'; g.style.height = ph + 'px'; void g.offsetWidth;
+    g.style.transition = 'transform .22s cubic-bezier(.3,0,.2,1),width .22s cubic-bezier(.3,0,.2,1),height .22s cubic-bezier(.3,0,.2,1)';
+    if (vert){ var y0 = Math.min(py, ny), y1 = Math.max(py + ph, ny + nh); g.style.transform = 'translate(' + nx + 'px,' + y0 + 'px)'; g.style.height = (y1 - y0) + 'px'; }
+    else { var x0 = Math.min(px, nx), x1 = Math.max(px + pw, nx + nw); g.style.transform = 'translate(' + x0 + 'px,' + ny + 'px)'; g.style.width = (x1 - x0) + 'px'; }
+    clearTimeout(g._t); g._t = setTimeout(function(){ g.style.transition = 'transform .32s cubic-bezier(.2,.8,.2,1),width .32s cubic-bezier(.2,.8,.2,1),height .32s cubic-bezier(.2,.8,.2,1)';
+      g.style.transform = 'translate(' + nx + 'px,' + ny + 'px)'; g.style.width = nw + 'px'; g.style.height = nh + 'px'; }, 200);
+  }
+  g.classList.remove('pop'); void g.offsetWidth; g.classList.add('pop');
 }
 function glideAll(animate){ document.querySelectorAll('.gl').forEach(function(b){ glide(b, animate); }); }
 var lastGl = {};
@@ -974,16 +1052,21 @@ function ghost(el){
   g.style.left = r.left + 'px'; g.style.top = r.top + 'px'; g.style.width = r.width + 'px'; g.style.height = Math.min(r.height, vh - r.top + 40) + 'px'; g.style.overflow = 'hidden';
   document.body.appendChild(g); setTimeout(function(){ g.remove(); }, 650);
 }
-function swap(el, render){ ghost(el); render(); enter(el); }
+function swap(el, render){
+  if (!el || el.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches){ render(); if (el) enter(el); return; }
+  el.classList.remove('dIn'); el.classList.add('dOut');
+  setTimeout(function(){ render(); el.classList.remove('dOut'); void el.offsetWidth; el.classList.add('dIn'); countUp(el); el.classList.add('grow'); setTimeout(function(){ el.classList.remove('dIn','grow'); }, 1100); }, 190);
+}
 
 /* ---------------- oq / qora mavzu (aylana bo'lib yoyiladi) */
 (function(){
   var root = document.documentElement, btn = document.getElementById('themeBtn');
   var saved = null; try { saved = localStorage.getItem('admTheme'); } catch(e){}
-  var set = function(t){ root.setAttribute('data-theme', t); btn.textContent = t === 'dark' ? '☀' : '☾'; try { localStorage.setItem('admTheme', t); } catch(e){} };
-  set(saved === 'dark' ? 'dark' : 'light');
+  var ORD = ['glass','light','dark'], ICO = {glass:'◎', light:'☾', dark:'☀'}, TIT = {glass:'Shisha → Oq', light:'Oq → Qora', dark:'Qora → Shisha'};
+  var set = function(t){ root.setAttribute('data-theme', t); btn.textContent = ICO[t]; btn.title = 'Mavzu: ' + TIT[t]; try { localStorage.setItem('admTheme', t); } catch(e){} };
+  set(ORD.indexOf(saved) >= 0 ? saved : 'glass');
   btn.onclick = function(){
-    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    var next = ORD[(ORD.indexOf(root.getAttribute('data-theme')) + 1) % 3];
     if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches){ set(next); return; }
     var r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
     var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
@@ -996,7 +1079,7 @@ function swap(el, render){ ghost(el); render(); enter(el); }
 /* ---------------- ko'rinish almashinuvi */
 function show(v){
   var cur = $(S.view === 'admin' ? 'admin' : 'panel');
-  if (S.view !== v) ghost(cur);
+  if (S.view !== v && !cur.hidden){ swap(cur, function(){ show2(v); }); return; }
   show2(v);
 }
 function show2(v){
@@ -1010,7 +1093,7 @@ function show2(v){
 $('tabPanel').onclick = function(){ show('panel'); };
 $('tabAdmin').onclick = function(){ show('admin'); };
 $('tabAdmin').hidden = !window.SHOW_ADMIN;
-document.querySelectorAll('#sexSeg button').forEach(function(b){ b.onclick = function(){ S.sex = b.getAttribute('data-s'); document.querySelectorAll('#sexSeg button').forEach(function(x){ x.classList.toggle('on', x === b); }); swap($('panel'), renderPanel); }; });
+document.querySelectorAll('#sexSeg button').forEach(function(b){ b.onclick = function(){ S.sex = b.getAttribute('data-s'); S.mqSex = null; document.querySelectorAll('#sexSeg button').forEach(function(x){ x.classList.toggle('on', x === b); }); swap($('panel'), renderPanel); }; });
 
 run('getData').then(function(d){
   S.data = d; index();
