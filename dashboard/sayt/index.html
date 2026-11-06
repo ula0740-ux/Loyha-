@@ -567,6 +567,22 @@ html[data-theme="glass"] input.cell.pc.man{background:rgba(98,212,243,.16);borde
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:700px){.wrap{padding:16px 16px 32px}.phead h1{font-size:27px}.kpis{gap:10px}.kpi{padding:13px 14px}.kv{font-size:24px}.kh{font-size:12px}.kh i{width:28px;height:28px}.mrow{grid-template-columns:minmax(70px,100px) minmax(0,1fr) 44px}}
 @media (max-width:420px){.kpis{grid-template-columns:minmax(0,1fr)}}
+
+/* "Oy davomida": reja (kulrang ustun) va fakt (ichidagi rangli ustun) */
+.lstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:2px 0 12px}
+.lst{display:grid;gap:2px;padding:10px 12px;border-radius:14px;background:var(--soft);border:1px solid var(--line);min-width:0}
+.lst span{font-size:11.5px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lst b{font:800 20px/1.1 var(--disp);font-variant-numeric:tabular-nums}.lst b.okc{color:var(--ok)}.lst b.badc{color:var(--bad)}
+.bpl{fill:var(--ink);fill-opacity:.10}.bplt{stroke:var(--ink);stroke-opacity:.45;stroke-width:1.5}
+.bfa.ok{fill:var(--lc)}.bfa.bad{fill:var(--bad)}
+.bv2{font:800 11px var(--body)}.bvp{fill:var(--muted);font-weight:700}.bv2.ok{fill:var(--lc)}.bv2.bad{fill:var(--bad)}
+.bsel{fill:var(--lc);fill-opacity:.08;stroke:var(--lc);stroke-opacity:.45;stroke-width:1}
+.lx.off{opacity:.45}.lx.sel{fill:var(--ink);font-weight:800}.lx.wd{font-size:9.5px;opacity:.7}
+.lk{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.lk.kpl{background:color-mix(in srgb,var(--ink) 14%,transparent);border-top:2px solid color-mix(in srgb,var(--ink) 45%,transparent)}.lk.kok{background:var(--lc)}.lk.kbad{background:var(--bad)}.lk.ksel{border:1px solid var(--lc);background:color-mix(in srgb,var(--lc) 12%,transparent)}
+.grow .bfa,.grow .bpl{animation:growY .8s cubic-bezier(.22,1,.36,1) both;transform-box:fill-box;transform-origin:bottom}.grow .bfa{animation-delay:.15s}.grow .bv2{animation:lcFade .4s .7s ease both}
+@media (prefers-reduced-motion:reduce){.grow .bfa,.grow .bpl,.grow .bv2{animation:none!important}}
+@media (max-width:700px){.lstats{grid-template-columns:repeat(2,minmax(0,1fr))}.lcw svg{min-width:640px}}
 /* yon navigatsiya bilan maket */
 .shell{display:grid;grid-template-columns:72px minmax(0,1fr);column-gap:78px;row-gap:16px;align-items:start}
 .shell.nonav{grid-template-columns:minmax(0,1fr)}
@@ -932,32 +948,37 @@ function smooth(P){
   return d;
 }
 function lineCard(ym, D){
-  var key = S.lc === 'b' ? 'b' : 'a', n = dim(ym), pts = [], plan = [], mx = 0, sum = 0, cnt = 0;
+  var key = S.lc === 'b' ? 'b' : 'a', n = dim(ym), rows = [], mx = 0, sP = 0, sF = 0, cnt = 0, today = S.data.bugun;
   for (var d = 1; d <= n; d++){
-    var ds = ym + '-' + ('0'+d).slice(-2), v = fact(ds), pl = dayPlan(ds);
-    if (pl > 0) plan.push([d, pl]);
-    if (v.has && ds <= D){ pts.push([d, v[key]]); sum += v[key]; cnt++; }
-    mx = Math.max(mx, pl, v.has ? v[key] : 0);
+    var ds = ym + '-' + ('0'+d).slice(-2), v = fact(ds), pl = dayPlan(ds), has = v.has && ds <= D;
+    rows.push({d:d, ds:ds, pl:pl, fa: has ? v[key] : null});
+    if (ds <= D){ sP += pl; if (has){ sF += v[key]; cnt++; } }
+    mx = Math.max(mx, pl, has ? v[key] : 0);
   }
-  var top = niceMax(mx * 1.08), W0 = 760, H0 = 270, P = {l:44, r:16, t:16, b:30}, iw = W0 - P.l - P.r, ih = H0 - P.t - P.b;
-  var X = function(d){ return P.l + (n > 1 ? (d - 1) / (n - 1) : .5) * iw; }, Y = function(v){ return P.t + ih - v / top * ih; };
-  var g = '';
-  for (var i = 0; i <= 4; i++){ var yv = top * i / 4, yy = Y(yv); g += '<line class="lg" x1="' + P.l + '" x2="' + (W0 - P.r) + '" y1="' + yy.toFixed(1) + '" y2="' + yy.toFixed(1) + '"/><text class="lx" x="' + (P.l - 10) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + f(yv) + '</text>'; }
-  [1, 5, 10, 15, 20, 25, n].forEach(function(d, j, a){ if (j && a[j-1] === d) return; if (d === 25 && n - 25 < 3) return; g += '<text class="lx" x="' + X(d).toFixed(1) + '" y="' + (H0 - 8) + '" text-anchor="middle">' + d + '</text>'; });
-  if (plan.length > 1) g += '<path class="lp" d="' + plan.map(function(q, i){ return (i ? 'L' : 'M') + X(q[0]).toFixed(1) + ' ' + Y(q[1]).toFixed(1); }).join('') + '"/>';
-  var P2 = pts.map(function(q){ return [X(q[0]), Y(q[1])]; });
-  if (P2.length > 1){
-    var ln = smooth(P2);
-    g += '<path class="la" d="' + ln + 'L' + P2[P2.length-1][0].toFixed(1) + ' ' + (P.t + ih) + 'L' + P2[0][0].toFixed(1) + ' ' + (P.t + ih) + 'Z" fill="url(#lcA)"/>';
-    g += '<path class="ll" pathLength="1" d="' + ln + '"/>';
-  }
-  pts.forEach(function(q, i){ var last = i === pts.length - 1; g += '<circle class="lpnt' + (last ? ' lst' : '') + '" cx="' + X(q[0]).toFixed(1) + '" cy="' + Y(q[1]).toFixed(1) + '" r="' + (last ? 5 : 3) + '"><title>' + q[0] + '-' + OY[+ym.slice(5)-1] + ': ' + f(q[1]) + '</title></circle>'; });
-  if (pts.length){ var L = pts[pts.length-1]; g += '<text class="lv" x="' + Math.min(X(L[0]), W0 - P.r - 4).toFixed(1) + '" y="' + (Y(L[1]) - 12).toFixed(1) + '" text-anchor="' + (X(L[0]) > W0 - 60 ? 'end' : 'middle') + '">' + f(L[1]) + '</text>'; }
-  var title = key === 'a' ? 'kunlik ishlab chiqarish · 630' : 'omborga topshirish · 700';
-  return '<div class="card lc" id="lcCard"><div class="ct"><div><h2>Oy davomida</h2><span class="lsub">' + OY[+ym.slice(5)-1] + ' ' + ym.slice(0,4) + ' · ' + title + '</span></div>' +
+  var top = niceMax(mx * 1.12), W0 = 760, H0 = 300, P = {l:40, r:8, t:22, b:34}, iw = W0 - P.l - P.r, ih = H0 - P.t - P.b, sw = iw / n;
+  var Y = function(v){ return P.t + ih - v / top * ih; }, g = '';
+  for (var i = 0; i <= 4; i++){ var yv = top * i / 4, yy = Y(yv); g += '<line class="lg" x1="' + P.l + '" x2="' + (W0 - P.r) + '" y1="' + yy.toFixed(1) + '" y2="' + yy.toFixed(1) + '"/><text class="lx" x="' + (P.l - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + f(yv) + '</text>'; }
+  rows.forEach(function(r){
+    var cx = P.l + (r.d - .5) * sw, wP = Math.max(6, sw * .72), wF = Math.max(4, sw * .42), off = !r.pl && r.fa === null, sel = r.ds === D;
+    if (sel) g += '<rect class="bsel" x="' + (cx - sw / 2 + 1).toFixed(1) + '" y="' + (P.t - 14) + '" width="' + (sw - 2).toFixed(1) + '" height="' + (ih + 14) + '" rx="6"/>';
+    if (r.pl > 0) g += '<rect class="bpl" x="' + (cx - wP / 2).toFixed(1) + '" y="' + Y(r.pl).toFixed(1) + '" width="' + wP.toFixed(1) + '" height="' + (P.t + ih - Y(r.pl)).toFixed(1) + '" rx="4"/><line class="bplt" x1="' + (cx - wP / 2).toFixed(1) + '" x2="' + (cx + wP / 2).toFixed(1) + '" y1="' + Y(r.pl).toFixed(1) + '" y2="' + Y(r.pl).toFixed(1) + '"/>';
+    if (r.fa !== null){
+      var ok = !r.pl || r.fa >= r.pl, hF = Math.max(2, P.t + ih - Y(r.fa));
+      g += '<rect class="bfa ' + (ok ? 'ok' : 'bad') + '" x="' + (cx - wF / 2).toFixed(1) + '" y="' + (P.t + ih - hF).toFixed(1) + '" width="' + wF.toFixed(1) + '" height="' + hF.toFixed(1) + '" rx="3"/>';
+      g += '<text class="bv2 ' + (ok ? 'ok' : 'bad') + '" x="' + cx.toFixed(1) + '" y="' + (Math.min(Y(r.fa), r.pl ? Y(r.pl) : Y(r.fa)) - 6).toFixed(1) + '" text-anchor="middle">' + f(r.fa) + (sel && r.pl ? '<tspan class="bvp"> / ' + f(r.pl) + '</tspan>' : '') + '</text>';
+    }
+    g += '<rect x="' + (cx - sw / 2).toFixed(1) + '" y="' + P.t + '" width="' + sw.toFixed(1) + '" height="' + ih + '" fill="transparent"><title>' + nice(r.ds) + ', ' + WD[dow(r.ds)] + ': reja ' + (r.pl ? f(r.pl) : '—') + ', fakt ' + (r.fa === null ? '—' : f(r.fa)) + (r.fa !== null && r.pl ? ' (' + sg(r.fa - r.pl) + ')' : '') + '</title></rect>';
+    g += '<text class="lx' + (off ? ' off' : '') + (sel ? ' sel' : '') + '" x="' + cx.toFixed(1) + '" y="' + (H0 - 18) + '" text-anchor="middle">' + r.d + '</text>';
+    if (r.d === 1 || dow(r.ds) === 0) g += '<text class="lx wd" x="' + cx.toFixed(1) + '" y="' + (H0 - 5) + '" text-anchor="middle">' + WD[dow(r.ds)] + '</text>';
+  });
+  var df = Math.round(sF - sP), pct = sP ? Math.round(sF / sP * 100) : null;
+  var title = key === 'a' ? 'ishlab chiqarish (630)' : 'omborga topshirish (700)';
+  var stat = function(lab, val, cls){ return '<div class="lst"><span>' + lab + '</span><b' + (cls ? ' class="' + cls + '"' : '') + '>' + val + '</b></div>'; };
+  return '<div class="card lc" id="lcCard"><div class="ct"><div><h2>Oy davomida · reja va fakt</h2><span class="lsub">' + OY[+ym.slice(5)-1] + ' ' + ym.slice(0,4) + ' · har kuni ' + title + '</span></div>' +
     '<div class="seg lcs" role="group" aria-label="Ko\'rsatkich"><button data-lc="a" class="' + (key === 'a' ? 'on' : '') + '">630</button><button data-lc="b" class="' + (key === 'b' ? 'on' : '') + '">700</button></div></div>' +
-    '<div class="lcw"><svg viewBox="0 0 ' + W0 + ' ' + H0 + '" width="100%" role="img" aria-label="' + OY[+ym.slice(5)-1] + ' oyi ' + title + ' va kunlik reja"><defs><linearGradient id="lcA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--lc);stop-opacity:.34"/><stop offset="1" style="stop-color:var(--lc);stop-opacity:0"/></linearGradient></defs>' + g + '</svg></div>' +
-    '<div class="leg lleg"><span><span class="li"></span>fakt</span><span><span class="li lpl"></span>kunlik reja (ish grafigi bo\'yicha)</span><span>' + (cnt ? cnt + ' kun · o\'rtacha ' + f(sum / cnt) + ' ta' : 'bu oyda hali ma\'lumot yo\'q') + '</span></div></div>';
+    '<div class="lstats">' + stat(nice(D) + 'gacha reja', sP ? f(sP) : '—') + stat('fakt', f(sF)) + stat('farq', sP ? sg(df) : '—', sP ? (df >= 0 ? 'okc' : 'badc') : '') + stat('bajarildi', pct === null ? '—' : pct + '%', pct === null ? '' : (pct >= 100 ? 'okc' : 'badc')) + '</div>' +
+    '<div class="lcw"><svg viewBox="0 0 ' + W0 + ' ' + H0 + '" width="100%" role="img" aria-label="' + OY[+ym.slice(5)-1] + ' oyi: har kunning rejasi va fakti">' + g + '</svg></div>' +
+    '<div class="leg lleg"><span><span class="lk kpl"></span>reja (kunlik)</span><span><span class="lk kok"></span>fakt — rejaga yetdi</span><span><span class="lk kbad"></span>fakt — rejadan kam</span><span><span class="lk ksel"></span>tanlangan kun</span>' + (cnt ? '' : '<span>bu oyda hali fakt yo\'q</span>') + '</div></div>';
 }
 function renderPanelLc(){ document.querySelectorAll('#lcCard [data-lc]').forEach(function(b){ b.onclick = function(){ S.lc = b.getAttribute('data-lc'); $('lcCard').outerHTML = lineCard(S.sel.slice(0,7), S.sel); renderPanelLc(); }; }); }
 function modelCard(ym, D){
