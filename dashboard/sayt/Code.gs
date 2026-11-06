@@ -6,7 +6,7 @@
  *   Kunlik     — kun / sex / model bo'yicha 630 va 700 soni (Avto'dan hisoblanadi).
  *   MQS        — har bir nuqson bitta qator.
  *   Reja       — oylik reja (CKD, SKD).
- *   Grafik     — oyning ish grafigi (har kun: 2 smena, 1 smena, Q qisqa, X to'xtash, D dam).
+ *   Grafik     — oyning ish grafigi: 'h:soatlar' va ixtiyoriy ';p:kunlik reja (dona)' (bo'sh = soatdan hisoblanadi).
  *   Tuzatish   — qo'lda tuzatilgan kunlik raqamlar (Kunlik ustidan yoziladi).
  *   OylikQolda — Excel bo'lmagan o'tgan oylar uchun qo'lda kiritilgan oylik jami.
  *   Tarjima    — inglizcha nuqson nomi -> o'zbekcha.
@@ -307,7 +307,7 @@ function saveReja(pin, kim, oy, sex, son) {
 
 function saveGrafik(pin, kim, oy, sex, kunlar) {
   pin_(pin);
-  if (!/^[21QXD](,[21QXD]){27,30}$/.test(kunlar) && !/^h:\d{1,2}(\.5)?(,\d{1,2}(\.5)?){27,30}$/.test(kunlar)) throw new Error('Grafik noto\'g\'ri.');
+  if (!/^[21QXD](,[21QXD]){27,30}$/.test(kunlar) && !/^h:\d{1,2}(\.5)?(,\d{1,2}(\.5)?){27,30}(;p:(\d{1,5})?(,(\d{1,5})?){27,30})?$/.test(kunlar)) throw new Error('Grafik noto\'g\'ri.');
   var data = rows_('Grafik').filter(function (r) { return !(r[0] === oy && r[1] === sex); });
   data.push([oy, sex, kunlar]);
   write_('Grafik', data);

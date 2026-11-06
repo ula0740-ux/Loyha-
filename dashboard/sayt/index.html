@@ -557,6 +557,13 @@ html[data-theme="glass"] .lcs{background:rgba(255,255,255,.06)}html[data-theme="
 html[data-theme="glass"] .hbtn{background:rgba(255,255,255,.07)}
 html[data-theme="glass"] .tabs.gl,html[data-theme="glass"] .seg.gl,html[data-theme="glass"] #topRight .seg,html[data-theme="glass"] .themeBtn{background:rgba(24,27,27,.5);border-color:rgba(255,255,255,.14)}
 html[data-theme="dark"] .lcs button.on{color:#0d0e10}html[data-theme="light"] .lcs button.on{color:#fff}
+input.cell.pc{font:800 13px var(--disp);letter-spacing:-.02em;background:var(--soft);color:var(--ink);border:1.5px solid var(--line)}
+input.cell.pc::placeholder{color:var(--muted);opacity:.55;font-weight:700}
+input.cell.pc.man{background:rgba(47,99,255,.12);border-color:rgba(47,99,255,.45)}
+html[data-theme="glass"] input.cell.pc.man{background:rgba(98,212,243,.16);border-color:rgba(98,212,243,.5)}
+.sch .rl.rlp{font-size:13px;color:var(--muted)}.sch .rl.rlp span{white-space:nowrap}
+.sch{grid-template-columns:118px repeat(31,minmax(0,1fr))}
+@media (max-width:1100px){.sch{grid-template-columns:118px repeat(31,44px)}}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:700px){.wrap{padding:16px 16px 32px}.phead h1{font-size:27px}.kpis{gap:10px}.kpi{padding:13px 14px}.kv{font-size:24px}.kh{font-size:12px}.kh i{width:28px;height:28px}.mrow{grid-template-columns:minmax(70px,100px) minmax(0,1fr) 44px}}
 @media (max-width:420px){.kpis{grid-template-columns:minmax(0,1fr)}}
@@ -817,7 +824,7 @@ function index(){
   if (!/^\d{4}-\d{2}-\d{2}$/.test(D.bugun || '')) D.bugun = ymd(new Date());
   var okD = function(r){ return /^\d{4}-\d{2}-\d{2}$/.test(r[0]); }, okM = function(r){ return /^\d{4}-\d{2}$/.test(r[0]); };
   D.days = D.days.filter(okD); D.mqsDays = D.mqsDays.filter(okD); D.reja = D.reja.filter(okM); D.grafik = D.grafik.filter(okM); D.oylik = D.oylik.filter(okM);
-  var ix = { day:{}, mq:{}, reja:{}, graf:{}, oylik:{}, dates:[] };
+  var ix = { day:{}, mq:{}, reja:{}, graf:{}, dplan:{}, pc:{}, oylik:{}, dates:[] };
   D.days.forEach(function(r){
     var o = (ix.day[r[0]] = ix.day[r[0]] || {});
     var x = (o[r[1]] = o[r[1]] || {a:0, b:0, m:{}, t:false});
@@ -827,13 +834,14 @@ function index(){
   });
   D.mqsDays.forEach(function(r){ var o = (ix.mq[r[0]] = ix.mq[r[0]] || {}); o[r[1]] = {n:+r[2], p:+r[3], t:+r[4]}; });
   D.reja.forEach(function(r){ ix.reja[r[0] + '|' + r[1]] = +r[2] || 0; });
-  D.grafik.forEach(function(r){ ix.graf[r[0] + '|' + r[1]] = parseGraf(r[2]); });
+  D.grafik.forEach(function(r){ ix.graf[r[0] + '|' + r[1]] = parseGraf(r[2]); ix.dplan[r[0] + '|' + r[1]] = parsePlan(r[2]); });
   D.oylik.forEach(function(r){ ix.oylik[r[0] + '|' + r[1]] = {a: r[2] === '' ? null : +r[2], b: r[3] === '' ? null : +r[3], q: r[4] === '' ? null : +r[4]}; });
   ix.dates = Object.keys(ix.day).sort();
   S.ix = ix;
 }
 var LEG = {'2':16,'1':8,'Q':4,'X':0,'D':0};
-function parseGraf(t){ t = String(t || ''); if (t.slice(0,2) === 'h:') return t.slice(2).split(',').map(function(x){ return Math.max(0, +x || 0); }); return t.split(',').map(function(c){ return LEG[c] !== undefined ? LEG[c] : (+c || 0); }); }
+function parsePlan(t){ var m = /;p:(.*)$/.exec(String(t || '')); if (!m) return null; return m[1].split(',').map(function(v){ return v === '' ? null : Math.max(0, +v || 0); }); }
+function parseGraf(t){ t = String(t || '').split(';')[0]; if (t.slice(0,2) === 'h:') return t.slice(2).split(',').map(function(x){ return Math.max(0, +x || 0); }); return t.split(',').map(function(c){ return LEG[c] !== undefined ? LEG[c] : (+c || 0); }); }
 var TPL = {wd:16, sh:8};
 function defGraf(ym){ var out = []; for (var d = 1; d <= dim(ym); d++){ var w = dow(ym + '-' + ('0'+d).slice(-2)); out.push(w < 5 ? TPL.wd : w === 5 ? TPL.sh : 0); } return out; }
 function sexes(){ return S.sex === 'ALL' ? ['CKD','SKD'] : [S.sex]; }
@@ -841,16 +849,24 @@ function grafik(ym, sex){
   var g = S.ix.graf[ym + '|' + sex]; if (g && g.length === dim(ym)) return g;
   return defGraf(ym);
 }
-function planMonth(ym){ return sexes().reduce(function(s, x){ return s + (S.ix.reja[ym + '|' + x] || 0); }, 0); }
-function dayPlan(date){
-  var ym = date.slice(0,7), d = +date.slice(8);
-  return sexes().reduce(function(s, x){
-    var pm = S.ix.reja[ym + '|' + x] || 0; if (!pm) return s;
-    var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + (+c || 0); }, 0);
-    return s + (tot ? pm * (+g[d-1] || 0) / tot : 0);
-  }, 0);
+/* kunlik reja: qo'lda yozilgan kunlar o'z sonini oladi, qolgan reja qolgan kunlarga ish soatiga qarab bo'linadi */
+function splitPlan(pm, g, man, n){
+  var out = [], ms = 0, hr = 0, i, has = function(k){ return man && man[k] !== null && man[k] !== undefined && man[k] !== ''; };
+  for (i = 0; i < n; i++){ if (has(i)) ms += +man[i]; else hr += +g[i] || 0; }
+  var rest = Math.max(0, pm - ms);
+  for (i = 0; i < n; i++) out.push(has(i) ? +man[i] : (hr ? rest * (+g[i] || 0) / hr : 0));
+  return out;
 }
-function isOff(date){ var ym = date.slice(0,7), d = +date.slice(8); return sexes().every(function(x){ return !(+grafik(ym, x)[d-1]); }); }
+function planDays(ym, x){
+  var k = ym + '|' + x, c = S.ix.pc; if (c[k]) return c[k];
+  var man = S.ix.dplan[k]; if (man && man.length !== dim(ym)) man = null;
+  return (c[k] = splitPlan(S.ix.reja[k] || 0, grafik(ym, x), man, dim(ym)));
+}
+function planMonthSex(ym, x){ return Math.max(S.ix.reja[ym + '|' + x] || 0, planDays(ym, x).reduce(function(a, v){ return a + v; }, 0)); }
+function planMonth(ym){ return sexes().reduce(function(s, x){ return s + planMonthSex(ym, x); }, 0); }
+function dayPlanSex(date, x){ return planDays(date.slice(0,7), x)[+date.slice(8) - 1] || 0; }
+function dayPlan(date){ return sexes().reduce(function(s, x){ return s + dayPlanSex(date, x); }, 0); }
+function isOff(date){ var ym = date.slice(0,7), d = +date.slice(8); return sexes().every(function(x){ return !(+grafik(ym, x)[d-1]) && !dayPlanSex(date, x); }); }
 function fact(date){
   var o = S.ix.day[date] || {}, r = {a:0, b:0, m:{}, has:false, t:false, sx:{}};
   sexes().forEach(function(x){ var v = o[x]; if (!v) return; r.has = true; r.a += v.a; r.b += v.b; if (v.t) r.t = true; r.sx[x] = v;
@@ -1044,11 +1060,6 @@ function yearStrip(y, ym, today){
 
 
 /* ---------------- oxirgi 3 kun + oy bo'yicha holat (CKD, SKD, Jami) */
-function dayPlanSex(date, x){
-  var ym = date.slice(0,7), d = +date.slice(8), pm = S.ix.reja[ym + '|' + x] || 0; if (!pm) return 0;
-  var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + (+c || 0); }, 0);
-  return tot ? pm * (+g[d-1] || 0) / tot : 0;
-}
 function factSex(date, x){ var o = (S.ix.day[date] || {})[x]; return o ? {a:o.a, b:o.b, has:true} : {a:0, b:0, has:false}; }
 function last3(D){
   var out = [], d = parseD(D), guard = 0;
@@ -1254,7 +1265,9 @@ function aReja(){
   var pv = function(x){ var v = S.ix.reja[ym + '|' + x]; return v === undefined ? '' : String(v); };
   if (!S.gEdit || S.gEdit.ym !== ym){
     var o = {CKD: grafikRaw(ym, 'CKD').map(Number), SKD: grafikRaw(ym, 'SKD').map(Number)};
-    S.gEdit = {ym: ym, CKD: o.CKD.slice(), SKD: o.SKD.slice(), orig: o, plan: {CKD: pv('CKD'), SKD: pv('SKD')}, plan0: {CKD: pv('CKD'), SKD: pv('SKD')}};
+    var mp = function(x){ var m = S.ix.dplan[ym + '|' + x], out = []; for (var i = 0; i < dim(ym); i++) out.push(m && m.length === dim(ym) && m[i] !== null ? String(m[i]) : ''); return out; };
+    S.gEdit = {ym: ym, CKD: o.CKD.slice(), SKD: o.SKD.slice(), orig: o, plan: {CKD: pv('CKD'), SKD: pv('SKD')}, plan0: {CKD: pv('CKD'), SKD: pv('SKD')},
+      P: {CKD: mp('CKD'), SKD: mp('SKD')}, P0: {CKD: mp('CKD'), SKD: mp('SKD')}};
   }
   var G = S.gEdit, n = dim(ym);
   var wsum = function(x){ return G[x].reduce(function(a, c){ return a + (+c || 0); }, 0); };
@@ -1262,27 +1275,35 @@ function aReja(){
   var cls = function(v){ return v <= 0 ? 'sD' : v < 8 ? 'sQ' : v < 16 ? 's1' : 's2'; };
   var h = '<div class="card"><div class="ct"><h2>Oylik reja</h2><div class="calnav"><button id="rPrev">‹</button><b style="padding:0 8px">' + OY[+ym.slice(5)-1] + ' ' + ym.slice(0,4) + '</b><button id="rNext">›</button></div></div><div class="plans">' +
     ['CKD','SKD'].map(function(x){ return '<div class="pl ' + (x === 'CKD' ? 'c' : 's') + '"><div class="h">' + x + ' sexi<span id="ps' + x + '"></span></div><input id="pl' + x + '" type="text" inputmode="numeric" value="' + G.plan[x] + '" placeholder="—"><div class="r">soatiga reja<b id="pd' + x + '">—</b></div></div>'; }).join('') +
-    '<div class="pl t"><div class="h">Jami zavod<span>avtomatik</span></div><input disabled id="plT"><div class="r">kunlik reja ish grafigidan hisoblanadi<b></b></div></div></div></div>';
-  h += '<div class="card"><div class="ct"><h2>Ish grafigi · soat</h2><span>katakka bosing va soatni yozing · Enter / ← → ↑ ↓ bilan yuring · 0 yoki bo\'sh = dam olish</span></div>' +
+    '<div class="pl t"><div class="h">Jami zavod<span>avtomatik</span></div><input disabled id="plT"><div class="r">kunlik reja: qo\'lda yozilgani yoki soatdan hisoblanadi<b></b></div></div></div></div>';
+  h += '<div class="card"><div class="ct"><h2>Ish grafigi va kunlik reja</h2><span>har kunga soat va ishlab chiqarish rejasini (dona) yozing · Enter / ← → ↑ ↓ bilan yuring · reja bo\'sh qolsa, oylik rejadan soatga qarab hisoblanadi (xira son)</span></div>' +
     '<div class="row" style="margin-bottom:12px;align-items:center;gap:8px"><span style="font-weight:700">Tez to\'ldirish:</span><label class="small muted">Du–Ju <input id="tWd" type="text" inputmode="decimal" value="' + TPL.wd + '" style="width:64px"> soat</label><label class="small muted">Sh <input id="tSh" type="text" inputmode="decimal" value="' + TPL.sh + '" style="width:64px"> soat</label><span class="small muted">Ya dam</span>' +
     '<select id="tSx"><option value="both">ikkala sex</option><option value="CKD">faqat CKD</option><option value="SKD">faqat SKD</option></select><button class="btn" id="gTpl">Qo\'llash</button><button class="btn" id="gCopy">O\'tgan oydan nusxa</button></div>' +
     '<div style="overflow-x:auto"><div class="sch"><div></div>';
   for (var d = 1; d <= 31; d++){ if (d > n){ h += '<div></div>'; continue; } var w = dow(ym + '-' + ('0'+d).slice(-2)); h += '<div class="hd' + (w === 6 ? ' we' : '') + '"><b>' + d + '</b>' + WD[w] + '</div>'; }
-  ['CKD','SKD'].forEach(function(x, r){
-    h += '<div class="rl">' + x + ' sexi<span id="rs' + x + '"></span></div>';
+  ['CKD','SKD'].forEach(function(x, k){
+    var r = k * 2;
+    h += '<div class="rl">' + x + ' · soat<span id="rs' + x + '"></span></div>';
     for (var d2 = 1; d2 <= 31; d2++){ if (d2 > n){ h += '<div></div>'; continue; } var c = +G[x][d2-1] || 0;
-      h += '<input class="cell ' + cls(c) + (c !== G.orig[x][d2-1] ? ' chg' : '') + '" type="text" inputmode="decimal" maxlength="4" autocomplete="off" data-x="' + x + '" data-r="' + r + '" data-i="' + (d2-1) + '" value="' + (c || '') + '" aria-label="' + x + ' ' + d2 + '-kun, soat">'; }
+      h += '<input class="cell ' + cls(c) + (c !== G.orig[x][d2-1] ? ' chg' : '') + '" type="text" inputmode="decimal" maxlength="4" autocomplete="off" data-k="h" data-x="' + x + '" data-r="' + r + '" data-i="' + (d2-1) + '" value="' + (c || '') + '" aria-label="' + x + ' ' + d2 + '-kun, soat">'; }
+    h += '<div class="rl rlp">' + x + ' · reja<span id="rp' + x + '"></span></div>';
+    for (var d3 = 1; d3 <= 31; d3++){ if (d3 > n){ h += '<div></div>'; continue; } var pvv = G.P[x][d3-1];
+      h += '<input class="cell pc' + (pvv !== '' ? ' man' : '') + (pvv !== G.P0[x][d3-1] ? ' chg' : '') + '" type="text" inputmode="numeric" maxlength="5" autocomplete="off" data-k="p" data-x="' + x + '" data-r="' + (r + 1) + '" data-i="' + (d3-1) + '" value="' + pvv + '" aria-label="' + x + ' ' + d3 + '-kun, ishlab chiqarish rejasi (dona)">'; }
   });
-  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>16 soat va ko\'p</span><span><i style="background:#cfe7da"></i>8–15 soat</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>8 soatdan kam</span><span><i style="border:1.5px dashed #b9c3cf"></i>dam olish</span><span><i style="outline:2px solid #2f63ff"></i>o\'zgartirilgan, hali tasdiqlanmagan</span></div></div>';
+  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>16 soat va ko\'p</span><span><i style="background:#cfe7da"></i>8–15 soat</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>8 soatdan kam</span><span><i style="border:1.5px dashed #b9c3cf"></i>dam olish</span><span><i style="outline:2px solid #2f63ff"></i>o\'zgartirilgan, hali tasdiqlanmagan</span><span><b>135</b> qo\'lda yozilgan reja · <span style="opacity:.5">135</span> avtomatik hisoblangan</span></div></div>';
   h += '<div class="gbar" id="gBar"><span id="gCnt"></span><div class="row"><button class="btn" id="gUndo">Bekor qilish</button><button class="btn p" id="gSave">✓ Tasdiqlash va saqlash</button></div></div>';
   $('amain').innerHTML = h;
 
-  var changes = function(){ var c = 0; ['CKD','SKD'].forEach(function(x){ G[x].forEach(function(v, i){ if (+v !== +G.orig[x][i]) c++; }); if (String(G.plan[x]) !== String(G.plan0[x])) c++; }); return c; };
+  var changes = function(){ var c = 0; ['CKD','SKD'].forEach(function(x){ G[x].forEach(function(v, i){ if (+v !== +G.orig[x][i]) c++; }); G.P[x].forEach(function(v, i){ if (v !== G.P0[x][i]) c++; }); if (String(G.plan[x]) !== String(G.plan0[x])) c++; }); return c; };
   var refresh = function(){
     ['CKD','SKD'].forEach(function(x){ var w = wsum(x), p = +G.plan[x] || 0;
       $('ps' + x).textContent = wdays(x) + ' ish kuni · ' + f(w) + ' soat'; $('rs' + x).textContent = wdays(x) + ' kun · ' + f(w) + ' soat';
-      $('pd' + x).textContent = p && w ? (p / w).toFixed(1) + ' dona' : '—'; });
-    $('plT').value = (+G.plan.CKD || 0) + (+G.plan.SKD || 0) || '';
+      $('pd' + x).textContent = p && w ? (p / w).toFixed(1) + ' dona' : '—';
+      var sp = splitPlan(p, G[x], G.P[x], n), tot = sp.reduce(function(a, v){ return a + v; }, 0), man = G.P[x].filter(function(v){ return v !== ''; }).length;
+      $('rp' + x).textContent = 'jami ' + f(tot) + (man ? ' · qo\'lda ' + man + ' kun' : '');
+      document.querySelectorAll('input.cell.pc[data-x="' + x + '"]').forEach(function(el){ el.placeholder = sp[+el.getAttribute('data-i')] ? f(sp[+el.getAttribute('data-i')]) : ''; });
+      G.tot = G.tot || {}; G.tot[x] = tot; });
+    $('plT').value = Math.round(Math.max(+G.plan.CKD || 0, G.tot.CKD) + Math.max(+G.plan.SKD || 0, G.tot.SKD)) || '';
     var c = changes(); $('gCnt').innerHTML = c ? '<b>' + c + ' ta o\'zgarish</b> — hali saqlanmagan. Hammasini o\'zgartirib bo\'lgach, tasdiqlang.' : 'O\'zgarish yo\'q';
     $('gBar').classList.toggle('on', c > 0); $('gSave').disabled = !c; $('gUndo').disabled = !c;
   };
@@ -1292,9 +1313,13 @@ function aReja(){
   cells.forEach(function(b){
     var x = b.getAttribute('data-x'), r = +b.getAttribute('data-r'), i = +b.getAttribute('data-i');
     b.onfocus = function(){ b.select(); };
-    b.oninput = function(){ var v = parse(b.value); if (v === null){ b.classList.add('bad'); return; } b.classList.remove('bad');
+    var isP = b.getAttribute('data-k') === 'p';
+    b.oninput = function(){
+      if (isP){ var t = b.value.replace(/[^\d]/g, '').slice(0, 5); if (t !== b.value) b.value = t; G.P[x][i] = t === '' ? '' : String(+t);
+        b.className = 'cell pc' + (G.P[x][i] !== '' ? ' man' : '') + (G.P[x][i] !== G.P0[x][i] ? ' chg' : ''); refresh(); return; }
+      var v = parse(b.value); if (v === null){ b.classList.add('bad'); return; } b.classList.remove('bad');
       G[x][i] = v; b.className = 'cell ' + cls(v) + (v !== G.orig[x][i] ? ' chg' : ''); refresh(); };
-    b.onblur = function(){ var v = parse(b.value); if (v === null) v = G[x][i]; b.value = v || ''; b.classList.remove('bad'); };
+    b.onblur = function(){ if (isP){ b.value = G.P[x][i]; return; } var v = parse(b.value); if (v === null) v = G[x][i]; b.value = v || ''; b.classList.remove('bad'); };
     b.onkeydown = function(e){
       var t = null;
       if (e.key === 'Enter' || (e.key === 'ArrowRight' && b.selectionStart === b.value.length)) t = at(r, i + 1) || at(r + 1, 0);
@@ -1312,11 +1337,12 @@ function aReja(){
     xs.forEach(function(x){ for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); G[x][i] = w < 5 ? a : w === 5 ? b : 0; } }); aReja(); };
   $('gCopy').onclick = function(){ var pr = ymAdd(ym, -1); ['CKD','SKD'].forEach(function(x){ var g = grafikRaw(pr, x).map(Number); for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); var src = g.filter(function(c, j){ return dow(pr + '-' + ('0'+(j+1)).slice(-2)) === w; })[0]; if (src !== undefined) G[x][i] = src; } }); aReja(); };
   $('gUndo').onclick = function(){ S.gEdit = null; aReja(); toast('O\'zgarishlar bekor qilindi.'); };
+  var grafStr = function(x){ return 'h:' + G[x].join(',') + (G.P[x].some(function(v){ return v !== ''; }) ? ';p:' + G.P[x].join(',') : ''); };
   $('gSave').onclick = function(){
     var btn = this; btn.disabled = true; btn.textContent = 'Saqlanmoqda…';
     Promise.all([run('saveReja', S.pin, S.kim, ym, 'CKD', G.plan.CKD), run('saveReja', S.pin, S.kim, ym, 'SKD', G.plan.SKD),
-                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', 'h:' + G.CKD.join(',')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', 'h:' + G.SKD.join(','))])
-      .then(reload).then(function(){ S.gEdit = null; toast('Tasdiqlandi: ' + OY[+ym.slice(5)-1] + ' rejasi va ish grafigi saqlandi.'); aReja(); })
+                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', grafStr('CKD')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', grafStr('SKD'))])
+      .then(reload).then(function(){ S.gEdit = null; toast('Tasdiqlandi: ' + OY[+ym.slice(5)-1] + ' rejasi, ish grafigi va kunlik reja saqlandi.'); aReja(); })
       .catch(function(e){ btn.disabled = false; btn.textContent = '✓ Tasdiqlash va saqlash'; toast(e.message, true); });
   };
   refresh();
