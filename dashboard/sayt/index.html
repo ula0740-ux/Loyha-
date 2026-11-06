@@ -343,6 +343,7 @@ body::before{animation:none!important;filter:none!important}
 .enter>*,.enter .card,.enter .cat{animation-duration:.4s!important;filter:none}
 @keyframes frostIn2{0%{opacity:0;transform:translateX(16px)}100%{opacity:1;transform:none}}
 @keyframes ghostOut{0%{opacity:1}100%{opacity:0;transform:translateX(-16px)}}
+input.cell{width:100%;padding:0;text-align:center;font:900 15px var(--disp);border:0;-moz-appearance:textfield}input.cell::-webkit-outer-spin-button,input.cell::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}input.cell:focus{outline:2.5px solid var(--c630);outline-offset:1px}input.cell.sD{border:1.5px dashed #cfd6df}
 </style>
 </head>
 <body>
@@ -413,27 +414,30 @@ function index(){
   });
   D.mqsDays.forEach(function(r){ var o = (ix.mq[r[0]] = ix.mq[r[0]] || {}); o[r[1]] = {n:+r[2], p:+r[3], t:+r[4]}; });
   D.reja.forEach(function(r){ ix.reja[r[0] + '|' + r[1]] = +r[2] || 0; });
-  D.grafik.forEach(function(r){ ix.graf[r[0] + '|' + r[1]] = r[2].split(','); });
+  D.grafik.forEach(function(r){ ix.graf[r[0] + '|' + r[1]] = parseGraf(r[2]); });
   D.oylik.forEach(function(r){ ix.oylik[r[0] + '|' + r[1]] = {a: r[2] === '' ? null : +r[2], b: r[3] === '' ? null : +r[3], q: r[4] === '' ? null : +r[4]}; });
   ix.dates = Object.keys(ix.day).sort();
   S.ix = ix;
 }
+var LEG = {'2':16,'1':8,'Q':4,'X':0,'D':0};
+function parseGraf(t){ t = String(t || ''); if (t.slice(0,2) === 'h:') return t.slice(2).split(',').map(function(x){ return Math.max(0, +x || 0); }); return t.split(',').map(function(c){ return LEG[c] !== undefined ? LEG[c] : (+c || 0); }); }
+var TPL = {wd:16, sh:8};
+function defGraf(ym){ var out = []; for (var d = 1; d <= dim(ym); d++){ var w = dow(ym + '-' + ('0'+d).slice(-2)); out.push(w < 5 ? TPL.wd : w === 5 ? TPL.sh : 0); } return out; }
 function sexes(){ return S.sex === 'ALL' ? ['CKD','SKD'] : [S.sex]; }
 function grafik(ym, sex){
   var g = S.ix.graf[ym + '|' + sex]; if (g && g.length === dim(ym)) return g;
-  var out = []; for (var d = 1; d <= dim(ym); d++){ var w = dow(ym + '-' + ('0'+d).slice(-2)); out.push(w < 5 ? '2' : w === 5 ? '1' : 'D'); }
-  return out;
+  return defGraf(ym);
 }
 function planMonth(ym){ return sexes().reduce(function(s, x){ return s + (S.ix.reja[ym + '|' + x] || 0); }, 0); }
 function dayPlan(date){
   var ym = date.slice(0,7), d = +date.slice(8);
   return sexes().reduce(function(s, x){
     var pm = S.ix.reja[ym + '|' + x] || 0; if (!pm) return s;
-    var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + W[c]; }, 0);
-    return s + (tot ? pm * W[g[d-1]] / tot : 0);
+    var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + (+c || 0); }, 0);
+    return s + (tot ? pm * (+g[d-1] || 0) / tot : 0);
   }, 0);
 }
-function isOff(date){ var ym = date.slice(0,7), d = +date.slice(8); return sexes().every(function(x){ return W[grafik(ym, x)[d-1]] === 0; }); }
+function isOff(date){ var ym = date.slice(0,7), d = +date.slice(8); return sexes().every(function(x){ return !(+grafik(ym, x)[d-1]); }); }
 function fact(date){
   var o = S.ix.day[date] || {}, r = {a:0, b:0, m:{}, has:false, t:false, sx:{}};
   sexes().forEach(function(x){ var v = o[x]; if (!v) return; r.has = true; r.a += v.a; r.b += v.b; if (v.t) r.t = true; r.sx[x] = v;
@@ -560,8 +564,8 @@ function yearStrip(y, ym, today){
 /* ---------------- oxirgi 3 kun + oy bo'yicha holat (CKD, SKD, Jami) */
 function dayPlanSex(date, x){
   var ym = date.slice(0,7), d = +date.slice(8), pm = S.ix.reja[ym + '|' + x] || 0; if (!pm) return 0;
-  var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + W[c]; }, 0);
-  return tot ? pm * W[g[d-1]] / tot : 0;
+  var g = grafik(ym, x), tot = g.reduce(function(a, c){ return a + (+c || 0); }, 0);
+  return tot ? pm * (+g[d-1] || 0) / tot : 0;
 }
 function factSex(date, x){ var o = (S.ix.day[date] || {})[x]; return o ? {a:o.a, b:o.b, has:true} : {a:0, b:0, has:false}; }
 function last3(D){
@@ -737,35 +741,41 @@ function aReja(){
   var ym = S.amonth || S.sel.slice(0,7); S.amonth = ym;
   if (!S.gEdit || S.gEdit.ym !== ym) S.gEdit = {ym: ym, CKD: grafikRaw(ym, 'CKD').slice(), SKD: grafikRaw(ym, 'SKD').slice(), dirty:false};
   var G = S.gEdit, n = dim(ym);
-  var wsum = function(x){ return G[x].reduce(function(a, c){ return a + W[c]; }, 0); };
+  var wsum = function(x){ return G[x].reduce(function(a, c){ return a + (+c || 0); }, 0); };
+  var wdays = function(x){ return G[x].filter(function(c){ return +c > 0; }).length; };
   var pv = function(x){ var v = S.ix.reja[ym + '|' + x]; return v === undefined ? '' : v; };
   var h = '<div class="card"><div class="ct"><h2>Oylik reja</h2><div class="calnav"><button id="rPrev">‹</button><b style="padding:0 8px">' + OY[+ym.slice(5)-1] + ' ' + ym.slice(0,4) + '</b><button id="rNext">›</button></div></div><div class="plans">' +
-    ['CKD','SKD'].map(function(x){ var w = wsum(x); return '<div class="pl ' + (x === 'CKD' ? 'c' : 's') + '"><div class="h">' + x + ' sexi<span>' + w + ' ish kuni (vazn)</span></div><input id="pl' + x + '" type="number" min="0" step="1" value="' + pv(x) + '" placeholder="—"><div class="r">kunlik reja (o\'rtacha)<b id="pd' + x + '">' + (pv(x) && w ? f(pv(x) / w) + ' dona' : '—') + '</b></div></div>'; }).join('') +
+    ['CKD','SKD'].map(function(x){ var w = wsum(x); return '<div class="pl ' + (x === 'CKD' ? 'c' : 's') + '"><div class="h">' + x + ' sexi<span>' + wdays(x) + ' ish kuni · ' + f(w) + ' soat</span></div><input id="pl' + x + '" type="number" min="0" step="1" value="' + pv(x) + '" placeholder="—"><div class="r">soatiga reja<b id="pd' + x + '">' + (pv(x) && w ? (pv(x) / w).toFixed(1) + ' dona' : '—') + '</b></div></div>'; }).join('') +
     '<div class="pl t"><div class="h">Jami zavod<span>avtomatik</span></div><input disabled id="plT" value="' + ((+pv('CKD') || 0) + (+pv('SKD') || 0) || '') + '"><div class="r">kunlik reja ish grafigidan hisoblanadi<b></b></div></div></div></div>';
-  h += '<div class="card"><div class="ct"><h2>Ish grafigi</h2><span>katakni bosing: 2 → 1 → Q → × → dam</span></div><div style="overflow-x:auto"><div class="sch"><div></div>';
+  h += '<div class="card"><div class="ct"><h2>Ish grafigi · soat</h2><span>har kunga necha soat ishlashini yozing · 0 = dam olish</span></div><div style="overflow-x:auto"><div class="sch"><div></div>';
   for (var d = 1; d <= 31; d++){ if (d > n){ h += '<div></div>'; continue; } var w = dow(ym + '-' + ('0'+d).slice(-2)); h += '<div class="hd' + (w === 6 ? ' we' : '') + '"><b>' + d + '</b>' + WD[w] + '</div>'; }
   ['CKD','SKD'].forEach(function(x){
-    h += '<div class="rl">' + x + ' sexi<span>' + wsum(x) + ' ish kuni</span></div>';
-    for (var d2 = 1; d2 <= 31; d2++){ if (d2 > n){ h += '<div></div>'; continue; } var c = G[x][d2-1]; h += '<button class="cell s' + c + '" data-g="' + x + '|' + (d2-1) + '">' + ({'2':'2','1':'1','Q':'Q','X':'×','D':''})[c] + '</button>'; }
+    h += '<div class="rl">' + x + ' sexi<span>' + wdays(x) + ' kun · ' + f(wsum(x)) + ' soat</span></div>';
+    for (var d2 = 1; d2 <= 31; d2++){ if (d2 > n){ h += '<div></div>'; continue; } var c = +G[x][d2-1] || 0, cl = c <= 0 ? 'sD' : c < 8 ? 'sQ' : c < 16 ? 's1' : 's2'; h += '<input class="cell ' + cl + '" type="number" min="0" max="24" step="0.5" inputmode="decimal" data-g="' + x + '|' + (d2-1) + '" value="' + (c || '') + '" placeholder="" aria-label="' + x + ' ' + d2 + '-kun, soat">'; }
   });
-  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>2 · ikki smena</span><span><i style="background:#cfe7da"></i>1 · bir smena</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>Q · qisqartirilgan (yarim reja)</span><span><i style="background:var(--bad-s);border:1px solid var(--bad)"></i>× · to\'xtash</span><span><i style="border:1.5px dashed #b9c3cf"></i>dam olish</span></div>' +
-    '<div class="row" style="margin-top:14px"><button class="btn" id="gTpl">Hafta shablonini qo\'llash: Du–Ju 2 smena, Sh 1 smena, Ya dam</button><button class="btn" id="gCopy">O\'tgan oydan nusxa olish</button><button class="btn p" id="gSave">Reja va grafikni saqlash</button></div></div>';
+  h += '</div></div><div class="leg"><span><i style="background:#12a36b"></i>16 soat va ko\'p</span><span><i style="background:#cfe7da"></i>8–15 soat</span><span><i style="background:var(--warn-s);border:1px solid var(--warn)"></i>8 soatdan kam</span><span><i style="border:1.5px dashed #b9c3cf"></i>0 · dam olish</span><span>kunlik reja shu soatlarga mutanosib taqsimlanadi</span></div>' +
+    '<div class="row" style="margin-top:14px;align-items:center"><span style="font-weight:700">Shablon:</span><label class="small muted">Du–Ju <input id="tWd" type="number" min="0" max="24" step="0.5" value="' + TPL.wd + '" style="width:70px"> soat</label><label class="small muted">Sh <input id="tSh" type="number" min="0" max="24" step="0.5" value="' + TPL.sh + '" style="width:70px"> soat</label><span class="small muted">Ya dam</span><button class="btn" id="gTpl">Shablonni qo\'llash</button><button class="btn" id="gCopy">O\'tgan oydan nusxa olish</button><button class="btn p" id="gSave">Reja va grafikni saqlash</button></div></div>';
   $('amain').innerHTML = h;
   $('rPrev').onclick = function(){ S.amonth = ymAdd(ym, -1); aReja(); }; $('rNext').onclick = function(){ S.amonth = ymAdd(ym, 1); aReja(); };
-  var order = ['2','1','Q','X','D'];
-  document.querySelectorAll('[data-g]').forEach(function(b){ b.onclick = function(){ var p = b.getAttribute('data-g').split('|'); var a = G[p[0]]; a[+p[1]] = order[(order.indexOf(a[+p[1]]) + 1) % 5]; G.dirty = true; aReja(); }; });
-  $('gTpl').onclick = function(){ ['CKD','SKD'].forEach(function(x){ for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); G[x][i] = w < 5 ? '2' : w === 5 ? '1' : 'D'; } }); G.dirty = true; aReja(); };
+  document.querySelectorAll('input[data-g]').forEach(function(b){
+    b.onfocus = function(){ b.select(); };
+    b.onchange = function(){ var p = b.getAttribute('data-g').split('|'), v = Math.min(24, Math.max(0, Math.round((+b.value || 0) * 2) / 2)); G[p[0]][+p[1]] = v; G.dirty = true;
+      b.value = v || ''; b.className = 'cell ' + (v <= 0 ? 'sD' : v < 8 ? 'sQ' : v < 16 ? 's1' : 's2');
+      ['CKD','SKD'].forEach(function(x){ var w = wsum(x), pvv = +$('pl' + x).value; $('pd' + x).textContent = pvv && w ? (pvv / w).toFixed(1) + ' dona' : '—'; }); };
+    b.onkeydown = function(e){ if (e.key === 'Enter'){ b.onchange(); var nx = b.nextElementSibling; while (nx && nx.tagName !== 'INPUT') nx = nx.nextElementSibling; if (nx) nx.focus(); } };
+  });
+  $('gTpl').onclick = function(){ TPL.wd = Math.min(24, Math.max(0, +$('tWd').value || 0)); TPL.sh = Math.min(24, Math.max(0, +$('tSh').value || 0)); ['CKD','SKD'].forEach(function(x){ for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); G[x][i] = w < 5 ? TPL.wd : w === 5 ? TPL.sh : 0; } }); G.dirty = true; aReja(); };
   $('gCopy').onclick = function(){ var pr = ymAdd(ym, -1); ['CKD','SKD'].forEach(function(x){ var g = grafikRaw(pr, x); for (var i = 0; i < n; i++){ var w = dow(ym + '-' + ('0'+(i+1)).slice(-2)); var src = g.filter(function(c, j){ return dow(pr + '-' + ('0'+(j+1)).slice(-2)) === w; })[0]; G[x][i] = src || G[x][i]; } }); G.dirty = true; aReja(); };
-  ['CKD','SKD'].forEach(function(x){ $('pl' + x).oninput = function(){ var w = wsum(x), v = +this.value; $('pd' + x).textContent = v && w ? f(v / w) + ' dona' : '—'; $('plT').value = (+$('plCKD').value || 0) + (+$('plSKD').value || 0) || ''; }; });
+  ['CKD','SKD'].forEach(function(x){ $('pl' + x).oninput = function(){ var w = wsum(x), v = +this.value; $('pd' + x).textContent = v && w ? (v / w).toFixed(1) + ' dona' : '—'; $('plT').value = (+$('plCKD').value || 0) + (+$('plSKD').value || 0) || ''; }; });
   $('gSave').onclick = function(){
     var btn = this; btn.disabled = true;
     Promise.all([run('saveReja', S.pin, S.kim, ym, 'CKD', $('plCKD').value), run('saveReja', S.pin, S.kim, ym, 'SKD', $('plSKD').value),
-                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', G.CKD.join(',')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', G.SKD.join(','))])
+                 run('saveGrafik', S.pin, S.kim, ym, 'CKD', 'h:' + G.CKD.join(',')), run('saveGrafik', S.pin, S.kim, ym, 'SKD', 'h:' + G.SKD.join(','))])
       .then(reload).then(function(){ S.gEdit = null; toast('Saqlandi: ' + OY[+ym.slice(5)-1] + ' rejasi va ish grafigi.'); aReja(); })
       .catch(function(e){ btn.disabled = false; toast(e.message, true); });
   };
 }
-function grafikRaw(ym, x){ var g = S.ix.graf[ym + '|' + x]; if (g && g.length === dim(ym)) return g; var out = []; for (var d = 1; d <= dim(ym); d++){ var w = dow(ym + '-' + ('0'+d).slice(-2)); out.push(w < 5 ? '2' : w === 5 ? '1' : 'D'); } return out; }
+function grafikRaw(ym, x){ var g = S.ix.graf[ym + '|' + x]; if (g && g.length === dim(ym)) return g; return defGraf(ym); }
 
 function dropZone(id, label){
   return '<label class="drop" id="' + id + '"><b>' + label + '</b>yoki bosib tanlang · .xlsx · bir nechta faylni birdan tashlash mumkin<input type="file" accept=".xlsx,.xls" multiple hidden></label><div id="' + id + 'Pv" style="display:grid;gap:10px;margin-top:12px"></div>';
@@ -906,7 +916,7 @@ function glideKeep(){ document.querySelectorAll('.gl').forEach(function(b){
   if (on) lastGl[id] = {key:key, w:on.offsetWidth, h:on.offsetHeight, x:on.offsetLeft, y:on.offsetTop};
 }); }
 window.addEventListener('resize', function(){ glideAll(false); });
-var glQ = false; new MutationObserver(function(muts){ if (glQ) return; for (var i = 0; i < muts.length; i++){ var t = muts[i].target; if (t.closest && t.closest('.gl')){ glQ = true; requestAnimationFrame(function(){ glQ = false; glideKeep(); }); return; } } }).observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
+var glQ = false; new MutationObserver(function(muts){ if (glQ) return; for (var i = 0; i < muts.length; i++){ var t = muts[i].target; if (t.closest && (t.closest('.gl') || (t.querySelector && t.querySelector('.gl')))){ glQ = true; requestAnimationFrame(function(){ glQ = false; glideKeep(); }); return; } } }).observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
 function countUp(root){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   root.querySelectorAll('.ev .n, .mbig, .cat .n, .sp b').forEach(function(el){

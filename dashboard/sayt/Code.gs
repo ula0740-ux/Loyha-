@@ -293,7 +293,7 @@ function saveReja(pin, kim, oy, sex, son) {
 
 function saveGrafik(pin, kim, oy, sex, kunlar) {
   pin_(pin);
-  if (!/^[21QXD](,[21QXD]){27,30}$/.test(kunlar)) throw new Error('Grafik noto\'g\'ri.');
+  if (!/^[21QXD](,[21QXD]){27,30}$/.test(kunlar) && !/^h:\d{1,2}(\.5)?(,\d{1,2}(\.5)?){27,30}$/.test(kunlar)) throw new Error('Grafik noto\'g\'ri.');
   var data = rows_('Grafik').filter(function (r) { return !(r[0] === oy && r[1] === sex); });
   data.push([oy, sex, kunlar]);
   write_('Grafik', data);
