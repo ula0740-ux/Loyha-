@@ -61,10 +61,12 @@ http.createServer((req, res) => {
     return;
   }
   if (req.url.startsWith('/xlsx.js')) { res.setHeader('content-type', 'text/javascript'); return res.end(fs.readFileSync(path.join(__dirname, 'node_modules/xlsx/dist/xlsx.full.min.js'))); }
+  if (req.url.startsWith('/pptx.js')) { res.setHeader('content-type', 'text/javascript'); return res.end(fs.readFileSync(path.join(__dirname, 'node_modules/pptxgenjs/dist/pptxgen.bundle.js'))); }
   if (req.url.startsWith('/dump')) { const o = {}; for (const k in sheets) o[k] = sheets[k].getRange(1, 1, sheets[k].getLastRow() || 1, 10).getValues(); res.setHeader('content-type', 'application/json'); return res.end(JSON.stringify(o)); }
   let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
     .replace('<?= showAdmin ?>', 'true')
     .replace('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', '/xlsx.js')
+    .replace('https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js', '/pptx.js')
     .replace('<script>window.SHOW_ADMIN', shim + '<script>window.SHOW_ADMIN');
   res.setHeader('content-type', 'text/html; charset=utf-8'); res.end(html);
 }).listen(process.env.PORT || 8790, () => console.log('ok ' + (process.env.PORT || 8790)));
