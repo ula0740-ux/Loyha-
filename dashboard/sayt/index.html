@@ -502,6 +502,11 @@ html[data-theme="glass"] .kv .okc{color:#5ff0a8}html[data-theme="glass"] .kv .ba
 .kpi.td .ks b{color:var(--ink)}html[data-theme="glass"] .kpi.td .ks b{color:#fff}
 .tdb{flex:1 1 80px;min-width:60px;height:7px;border-radius:4px;background:rgba(127,127,127,.22);overflow:hidden}.tdb i{display:block;height:100%;border-radius:4px}.tdb i.ok{background:var(--ok)}.tdb i.bad{background:var(--bad)}
 .grow .tdb i{animation:growX .9s cubic-bezier(.22,1,.36,1) both;transform-origin:left}
+.kpi.td{gap:4px}.tdr{display:flex;align-items:baseline;gap:10px;font-size:13px;font-weight:700;color:var(--muted)}.tdr span{flex:1}
+.tdr b{font:800 19px/1.25 var(--disp);color:var(--ink);font-variant-numeric:tabular-nums}html[data-theme="glass"] .tdr b{color:#fff}
+.tdr.tdz{margin-top:4px;padding-top:7px;border-top:1px solid rgba(127,127,127,.22);align-items:center}.tdr.tdz b{font-size:27px}
+.tdr b.okc{color:var(--ok)!important}.tdr b.badc{color:var(--bad)!important}html[data-theme="glass"] .tdr b.okc{color:#5ff0a8!important}html[data-theme="glass"] .tdr b.badc{color:#ff8f80!important}
+.tdr em{font-style:normal;font-size:12.5px;padding:5px 8px}.tdm{margin-top:2px}
 .ks2{padding-top:7px;margin-top:3px;border-top:1px solid rgba(127,127,127,.18)}.kq b{color:var(--ink)}html[data-theme="glass"] .kq b{color:#fff}
 .mc{display:inline-block;font:800 11.5px/1 var(--body);padding:4px 7px;border-radius:7px}
 .mc.ok{background:var(--ok-s);color:var(--ok)}.mc.bad{background:var(--bad-s);color:var(--bad)}
@@ -938,16 +943,16 @@ function mtd(v, plan){ if (!plan) return '<span class="kq">shu kungacha reja kir
   return '<span class="kq">oy boshidan <b>' + f(v) + '</b> / reja ' + f(Math.round(plan)) + '</span><span class="mc ' + (d >= 0 ? 'ok' : 'bad') + '">' + (d >= 0 ? '▲ ' : '▼ ') + sg(d) + ' ' + (d >= 0 ? 'oldinda' : 'orqada') + '</span>'; }
 /* oy rejasidan shu kungacha: nechta va necha foiz oldinda / orqada */
 function toDate(D, ms, mp, pm){
-  var pl = Math.round(mp), fa = ms.a, d = fa - pl, pc = pl ? fa / pl * 100 : null, gap = pc === null ? null : pc - 100, ok = d >= 0;
+  var pl = Math.round(mp), fa = ms.a, d = fa - pl, ok = d >= 0;
   var p1 = function(v){ return (Math.round(v * 10) / 10).toFixed(1).replace('.', ','); };
-  var lab = 'Oy rejasidan ' + nice(D) + 'gacha';
-  if (!pl) return kpi('t3', lab, 'reja', '—', pm ? 'shu kungacha reja hali boshlanmagan' : 'oylik reja kiritilmagan');
-  var val = '<span class="' + (ok ? 'okc' : 'badc') + '">' + (ok ? '+' : '−') + f(Math.abs(d)) + '</span><small class="kvs">' + (ok ? 'ta oldindamiz' : 'ta orqadamiz') + '</small>';
-  var bar = '<span class="tdb"><i style="width:' + Math.min(100, pc).toFixed(1) + '%" class="' + (ok ? 'ok' : 'bad') + '"></i></span>';
-  var sub = '<span>reja <b>' + f(pl) + '</b> · ishlab chiqarildi <b>' + f(fa) + '</b> · bajarildi <b>' + p1(pc) + '%</b></span>' +
-    '</div><div class="ks ks2">' + bar + '<span class="mc ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '▲ ' : '▼ ') + p1(Math.abs(gap)) + '% ' + (ok ? 'oldinda' : 'ortda') + '</span>' +
-    '<span class="kq">oy rejasi ' + f(pm) + ' · ' + p1(fa / pm * 100) + '%</span>';
-  return kpi('t3 td', lab, 'reja', val, sub);
+  var head = '<div class="kh"><span>Oy rejasidan ' + nice(D) + 'gacha</span><i>' + navIco('reja') + '</i></div>';
+  if (!pl) return '<div class="kpi t3 td">' + head + '<div class="ks">' + (pm ? 'shu kungacha reja hali boshlanmagan' : 'oylik reja kiritilmagan') + '</div></div>';
+  var gp = d / pl * 100, cls = ok ? 'okc' : 'badc', sgn = function(v, t){ return (v > 0 ? '+' : v < 0 ? '−' : '') + t; };
+  return '<div class="kpi t3 td">' + head +
+    '<div class="tdr"><span>Reja</span><b>' + f(pl) + '</b></div>' +
+    '<div class="tdr"><span>Fakt (630)</span><b>' + f(fa) + '</b></div>' +
+    '<div class="tdr tdz"><span>Rejadan</span><b class="' + cls + '">' + sgn(d, f(Math.abs(d))) + '</b><em class="mc ' + (ok ? 'ok' : 'bad') + '">' + sgn(gp, p1(Math.abs(gp))) + '%</em></div>' +
+    '<div class="ks tdm">oy rejasi ' + f(pm) + ' · bajarildi ' + p1(fa / pm * 100) + '%</div></div>';
 }
 function kpiRow(D, k, kp, kq, ms, pm, mp){
   return '<div class="kpis">' +
