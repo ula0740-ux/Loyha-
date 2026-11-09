@@ -497,7 +497,12 @@ html[data-theme="dark"]{--lc:#4cc3ec}
 .kh i{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(127,127,127,.12)}
 .kh i svg{width:17px;height:17px}
 .kv{font:800 30px/1.1 var(--disp);font-stretch:104%;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap}
-.ks{font-size:12.5px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}.ks2{padding-top:7px;margin-top:3px;border-top:1px solid rgba(127,127,127,.18)}.kq b{color:var(--ink)}html[data-theme="glass"] .kq b{color:#fff}
+.ks{font-size:12.5px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}.kv .okc{color:var(--ok)}.kv .badc{color:var(--bad)}.kvs{font:700 13px var(--body);color:var(--muted);margin-left:8px;letter-spacing:0}
+html[data-theme="glass"] .kv .okc{color:#5ff0a8}html[data-theme="glass"] .kv .badc{color:#ff8f80}
+.kpi.td .ks b{color:var(--ink)}html[data-theme="glass"] .kpi.td .ks b{color:#fff}
+.tdb{flex:1 1 80px;min-width:60px;height:7px;border-radius:4px;background:rgba(127,127,127,.22);overflow:hidden}.tdb i{display:block;height:100%;border-radius:4px}.tdb i.ok{background:var(--ok)}.tdb i.bad{background:var(--bad)}
+.grow .tdb i{animation:growX .9s cubic-bezier(.22,1,.36,1) both;transform-origin:left}
+.ks2{padding-top:7px;margin-top:3px;border-top:1px solid rgba(127,127,127,.18)}.kq b{color:var(--ink)}html[data-theme="glass"] .kq b{color:#fff}
 .mc{display:inline-block;font:800 11.5px/1 var(--body);padding:4px 7px;border-radius:7px}
 .mc.ok{background:var(--ok-s);color:var(--ok)}.mc.bad{background:var(--bad-s);color:var(--bad)}
 .kpi.t1{background:#e8f1fb}.kpi.t2{background:#e3f4f2}.kpi.t3{background:#e7f3e6}.kpi.t4{background:#f6ebe4}
@@ -931,11 +936,24 @@ function kpi(tone, label, icon, value, sub){ return '<div class="kpi ' + tone + 
 function mini(d){ return '<span class="mc ' + (d >= 0 ? 'ok' : 'bad') + '">' + sg(d) + '</span>'; }
 function mtd(v, plan){ if (!plan) return '<span class="kq">shu kungacha reja kiritilmagan</span>'; var d = Math.round(v - plan);
   return '<span class="kq">oy boshidan <b>' + f(v) + '</b> / reja ' + f(Math.round(plan)) + '</span><span class="mc ' + (d >= 0 ? 'ok' : 'bad') + '">' + (d >= 0 ? '▲ ' : '▼ ') + sg(d) + ' ' + (d >= 0 ? 'oldinda' : 'orqada') + '</span>'; }
+/* oy rejasidan shu kungacha: nechta va necha foiz oldinda / orqada */
+function toDate(D, ms, mp, pm){
+  var pl = Math.round(mp), fa = ms.a, d = fa - pl, pc = pl ? fa / pl * 100 : null, gap = pc === null ? null : pc - 100, ok = d >= 0;
+  var p1 = function(v){ return (Math.round(v * 10) / 10).toFixed(1).replace('.', ','); };
+  var lab = 'Oy rejasidan ' + nice(D) + 'gacha';
+  if (!pl) return kpi('t3', lab, 'reja', '—', pm ? 'shu kungacha reja hali boshlanmagan' : 'oylik reja kiritilmagan');
+  var val = '<span class="' + (ok ? 'okc' : 'badc') + '">' + (ok ? '+' : '−') + f(Math.abs(d)) + '</span><small class="kvs">' + (ok ? 'ta oldindamiz' : 'ta orqadamiz') + '</small>';
+  var bar = '<span class="tdb"><i style="width:' + Math.min(100, pc).toFixed(1) + '%" class="' + (ok ? 'ok' : 'bad') + '"></i></span>';
+  var sub = '<span>reja <b>' + f(pl) + '</b> · ishlab chiqarildi <b>' + f(fa) + '</b> · bajarildi <b>' + p1(pc) + '%</b></span>' +
+    '</div><div class="ks ks2">' + bar + '<span class="mc ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '▲ ' : '▼ ') + p1(Math.abs(gap)) + '% ' + (ok ? 'oldinda' : 'ortda') + '</span>' +
+    '<span class="kq">oy rejasi ' + f(pm) + ' · ' + p1(fa / pm * 100) + '%</span>';
+  return kpi('t3 td', lab, 'reja', val, sub);
+}
 function kpiRow(D, k, kp, kq, ms, pm, mp){
   return '<div class="kpis">' +
-    kpi('t1', 'Bugun ishlab chiqarildi (630)', 'car', f(k.a), (kp ? mini(k.a - kp) + ' kunlik reja ' + f(kp) : (k.has ? 'kunlik reja kiritilmagan' : 'ma\'lumot yo\'q')) + '</div><div class="ks ks2">' + mtd(ms.a, mp)) +
+    kpi('t1', 'Bugun ishlab chiqarildi (630)', 'car', f(k.a), kp ? mini(k.a - kp) + ' kunlik reja ' + f(kp) : (k.has ? 'kunlik reja kiritilmagan' : 'ma\'lumot yo\'q')) +
     kpi('t2', 'Tayyor mahsulotlar saqlash ombori (700)', 'box', f(k.b), (k.has ? 'bugun · ' + nice(D) : 'bugun ma\'lumot yo\'q') + '</div><div class="ks ks2">' + mtd(ms.b, mp)) +
-    kpi('t3', 'Oylik reja bajarilishi', 'reja', pm ? Math.round(ms.a / pm * 100) + '%' : '—', pm ? f(ms.a) + ' / ' + f(pm) + ' · oy rejasi' : 'oylik reja kiritilmagan') +
+    toDate(D, ms, mp, pm) +
     kpi('t4', 'MQS nuqsonlar · bugun', 'mqs', f(kq), k.a ? (kq / k.a * 100).toFixed(1) + ' ta / 100 avto' : 'avto yo\'q') + '</div>';
 }
 function niceMax(v){ if (v <= 0) return 4; var e = Math.pow(10, Math.floor(Math.log10(v))), m = v / e; var s = m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10; return s * e; }
