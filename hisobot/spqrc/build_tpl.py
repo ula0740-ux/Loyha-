@@ -1,10 +1,9 @@
-# SPQRC haftalik belgilash SHABLONI (HRM 2026 uslubida). Har yo'nalish slaydida ko'rsatkich × hafta katakchalari:
-# bo'sh / ✓ / ✗ / — (shu oyda yo'q hafta). Katakchalar SPQRC.bas makrosidagi ToggleMark ga ulangan; foizlar Yangilash makrosi bilan
-# qayta hisoblanadi. Shakl nomlari makros uchun kalit:  CELL|s|d|r|w   HDR|s|d|w   TXT|metric|s|d|r|w   BAR|...  TRK|...  MAT|s|d
-#   s: sex 1..4, d: yo'nalish 1..5, r: ko'rsatkich 1..6, w: hafta 1..5; 0 = hammasi (yig'indi).
-#   metric: pct = ✓/oylik reja, exe = ✓/(✓+✗), done, miss, plan.
-#   python3 build_tpl.py   (Noyabr 2026 ma'lumotlari Excel'dan oldindan to'ldiriladi)
-import calendar, datetime, os, re, shutil, subprocess, zipfile, openpyxl
+# SPQRC haftalik slaydlari (HRM 2026 uslubida) SPQRC_belgilash.xlsx dan (makrossiz).
+#   Belgilash Excel'da: har sex varag'ida ko'rsatkich x hafta katagiga ✓ / ✗ (make_xlsx.py yasaydi).
+#   python3 build_tpl.py [SPQRC_belgilash.xlsx]   -> SPQRC_haftalik_shablon.pptx (oy va yil Excel'dagi Йил/Ой kataklaridan)
+#   Zavod dashboard faylini ham to'g'ridan-to'g'ri berish mumkin (Dashboard varag'i bo'lsa avtomatik aniqlanadi).
+import calendar, datetime, os, re, shutil, subprocess, sys, zipfile, openpyxl
+from spqrc_data import DIRS, DAYN, SHOPS, MONTHS, OK, NO, OFF, load_dashboard, load_input, weeks as _weeks
 from lxml import etree
 from pptx import Presentation
 from pptx.util import Inches, Pt
@@ -13,45 +12,17 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 
 SKILL = '/root/.claude/skills/synced/bb7b0922-36d0-4b1f-8fcb-0025844e920b_160cec7e-c774-4a51-9040-7a1d5a36cb8e/pptx/scripts'
-TPL, XLSX, OUT = 'kirish/HRM_2026_Sentabr.pptx', 'kirish/SPQRC_dashboard_November_2026.xlsx', 'SPQRC_haftalik_shablon.pptx'
-YEAR, MONTH, MONTH_UZ = 2026, 11, 'Ноябрь'
+TPL, OUT = 'kirish/HRM_2026_Sentabr.pptx', 'SPQRC_haftalik_shablon.pptx'
 CARD, TRACK, CHIP, CELLC, TEAL, LTEAL, CORAL, AMBER = '2F343B', '363C44', '3A3F47', '343A42', '3CC6B8', '7FD9CF', 'E8826E', 'E8B86E'
 TXT, MUTED, DIM, GREY = 'EDEBEB', '9AA2AC', '6B737D', '5A626C'
-OK, NO, OFF = '✓', '✗', '—'
-DIRS = [('SAFETY', 'Хавфсизлик', 'Душанба', 'Ду'), ('PEOPLE', 'Ходимлар', 'Сешанба', 'Се'), ('QUALITY', 'Сифат', 'Чоршанба', 'Чо'),
-        ('RESPONSIVENESS', 'Тезкорлик', 'Пайшанба', 'Па'), ('COST', 'Харажат', 'Жума', 'Жу')]
-DAYN = {d[0]: i for i, d in enumerate(DIRS)}
-SHOPS = [('Body Shop', 'Пайвандлаш цехи', 'Body'), ('Paint Shop', 'Бўёқлаш цехи', 'Paint'), ('GA Shop', 'Йиғув цехи', 'GA'), ('SKD', 'SKD цехи', 'SKD')]
 
-# ---------- ma'lumot (Excel) ----------
-wb = openpyxl.load_workbook(XLSX, data_only=True)
-DASH = list(wb['Dashboard'].iter_rows(values_only=True))
-REP = next(next(v for v in r if isinstance(v, datetime.datetime)) for r in DASH if r[1] and 'Ҳисобот санаси' in str(r[1])).date()
-NA = {}
-h0 = next(i for i, r in enumerate(DASH) if r[1] == 'Йўналиш' and r[2] == 'Кўрсаткич')
-for r in DASH[h0 + 1:]:
-    if r[1] not in DAYN: break
-    for k, v in enumerate(r[6:10]):
-        if v == 'н/а': NA.setdefault(k + 1, []).append((r[1], r[2]))
-def weeks(dcode):  # oyning shu hafta kuniga to'g'ri keladigan sanalari (4 yoki 5 ta)
-    return [datetime.date(YEAR, MONTH, d) for d in range(1, calendar.monthrange(YEAR, MONTH)[1] + 1) if calendar.weekday(YEAR, MONTH, d) == DAYN[dcode]]
-ITEMS = {}  # (s, d) -> [(nomi, {sana: '✓'|'✗'|''})]
-for si, (sheet, *_ ) in enumerate(SHOPS, 1):
-    rows = list(wb[sheet].iter_rows(values_only=True))
-    dates = [x.date() if isinstance(x, datetime.datetime) else None for x in next(r for r in rows if isinstance(r[4], datetime.datetime))[4:34]]
-    cur = None
-    for r in rows:
-        if r[2] and str(r[2]).split('\n')[0] in DAYN: cur = str(r[2]).split('\n')[0]
-        if cur and r[3] and isinstance(r[37], (int, float)) and r[3] != 'Кунлик бажарилган (+) сони':
-            plus = {dates[i] for i, v in enumerate(r[4:34]) if v == '+'}
-            marks = {dt: (OK if dt in plus else (NO if dt <= REP else '')) for dt in weeks(cur)}
-            assert sum(1 for v in marks.values() if v == OK) == r[36] and sum(1 for v in marks.values() if v) == r[37], (sheet, r[3])
-            ITEMS.setdefault((si, DAYN[cur] + 1), []).append((r[3], marks))
-CELLS = []  # (s, d, r, w, qiymat)
-for (s, d), its in ITEMS.items():
-    wk = weeks(DIRS[d - 1][0])
-    for r, (_, marks) in enumerate(its, 1):
-        for w in range(1, 6): CELLS.append((s, d, r, w, marks[wk[w - 1]] if w <= len(wk) else OFF))
+# ---------- ma'lumot: SPQRC_belgilash.xlsx (yoki zavod dashboard fayli) ----------
+SRC = sys.argv[1] if len(sys.argv) > 1 else 'SPQRC_belgilash.xlsx'
+DATA = load_dashboard(SRC) if 'Dashboard' in openpyxl.load_workbook(SRC, read_only=True).sheetnames else load_input(SRC)
+YEAR, MONTH = DATA['year'], DATA['month']; MONTH_UZ = MONTHS[MONTH - 1]
+ITEMS, NA = DATA['items'], DATA['na']
+def weeks(dcode): return _weeks(YEAR, MONTH, DAYN[dcode])
+CELLS = [(s_, d_, r_ + 1, w + 1, marks[w]) for (s_, d_), its in ITEMS.items() for r_, (_, marks) in enumerate(its) for w in range(5)]
 def agg(s=0, d=0, r=0, w=0):
     c = [v for (a, b, e, f, v) in CELLS if (not s or a == s) and (not d or b == d) and (not r or e == r) and (not w or f == w)]
     done = c.count(OK); miss = c.count(NO); plan = sum(1 for v in c if v != OFF)
@@ -106,10 +77,6 @@ def settext(sh, t):
     p = sh.text_frame.paragraphs[0]; p.runs[0].text = t
     for r in p.runs[1:]: r._r.getparent().remove(r._r)
     for e in sh.text_frame.paragraphs[1:]: e._p.getparent().remove(e._p)
-A = 'http://schemas.openxmlformats.org/drawingml/2006/main'
-def macro_click(shape, name='ToggleMark'):  # bosilganda makros: <a:hlinkClick r:id="" action="ppaction://macro?name=..."/>
-    cNvPr = shape._element.nvSpPr.cNvPr
-    h = etree.SubElement(cNvPr, f'{{{A}}}hlinkClick'); h.set('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id', ''); h.set('action', f'ppaction://macro?name={name}')
 def header(sl, num, title, sub, pg):
     for sh in list(sl.shapes):
         if not (sh.name.startswith('!!') and sh.name not in ('!!c1', '!!c2', '!!c3', '!!c4')):
@@ -129,8 +96,7 @@ def kpi(sl, i, lab, key_val, note, ac, val_text):
     text(sl, x + 0.25, 1.66, 2.6, 0.7, val_text if isinstance(val_text, list) else [(val_text, {})], 28, TXT, 'Segoe UI Light', name=key_val)
     text(sl, x + 0.25, 2.34, 2.65, 0.3, note, 8.5, DIM)
 SUB = f'SPQRC маълумотлари · {MONTH_UZ} {YEAR} · ҳафталик белгилаш'
-HOWTO = [('Белгилаш: ', {'font': 'Segoe UI Semibold', 'color': TEAL}), ('слайд-шоуда (F5) катакни босинг: бўш → ✓ → ✗ → бўш. Фоизлар ўзи янгиланади.', {}), ('\n', {}),
-         ('Таҳрирлаш режимида: ', {'font': 'Segoe UI Semibold', 'color': TEAL}), ('катакка + ёки − ёзинг, сўнг Alt+F8 → Yangilash.', {}), ('\n', {}),
+HOWTO = [('Ўзгартириш: ', {'font': 'Segoe UI Semibold', 'color': TEAL}), ('SPQRC_belgilash.xlsx да ҳафта катагига ✓ ёки ✗ қўйинг — слайдлар шу Excel асосида янгиланади.', {}), ('\n', {}),
          ('— ', {'font': 'Segoe UI Semibold', 'color': TEAL}), ('шу ойда йўқ ҳафта (режага кирмайди).', {})]
 
 # ---------- 1) muqova ----------
@@ -143,11 +109,11 @@ for sh in slides[0].shapes:
 
 # ---------- 2) qo'llanma ----------
 sl = slides[1]; header(sl, '00', 'Шаблондан фойдаланиш тартиби', SUB, 2)
-steps = [('1', 'Макросни бир марта улаш', 'Alt+F11 → File → Import File → SPQRC.bas. Сўнг файлни «PowerPoint Macro-Enabled Presentation (*.pptm)» сифатида сақланг. Очилганда «Enable Content / Включить содержимое» ни босинг.'),
-         ('2', 'Ҳафтани белгилаш', 'F5 (слайд-шоу) да катакни босинг: бўш → ✓ (бажарилди) → ✗ (бажарилмади) → бўш. Ҳар бир йўналиш ўз куни бўйича: Ду–SAFETY, Се–PEOPLE, Чо–QUALITY, Па–RESPONSIVENESS, Жу–COST.'),
-         ('3', 'Фоизлар ўзи ошади', 'Ойлик бажарилиш = ✓ / ойлик режа. Белгиланган ҳафталар бўйича = ✓ / (✓ + ✗). Цехнинг умумий слайди ва «Барча цехлар» жадвали ҳам янгиланади.'),
-         ('4', 'Таҳрирлаш режимида', 'Катакка + (бажарилди) ёки − (бажарилмади) ёзинг ва Alt+F8 → Yangilash ни ишга туширинг.'),
-         ('5', 'Янги ой', 'Alt+F8 → OyniOrnatish → йил-ойни киритинг (масалан 2026-12). Саналар янгиланади, белгилар тозаланади, шу ойда йўқ ҳафта «—» бўлади. Сарлавҳадаги ой номини қўлда алмаштиринг.')]
+steps = [('1', 'Excel файлни очинг', 'SPQRC_belgilash.xlsx — телефонда (Excel иловаси), браузерда ёки компьютерда очилади. Макрос керак эмас.'),
+         ('2', 'Ҳафтани белгиланг', 'Цех варағида (Body, Paint, GA, SKD) ҳафта катагига ✓ (бажарилди) ёки ✗ (бажарилмади) танланг ёки + / − ёзинг. Ҳар йўналиш ўз куни бўйича: Ду–SAFETY, Се–PEOPLE, Чо–QUALITY, Па–RESPONSIVENESS, Жу–COST.'),
+         ('3', 'Фоизлар ўзи ошади', 'Ойлик бажарилиш = ✓ / ойлик режа (ой давомида ошиб боради). Белгиланган ҳафталар бўйича = ✓ / (✓ + ✗). Excel да дарҳол, слайдларда — янгилангач.'),
+         ('4', 'Слайдларни янгилаш', 'Белгиланган Excel файлни юборинг — шу шаблондаги барча слайдлар (цехлар, йўналишлар, «Барча цехлар» жадвали) Excel бўйича янгиланади.'),
+         ('5', 'Янги ой', 'Excel даги «Барча цехлар» варағида Йил ва Ой катакларини ўзгартиринг: ҳафта саналари ўзи янгиланади, «—» ўзи қўйилади. Эски белгиларни ўчиринг.')]
 for i, (n, t, d) in enumerate(steps):
     y = 1.35 + i * 1.08
     box(sl, 0.55, y, 12.25, 0.95, CARD)
@@ -217,17 +183,16 @@ for s, (sheet, name, short) in enumerate(SHOPS, 1):
             text(sl, cx0 + (w - 1) * cwid, 3.22, cwid - 0.08, 0.4, [(f'{w}-ҳафта', {'size': 7, 'color': DIM}), ('\n', {}), (lab, {'size': 8, 'color': MUTED, 'font': 'Segoe UI Semibold'})], 8, align=PP_ALIGN.CENTER, name=f'HDR|{s}|{d}|{w}')
         text(sl, 7.00, 3.28, 1.6, 0.3, 'Ойлик бажарилиш', 7.5, DIM, 'Segoe UI Semibold', anchor=MSO_ANCHOR.MIDDLE)
         rh = min(0.5, 3.1 / max(1, len(its) + len([1 for c2, _ in NA.get(s, []) if c2 == code])))
-        for r, (nm, marks) in enumerate(its, 1):
+        for r, (nm, marks) in enumerate(its, 1):  # marks: [w1..w5]
             y = 3.70 + (r - 1) * rh
             text(sl, 0.80, y, 2.45, rh, nm, 9, TXT, anchor=MSO_ANCHOR.MIDDLE)
             for w in range(1, 6):
-                v = marks[wk[w - 1]] if w <= len(wk) else OFF
+                v = marks[w - 1]
                 c = box(sl, cx0 + (w - 1) * cwid, y + rh / 2 - 0.17, cwid - 0.12, 0.34, CELLC, adj=0.25, name=f'CELL|{s}|{d}|{r}|{w}')
                 tf = c.text_frame; tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0; tf.vertical_anchor = MSO_ANCHOR.MIDDLE
                 tf.text = v; p = tf.paragraphs[0]; p.alignment = PP_ALIGN.CENTER
                 run = p.runs[0] if p.runs else p.add_run()
                 run.font.size = Pt(13); run.font.name = 'Segoe UI Semibold'; run.font.color.rgb = rgb(TEAL if v == OK else (CORAL if v == NO else GREY))
-                if v != OFF: macro_click(c)
             bar(sl, 7.00, y + rh / 2 - 0.05, 0.95, 0.10, f'pct|{s}|{d}|{r}|0', exe_col(s, d, r), ratio(s, d, r))
             text(sl, 8.02, y, 0.6, rh, metric('pct', s, d, r), 8.5, TXT, 'Segoe UI Semibold', anchor=MSO_ANCHOR.MIDDLE, name=f'TXT|pct|{s}|{d}|{r}|0')
         for j, (c2, nm) in enumerate([x for x in NA.get(s, []) if x[0] == code]):
@@ -244,4 +209,4 @@ for s, (sheet, name, short) in enumerate(SHOPS, 1):
             text(sl, 12.08, y, 0.62, 0.25, metric('pct', s, d, 0, w), 8.5, TXT, 'Segoe UI Semibold', align=PP_ALIGN.RIGHT, name=f'TXT|pct|{s}|{d}|0|{w}')
         text(sl, 9.10, 5.62, 3.5, 1.2, HOWTO, 7.5, MUTED)
 pres.save(OUT)
-print('ok', len(pres.slides), 'slayd · hisobot sanasi', REP, '· sexlar oylik %:', {SHOPS[s - 1][2]: metric('pct', s) for s in range(1, 5)})
+print('ok', len(pres.slides), 'slayd ·', MONTH_UZ, YEAR, '· sexlar oylik %:', {SHOPS[s - 1][2]: metric('pct', s) for s in range(1, 5)})
