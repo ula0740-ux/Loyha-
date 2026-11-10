@@ -1345,9 +1345,9 @@ function repData(ym){
 
 /* ---- PowerPoint XML bilan ishlash ---- */
 var NS = {a:'http://schemas.openxmlformats.org/drawingml/2006/main', p:'http://schemas.openxmlformats.org/presentationml/2006/main', c:'http://schemas.openxmlformats.org/drawingml/2006/chart', r:'http://schemas.openxmlformats.org/officeDocument/2006/relationships'};
-var XHEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+var XHEAD = '<' + '?xml version="1.0" encoding="UTF-8" standalone="yes"?' + '>\n';   // '<'+'?' ajratilgan: Apps Script shablonida skriptlet deb o'qilmasin
 function xparse(s){ return new DOMParser().parseFromString(s, 'application/xml'); }
-function xstr(doc){ var s = new XMLSerializer().serializeToString(doc); return s.indexOf('<?xml') === 0 ? s : XHEAD + s; }
+function xstr(doc){ var s = new XMLSerializer().serializeToString(doc); return s.indexOf('<' + '?xml') === 0 ? s : XHEAD + s; }
 function kids(el, ns, name){ var out = []; for (var n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 1 && n.namespaceURI === ns && n.localName === name) out.push(n); return out; }
 function kid(el, ns, name){ return kids(el, ns, name)[0] || null; }
 function shp(doc, name){

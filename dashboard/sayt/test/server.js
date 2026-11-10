@@ -68,5 +68,7 @@ http.createServer((req, res) => {
     .replace('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', '/xlsx.js')
     .replace('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', '/jszip.js')
     .replace('<script>window.SHOW_ADMIN', shim + '<script>window.SHOW_ADMIN');
+  // Apps Script HtmlService '<?' ... '?>' ni skriptlet deb o'qiydi: shablonda boshqa '<?' qolmasligi kerak
+  if (html.indexOf('<?') >= 0) { res.statusCode = 500; return res.end('SyntaxError: index.html ichida ruxsatsiz "<?" bor: ' + html.substr(html.indexOf('<?'), 40)); }
   res.setHeader('content-type', 'text/html; charset=utf-8'); res.end(html);
 }).listen(process.env.PORT || 8790, () => console.log('ok ' + (process.env.PORT || 8790)));
