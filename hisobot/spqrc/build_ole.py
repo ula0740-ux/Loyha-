@@ -203,7 +203,10 @@ def make_sheet(s, d, path):
     # sum (pts) - kenglik/balandlik nisbati uchun
     wpt = sum((WIDTH[k] * 7 + 5) * 0.75 for k in WIDTH)
     hpt = sum((ws.row_dimensions[r].height or 15) for r in range(1, lr + 2))
-    return wpt, hpt
+    tops, acc = {}, 0
+    for r in range(1, lr + 2):
+        hh = ws.row_dimensions[r].height or 15; tops[r] = (acc, hh); acc += hh
+    return wpt, hpt, tops, list(range(first, lastr + 1))
 
 def preview(xlsx, png):
     out = os.path.join(TMP, 'pdf'); os.makedirs(out, exist_ok=True)
@@ -226,8 +229,8 @@ sl = slides[1]; header(sl, '00', 'Маълумотларни қандай ўзг
 steps = [('1', 'Жадвални 2 марта босинг', 'Керакли цех ва йўналиш саҳифасидаги жадвални (рақамлар ва катаклар) сичқонча билан 2 марта босинг — ичидаги Excel очилади.'),
          ('2', 'Ҳафтага белги қўйинг', 'Ҳафта катагига ✓ (бажарилди) ёки ✗ (бажарилмади) ёзинг ёки рўйхатдан танланг; + ёки − ҳам бўлади.'),
          ('3', 'Ташқарига босинг', 'Жадвалдан ташқарига босинг — бажарилиш фоизи, бажарилди, режа ва бажарилмади сонлари ўзи янгиланади, ранглар ўзгаради.'),
-         ('4', 'Саҳифалар тартиби', 'Ҳар цех учун 5 та саҳифа: S – Safety, P – People, Q – Quality, R – Responsiveness, C – Cost. Цехлар: Пайвандлаш, Бўёқлаш, Йиғув, SKD.'),
-         ('5', 'Янги ой', 'Файл нусхасини олинг: жадвалда белгиларни ўчиринг, 5-қатордаги ҳафта саналарини алмаштиринг. Сарлавҳадаги ой номини Ctrl+H билан алмаштиринг.')]
+         ('4', 'Натижа файлини биркитиринг', 'Кўрсаткич ёнидаги «+ файл қўшиш» катагини танланг. Ҳавола: Ctrl+K → файл ёки папкани танланг (умумий дискдаги файл учун). Файлнинг ўзини жойлаш: Вставка → Объект → Из файла → «В виде значка» — файл слайд ичида сақланади. Расм: Вставка → Рисунки.'),
+         ('5', 'Тартиб ва янги ой', 'Ҳар цех учун 5 саҳифа: S, P, Q, R, C. Янги ой: файл нусхасини олинг, белгиларни ўчиринг, 5-қатордаги саналарни алмаштиринг, ой номини Ctrl+H билан алмаштиринг.')]
 for i, (n_, t_, d_) in enumerate(steps):
     y = 1.35 + i * 1.08
     box(sl, 0.55, y, 12.25, 0.95, CARD)
@@ -242,15 +245,29 @@ for s, (_, name, short) in enumerate(SHOPS, 1):
         sl = slides[k]; k += 1
         header(sl, LETTER[code], f'{name} — {code} ({uz})', f'{name.upper()} ({SHOPX[s - 1]}) · {SUB} · {wd} кунлари', pg); pg += 1
         x = os.path.join(TMP, f'{short}_{code}.xlsx'); png = x[:-5] + '.png'
-        wpt, hpt = make_sheet(s, d, x); iw, ih = preview(x, png)
-        maxw, maxh = 12.25, 5.35; ar = iw / ih
+        wpt, hpt, tops, irows = make_sheet(s, d, x); iw, ih = preview(x, png)
+        SLW, GAP = 1.55, 0.12
+        maxw, maxh = 12.25 - SLW - GAP, 5.35; ar = iw / ih
         w = maxw; h = w / ar
         if h > maxh: h = maxh; w = h * ar
-        gf = sl.shapes.add_ole_object(x, PROG_ID.XLSX, Inches(0.55 + (maxw - w) / 2), Inches(1.30), Inches(w), Inches(h), icon_file=png, icon_width=Inches(w), icon_height=Inches(h))
+        x0 = 0.55 + (12.25 - (w + GAP + SLW)) / 2; y0 = 1.30
+        gf = sl.shapes.add_ole_object(x, PROG_ID.XLSX, Inches(x0), Inches(y0), Inches(w), Inches(h), icon_file=png, icon_width=Inches(w), icon_height=Inches(h))
         gf.name = f'SPQRC|{short}|{code}'
         ole = gf._element.xpath('.//p:oleObj')[0]
         if 'showAsIcon' in ole.attrib: del ole.attrib['showAsIcon']
+        # dalil (fayl) ustuni
+        sx = x0 + w + GAP; k_ = h / hpt
+        t5, h5 = tops[5]
+        box(sl, sx, y0 + t5 * k_, SLW, h5 * k_, CARD, adj=0.0)
+        text(sl, sx, y0 + t5 * k_, SLW, h5 * k_, '📎 ДАЛИЛ (файл)', 9, MUTED, 'Segoe UI Semibold', align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+        for i_, r in enumerate(irows):
+            tr, hr = tops[r]; pad = min(0.05, hr * k_ * 0.12)
+            b_ = box(sl, sx, y0 + tr * k_ + pad, SLW, hr * k_ - 2 * pad, '2A2E34', adj=0.15, name=f'DALIL|{short}|{code}|{i_ + 1}')
+            b_.line.color.rgb = rgb('5A626C'); b_.line.width = Pt(0.75); b_.line.dash_style = 4
+            tf = b_.text_frame; tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0; tf.vertical_anchor = MSO_ANCHOR.MIDDLE; tf.word_wrap = True
+            tf.text = '+ файл қўшиш'; pr = tf.paragraphs[0]; pr.alignment = PP_ALIGN.CENTER
+            ru = pr.runs[0]; ru.font.size = Pt(9); ru.font.name = 'Segoe UI'; ru.font.color.rgb = rgb('9AA2AC')
         text(sl, 0.55, 6.78, 12.25, 0.3, [('Ўзгартириш: ', {'font': 'Segoe UI Semibold', 'color': TEAL}),
-                                          ('жадвални 2 марта босинг → ичидаги Excel очилади → ҳафта катагига ✓ ёки ✗ ёзинг → ташқарига босинг, фоизлар ўзи янгиланади.', {})], 9, MUTED)
+                                          ('жадвални 2 марта босинг → ✓ / ✗ ёзинг → ташқарига босинг.   ', {}), ('Далил: ', {'font': 'Segoe UI Semibold', 'color': TEAL}), ('«+ файл қўшиш» ни танланг → Ctrl+K → файлни танланг (ёки Вставка → Объект → Из файла → «В виде значка»).', {})], 8.5, MUTED)
 pres.save(OUT)
 print('ok', OUT, len(pres.slides), 'slayd')
