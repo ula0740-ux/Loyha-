@@ -599,7 +599,7 @@ html[data-theme="glass"] input.cell.pc.man{background:rgba(98,212,243,.16);borde
 i.kd{width:12px;height:12px;padding:0;margin-right:6px;vertical-align:-1px;border-radius:4px}
 .kd.k0{background:var(--ok-s);color:var(--ok)}.kd.k1{background:rgba(98,212,243,.16);color:#38a9cf}.kd.k2{background:var(--warn-s);color:var(--warn)}.kd.k3{background:var(--bad-s);color:var(--bad)}
 html[data-theme="glass"] .kd.k1{color:#7fdcf5}html[data-theme="glass"] .kd.k2{color:#ffc56b}
-table.ft td{white-space:nowrap}table.ft input[type=date]{padding:5px 8px;font-size:13px}.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+table.ft td{white-space:nowrap}table.ft td.fiz{white-space:normal;min-width:160px;max-width:320px;font-size:13px}.flZ{width:220px;padding:6px 9px;font-size:13px}table.ft input[type=date]{padding:5px 8px;font-size:13px}.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
 .kv .badc{color:var(--bad)}html[data-theme="glass"] .kv .badc{color:#ff8f80}
 /* yon navigatsiya bilan maket */
 .shell{display:grid;grid-template-columns:72px minmax(0,1fr);column-gap:78px;row-gap:16px;align-items:start}
@@ -953,7 +953,7 @@ function imkonTxt(D, a){ var v = imkonOf(D); if (v === null) return '<span class
   return '<span class="kq">bugun yig\'ish mumkin <b>' + f(v) + '</b></span><span class="mc ' + (a >= v ? 'ok' : 'bad') + '">' + (v ? Math.round(a / v * 100) + '%' : '—') + '</span>'; }
 /* ---------------- Float (#690): 630 dan o'tgan, 700 ga kirmagan avtomobillar */
 function daysBetween(a, b){ return Math.round((parseD(b) - parseD(a)) / 864e5); }
-function floatOf(sex){ var t = S.data.bugun; return S.data.float.filter(function(r){ return !sex || r[1] === sex; }).map(function(r){ return {vin:r[0], sex:r[1], model:r[2] || '—', mod:r[3], rang:r[4], s630:r[5], q:r[6] === 'q', kun:Math.max(0, daysBetween(r[5], t))}; }).sort(function(p, q){ return q.kun - p.kun || (p.s630 < q.s630 ? -1 : 1); }); }
+function floatOf(sex){ var t = S.data.bugun; return S.data.float.filter(function(r){ return !sex || r[1] === sex; }).map(function(r){ return {vin:r[0], sex:r[1], model:r[2] || '—', mod:r[3], rang:r[4], s630:r[5], q:r[6] === 'q', izoh:r[7] || '', kun:Math.max(0, daysBetween(r[5], t))}; }).sort(function(p, q){ return q.kun - p.kun || (p.s630 < q.s630 ? -1 : 1); }); }
 function floatView(){
   var L = floatOf(S.sex), tot = L.length, b = [0, 0, 0, 0];
   L.forEach(function(o){ b[o.kun <= 1 ? 0 : o.kun <= 3 ? 1 : o.kun <= 7 ? 2 : 3]++; });
@@ -966,8 +966,8 @@ function floatView(){
   var ML = Object.keys(M).map(function(k2){ return [k2, M[k2].n, M[k2].s / M[k2].n, M[k2].mx]; }).sort(function(p, q){ return q[1] - p[1]; });
   var mmx = ML.length ? ML[0][1] : 1;
   h += '<div class="g2"><div class="card"><div class="ct"><div><h2>Floatdagi avtomobillar</h2><span class="lsub">eng uzoq turganlari yuqorida</span></div><span>' + f(tot) + ' ta</span></div>' +
-    (tot ? '<div style="overflow:auto;max-height:560px"><table class="t ft"><tr><th>№</th><th>Model</th><th>Modifikatsiya</th><th>VIN</th><th>Floatga kirgan</th><th>Necha kun</th></tr>' +
-      L.map(function(o, i){ var c = o.kun >= 8 ? 'k3' : o.kun >= 4 ? 'k2' : o.kun >= 2 ? 'k1' : 'k0'; return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(o.model) + '</b>' + (o.q ? ' <span class="tag" style="background:rgba(127,127,127,.25);color:inherit">qo\'lda</span>' : '') + '</td><td class="muted">' + esc(o.mod) + '</td><td class="mono">' + esc(o.vin) + '</td><td>' + nice(o.s630) + '</td><td><span class="kd ' + c + '">' + o.kun + ' kun</span></td></tr>'; }).join('') + '</table></div>'
+    (tot ? '<div style="overflow:auto;max-height:560px"><table class="t ft"><tr><th>№</th><th>Model</th><th>VIN</th><th>Kirgan</th><th>Kun</th><th>Izoh</th></tr>' +
+      L.map(function(o, i){ var c = o.kun >= 8 ? 'k3' : o.kun >= 4 ? 'k2' : o.kun >= 2 ? 'k1' : 'k0'; return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(o.model) + '</b>' + (o.q ? ' <span class="tag" style="background:rgba(127,127,127,.25);color:inherit">qo\'lda</span>' : '') + '<div class="muted small" style="font-weight:600;max-width:190px;overflow:hidden;text-overflow:ellipsis">' + esc(o.mod) + '</div></td><td class="mono">' + esc(o.vin) + '</td><td>' + nice(o.s630) + '</td><td><span class="kd ' + c + '">' + o.kun + ' kun</span></td><td class="fiz">' + (o.izoh ? esc(o.izoh) : '<span class="muted">—</span>') + '</td></tr>'; }).join('') + '</table></div>'
       : '<div class="empty">Floatda avtomobil yo\'q: 630 dan o\'tganlarning hammasi 700 ga kirgan.</div>') + '</div>' +
     '<div class="card mcard"><div class="ct"><div><h2>Modellar bo\'yicha</h2><span class="lsub">soni · o\'rtacha / eng ko\'p kun</span></div></div>' +
     (ML.length ? '<div class="mlist">' + ML.map(function(z){ return '<div class="mrow"><div class="mn"><b>' + esc(z[0]) + '</b><span>o\'rtacha ' + z[2].toFixed(1).replace('.', ',') + ' · eng ko\'p ' + z[3] + ' kun</span></div><span class="mb"><i style="width:' + (z[1] / mmx * 100).toFixed(1) + '%"></i></span><em>' + f(z[1]) + '</em></div>'; }).join('') + '</div>' : '<div class="empty">—</div>') +
@@ -1730,11 +1730,11 @@ function aFloat(){
     '<div class="row"><div class="f"><label>VIN</label><input id="flV" placeholder="LGWFF7A52TH955892" style="width:210px;text-transform:uppercase"></div><div class="f"><label>Model</label><input id="flM" placeholder="HAVAL H6" style="width:150px"></div>' +
     '<div class="f"><label>Sex</label><select id="flX"><option>SKD</option><option>CKD</option></select></div><div class="f"><label>Floatga kirgan sana</label><input type="date" id="flS" value="' + S.data.bugun + '"></div>' +
     '<div class="f"><label>Izoh</label><input id="flI" placeholder="ixtiyoriy" style="width:170px"></div><button class="btn p" id="flAdd">+ Qo\'shish</button></div>' +
-    '<div class="muted small" style="margin-top:8px">Ro\'yxatdagi avtomobil VIN\'ini yozsangiz, uning floatga kirgan sanasi yangilanadi.</div></div>';
+    '<div class="muted small" style="margin-top:8px">Ro\'yxatdagi avtomobil VIN\'ini yozsangiz, uning floatga kirgan sanasi yangilanadi. Izohni pastdagi jadvalda yozib, Enter bosing — panelda ham ko\'rinadi.</div></div>';
   h += '<div class="card"><div class="ct"><h2>Hozir floatda</h2><span>' + f(L.length) + ' ta · CKD ' + f(L.filter(function(o){ return o.sex === 'CKD'; }).length) + ' · SKD ' + f(L.filter(function(o){ return o.sex === 'SKD'; }).length) + '</span></div>' +
-    (L.length ? '<div style="overflow:auto;max-height:620px"><table class="t ft"><tr><th>VIN</th><th>Model</th><th>Sex</th><th>Floatga kirgan</th><th>Kun</th><th>Manba</th><th></th></tr>' +
+    (L.length ? '<div style="overflow:auto;max-height:620px"><table class="t ft"><tr><th>VIN</th><th>Model</th><th>Sex</th><th>Floatga kirgan</th><th>Kun</th><th>Izoh</th><th>Manba</th><th></th></tr>' +
       L.map(function(o){ var c = o.kun >= 8 ? 'k3' : o.kun >= 4 ? 'k2' : o.kun >= 2 ? 'k1' : 'k0';
-        return '<tr data-v="' + esc(o.vin) + '" data-x="' + o.sex + '" data-m="' + esc(o.model) + '"><td class="mono">' + esc(o.vin) + '</td><td><b>' + esc(o.model) + '</b></td><td>' + o.sex + '</td><td><input type="date" class="flD" value="' + o.s630 + '"></td><td><span class="kd ' + c + '">' + o.kun + ' kun</span></td><td class="muted small">' + (o.q ? 'qo\'lda' : '630 fayli') + '</td>' +
+        return '<tr data-v="' + esc(o.vin) + '" data-x="' + o.sex + '" data-m="' + esc(o.model) + '"><td class="mono">' + esc(o.vin) + '</td><td><b>' + esc(o.model) + '</b></td><td>' + o.sex + '</td><td><input type="date" class="flD" value="' + o.s630 + '"></td><td><span class="kd ' + c + '">' + o.kun + ' kun</span></td><td><input class="flZ" value="' + esc(o.izoh) + '" placeholder="' + (o.kun >= 4 ? 'sababini yozing' : 'izoh') + '" maxlength="300"></td><td class="muted small">' + (o.q ? 'qo\'lda' : '630 fayli') + '</td>' +
           '<td style="white-space:nowrap">' + (o.q ? '<button class="btn flU" style="padding:6px 10px">Bekor</button> ' : '') + '<button class="btn flO" style="padding:6px 10px">Floatdan chiqarish</button></td></tr>'; }).join('') + '</table></div>'
       : '<div class="empty">Floatda avtomobil yo\'q.</div>') + '</div>';
   h += '<div class="card"><div class="ct"><h2>Qo\'lda chiqarilganlar</h2><span>700 fayli kelmagan, lekin floatdan chiqarilgan avtomobillar</span></div><div id="flOut"><div class="loading">Yuklanmoqda…</div></div></div>';
@@ -1745,6 +1745,11 @@ function aFloat(){
   document.querySelectorAll('#amain tr[data-v]').forEach(function(tr){
     var op = function(amal, extra){ return Object.assign({vin:tr.getAttribute('data-v'), sex:tr.getAttribute('data-x'), model:tr.getAttribute('data-m'), amal:amal}, extra || {}); };
     tr.querySelector('.flD').onchange = function(){ go(op('qosh', {sana:this.value})); };
+    var z = tr.querySelector('.flZ'), z0 = z.value;
+    z.onkeydown = function(e){ if (e.key === 'Enter') z.blur(); };
+    z.onblur = function(){ if (z.value.trim() === z0.trim()) return; var v = z.value; z.disabled = true;
+      run('saveFloatIzoh', S.pin, S.kim, tr.getAttribute('data-v'), v).then(reload).then(function(){ z0 = v; z.disabled = false; toast('Izoh saqlandi: ' + tr.getAttribute('data-v')); })
+        .catch(function(e){ z.disabled = false; toast(e.message, true); }); };
     tr.querySelector('.flO').onclick = function(){ if (confirm(tr.getAttribute('data-v') + ' floatdan chiqarilsinmi?')) go(op('chiq'), this); };
     var u = tr.querySelector('.flU'); if (u) u.onclick = function(){ go(op('bekor'), this); };
   });

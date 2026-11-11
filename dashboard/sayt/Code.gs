@@ -29,6 +29,7 @@ var HEAD = {
   Tarjima: ['fault', 'uz'],
   Imkon: ['sana', 'sex', 'son'],
   FloatQolda: ['vin', 'sex', 'model', 'sana', 'amal', 'izoh'],
+  FloatIzoh: ['vin', 'izoh', 'kim', 'vaqt'],
   Fayllar: ['vaqt', 'nom', 'tur', 'sex', 'sana', 'qator', 'yangi', 'kim'],
   Tarix: ['vaqt', 'kim', 'amal', 'tafsilot']
 };
@@ -192,7 +193,7 @@ function getData0_() {
 }
 
 /** Float (#690): 630 dan o'tgan, lekin 700 ga hali kirmagan avtomobillar + qo'lda kiritilgan o'zgarishlar.
- *  Natija: [vin, sex, model, modifikatsiya, rang, sana, belgi]  belgi: '' avtomatik, 'q' qo'lda qo'shilgan/sanasi tuzatilgan. */
+ *  Natija: [vin, sex, model, modifikatsiya, rang, sana, belgi, izoh]  belgi: '' avtomatik, 'q' qo'lda qo'shilgan/sanasi tuzatilgan. */
 function floatList_() {
   var avto = rows_('Avto'), by = {}, out = {}, order = [];
   avto.forEach(function (r) { by[r[0]] = r; if (/^\d{4}-\d{2}-\d{2}$/.test(r[5]) && !r[6]) { out[r[0]] = [r[0], r[1], r[2], r[3], r[4], r[5], '']; order.push(r[0]); } });
@@ -206,7 +207,9 @@ function floatList_() {
       if (q[3]) o[5] = q[3]; if (q[2]) o[2] = q[2]; if (q[1]) o[1] = q[1]; o[6] = 'q';
     }
   });
-  return order.filter(function (v) { return out[v] && /^\d{4}-\d{2}-\d{2}$/.test(out[v][5]); }).map(function (v) { return out[v]; });
+  var iz = {}; rows_('FloatQolda').forEach(function (q) { if (q[5]) iz[q[0]] = q[5]; });
+  rows_('FloatIzoh').forEach(function (q) { iz[q[0]] = q[1]; });
+  return order.filter(function (v) { return out[v] && /^\d{4}-\d{2}-\d{2}$/.test(out[v][5]); }).map(function (v) { var o = out[v].slice(0, 7); o.push(iz[v] || ''); return o; });
 }
 /** Float'ni qo'lda o'zgartirish. op = {vin, sex, model, sana, amal:'qosh'|'chiq'|'bekor', izoh} */
 function saveFloat(pin, kim, op) {
@@ -218,6 +221,17 @@ function saveFloat(pin, kim, op) {
   if (op.amal === 'qosh' || op.amal === 'chiq') data.push([vin, op.sex || '', String(op.model || '').trim().toUpperCase(), op.sana || '', op.amal, String(op.izoh || '').slice(0, 200)]);
   write_('FloatQolda', data);
   log_(kim, 'Float (qo\'lda)', ({qosh: 'qo\'shildi', chiq: 'chiqarildi', bekor: 'bekor qilindi'})[op.amal] + ': ' + vin + (op.sana ? ' · ' + op.sana : ''));
+  return true;
+}
+/** Floatdagi avtomobilga izoh (sabab, kim javobgar va h.k.). Bo'sh izoh — o'chiriladi. */
+function saveFloatIzoh(pin, kim, vin, izoh) {
+  pin_(pin);
+  vin = String(vin || '').trim().toUpperCase(); izoh = String(izoh || '').trim().slice(0, 300);
+  if (vin.length < 5) throw new Error('VIN noto\'g\'ri.');
+  var data = rows_('FloatIzoh').filter(function (r) { return r[0] !== vin; });
+  if (izoh) data.push([vin, izoh, kim || '', now_()]);
+  write_('FloatIzoh', data);
+  log_(kim, 'Float izoh', vin + ': ' + (izoh || '(o\'chirildi)'));
   return true;
 }
 function getFloatQolda(pin) { pin_(pin); return rows_('FloatQolda'); }
