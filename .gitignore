@@ -17,3 +17,13 @@ video/pptx-film/assets/logo2*.png
 video/pptx-film/assets/building.png
 video/pptx-film/assets/image*
 video/pptx-film/out/
+
+# montaj: oraliq fayllar (manbadan qayta yasaladi)
+video/montaj/ish/
+
+# zavod Excel namunalari (VIN va boshqa ichki ma'lumot, repoga kirmaydi)
+dashboard/namuna_excel/
+dashboard/4_mqs.png
+dashboard/1_asosiy_panel_mqs.png
+dashboard/sayt/test/node_modules/
+dashboard/sayt/test/package-lock.json
