@@ -2,7 +2,7 @@
  * ADM JIZZAX AJ — yig'uv paneli (Google Apps Script veb-ilova).
  *
  * Ma'lumot ombori: shu skript bog'langan Google jadval. Varaqlar o'zi yaratiladi.
- *   Avto       — har bir avtomobil (VIN) bitta qator: 630 va 700 sanasi. VIN bir marta sanaladi.
+ *   Avto       — har bir avtomobil (VIN) bitta qator: 630 va 700 sanasi, oxirgi bosqich (630/690/700…) va vaqti. VIN bir marta sanaladi.
  *   Kunlik     — kun / sex / model bo'yicha 630 va 700 soni (Avto'dan hisoblanadi).
  *   MQS        — har bir nuqson bitta qator.
  *   Reja       — oylik reja (CKD, SKD).
@@ -19,7 +19,7 @@
  */
 
 var HEAD = {
-  Avto: ['vin', 'sex', 'model', 'modifikatsiya', 'rang', 'sana630', 'sana700', 'rastamojen'],
+  Avto: ['vin', 'sex', 'model', 'modifikatsiya', 'rang', 'sana630', 'sana700', 'rastamojen', 'bosqich', 'bvaqt'],
   Kunlik: ['sana', 'sex', 'model', 'e630', 'e700'],
   MQS: ['sana', 'sex', 'model', 'team', 'nuqson', 'fault', 'detal', 'vin', 'holat'],
   Reja: ['oy', 'sex', 'reja'],
@@ -28,8 +28,10 @@ var HEAD = {
   OylikQolda: ['oy', 'sex', 'e630', 'e700', 'mqs'],
   Tarjima: ['fault', 'uz'],
   Imkon: ['sana', 'sex', 'son'],
+  ImkonModel: ['sana', 'sex', 'model', 'son'],
   FloatQolda: ['vin', 'sex', 'model', 'sana', 'amal', 'izoh'],
   FloatIzoh: ['vin', 'izoh', 'kim', 'vaqt'],
+  FloatBosqich: ['vin', 'bosqich', 'kim', 'vaqt'],
   Fayllar: ['vaqt', 'nom', 'tur', 'sex', 'sana', 'qator', 'yangi', 'kim'],
   Tarix: ['vaqt', 'kim', 'amal', 'tafsilot']
 };
@@ -186,6 +188,7 @@ function getData0_() {
     oylik: rows_('OylikQolda'),
     fayllar: rows_('Fayllar').slice(-60).reverse(),
     imkon: rows_('Imkon'),
+    imkonM: rows_('ImkonModel'),
     float: floatList_(),                          // [vin, sex, model, modifikatsiya, rang, sana630]
     hasPin: hasPin(),
     bugun: Utilities.formatDate(new Date(), 'Asia/Tashkent', 'yyyy-MM-dd')
@@ -196,7 +199,12 @@ function getData0_() {
  *  Natija: [vin, sex, model, modifikatsiya, rang, sana, belgi, izoh]  belgi: '' avtomatik, 'q' qo'lda qo'shilgan/sanasi tuzatilgan. */
 function floatList_() {
   var avto = rows_('Avto'), by = {}, out = {}, order = [];
-  avto.forEach(function (r) { by[r[0]] = r; if (/^\d{4}-\d{2}-\d{2}$/.test(r[5]) && !r[6]) { out[r[0]] = [r[0], r[1], r[2], r[3], r[4], r[5], '']; order.push(r[0]); } });
+  var isD = function (s) { return /^\d{4}-\d{2}-\d{2}$/.test(s); };
+  avto.forEach(function (r) {
+    by[r[0]] = r;
+    var in690 = r[8] === '690' && !r[6];
+    if ((isD(r[5]) || in690) && !r[6]) { out[r[0]] = [r[0], r[1], r[2], r[3], r[4], isD(r[5]) ? r[5] : String(r[9]).slice(0, 10), '']; order.push(r[0]); }
+  });
   rows_('FloatQolda').forEach(function (q) {
     var vin = q[0], a = by[vin];
     if (q[4] === 'chiq') { delete out[vin]; return; }
@@ -209,7 +217,24 @@ function floatList_() {
   });
   var iz = {}; rows_('FloatQolda').forEach(function (q) { if (q[5]) iz[q[0]] = q[5]; });
   rows_('FloatIzoh').forEach(function (q) { iz[q[0]] = q[1]; });
-  return order.filter(function (v) { return out[v] && /^\d{4}-\d{2}-\d{2}$/.test(out[v][5]); }).map(function (v) { var o = out[v].slice(0, 7); o.push(iz[v] || ''); return o; });
+  var bq = {}; rows_('FloatBosqich').forEach(function (q) { bq[q[0]] = q; });
+  return order.filter(function (v) { return out[v] && isD(out[v][5]); }).map(function (v) {
+    var o = out[v].slice(0, 7), a = by[v] || [], m = bq[v];
+    o.push(iz[v] || '');
+    if (m) o.push(m[1], String(m[3]).slice(0, 16), 'q'); else o.push(a[8] || (isD(a[5]) ? '630' : ''), a[9] || a[5] || '', '');
+    return o;   // [vin, sex, model, mod, rang, sana, belgi, izoh, bosqich, bvaqt, bosqich-belgi]
+  });
+}
+/** Oxirgi bosqichni qo'lda belgilash (bo'sh — Excel'dagi avtomatik qiymatga qaytadi). */
+function saveFloatBosqich(pin, kim, vin, bosqich) {
+  pin_(pin);
+  vin = String(vin || '').trim().toUpperCase(); bosqich = String(bosqich || '').trim().slice(0, 60);
+  if (vin.length < 5) throw new Error('VIN noto\'g\'ri.');
+  var data = rows_('FloatBosqich').filter(function (r) { return r[0] !== vin; });
+  if (bosqich) data.push([vin, bosqich, kim || '', now_()]);
+  write_('FloatBosqich', data);
+  log_(kim, 'Float bosqich', vin + ': ' + (bosqich || '(avtomatik)'));
+  return true;
 }
 /** Float'ni qo'lda o'zgartirish. op = {vin, sex, model, sana, amal:'qosh'|'chiq'|'bekor', izoh} */
 function saveFloat(pin, kim, op) {
@@ -244,6 +269,25 @@ function saveImkon(pin, kim, sana, sex, son) {
   if (String(son) !== '') data.push([sana, sex, String(Math.max(0, Math.round(+son || 0)))]);
   write_('Imkon', data);
   log_(kim, 'Yig\'ish imkoniyati', sana + ' ' + sex + ' = ' + son);
+  return true;
+}
+
+/** "Bugun yig'ish mumkin" — modellar bo'yicha. list = [{model, son}]; jami avtomatik qo'shib yoziladi.
+ *  list bo'sh bo'lsa, modellar o'chiriladi va jami (son) qo'lda kiritilgani qoladi. */
+function saveImkonModel(pin, kim, sana, sex, list, jami) {
+  pin_(pin);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(sana) || (sex !== 'CKD' && sex !== 'SKD')) throw new Error('Sana yoki sex noto\'g\'ri.');
+  var rows = rows_('ImkonModel').filter(function (r) { return !(r[0] === sana && r[1] === sex); }), sum = 0, n = 0;
+  (list || []).forEach(function (x) {
+    var m = String(x.model || '').trim().toUpperCase(), v = String(x.son) === '' ? '' : Math.max(0, Math.round(+x.son || 0));
+    if (!m || v === '') return; rows.push([sana, sex, m, String(v)]); sum += v; n++;
+  });
+  write_('ImkonModel', rows);
+  var tot = n ? String(sum) : (String(jami) === '' || jami === undefined || jami === null ? '' : String(Math.max(0, Math.round(+jami || 0))));
+  var im = rows_('Imkon').filter(function (r) { return !(r[0] === sana && r[1] === sex); });
+  if (tot !== '') im.push([sana, sex, tot]);
+  write_('Imkon', im);
+  log_(kim, 'Yig\'ish imkoniyati', sana + ' ' + sex + ': ' + (n ? n + ' model, jami ' + sum : 'jami ' + (tot || '—')));
   return true;
 }
 
@@ -293,6 +337,7 @@ function getMqs(from, to, sex) {
  */
 function uploadEvent(p) {
   pin_(p.pin);
+  if (p.tur !== '630' && p.tur !== '700') return uploadBosqich_(p);
   var col = p.tur === '700' ? 6 : 5;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(p.sana)) throw new Error('Sana noto\'g\'ri.');
   var stamp = p.baza ? 'baza' : p.sana;
@@ -309,12 +354,14 @@ function uploadEvent(p) {
       var vin = String(x[0] || '').trim(); if (!vin) return;
       var i = idx[vin];
       if (i === undefined) {
-        var r = [vin, p.sex, x[1] || '', x[2] || '', x[3] || '', '', '', x[4] ? '1' : '0'];
+        var r = [vin, p.sex, x[1] || '', x[2] || '', x[3] || '', '', '', x[4] ? '1' : '0', '', ''];
         r[col] = stamp; idx[vin] = data.length; data.push(r); yangi++;
+        if (!p.baza) bosqich_(r, p.tur, x[5] || p.sana);
       } else {
         var row = data[i];
         row[7] = x[4] ? '1' : row[7];
         if (x[1]) row[2] = x[1]; if (x[2]) row[3] = x[2]; if (x[3]) row[4] = x[3];   // model nomi yangi fayldan to'ldiriladi
+        if (!p.baza) bosqich_(row, p.tur, x[5] || p.sana);
         if (!row[col]) { row[col] = stamp; if (oldi[vin]) qayta++; else yangi++; }
         else if (row[col] !== 'baza' && stamp !== 'baza' && stamp < row[col]) { row[col] = stamp; yangi++; } // eski fayl keyin yuklandi
         else takror++;
@@ -325,6 +372,33 @@ function uploadEvent(p) {
     append_('Fayllar', [[now_(), p.fayl || '', p.tur, p.sex, p.baza ? 'boshlang\'ich qoldiq' : p.sana, p.rows.length, yangi, p.kim || '']]);
     log_(p.kim, p.tur + ' yuklandi', (p.fayl || '') + ': ' + p.rows.length + ' qator, ' + yangi + ' yangi');
     return { jami: p.rows.length, yangi: yangi, takror: takror, qayta: qayta };
+  } finally { lock.releaseLock(); }
+}
+
+/** Oxirgi bosqichni yangilash: faqat keyinroq bo'lgan hodisa yoziladi. vaqt: 'YYYY-MM-DD' yoki 'YYYY-MM-DD HH:MM'. */
+function bosqich_(row, kod, vaqt) {
+  vaqt = String(vaqt || '').slice(0, 16);
+  if (!/^\d{4}-\d{2}-\d{2}/.test(vaqt)) return;
+  if (!row[9] || vaqt >= row[9]) { row[8] = String(kod); row[9] = vaqt; }
+}
+/** 630 va 700 dan boshqa hodisalar (masalan #690 — sifat bo'limi / float): sonlarga qo'shilmaydi, faqat oxirgi bosqich yoziladi. */
+function uploadBosqich_(p) {
+  if (!/^\d{3}$/.test(String(p.tur))) throw new Error('Hodisa kodi noto\'g\'ri (masalan 690).');
+  var lock = LockService.getScriptLock(); lock.waitLock(30000);
+  try {
+    var data = rows_('Avto'), idx = {}, yangi = 0, yangilandi = 0;
+    data.forEach(function (r, i) { idx[r[0]] = i; });
+    p.rows.forEach(function (x) {
+      var vin = String(x[0] || '').trim(); if (!vin) return;
+      var i = idx[vin], row;
+      if (i === undefined) { row = [vin, p.sex, x[1] || '', x[2] || '', x[3] || '', '', '', x[4] ? '1' : '0', '', '']; idx[vin] = data.length; data.push(row); yangi++; }
+      else { row = data[i]; if (x[1] && !row[2]) row[2] = x[1]; if (x[2] && !row[3]) row[3] = x[2]; }
+      var old = row[8] + row[9]; bosqich_(row, p.tur, x[5] || p.sana); if (row[8] + row[9] !== old) yangilandi++;
+    });
+    write_('Avto', data);
+    append_('Fayllar', [[now_(), p.fayl || '', '#' + p.tur, p.sex, p.sana, p.rows.length, yangi, p.kim || '']]);
+    log_(p.kim, '#' + p.tur + ' yuklandi', (p.fayl || '') + ': ' + p.rows.length + ' qator');
+    return { jami: p.rows.length, yangi: 0, takror: 0, qayta: 0, bosqich: yangilandi };
   } finally { lock.releaseLock(); }
 }
 
