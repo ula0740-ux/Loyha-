@@ -594,6 +594,13 @@ html[data-theme="glass"] input.cell.pc.man{background:rgba(98,212,243,.16);borde
 .grow .bfa,.grow .bpl{animation:growY .8s cubic-bezier(.22,1,.36,1) both;transform-box:fill-box;transform-origin:bottom}.grow .bfa{animation-delay:.15s}.grow .bv2{animation:lcFade .4s .7s ease both}
 @media (prefers-reduced-motion:reduce){.grow .bfa,.grow .bpl,.grow .bv2{animation:none!important}}
 @media (max-width:700px){.lstats{grid-template-columns:repeat(2,minmax(0,1fr))}.lcw svg{min-width:640px}}
+/* Float */
+.kd{display:inline-block;padding:3px 9px;border-radius:999px;font:800 12px var(--body);white-space:nowrap}
+i.kd{width:12px;height:12px;padding:0;margin-right:6px;vertical-align:-1px;border-radius:4px}
+.kd.k0{background:var(--ok-s);color:var(--ok)}.kd.k1{background:rgba(98,212,243,.16);color:#38a9cf}.kd.k2{background:var(--warn-s);color:var(--warn)}.kd.k3{background:var(--bad-s);color:var(--bad)}
+html[data-theme="glass"] .kd.k1{color:#7fdcf5}html[data-theme="glass"] .kd.k2{color:#ffc56b}
+table.ft td{white-space:nowrap}table.ft input[type=date]{padding:5px 8px;font-size:13px}.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.kv .badc{color:var(--bad)}html[data-theme="glass"] .kv .badc{color:#ff8f80}
 /* yon navigatsiya bilan maket */
 .shell{display:grid;grid-template-columns:72px minmax(0,1fr);column-gap:78px;row-gap:16px;align-items:start}
 .shell.nonav{grid-template-columns:minmax(0,1fr)}
@@ -670,6 +677,7 @@ function run(fn){
 }
 /*GN-JS-START — A variant: bitta uzluksiz kontur. Bo'rtiq tanlangan tugma markaziga hisoblab qo'yiladi. */
 var NAV_ICO = {
+  float:'<path d="M3.5 16.5h17"/><path d="M5 16.5v-3.2l1.8-4.1A1.5 1.5 0 018.2 8.3h7.6a1.5 1.5 0 011.4.9l1.8 4.1v3.2"/><circle cx="8" cy="16.5" r="1.6"/><circle cx="16" cy="16.5" r="1.6"/><path d="M12 2.8v3M9.6 4.4L12 2.8l2.4 1.6"/>',
   hisobot:'<rect x="3.5" y="4" width="17" height="12" rx="2"/><path d="M12 16v4M8.5 20.5h7"/><path d="M7.5 12.5l3-3 2.5 2 3.5-4"/>',
   car:'<path d="M3.5 15.5v-3.2l2.1-5.1A1.5 1.5 0 017 6.3h10a1.5 1.5 0 011.4.9l2.1 5.1v3.2a1 1 0 01-1 1h-15a1 1 0 01-1-1z"/><path d="M3.5 12.3h17M6 16.5v2M18 16.5v2"/><circle cx="7.5" cy="14.3" r=".5"/><circle cx="16.5" cy="14.3" r=".5"/>',
   box:'<path d="M3.5 7.5L12 3.5l8.5 4v9L12 20.5l-8.5-4z"/><path d="M3.5 7.5l8.5 4 8.5-4M12 11.5v9"/>',
@@ -806,8 +814,8 @@ function GlowNav(root, onSelect, label){
 }
 /*GN-JS-END*/
 
-var PANEL_NAV = [{id:'umumiy',label:'Umumiy',icon:'umumiy',attr:' data-pv="umumiy"'},{id:'kalendar',label:'Kalendar',icon:'kalendar',attr:' data-pv="kalendar"'},{id:'oylar',label:'Oylar',icon:'oylar',attr:' data-pv="oylar"'},{id:'mqs',label:'MQS',icon:'mqs',attr:' data-pv="mqs"'}];
-var ADMIN_NAV = [{id:'reja',label:'Reja',icon:'reja'},{id:'natija',label:'Natijalar',icon:'natija'},{id:'mqs',label:'MQS',icon:'mqs'},{id:'tarjima',label:'Nomlar',icon:'nomlar'},{id:'tarix',label:'Tarix',icon:'tarix'},{id:'hisobot',label:'Hisobot',icon:'hisobot'},{id:'pin',label:'PIN-kod',icon:'pin'}].map(function(x){ x.attr = ' data-a="' + x.id + '"'; return x; });
+var PANEL_NAV = [{id:'umumiy',label:'Umumiy',icon:'umumiy',attr:' data-pv="umumiy"'},{id:'kalendar',label:'Kalendar',icon:'kalendar',attr:' data-pv="kalendar"'},{id:'oylar',label:'Oylar',icon:'oylar',attr:' data-pv="oylar"'},{id:'mqs',label:'MQS',icon:'mqs',attr:' data-pv="mqs"'},{id:'float',label:'Float',icon:'float',attr:' data-pv="float"'}];
+var ADMIN_NAV = [{id:'reja',label:'Reja',icon:'reja'},{id:'natija',label:'Natijalar',icon:'natija'},{id:'mqs',label:'MQS',icon:'mqs'},{id:'tarjima',label:'Nomlar',icon:'nomlar'},{id:'tarix',label:'Tarix',icon:'tarix'},{id:'float',label:'Float',icon:'float'},{id:'hisobot',label:'Hisobot',icon:'hisobot'},{id:'pin',label:'PIN-kod',icon:'pin'}].map(function(x){ x.attr = ' data-a="' + x.id + '"'; return x; });
 var NAV = null;
 function navShow(v){ $('gnav').hidden = !v; $('shell').classList.toggle('nonav', !v); }
 /* B variant: projektor nuri (Panel/Boshqaruv va CKD/SKD) */
@@ -848,7 +856,7 @@ var S = { data:null, sex:'CKD', sel:null, view:'panel', mq:{mode:'kun', from:'',
           pin:null, kim:'', aview:'reja', amonth:null, ix:null, gEdit:null };
 
 function index(){
-  var D = S.data; ['days','mqsDays','reja','grafik','oylik','fayllar'].forEach(function(k){ if (!Array.isArray(D[k])) D[k] = []; D[k] = D[k].filter(function(r){ return Array.isArray(r) && typeof r[0] === 'string' && r[0]; }); });
+  var D = S.data; ['days','mqsDays','reja','grafik','oylik','fayllar','imkon','float'].forEach(function(k){ if (!Array.isArray(D[k])) D[k] = []; D[k] = D[k].filter(function(r){ return Array.isArray(r) && typeof r[0] === 'string' && r[0]; }); });
   if (!/^\d{4}-\d{2}-\d{2}$/.test(D.bugun || '')) D.bugun = ymd(new Date());
   var okD = function(r){ return /^\d{4}-\d{2}-\d{2}$/.test(r[0]); }, okM = function(r){ return /^\d{4}-\d{2}$/.test(r[0]); };
   D.days = D.days.filter(okD); D.mqsDays = D.mqsDays.filter(okD); D.reja = D.reja.filter(okM); D.grafik = D.grafik.filter(okM); D.oylik = D.oylik.filter(okM);
@@ -865,6 +873,7 @@ function index(){
   D.grafik.forEach(function(r){ ix.graf[r[0] + '|' + r[1]] = parseGraf(r[2]); ix.dplan[r[0] + '|' + r[1]] = parsePlan(r[2]); });
   D.oylik.forEach(function(r){ ix.oylik[r[0] + '|' + r[1]] = {a: r[2] === '' ? null : +r[2], b: r[3] === '' ? null : +r[3], q: r[4] === '' ? null : +r[4]}; });
   ix.dates = Object.keys(ix.day).sort();
+  ix.imkon = {}; D.imkon.forEach(function(r){ ix.imkon[r[0] + '|' + r[1]] = +r[2] || 0; });
   S.ix = ix;
 }
 var LEG = {'2':16,'1':8,'Q':4,'X':0,'D':0};
@@ -933,10 +942,38 @@ function scard(dark, when, sub, a, b, pl, max, lab, meta, q){
 /* ---------------- sahifa sarlavhasi, KPI qatori, chiziqli grafik (Home Control uslubi) */
 function phead(t, sub, right){ return '<div class="phead"><div><h1>' + t + '</h1><p>' + sub + '</p></div>' + (right ? '<div class="pact">' + right + '</div>' : '') + '</div>'; }
 function daySentence(D, k, kp, kq){
-  var w = '<b>' + nice(D) + ', ' + HAF[dow(D)] + '</b> · ' + S.sex + ' sexi. ';
+  var w = '<b>' + nice(D) + ', ' + HAF[dow(D)] + '</b> · ' + S.sex + ' sexi. ', im = imkonOf(D);
+  if (im !== null) w += 'Bugun yig\'ish mumkin: <b>' + f(im) + '</b>. ';
   if (!k.has) return w + (isOff(D) ? 'Bu kun ish grafigida dam olish kuni.' : 'Bu kun uchun 630 / 700 ma\'lumoti hali yuklanmagan.');
   return w + '<b>' + f(k.a) + '</b> ta avto ishlab chiqarildi, <b>' + f(k.b) + '</b> tasi tayyor mahsulotlar saqlash omboriga kirdi' +
     (kp ? '; kunlik reja <b>' + f(kp) + '</b> — bajarildi <b>' + Math.round(k.a / kp * 100) + '%</b>' : '') + (kq ? '. MQS: <b>' + f(kq) + '</b> ta nuqson.' : '.');
+}
+function imkonOf(D){ var t = 0, has = false; sexes().forEach(function(x){ var v = S.ix.imkon[D + '|' + x]; if (v !== undefined){ has = true; t += v; } }); return has ? t : null; }
+function imkonTxt(D, a){ var v = imkonOf(D); if (v === null) return '<span class="kq">bugun yig\'ish mumkin: kiritilmagan</span>';
+  return '<span class="kq">bugun yig\'ish mumkin <b>' + f(v) + '</b></span><span class="mc ' + (a >= v ? 'ok' : 'bad') + '">' + (v ? Math.round(a / v * 100) + '%' : '—') + '</span>'; }
+/* ---------------- Float (#690): 630 dan o'tgan, 700 ga kirmagan avtomobillar */
+function daysBetween(a, b){ return Math.round((parseD(b) - parseD(a)) / 864e5); }
+function floatOf(sex){ var t = S.data.bugun; return S.data.float.filter(function(r){ return !sex || r[1] === sex; }).map(function(r){ return {vin:r[0], sex:r[1], model:r[2] || '—', mod:r[3], rang:r[4], s630:r[5], q:r[6] === 'q', kun:Math.max(0, daysBetween(r[5], t))}; }).sort(function(p, q){ return q.kun - p.kun || (p.s630 < q.s630 ? -1 : 1); }); }
+function floatView(){
+  var L = floatOf(S.sex), tot = L.length, b = [0, 0, 0, 0];
+  L.forEach(function(o){ b[o.kun <= 1 ? 0 : o.kun <= 3 ? 1 : o.kun <= 7 ? 2 : 3]++; });
+  var mx = L.length ? L[0].kun : 0, avg = tot ? L.reduce(function(s2, o){ return s2 + o.kun; }, 0) / tot : 0;
+  var h = phead('Float (#690)', '<b>' + S.sex + ' sexi</b> · 630 dan o\'tgan, lekin tayyor mahsulotlar omboriga (700) hali kirmagan avtomobillar. Kunlar 630 sanasidan bugungacha (' + nice(S.data.bugun) + ') hisoblanadi.');
+  h += '<div class="kpis">' + kpi('t1', 'Hozir floatda', 'float', f(tot), tot ? 'o\'rtacha <b>' + avg.toFixed(1).replace('.', ',') + '</b> kun turibdi' : 'floatda avtomobil yo\'q') +
+    kpi('t2', '0–1 kun', 'kalendar', f(b[0]), 'yangi kelganlar') + kpi('t3', '2–7 kun', 'kalendar', f(b[1] + b[2]), '2–3 kun: ' + f(b[1]) + ' · 4–7 kun: ' + f(b[2])) +
+    kpi('t4', '8 kundan ko\'p', 'tarix', '<span class="' + (b[3] ? 'badc' : '') + '">' + f(b[3]) + '</span>', mx ? 'eng uzoq: <b>' + mx + '</b> kun' : '—') + '</div>';
+  var M = {}; L.forEach(function(o){ var q = (M[o.model] = M[o.model] || {n:0, s:0, mx:0}); q.n++; q.s += o.kun; q.mx = Math.max(q.mx, o.kun); });
+  var ML = Object.keys(M).map(function(k2){ return [k2, M[k2].n, M[k2].s / M[k2].n, M[k2].mx]; }).sort(function(p, q){ return q[1] - p[1]; });
+  var mmx = ML.length ? ML[0][1] : 1;
+  h += '<div class="g2"><div class="card"><div class="ct"><div><h2>Floatdagi avtomobillar</h2><span class="lsub">eng uzoq turganlari yuqorida</span></div><span>' + f(tot) + ' ta</span></div>' +
+    (tot ? '<div style="overflow:auto;max-height:560px"><table class="t ft"><tr><th>№</th><th>Model</th><th>Modifikatsiya</th><th>VIN</th><th>Floatga kirgan</th><th>Necha kun</th></tr>' +
+      L.map(function(o, i){ var c = o.kun >= 8 ? 'k3' : o.kun >= 4 ? 'k2' : o.kun >= 2 ? 'k1' : 'k0'; return '<tr><td>' + (i + 1) + '</td><td><b>' + esc(o.model) + '</b>' + (o.q ? ' <span class="tag" style="background:rgba(127,127,127,.25);color:inherit">qo\'lda</span>' : '') + '</td><td class="muted">' + esc(o.mod) + '</td><td class="mono">' + esc(o.vin) + '</td><td>' + nice(o.s630) + '</td><td><span class="kd ' + c + '">' + o.kun + ' kun</span></td></tr>'; }).join('') + '</table></div>'
+      : '<div class="empty">Floatda avtomobil yo\'q: 630 dan o\'tganlarning hammasi 700 ga kirgan.</div>') + '</div>' +
+    '<div class="card mcard"><div class="ct"><div><h2>Modellar bo\'yicha</h2><span class="lsub">soni · o\'rtacha / eng ko\'p kun</span></div></div>' +
+    (ML.length ? '<div class="mlist">' + ML.map(function(z){ return '<div class="mrow"><div class="mn"><b>' + esc(z[0]) + '</b><span>o\'rtacha ' + z[2].toFixed(1).replace('.', ',') + ' · eng ko\'p ' + z[3] + ' kun</span></div><span class="mb"><i style="width:' + (z[1] / mmx * 100).toFixed(1) + '%"></i></span><em>' + f(z[1]) + '</em></div>'; }).join('') + '</div>' : '<div class="empty">—</div>') +
+    '<div class="leg" style="margin-top:14px"><span><i class="kd k0"></i>0–1 kun</span><span><i class="kd k1"></i>2–3</span><span><i class="kd k2"></i>4–7</span><span><i class="kd k3"></i>8+ kun</span></div>' +
+    '<div class="muted small" style="margin-top:8px">Ro\'yxat 630 va 700 fayllaridagi VIN raqamlaridan o\'zi tuziladi: avtomobil 700 fayli bilan omborga kirgan zahoti ro\'yxatdan chiqadi. Qo\'lda o\'zgartirish: Boshqaruv → Float.</div></div></div>';
+  return h;
 }
 function kpi(tone, label, icon, value, sub){ return '<div class="kpi ' + tone + '"><div class="kh"><span>' + label + '</span><i>' + navIco(icon) + '</i></div><b class="kv">' + value + '</b><div class="ks">' + sub + '</div></div>'; }
 function mini(d){ return '<span class="mc ' + (d >= 0 ? 'ok' : 'bad') + '">' + sg(d) + '</span>'; }
@@ -957,8 +994,8 @@ function toDate(D, ms, mp, pm){
 }
 function kpiRow(D, k, kp, kq, ms, pm, mp){
   return '<div class="kpis">' +
-    kpi('t1', 'Bugun ishlab chiqarildi (630)', 'car', f(k.a), kp ? mini(k.a - kp) + ' kunlik reja ' + f(kp) : (k.has ? 'kunlik reja kiritilmagan' : 'ma\'lumot yo\'q')) +
-    kpi('t2', 'Tayyor mahsulotlar saqlash ombori (700)', 'box', f(k.b), (k.has ? 'bugun · ' + nice(D) : 'bugun ma\'lumot yo\'q') + '</div><div class="ks ks2">' + mtd(ms.b, mp)) +
+    kpi('t1', 'Bugun ishlab chiqarildi (630)', 'car', f(k.a), (kp ? mini(k.a - kp) + ' kunlik reja ' + f(kp) : (k.has ? 'kunlik reja kiritilmagan' : 'ma\'lumot yo\'q')) + '</div><div class="ks ks2">' + imkonTxt(D, k.a)) +
+    kpi('t2', 'Tayyor mahsulotlar saqlash ombori (700)', 'box', f(k.b), (k.has ? 'bugun · ' + nice(D) : 'bugun ma\'lumot yo\'q') + ' · floatda <b class="flc">' + f(floatOf(S.sex === 'ALL' ? null : S.sex).length) + '</b>' + '</div><div class="ks ks2">' + mtd(ms.b, mp)) +
     toDate(D, ms, mp, pm) +
     kpi('t4', 'MQS nuqsonlar · bugun', 'mqs', f(kq), k.a ? (kq / k.a * 100).toFixed(1) + ' ta / 100 avto' : 'avto yo\'q') + '</div>';
 }
@@ -1039,6 +1076,7 @@ function renderPanel(){
     '<div class="g2">' + lineCard(ym, D) + modelCard(ym, D) + '</div>' + h + recentBlock(D);
   else if (pv === 'kalendar') body = phead('Kunlik kalendar', 'Kunni bosing — o\'ng tomonda o\'sha kunning natijasi, modellar va MQS chiqadi. Tanlangan kun: <b>' + nice(D) + ', ' + HAF[dow(D)] + '</b>.') +
     '<div class="mid">' + calendar(ym, today) + '<div class="card det" id="dayDet">' + dayDetail(D) + '</div></div>';
+  else if (pv === 'float') body = floatView();
   else if (pv === 'oylar') body = phead('Oylar bo\'yicha', '<b>' + y + '-yil</b> · har oy rejaga nisbatan. Oyni bosing — kalendar o\'sha oyga o\'tadi.') + yearStrip(y, ym, today);
   else body = '<div id="mqsSec"></div>';
   $('panel').innerHTML = '<div class="amain" id="pmain">' + body +
@@ -1267,17 +1305,34 @@ function parseFile(file){
     var hi = aoa.findIndex(function(r){ return r.some(function(c){ return String(c).trim() === '№ кузова'; }); });
     if (hi < 0) throw new Error(name + ': fayl tanilmadi ("№ кузова" yoki "Fault name" ustuni topilmadi).');
     var Hd = aoa[hi].map(function(c){ return String(c).trim(); }), ci = function(n){ return Hd.indexOf(n); };
+    var vc = ci('№ кузова'), md = ci('Модификация'), rc = ci('Цвет') >= 0 ? ci('Цвет') : ci('Цвет кузова');
+    var topTxt = aoa.slice(0, hi).map(function(r){ return r.join(' '); }).join(' ');
+    var data = aoa.slice(hi + 1).filter(function(r){ var v = String(r[vc] || '').trim(); return v.length > 8 && !/ВСЕГО|ИТОГО/i.test(r.join(' ')); });
+    // model ustuni: yangi 1C hisobotida qisqa nom oxirgi "Модель" ustunida (UNI-K, HAVAL H6, BONGO III), eskisida "Бренд (Модель)"
     var mc = ci('Бренд (Модель)'); if (mc >= 0 && Hd[mc+1] === '') mc++;
-    var vc = ci('№ кузова'), md = ci('Модификация'), rc = ci('Цвет'), rs = ci('растаможен');
-    var title = String((aoa[0] || [])[0] || '');
+    if (mc < 0){ var lm = Hd.lastIndexOf('Модель');   // birlashtirilgan kataklar sabab ma'lumot sarlavhadan bir-ikki katak siljigan bo'lishi mumkin
+      if (lm > vc){ var best = -1, bn = 0; [lm, lm - 1, lm + 1, lm - 2].forEach(function(c){ var n = data.filter(function(r){ var v = String(r[c] || '').trim(); return v && v.length < 30 && !/^\d+([.,]\d+)?$/.test(v); }).length; if (n > bn){ bn = n; best = c; } }); if (bn) mc = best; } }
+    var useMod = mc < 0;   // model nomi topilmasa, modifikatsiyaning boshidan olinadi
+    // rastamojka: eski faylda "растаможен"=1, yangisida "Растаможка" ustunida hujjat yozilgan bo'lsa
+    var rs = ci('растаможен'), rk = ci('Растаможка');
+    // tur: fayl ichidagi yozuvdan (#630 "Проверка качества ГП на производстве", 700 "ЦОП ROODELL"), bo'lmasa fayl nomidan
     var last = Hd.filter(function(x){ return x; }).slice(-1)[0] || '';
-    var tur = (name.match(/(^|\D)(630|700)(\D|$)/) || [])[2] || (/630/.test(last) ? '630' : /ЦОП|700/i.test(last) ? '700' : '');
-    var sex = /CKD/i.test(title) ? 'CKD' : /SKD/i.test(title) ? 'SKD' : '';
-    var dm = name.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    var rows2 = aoa.slice(hi + 1).filter(function(r){ return String(r[vc] || '').trim().length > 5; }).map(function(r){
-      return [String(r[vc]).trim(), String(r[mc] || '').trim(), String(r[md] || '').trim(), String(r[rc] || '').trim(), +r[rs] === 1];
+    var tur = /Проверка качества|\(#\s*630\)/i.test(topTxt) ? '630' : /ЦОП|ROODELL/i.test(topTxt) ? '700' : '';
+    if (!tur) tur = (name.match(/(^|\D)(630|700)(\D|$)/) || [])[2] || (/630/.test(last) ? '630' : /ЦОП|700/i.test(last) ? '700' : '');
+    if (!tur) tur = /#\s*630/.test(topTxt) ? '630' : /#\s*700/.test(topTxt) ? '700' : '';
+    // sex: fayl nomi yoki sarlavhada CKD/SKD; yangi faylda yozilmagan — lot nomlaridagi CKD/SKD dan, bo'lmasa SKD
+    var sex = /CKD/i.test(name) ? 'CKD' : /SKD/i.test(name) ? 'SKD' : /\bCKD\b/i.test(topTxt) ? 'CKD' : /\bSKD\b/i.test(topTxt) ? 'SKD' : '';
+    if (!sex){ var all = data.map(function(r){ return r.join(' '); }).join(' '), nc = (all.match(/\bCKD\b/gi) || []).length, ns = (all.match(/\bSKD\b/gi) || []).length; sex = nc > ns ? 'CKD' : 'SKD'; }
+    // sana: fayl nomidan, bo'lmasa qatorlardagi sanalarning eng ko'pidan
+    var dm = name.match(/(\d{2})\.(\d{2})\.(\d{4})/), sana = dm ? dm[3] + '-' + dm[2] + '-' + dm[1] : '';
+    if (!sana){ var cnt = {}; data.forEach(function(r){ r.slice(0, 3).forEach(function(c){ var d = cellDate(c).slice(0, 10); if (/^\d{4}-\d{2}-\d{2}$/.test(d)) cnt[d] = (cnt[d] || 0) + 1; }); });
+      sana = Object.keys(cnt).sort(function(x, y){ return cnt[y] - cnt[x]; })[0] || S.data.bugun; }
+    var rows2 = data.map(function(r){
+      var mod = String(r[md] || '').trim(), model = useMod ? mod.split(/\s+/).slice(0, 2).join(' ') : String(r[mc] || '').trim();
+      var ras = rs >= 0 ? +r[rs] === 1 : (rk >= 0 ? String(r[rk] || '').trim().length > 0 : false);
+      return [String(r[vc]).trim(), model.toUpperCase(), mod, String(rc >= 0 ? r[rc] || '' : '').trim(), ras];
     });
-    return {kind:'event', name:name, tur:tur, sex:sex || 'SKD', sana: dm ? dm[3] + '-' + dm[2] + '-' + dm[1] : S.data.bugun, rows:rows2};
+    return {kind:'event', name:name, tur:tur, sex:sex, sana:sana, rows:rows2};
   });
 }
 
@@ -1668,6 +1723,38 @@ function aHisobot(){
   };
 }
 
+/* ---------------- boshqaruv: Float (qo'lda) */
+function aFloat(){
+  var L = floatOf(null);
+  var h = '<div class="card"><div class="ct"><h2>Floatga qo\'lda qo\'shish</h2><span>masalan, sayt ishga tushishidan oldin floatga kirgan avtomobillar · VIN avval yuklangan bo\'lsa, model o\'zi olinadi</span></div>' +
+    '<div class="row"><div class="f"><label>VIN</label><input id="flV" placeholder="LGWFF7A52TH955892" style="width:210px;text-transform:uppercase"></div><div class="f"><label>Model</label><input id="flM" placeholder="HAVAL H6" style="width:150px"></div>' +
+    '<div class="f"><label>Sex</label><select id="flX"><option>SKD</option><option>CKD</option></select></div><div class="f"><label>Floatga kirgan sana</label><input type="date" id="flS" value="' + S.data.bugun + '"></div>' +
+    '<div class="f"><label>Izoh</label><input id="flI" placeholder="ixtiyoriy" style="width:170px"></div><button class="btn p" id="flAdd">+ Qo\'shish</button></div>' +
+    '<div class="muted small" style="margin-top:8px">Ro\'yxatdagi avtomobil VIN\'ini yozsangiz, uning floatga kirgan sanasi yangilanadi.</div></div>';
+  h += '<div class="card"><div class="ct"><h2>Hozir floatda</h2><span>' + f(L.length) + ' ta · CKD ' + f(L.filter(function(o){ return o.sex === 'CKD'; }).length) + ' · SKD ' + f(L.filter(function(o){ return o.sex === 'SKD'; }).length) + '</span></div>' +
+    (L.length ? '<div style="overflow:auto;max-height:620px"><table class="t ft"><tr><th>VIN</th><th>Model</th><th>Sex</th><th>Floatga kirgan</th><th>Kun</th><th>Manba</th><th></th></tr>' +
+      L.map(function(o){ var c = o.kun >= 8 ? 'k3' : o.kun >= 4 ? 'k2' : o.kun >= 2 ? 'k1' : 'k0';
+        return '<tr data-v="' + esc(o.vin) + '" data-x="' + o.sex + '" data-m="' + esc(o.model) + '"><td class="mono">' + esc(o.vin) + '</td><td><b>' + esc(o.model) + '</b></td><td>' + o.sex + '</td><td><input type="date" class="flD" value="' + o.s630 + '"></td><td><span class="kd ' + c + '">' + o.kun + ' kun</span></td><td class="muted small">' + (o.q ? 'qo\'lda' : '630 fayli') + '</td>' +
+          '<td style="white-space:nowrap">' + (o.q ? '<button class="btn flU" style="padding:6px 10px">Bekor</button> ' : '') + '<button class="btn flO" style="padding:6px 10px">Floatdan chiqarish</button></td></tr>'; }).join('') + '</table></div>'
+      : '<div class="empty">Floatda avtomobil yo\'q.</div>') + '</div>';
+  h += '<div class="card"><div class="ct"><h2>Qo\'lda chiqarilganlar</h2><span>700 fayli kelmagan, lekin floatdan chiqarilgan avtomobillar</span></div><div id="flOut"><div class="loading">Yuklanmoqda…</div></div></div>';
+  $('amain').innerHTML = h;
+  var go = function(op, btn){ if (btn) btn.disabled = true; return run('saveFloat', S.pin, S.kim, op).then(reload).then(function(){ toast('Float yangilandi: ' + op.vin); aFloat(); }).catch(function(e){ if (btn) btn.disabled = false; toast(e.message, true); }); };
+  $('flV').oninput = function(){ var v = this.value.trim().toUpperCase(), a = S.data.float.filter(function(r){ return r[0] === v; })[0]; if (a){ $('flM').value = a[2]; $('flX').value = a[1]; } };
+  $('flAdd').onclick = function(){ go({vin:$('flV').value, model:$('flM').value, sex:$('flX').value, sana:$('flS').value, izoh:$('flI').value, amal:'qosh'}, this); };
+  document.querySelectorAll('#amain tr[data-v]').forEach(function(tr){
+    var op = function(amal, extra){ return Object.assign({vin:tr.getAttribute('data-v'), sex:tr.getAttribute('data-x'), model:tr.getAttribute('data-m'), amal:amal}, extra || {}); };
+    tr.querySelector('.flD').onchange = function(){ go(op('qosh', {sana:this.value})); };
+    tr.querySelector('.flO').onclick = function(){ if (confirm(tr.getAttribute('data-v') + ' floatdan chiqarilsinmi?')) go(op('chiq'), this); };
+    var u = tr.querySelector('.flU'); if (u) u.onclick = function(){ go(op('bekor'), this); };
+  });
+  run('getFloatQolda', S.pin).then(function(rows){
+    var out = rows.filter(function(r){ return r[4] === 'chiq'; });
+    $('flOut').innerHTML = out.length ? '<table class="t"><tr><th>VIN</th><th>Model</th><th>Sex</th><th>Izoh</th><th></th></tr>' + out.map(function(r){ return '<tr><td class="mono">' + esc(r[0]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[1]) + '</td><td class="muted">' + esc(r[5]) + '</td><td><button class="btn flR" data-v="' + esc(r[0]) + '" style="padding:6px 10px">Floatga qaytarish</button></td></tr>'; }).join('') + '</table>' : '<div class="muted small">Qo\'lda chiqarilgan avtomobil yo\'q.</div>';
+    document.querySelectorAll('.flR').forEach(function(b){ b.onclick = function(){ go({vin:b.getAttribute('data-v'), amal:'bekor'}, b); }; });
+  }).catch(function(e){ $('flOut').innerHTML = '<div class="empty">' + esc(e.message) + '</div>'; });
+}
+
 /* ---------------- boshqaruv */
 var MENU = [['reja','📅 Reja va ish grafigi'],['natija','✎ Natijalar va fayllar'],['mqs','◎ MQS ma\'lumotlari'],['tarjima','Aa Nuqson nomlari'],['tarix','↺ O\'zgarishlar tarixi'],['pin','🔑 PIN-kod']];
 function renderAdmin(){
@@ -1691,7 +1778,7 @@ function renderAdmin(){
   }
   el.innerHTML = '<div class="anote">' + navIco('user') + '<span>Kirgan: <b>' + esc(S.kim) + '</b> · Excel fayllarning o\'zi saqlanmaydi — faqat natijalar.</span></div><div class="amain" id="amain"></div>';
   if (S.view === 'admin' && NAV){ navShow(true); NAV.setItems(ADMIN_NAV, S.aview); }
-  ({reja: aReja, natija: aNatija, mqs: aMqs, tarjima: aTarjima, tarix: aTarix, hisobot: aHisobot, pin: aPin})[S.aview]();
+  ({reja: aReja, natija: aNatija, mqs: aMqs, tarjima: aTarjima, tarix: aTarix, hisobot: aHisobot, float: aFloat, pin: aPin})[S.aview]();
 }
 function reload(){ MQC = {}; return run('getData').then(function(d){ S.data = d; index(); }); }
 
@@ -1834,7 +1921,9 @@ function previewCard(boxId, p){
 }
 
 function aNatija(){
-  var h = '<div class="card"><div class="ct"><h2>630 / 700 fayllarini yuklash</h2><span>fayl nomidan sana va tur aniqlanadi, masalan 630__04.11.2026.xlsx</span></div>' + dropZone('dzEv', 'Faylni shu yerga tashlang') + '</div>';
+  var iv = function(x){ var v = S.ix.imkon[S.data.bugun + '|' + x]; return v === undefined ? '' : v; };
+  var h = '<div class="card"><div class="ct"><h2>630 / 700 fayllarini yuklash</h2><span>turi fayl ichidan aniqlanadi: "Проверка качества ГП (#630)" = 630, "ЦОП ROODELL" = 700 · sana fayl nomidan</span></div>' + dropZone('dzEv', 'Faylni shu yerga tashlang') + '</div>';
+  h += '<div class="card"><div class="ct"><h2>Bugun yig\'ish mumkin bo\'lgan avtomobillar</h2><span>komplekt va detallar bo\'yicha · panelda "bugun yig\'ish mumkin" bo\'lib chiqadi</span></div><div class="row"><div class="f"><label>Sana</label><input type="date" id="imS" value="' + S.data.bugun + '"></div><div class="f"><label>CKD</label><input type="number" min="0" id="imC" class="ed" value="' + iv('CKD') + '" placeholder="—"></div><div class="f"><label>SKD</label><input type="number" min="0" id="imK" class="ed" value="' + iv('SKD') + '" placeholder="—"></div><button class="btn p" id="imSave">Saqlash</button></div></div>';
   h += '<div class="card"><div class="ct"><h2>Kunlik natijani tuzatish</h2><span>xato bo\'lsa — qo\'lda o\'zgartiring</span></div><div class="row"><div class="f"><label>Sana</label><input type="date" id="tzS" value="' + S.sel + '"></div><div class="f"><label>Sex</label><select id="tzX"><option>SKD</option><option>CKD</option></select></div><button class="btn" id="tzLoad">Ochish</button></div><div id="tzBox" style="margin-top:12px"></div></div>';
   h += '<div class="two"><div class="card"><div class="ct"><h2>O\'tgan oyni qo\'lda kiritish</h2><span>Excel bo\'lmagan oylar uchun</span></div><div class="form"><div class="row"><div class="f"><label>Oy</label><input type="month" id="oyM" value="' + ymAdd(S.sel.slice(0,7), -1) + '"></div><div class="f"><label>Sex</label><select id="oyX"><option>SKD</option><option>CKD</option></select></div></div>' +
     '<div class="row"><div class="f"><label>630 jami</label><input type="number" min="0" id="oyA" class="ed"></div><div class="f"><label>700 jami</label><input type="number" min="0" id="oyB" class="ed"></div><div class="f"><label>MQS nuqson</label><input type="number" min="0" id="oyQ" class="ed"></div><div class="f"><label>Reja</label><input type="number" min="0" id="oyR" class="ed"></div></div>' +
@@ -1849,6 +1938,10 @@ function aNatija(){
   $('oySave').onclick = function(){ var oy = $('oyM').value, x = $('oyX').value; if (!oy){ toast('Oyni tanlang.', true); return; }
     Promise.all([run('saveOylik', S.pin, S.kim, {oy:oy, sex:x, e630:$('oyA').value, e700:$('oyB').value, mqs:$('oyQ').value}), run('saveReja', S.pin, S.kim, oy, x, $('oyR').value)])
       .then(reload).then(function(){ toast(OY[+oy.slice(5)-1] + ' ' + oy.slice(0,4) + ' (' + x + ') saqlandi.'); }).catch(function(e){ toast(e.message, true); }); };
+  $('imS').onchange = function(){ var d = this.value; ['CKD','SKD'].forEach(function(x){ var v = S.ix.imkon[d + '|' + x]; $(x === 'CKD' ? 'imC' : 'imK').value = v === undefined ? '' : v; }); };
+  $('imSave').onclick = function(){ var d = $('imS').value, btn = this; if (!d) return; btn.disabled = true;
+    Promise.all([run('saveImkon', S.pin, S.kim, d, 'CKD', $('imC').value), run('saveImkon', S.pin, S.kim, d, 'SKD', $('imK').value)]).then(reload)
+      .then(function(){ btn.disabled = false; toast(nice(d) + ': yig\'ish imkoniyati saqlandi.'); }).catch(function(e){ btn.disabled = false; toast(e.message, true); }); };
   $('tzLoad').onclick = function(){
     var sana = $('tzS').value, sex = $('tzX').value; if (!sana) return;
     $('tzBox').innerHTML = '<div class="loading">Yuklanmoqda…</div>';

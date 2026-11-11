@@ -10,7 +10,10 @@
  *   Tuzatish   — qo'lda tuzatilgan kunlik raqamlar (Kunlik ustidan yoziladi).
  *   OylikQolda — Excel bo'lmagan o'tgan oylar uchun qo'lda kiritilgan oylik jami.
  *   Tarjima    — inglizcha nuqson nomi -> o'zbekcha.
+ *   Imkon      — kun / sex bo'yicha "bugun yig'ish mumkin bo'lgan avtomobillar" soni (qo'lda).
  *   Fayllar    — yuklangan fayllar jurnali.  Tarix — o'zgarishlar tarixi.
+ *   Float (#690): Avto'dan hisoblanadi — 630 dan o'tgan, 700 ga hali kirmagan VIN.
+ *   FloatQolda — floatga qo'lda qo'shilgan ('qosh') yoki chiqarilgan ('chiq') avtomobillar, avtomatik hisob ustidan qo'llanadi.
  *
  * Excel fayllarning o'zi saqlanmaydi: brauzer ularni o'qiydi va faqat natija yoziladi.
  */
@@ -24,6 +27,8 @@ var HEAD = {
   Tuzatish: ['sana', 'sex', 'model', 'tur', 'son'],
   OylikQolda: ['oy', 'sex', 'e630', 'e700', 'mqs'],
   Tarjima: ['fault', 'uz'],
+  Imkon: ['sana', 'sex', 'son'],
+  FloatQolda: ['vin', 'sex', 'model', 'sana', 'amal', 'izoh'],
   Fayllar: ['vaqt', 'nom', 'tur', 'sex', 'sana', 'qator', 'yangi', 'kim'],
   Tarix: ['vaqt', 'kim', 'amal', 'tafsilot']
 };
@@ -179,9 +184,53 @@ function getData0_() {
     grafik: rows_('Grafik'),
     oylik: rows_('OylikQolda'),
     fayllar: rows_('Fayllar').slice(-60).reverse(),
+    imkon: rows_('Imkon'),
+    float: floatList_(),                          // [vin, sex, model, modifikatsiya, rang, sana630]
     hasPin: hasPin(),
     bugun: Utilities.formatDate(new Date(), 'Asia/Tashkent', 'yyyy-MM-dd')
   };
+}
+
+/** Float (#690): 630 dan o'tgan, lekin 700 ga hali kirmagan avtomobillar + qo'lda kiritilgan o'zgarishlar.
+ *  Natija: [vin, sex, model, modifikatsiya, rang, sana, belgi]  belgi: '' avtomatik, 'q' qo'lda qo'shilgan/sanasi tuzatilgan. */
+function floatList_() {
+  var avto = rows_('Avto'), by = {}, out = {}, order = [];
+  avto.forEach(function (r) { by[r[0]] = r; if (/^\d{4}-\d{2}-\d{2}$/.test(r[5]) && !r[6]) { out[r[0]] = [r[0], r[1], r[2], r[3], r[4], r[5], '']; order.push(r[0]); } });
+  rows_('FloatQolda').forEach(function (q) {
+    var vin = q[0], a = by[vin];
+    if (q[4] === 'chiq') { delete out[vin]; return; }
+    if (q[4] === 'qosh') {
+      if (a && a[6]) { delete out[vin]; return; }          // 700 ga kirgan bo'lsa — floatda emas
+      var o = out[vin] || (out[vin] = [vin, q[1] || (a ? a[1] : 'SKD'), q[2] || (a ? a[2] : ''), a ? a[3] : '', a ? a[4] : '', '', 'q']);
+      if (order.indexOf(vin) < 0) order.push(vin);
+      if (q[3]) o[5] = q[3]; if (q[2]) o[2] = q[2]; if (q[1]) o[1] = q[1]; o[6] = 'q';
+    }
+  });
+  return order.filter(function (v) { return out[v] && /^\d{4}-\d{2}-\d{2}$/.test(out[v][5]); }).map(function (v) { return out[v]; });
+}
+/** Float'ni qo'lda o'zgartirish. op = {vin, sex, model, sana, amal:'qosh'|'chiq'|'bekor', izoh} */
+function saveFloat(pin, kim, op) {
+  pin_(pin);
+  var vin = String(op.vin || '').trim().toUpperCase();
+  if (vin.length < 5) throw new Error('VIN raqamini to\'liq yozing.');
+  if (op.amal === 'qosh' && !/^\d{4}-\d{2}-\d{2}$/.test(op.sana || '')) throw new Error('Floatga kirgan sanani tanlang.');
+  var data = rows_('FloatQolda').filter(function (r) { return r[0] !== vin; });
+  if (op.amal === 'qosh' || op.amal === 'chiq') data.push([vin, op.sex || '', String(op.model || '').trim().toUpperCase(), op.sana || '', op.amal, String(op.izoh || '').slice(0, 200)]);
+  write_('FloatQolda', data);
+  log_(kim, 'Float (qo\'lda)', ({qosh: 'qo\'shildi', chiq: 'chiqarildi', bekor: 'bekor qilindi'})[op.amal] + ': ' + vin + (op.sana ? ' · ' + op.sana : ''));
+  return true;
+}
+function getFloatQolda(pin) { pin_(pin); return rows_('FloatQolda'); }
+
+/** "Bugun yig'ish mumkin bo'lgan avtomobillar" — kun va sex bo'yicha, qo'lda kiritiladi. */
+function saveImkon(pin, kim, sana, sex, son) {
+  pin_(pin);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(sana) || (sex !== 'CKD' && sex !== 'SKD')) throw new Error('Sana yoki sex noto\'g\'ri.');
+  var data = rows_('Imkon').filter(function (r) { return !(r[0] === sana && r[1] === sex); });
+  if (String(son) !== '') data.push([sana, sex, String(Math.max(0, Math.round(+son || 0)))]);
+  write_('Imkon', data);
+  log_(kim, 'Yig\'ish imkoniyati', sana + ' ' + sex + ' = ' + son);
+  return true;
 }
 
 /** MQS: tanlangan davr bo'yicha yig'ma (sana 'YYYY-MM-DD', oraliq ikkala chekka bilan). */
@@ -251,6 +300,7 @@ function uploadEvent(p) {
       } else {
         var row = data[i];
         row[7] = x[4] ? '1' : row[7];
+        if (x[1]) row[2] = x[1]; if (x[2]) row[3] = x[2]; if (x[3]) row[4] = x[3];   // model nomi yangi fayldan to'ldiriladi
         if (!row[col]) { row[col] = stamp; if (oldi[vin]) qayta++; else yangi++; }
         else if (row[col] !== 'baza' && stamp !== 'baza' && stamp < row[col]) { row[col] = stamp; yangi++; } // eski fayl keyin yuklandi
         else takror++;
@@ -362,7 +412,7 @@ function getTarix(pin) {
 /** Bitta kunning model bo'yicha raqamlari (tuzatish oynasi uchun). */
 function getDay(sana, sex) {
   var out = {};
-  rows_('Kunlik').forEach(function (r) { if (r[0] === sana && r[1] === sex) out[r[2]] = { a: +r[3] || 0, b: +r[4] || 0, ta: '', tb: '' }; });
+  rows_('Kunlik').forEach(function (r) { if (r[0] === sana && r[1] === sex) out[r[2] || '(model yo\'q)'] = { a: +r[3] || 0, b: +r[4] || 0, ta: '', tb: '' }; });
   rows_('Tuzatish').forEach(function (r) {
     if (r[0] === sana && r[1] === sex) {
       var o = out[r[2]] || (out[r[2]] = { a: 0, b: 0, ta: '', tb: '' });
