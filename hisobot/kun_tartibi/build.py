@@ -109,7 +109,7 @@ def build(ws, steps, title, who):
     top = f'INDEX(Q{QA}:Q{QB},MATCH(MAX(T{QA}:T{QB}),T{QA}:T{QB},0))'
     topm = f'INDEX(R{QA}:R{QB},MATCH(MAX(T{QA}:T{QB}),T{QA}:T{QB},0))'
     ws['Q2'] = f'=IF({tw}<=0,"ЭНГ КЎП ВАҚТ: —","ЭНГ КЎП ВАҚТ:  "&{top})'
-    ws['Q3'] = f'="Жами иш вақти: "&INT({tw}/60)&" соат"&IF(MOD({tw},60)>0," "&MOD({tw},60)&" дақ.","")'
+    ws['Q3'] = f'="Жами иш вақти: "&INT({tw}/60)&" соат"'
     # kesh (Python hisobi)
     cats, mins = [], {}
     for st in steps:
@@ -121,7 +121,7 @@ def build(ws, steps, title, who):
         tc = max(mins, key=lambda c: (mins[c], -cats.index(c))); tm = mins[tc]
         c2 = f'ЭНГ КЎП ВАҚТ:  {tc}'
     else: c2 = 'ЭНГ КЎП ВАҚТ: —'
-    c3 = f'Жами иш вақти: {twv // 60} соат' + (f' {twv % 60} дақ.' if twv % 60 else '')
+    c3 = f'Жами иш вақти: {twv // 60} соат'
     order = [c for c in cats if c in mins]
     CHARTS.append(dict(sheet=ws.title, kind='bar', title=('Q2', c2, 1300, '1F2937'), cats=order, vals=[mins[c] for c in order]))
     CHARTS.append(dict(sheet=ws.title, kind='donut', title=('Q3', c3, 1050, '374151'), cats=order, vals=[mins[c] for c in order]))
