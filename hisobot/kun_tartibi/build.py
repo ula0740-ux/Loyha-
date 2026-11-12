@@ -108,8 +108,8 @@ def build(ws, steps, title, who):
     # --- panel sarlavhalari (formulali)
     top = f'INDEX(Q{QA}:Q{QB},MATCH(MAX(T{QA}:T{QB}),T{QA}:T{QB},0))'
     topm = f'INDEX(R{QA}:R{QB},MATCH(MAX(T{QA}:T{QB}),T{QA}:T{QB},0))'
-    ws['Q2'] = f'=IF({tw}<=0,"ЭНГ КЎП ВАҚТ: —","ЭНГ КЎП ВАҚТ:  "&{top}&CHAR(10)&INT({topm}/60)&" соат "&MOD({topm},60)&" дақиқа  ·  иш вақтининг "&TEXT({topm}/{tw},"0%"))'
-    ws['Q3'] = f'="Жами иш вақти: "&INT({tw}/60)&" соат "&MOD({tw},60)&" дақ. (тушликсиз)"&CHAR(10)&COUNTIF(U{QA}:U{QB},1)&" хил иш тоифаси"'
+    ws['Q2'] = f'=IF({tw}<=0,"ЭНГ КЎП ВАҚТ: —","ЭНГ КЎП ВАҚТ:  "&{top})'
+    ws['Q3'] = f'="Жами иш вақти: "&INT({tw}/60)&" соат"&IF(MOD({tw},60)>0," "&MOD({tw},60)&" дақ.","")'
     # kesh (Python hisobi)
     cats, mins = [], {}
     for st in steps:
@@ -119,9 +119,9 @@ def build(ws, steps, title, who):
     twv = sum(mins.values())
     if twv:
         tc = max(mins, key=lambda c: (mins[c], -cats.index(c))); tm = mins[tc]
-        c2 = f'ЭНГ КЎП ВАҚТ:  {tc}\n{tm // 60} соат {tm % 60} дақиқа  ·  иш вақтининг {round(tm / twv * 100)}%'
+        c2 = f'ЭНГ КЎП ВАҚТ:  {tc}'
     else: c2 = 'ЭНГ КЎП ВАҚТ: —'
-    c3 = f'Жами иш вақти: {twv // 60} соат {twv % 60} дақ. (тушликсиз)\n{len(mins)} хил иш тоифаси'
+    c3 = f'Жами иш вақти: {twv // 60} соат' + (f' {twv % 60} дақ.' if twv % 60 else '')
     order = [c for c in cats if c in mins]
     CHARTS.append(dict(sheet=ws.title, kind='bar', title=('Q2', c2, 1300, '1F2937'), cats=order, vals=[mins[c] for c in order]))
     CHARTS.append(dict(sheet=ws.title, kind='donut', title=('Q3', c3, 1050, '374151'), cats=order, vals=[mins[c] for c in order]))
