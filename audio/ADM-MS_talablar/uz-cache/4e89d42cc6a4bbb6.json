@@ -1,0 +1,21 @@
+{
+ "i": 34,
+ "text": "Ishni boshlashdan oldin ish joyi, uskuna va himoya vositalarining holatini tekshirishi, ish davomida esa xavfsizlik yoʻriqnomalariga rioya qilishi zarur.",
+ "tts": "Ishni boshlashdan oldin ish joyi, uskuna va himoya vositalarining holatini tekshirishi, ish davomida esa khavfsizlik yoʻriqnomalariga rioya qilishi zarur.",
+ "hash": "4e89d42cc6a4bbb6",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/4e89d42cc6a4bbb6.mp3",
+ "duration": 10.997551,
+ "takes": 1,
+ "similarity": 0.9866666666666667,
+ "problems": [
+  {
+   "expected": "uskuna",
+   "heard": "uskunav"
+  },
+  {
+   "expected": "vositalarining",
+   "heard": "vositalarning"
+  }
+ ],
+ "heard": "ishni boshlashdan oldin ish joyi uskunav va himoya vositalarning holatini tekshirishi ish davomida esa xavfsizlik yo'riqnomalariga rioya qilishi zarur"
+}

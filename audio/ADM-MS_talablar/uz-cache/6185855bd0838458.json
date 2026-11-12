@@ -1,0 +1,17 @@
+{
+ "i": 41,
+ "text": "Amaliy misol: uskuna himoya toʻsigʻi shikastlangan boʻlsa, xodim bu holatni eʼtiborsiz qoldirmaydi.",
+ "tts": "Amaliy misol: uskuna himoya toʻsigʻi shikastlangan boʻlsa, khodim bu holatni eʼtiborsiz qoldirmaydi.",
+ "hash": "6185855bd0838458",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6185855bd0838458.mp3",
+ "duration": 7.314286,
+ "takes": 1,
+ "similarity": 0.9791666666666666,
+ "problems": [
+  {
+   "expected": "uskuna",
+   "heard": "uskunani"
+  }
+ ],
+ "heard": "amaliy misol uskunani himoya to'sig'i shikastlangan bo'lsa xodim bu holatni e'tiborsiz qoldirmaydi"
+}

@@ -1,0 +1,17 @@
+{
+ "i": 20,
+ "text": "Maxsus ruxsati yoki malakasi boʻlmasa, uskunani oʻzboshimchalik bilan taʼmirlamaydi.",
+ "tts": "Makhsus rukhsati yoki malakasi boʻlmasa, uskunani oʻzboshimchalik bilan taʼmirlamaydi.",
+ "hash": "292c9bb5375b4341",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/292c9bb5375b4341.mp3",
+ "duration": 6.426122,
+ "takes": 1,
+ "similarity": 0.9878048780487805,
+ "problems": [
+  {
+   "expected": "o'zboshimchalik",
+   "heard": "o'zbo'shimchalik"
+  }
+ ],
+ "heard": "maxsus ruxsati yoki malakasi bo'lmasa uskunani o'zbo'shimchalik bilan ta'mirlamaydi"
+}

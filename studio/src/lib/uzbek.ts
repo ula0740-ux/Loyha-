@@ -61,7 +61,8 @@ export function latToCyr(input: string): string {
     const prev = i > 0 ? text[i - 1] : ' ';
     const atWordStart = !/[a-zA-Zʻʼ]/.test(prev);
     const two = text.slice(i, i + 2), lo2 = two.toLowerCase();
-    const pair = pairs.find(([l]) => l === lo2);
+    // "yoʻ" is й + ў (yoʻl -> йўл, yoʻq -> йўқ), not ё + ʻ
+    const pair = lo2 === 'yo' && text[i + 2] === OKINA ? undefined : pairs.find(([l]) => l === lo2);
     if (pair) {
       const up = isUpper(two[0]);
       out += up ? pair[1].toUpperCase() : pair[1];

@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ishlab chiqarish liniyasi: Svarka · Boʻyoqlash · Zborka</title>
+<style>
+  :root{
+    --bg:#0b1020; --ink:#f4f6fb; --muted:#a9b3c9; --line:rgba(255,255,255,.14);
+    --weld:#ff8a3d; --paint:#2ec4d6; --asm:#3ddc97; --accent:var(--weld);
+    --ease:cubic-bezier(.65,0,.35,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;
+    font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+  body{display:grid;place-items:center;height:100dvh;width:100vw}
+  .stage{position:relative;width:min(100vw,calc(100dvh*16/9));aspect-ratio:16/9;overflow:hidden;
+    container-type:size;background:#0d1326;border-radius:min(1.2cqw,14px);box-shadow:0 30px 80px rgba(0,0,0,.45);touch-action:pan-y}
+  @supports not (height:100dvh){ body{height:100vh} .stage{width:min(100vw,calc(100vh*16/9))} }
+  svg#world{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  /* ---------- HUD ---------- */
+  .hud{position:absolute;left:3.2cqw;top:4.2cqh;width:min(46cqw,640px);pointer-events:none}
+  .hud .step{display:inline-flex;align-items:center;gap:.6em;font-size:1.25cqw;font-weight:700;letter-spacing:.18em;color:var(--accent);
+    text-transform:uppercase;transition:color .6s var(--ease)}
+  .hud .step::before{content:"";width:2.4cqw;height:2px;background:currentColor;border-radius:2px}
+  .hud h1{font-size:4.6cqw;line-height:1.02;font-weight:800;letter-spacing:-.02em;margin-top:.7cqh;text-wrap:balance}
+  .hud p{font-size:1.45cqw;color:var(--muted);margin-top:1.2cqh;max-width:36cqw;line-height:1.35}
+  .chips{display:flex;flex-wrap:wrap;gap:.7cqw;margin-top:2.2cqh;list-style:none}
+  .chips li{font-size:1.15cqw;font-weight:600;padding:.55cqw 1.05cqw;border-radius:999px;border:1px solid var(--line);
+    background:rgba(10,14,30,.55);color:var(--muted);display:flex;align-items:center;gap:.5cqw;
+    transition:background .45s var(--ease),color .45s var(--ease),border-color .45s var(--ease),transform .45s var(--ease)}
+  .chips li i{width:.75cqw;height:.75cqw;border-radius:50%;border:2px solid currentColor;display:inline-block;transition:background .45s}
+  .chips li.on{color:#0b1020;background:var(--accent);border-color:transparent;transform:translateY(-2px)}
+  .chips li.on i{background:#0b1020;border-color:#0b1020}
+  .status{margin-top:1.8cqh;font-size:1.2cqw;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:.6cqw;min-height:2cqw}
+  .status .dot{width:.9cqw;height:.9cqw;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent);animation:pulse 1.4s infinite}
+  .status.done .dot{animation:none;background:var(--asm)}
+  .status.done{color:var(--ink)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}100%{box-shadow:0 0 0 .9cqw rgba(255,255,255,0)}}
+  .hud .swap{transition:opacity .45s var(--ease),transform .45s var(--ease)}
+  .hud.out .swap{opacity:0;transform:translateY(1.2cqh)}
+
+  /* ---------- controls ---------- */
+  .nav{position:absolute;left:50%;bottom:3.4cqh;transform:translateX(-50%);display:flex;align-items:center;gap:1.4cqw;
+    padding:.7cqw .9cqw;border-radius:999px;background:rgba(8,12,26,.72);border:1px solid var(--line);backdrop-filter:blur(6px)}
+  .nav button{appearance:none;border:0;cursor:pointer;color:var(--ink);background:transparent;font:inherit}
+  .arrow{width:3.4cqw;height:3.4cqw;min-width:34px;min-height:34px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(255,255,255,.08);transition:background .25s,transform .25s}
+  .arrow:hover{background:rgba(255,255,255,.18)} .arrow:active{transform:scale(.94)}
+  .arrow[disabled]{opacity:.35;cursor:default}
+  .arrow svg{width:46%;height:46%}
+  .dots{display:flex;gap:.9cqw;align-items:center}
+  .dots button{display:flex;align-items:center;gap:.55cqw;padding:.45cqw .8cqw;border-radius:999px;font-size:1.05cqw;font-weight:700;color:var(--muted);
+    transition:background .35s,color .35s}
+  .dots button i{width:.8cqw;height:.8cqw;min-width:8px;min-height:8px;border-radius:50%;background:currentColor;opacity:.6}
+  .dots button[aria-current="true"]{background:var(--accent);color:#0b1020}
+  .dots button[aria-current="true"] i{opacity:1}
+  .nav button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ---------- ambient (CSS) ---------- */
+  .blink{animation:blink 2.4s ease-in-out infinite}
+  .blink.b2{animation-delay:.8s}.blink.b3{animation-delay:1.6s}
+  @keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+  .belt{animation:belt 1.6s linear infinite}
+  @keyframes belt{to{stroke-dashoffset:-48}}
+  .mist{animation:mist 7s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .mist.m2{animation-duration:9s;animation-delay:-3s}.mist.m3{animation-duration:11s;animation-delay:-6s}
+  @keyframes mist{0%,100%{transform:translate(0,0) scale(1);opacity:.18}50%{transform:translate(40px,-26px) scale(1.25);opacity:.32}}
+  .glowpulse{animation:glow 3.2s ease-in-out infinite}
+  @keyframes glow{0%,100%{opacity:.55}50%{opacity:.95}}
+
+  @media (prefers-reduced-motion: reduce){
+    .blink,.belt,.mist,.glowpulse,.status .dot{animation:none!important}
+    .hud .swap,.chips li{transition:none}
+    .mist{opacity:.22}
+  }
+  /* portrait phones: full-screen stage, scene band in the middle, larger HUD and controls */
+  @media (max-aspect-ratio: 4/5){
+    .stage{width:100vw;height:100dvh;aspect-ratio:auto;border-radius:0;
+      background:linear-gradient(#141a33,#0d1326 45%,#0b101d)}
+    svg#world{inset:auto 0 auto 0;top:max(34cqh,calc(50cqh - 30cqw));height:76cqw}
+    .hud{left:5cqw;top:5cqh;width:90cqw}
+    .hud .step{font-size:3.2cqw}.hud .step::before{width:6cqw}
+    .hud h1{font-size:9.6cqw;margin-top:1cqh}
+    .hud p{font-size:3.9cqw;max-width:none;margin-top:1.2cqh}
+    .chips{gap:2cqw;margin-top:2cqh}
+    .chips li{font-size:3.3cqw;padding:1.4cqw 2.8cqw;gap:1.4cqw}
+    .chips li i{width:2cqw;height:2cqw}
+    .status{font-size:3.4cqw;gap:1.8cqw;margin-top:1.6cqh;min-height:5cqw}
+    .status .dot{width:2.4cqw;height:2.4cqw}
+    .nav{bottom:max(4cqh,env(safe-area-inset-bottom));gap:1.6cqw;padding:1.4cqw 1.6cqw;max-width:94cqw}
+    .arrow{width:11cqw;height:11cqw}
+    .dots{gap:1cqw}
+    .dots button{font-size:3.2cqw;padding:1.4cqw 2cqw;gap:1.2cqw}
+    .dots button i{width:2cqw;height:2cqw}
+  }
+</style>
+</head>
+<body>
+<main class="stage" id="stage" aria-roledescription="taqdimot" aria-label="Avtomobil ishlab chiqarish liniyasi">
+<svg id="world" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="wallWeld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1733"/><stop offset="1" stop-color="#3a2238"/></linearGradient>
+    <linearGradient id="wallPaint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b2a3a"/><stop offset="1" stop-color="#0f4155"/></linearGradient>
+    <linearGradient id="wallAsm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#10233d"/><stop offset="1" stop-color="#173d4a"/></linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2133"/><stop offset="1" stop-color="#0c111d"/></linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6eaf0"/><stop offset=".55" stop-color="#aeb6c2"/><stop offset="1" stop-color="#7d8796"/></linearGradient>
+    <linearGradient id="primer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe7ee"/><stop offset="1" stop-color="#9fb0bf"/></linearGradient>
+    <linearGradient id="paintCol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5d6c"/><stop offset=".5" stop-color="#e3263c"/><stop offset="1" stop-color="#8f1022"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfefff"/><stop offset=".5" stop-color="#6fb7d9"/><stop offset="1" stop-color="#2f6f93"/></linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd8ff" stop-opacity=".55"/><stop offset="1" stop-color="#9fd8ff" stop-opacity="0"/></linearGradient>
+    <radialGradient id="spot" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="beam" cx="0" cy=".5" r="1"><stop offset="0" stop-color="#fff6c8" stop-opacity=".85"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="glowF" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+    <clipPath id="clipPrimer"><rect id="primerRect" x="-20" y="0" width="0" height="220"/></clipPath>
+    <clipPath id="clipColor"><rect id="colorRect" x="-20" y="0" width="0" height="220"/></clipPath>
+    <!-- shared car body shapes (local car coordinates 0..520) -->
+    <path id="lowerBody" d="M26 150 L26 120 Q28 106 48 102 L152 94 L404 94 L456 100 Q490 106 496 124 L496 150 Q496 154 490 154 L432 154 A42 42 0 0 0 348 154 L172 154 A42 42 0 0 0 88 154 L32 154 Q26 154 26 150 Z"/>
+    <path id="cabin" d="M152 94 L204 52 Q214 44 232 44 L330 44 Q346 44 358 54 L404 94 Z"/>
+    <path id="winRear" d="M170 92 L210 57 Q216 52 228 52 L272 52 L272 92 Z"/>
+    <path id="winFront" d="M286 52 L328 52 Q340 52 350 60 L386 92 L286 92 Z"/>
+  </defs>
+
+  <g id="cam">
+    <!-- ============ BAYS (background) ============ -->
+    <!-- walls -->
+    <rect x="-1600" y="0" width="1600" height="720" fill="#14172b"/>
+    <rect x="0" y="0" width="1600" height="720" fill="url(#wallWeld)"/>
+    <rect x="1600" y="0" width="1600" height="720" fill="url(#wallPaint)"/>
+    <rect x="3200" y="0" width="1600" height="720" fill="url(#wallAsm)"/>
+    <rect x="4800" y="0" width="1600" height="720" fill="#13283a"/>
+    <!-- roof trusses -->
+    <path id="truss" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="4"/>
+    <!-- skylights -->
+    <g id="skylights" fill="url(#sky)"></g>
+    <!-- wall panel lines -->
+    <g id="panels" stroke="rgba(255,255,255,.05)" stroke-width="2"></g>
+    <!-- big faint bay numbers -->
+    <g font-family="Segoe UI,Roboto,Arial,sans-serif" font-weight="900" fill="rgba(255,255,255,.05)" font-size="360">
+      <text x="1530" y="560" text-anchor="end">01</text>
+      <text x="3130" y="560" text-anchor="end">02</text>
+      <text x="4730" y="560" text-anchor="end">03</text>
+    </g>
+
+    <!-- ===== BAY 1: WELDING ===== -->
+    <g id="bayWeld">
+      <!-- hanging sign -->
+      <g transform="translate(1180,170)">
+        <line x1="20" y1="-170" x2="20" y2="0" stroke="#3b3550" stroke-width="3"/><line x1="300" y1="-170" x2="300" y2="0" stroke="#3b3550" stroke-width="3"/>
+        <rect x="0" y="0" width="320" height="70" rx="10" fill="#241c37" stroke="#ff8a3d" stroke-width="2"/>
+        <text x="160" y="46" text-anchor="middle" font-family="Segoe UI,Roboto,Arial,sans-serif" font-weight="800" font-size="30" fill="#ffb27a" letter-spacing="3">SVARKA</text>
+      </g>
+      <!-- background welding cell (ambient sparks source) -->
+      <g transform="translate(1330,430)" opacity=".75">
+        <rect x="-60" y="0" width="160" height="290" fill="#251d33" stroke="#3d3352"/>
+        <rect x="-40" y="30" width="120" height="80" fill="#1a1426" stroke="#ff8a3d" stroke-opacity=".4"/>
+        <circle cx="20" cy="70" r="5" fill="#ffd166" class="glowpulse"/>
+        <circle cx="-40" cy="140" r="5" fill="#ff8a3d" class="blink"/><circle cx="-20" cy="140" r="5" fill="#ffd166" class="blink b2"/>
+      </g>
+      <!-- robot arms (left + right of station) -->
+      <g id="robotL" transform="translate(560,720)"></g>
+      <g id="robotR" transform="translate(1050,720)"></g>
+      <!-- control panel -->
+      <g transform="translate(150,520)">
+        <rect width="150" height="200" rx="8" fill="#2a2140" stroke="#463a63"/>
+        <rect x="18" y="20" width="114" height="60" rx="4" fill="#120e1e"/>
+        <polyline points="26,64 46,50 62,58 80,36 98,46 124,30" fill="none" stroke="#ff8a3d" stroke-width="3"/>
+        <circle cx="38" cy="112" r="8" fill="#3ddc97" class="blink"/><circle cx="68" cy="112" r="8" fill="#ffd166" class="blink b2"/><circle cx="98" cy="112" r="8" fill="#ff5d6c" class="blink b3"/>
+        <rect x="18" y="140" width="114" height="10" rx="5" fill="#463a63"/>
+      </g>
+      <ellipse cx="800" cy="300" rx="420" ry="260" fill="url(#spot)"/>
+    </g>
+
+    <!-- ===== BAY 2: PAINT ===== -->
+    <g id="bayPaint">
+      <g transform="translate(2780,170)">
+        <line x1="20" y1="-170" x2="20" y2="0" stroke="#2b4a5a" stroke-width="3"/><line x1="300" y1="-170" x2="300" y2="0" stroke="#2b4a5a" stroke-width="3"/>
+        <rect x="0" y="0" width="320" height="70" rx="10" fill="#0d3443" stroke="#2ec4d6" stroke-width="2"/>
+        <text x="160" y="46" text-anchor="middle" font-family="Segoe UI,Roboto,Arial,sans-serif" font-weight="800" font-size="28" fill="#8ef0ff" letter-spacing="3">BOʻYOQLASH</text>
+      </g>
+      <!-- paint booth -->
+      <rect x="2050" y="300" width="700" height="420" rx="14" fill="rgba(142,240,255,.05)" stroke="rgba(142,240,255,.35)" stroke-width="3"/>
+      <rect x="2050" y="300" width="700" height="34" rx="10" fill="#0e3a4a"/>
+      <g fill="#8ef0ff"><circle cx="2090" cy="317" r="6" class="blink"/><circle cx="2115" cy="317" r="6" class="blink b2"/><circle cx="2140" cy="317" r="6" class="blink b3"/></g>
+      <!-- booth air vents -->
+      <g stroke="rgba(142,240,255,.18)" stroke-width="3">
+        <line x1="2090" y1="360" x2="2090" y2="690"/><line x1="2710" y1="360" x2="2710" y2="690"/>
+      </g>
+      <!-- spray gantry -->
+      <rect x="2070" y="350" width="660" height="12" rx="6" fill="#2b5566"/>
+      <g id="nozzle" transform="translate(2400,362)">
+        <rect x="-26" y="0" width="52" height="40" rx="6" fill="#3a7487"/>
+        <rect x="-8" y="40" width="16" height="70" fill="#5aa3b8"/>
+        <path d="M-6 110 L6 110 L4 124 L-4 124 Z" fill="#cfefff"/>
+        <path id="sprayCone" d="M0 124 L-70 260 L70 260 Z" fill="#ff5d6c" opacity="0"/>
+      </g>
+      <!-- paint mist -->
+      <g filter="url(#soft)">
+        <circle class="mist" cx="2250" cy="560" r="80" fill="#2ec4d6"/>
+        <circle class="mist m2" cx="2520" cy="500" r="100" fill="#8ef0ff"/>
+        <circle class="mist m3" cx="2650" cy="600" r="70" fill="#2ec4d6"/>
+        <circle id="paintMist" cx="2400" cy="560" r="150" fill="#ff5d6c" opacity="0"/>
+      </g>
+      <!-- paint drums -->
+      <g transform="translate(1760,610)">
+        <rect width="70" height="110" rx="8" fill="#e3263c"/><rect y="18" width="70" height="8" fill="#8f1022"/>
+        <rect x="84" y="20" width="60" height="90" rx="8" fill="#2ec4d6"/><rect x="84" y="36" width="60" height="7" fill="#0f6b7a"/>
+      </g>
+      <g transform="translate(2930,520)">
+        <rect width="130" height="200" rx="8" fill="#0e3a4a" stroke="#1e5b6d"/>
+        <rect x="16" y="18" width="98" height="54" rx="4" fill="#06202a"/>
+        <rect x="26" y="30" width="20" height="30" fill="#ff5d6c" class="glowpulse"/><rect x="54" y="38" width="20" height="22" fill="#2ec4d6"/><rect x="82" y="26" width="20" height="34" fill="#8ef0ff"/>
+        <circle cx="34" cy="104" r="7" fill="#3ddc97" class="blink"/><circle cx="64" cy="104" r="7" fill="#8ef0ff" class="blink b3"/>
+      </g>
+    </g>
+
+    <!-- ===== BAY 3: ASSEMBLY ===== -->
+    <g id="bayAsm">
+      <g transform="translate(4380,170)">
+        <line x1="20" y1="-170" x2="20" y2="0" stroke="#2a4a5a" stroke-width="3"/><line x1="300" y1="-170" x2="300" y2="0" stroke="#2a4a5a" stroke-width="3"/>
+        <rect x="0" y="0" width="320" height="70" rx="10" fill="#0f3330" stroke="#3ddc97" stroke-width="2"/>
+        <text x="160" y="46" text-anchor="middle" font-family="Segoe UI,Roboto,Arial,sans-serif" font-weight="800" font-size="30" fill="#9ff0c9" letter-spacing="3">ZBORKA</text>
+      </g>
+      <!-- overhead rail + hoist -->
+      <rect x="3420" y="250" width="760" height="14" rx="7" fill="#2b4f5e"/>
+      <g id="hoist" transform="translate(3560,264)">
+        <rect x="-30" y="0" width="60" height="26" rx="5" fill="#3ddc97"/>
+        <line id="hoistCable" x1="0" y1="26" x2="0" y2="150" stroke="#9fb3c2" stroke-width="3"/>
+        <g id="hoistLoad" transform="translate(0,150)">
+          <circle r="30" fill="#1b1f27" stroke="#3b4250" stroke-width="6"/><circle r="12" fill="#c7d0db"/>
+        </g>
+      </g>
+      <!-- inspection light arch -->
+      <g id="arch" transform="translate(4000,330)">
+        <path d="M-150 390 L-150 40 Q-150 0 -110 0 L110 0 Q150 0 150 40 L150 390" fill="none" stroke="#24485a" stroke-width="22" stroke-linecap="round"/>
+        <path id="archLight" d="M-150 390 L-150 40 Q-150 0 -110 0 L110 0 Q150 0 150 40 L150 390" fill="none" stroke="#9ff0c9" stroke-width="6" stroke-linecap="round" opacity=".25"/>
+      </g>
+      <!-- tool rack + screen -->
+      <g transform="translate(3300,540)">
+        <rect width="120" height="180" rx="8" fill="#123040" stroke="#1e4a5c"/>
+        <rect x="14" y="16" width="92" height="56" rx="4" fill="#07202a"/>
+        <text x="60" y="52" text-anchor="middle" font-family="Segoe UI,Roboto,Arial,sans-serif" font-weight="800" font-size="22" fill="#3ddc97" class="glowpulse">OK</text>
+        <circle cx="30" cy="104" r="7" fill="#3ddc97" class="blink"/><circle cx="60" cy="104" r="7" fill="#ffd166" class="blink b2"/><circle cx="90" cy="104" r="7" fill="#3ddc97" class="blink b3"/>
+      </g>
+      <!-- tyre stack -->
+      <g transform="translate(4520,600)" fill="#1b1f27" stroke="#2f3644" stroke-width="5">
+        <ellipse cx="60" cy="100" rx="60" ry="20"/><ellipse cx="60" cy="72" rx="60" ry="20"/><ellipse cx="60" cy="44" rx="60" ry="20"/><ellipse cx="60" cy="16" rx="60" ry="20"/>
+      </g>
+      <ellipse cx="4000" cy="320" rx="420" ry="260" fill="url(#spot)"/>
+    </g>
+
+    <!-- bay dividers with strip curtains -->
+    <g id="dividers"></g>
+
+    <!-- ============ FLOOR + CONVEYOR ============ -->
+    <rect x="-1600" y="720" width="8000" height="180" fill="url(#floor)"/>
+    <rect x="-1600" y="760" width="8000" height="8" fill="#ffd166" opacity=".55"/>
+    <line x1="-1600" y1="764" x2="6400" y2="764" stroke="#1a1f2d" stroke-width="8" stroke-dasharray="26 26"/>
+    <rect x="-1600" y="720" width="8000" height="30" fill="#2a3245"/>
+    <line class="belt" x1="-1600" y1="735" x2="6400" y2="735" stroke="#4a5570" stroke-width="10" stroke-dasharray="8 40"/>
+    <g id="rollers" fill="#566181"></g>
+
+    <!-- ============ CAR ============ -->
+    <g id="car">
+      <ellipse cx="260" cy="190" rx="250" ry="10" fill="rgba(0,0,0,.45)"/>
+      <!-- skid (transport fixture) -->
+      <g id="skid">
+        <rect x="70" y="154" width="380" height="14" rx="3" fill="#ffd166"/>
+        <rect x="90" y="168" width="22" height="16" fill="#c9a043"/><rect x="250" y="168" width="22" height="16" fill="#c9a043"/><rect x="408" y="168" width="22" height="16" fill="#c9a043"/>
+      </g>
+      <!-- bare metal body -->
+      <g id="bodyMetal">
+        <use href="#lowerBody" fill="url(#metal)" stroke="#5d6676" stroke-width="2.5"/>
+        <!-- cabin skeleton (before welding) -->
+        <use href="#cabin" fill="none" stroke="#7d8796" stroke-width="2.5" stroke-dasharray="6 6"/>
+        <!-- welded parts -->
+        <g id="weldCabin" opacity="0">
+          <use href="#cabin" fill="url(#metal)" stroke="#5d6676" stroke-width="2.5"/>
+        </g>
+        <g id="weldSeams" opacity="0" fill="none" stroke="#5d6676" stroke-width="2">
+          <path d="M276 96 L276 150 M176 98 L176 150 M392 96 L392 150 M404 94 L456 100 M152 94 L60 104"/>
+          <path d="M190 112 L262 112 M290 112 L378 112" stroke-opacity=".5"/>
+        </g>
+        <!-- dark window openings -->
+        <g id="openings" opacity="0" fill="#1d222c">
+          <use href="#winRear"/><use href="#winFront"/>
+        </g>
+        <g id="weldDots"></g>
+      </g>
+      <!-- paint: primer + colour, revealed by clip rects -->
+      <g id="primerLayer" clip-path="url(#clipPrimer)">
+        <use href="#lowerBody" fill="url(#primer)" stroke="#7b8b99" stroke-width="2"/>
+        <use href="#cabin" fill="url(#primer)" stroke="#7b8b99" stroke-width="2"/>
+      </g>
+      <g id="colorLayer" clip-path="url(#clipColor)">
+        <use href="#lowerBody" fill="url(#paintCol)" stroke="#6e0b18" stroke-width="2"/>
+        <use href="#cabin" fill="url(#paintCol)" stroke="#6e0b18" stroke-width="2"/>
+        <g fill="none" stroke="#7a0c1b" stroke-width="2"><path d="M276 96 L276 150 M176 98 L176 150 M392 96 L392 150 M404 94 L456 100"/></g>
+        <path d="M60 112 Q260 100 470 112" stroke="#fff" stroke-opacity=".45" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M222 50 L330 50" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <g id="paintedOpenings" fill="#1d222c" opacity="0"><use href="#winRear"/><use href="#winFront"/></g>
+      <!-- assembly parts -->
+      <g id="glassParts" opacity="0">
+        <use href="#winRear" fill="url(#glass)"/><use href="#winFront" fill="url(#glass)"/>
+        <path d="M232 58 L214 86 M318 58 L300 86" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <g id="trimParts" opacity="0">
+        <rect x="22" y="128" width="30" height="16" rx="6" fill="#2b2f38"/>
+        <rect x="470" y="128" width="30" height="16" rx="6" fill="#2b2f38"/>
+        <rect x="236" y="116" width="26" height="6" rx="3" fill="#e9eef4"/><rect x="336" y="116" width="26" height="6" rx="3" fill="#e9eef4"/>
+        <path d="M394 82 L414 78 L416 90 L398 92 Z" fill="#2b2f38"/>
+        <rect x="270" y="138" width="60" height="8" rx="4" fill="#2b2f38" opacity=".6"/>
+      </g>
+      <g id="lightParts" opacity="0">
+        <path d="M478 108 Q494 110 495 122 L476 120 Z" fill="#fff6c8"/>
+        <path d="M28 112 L42 110 L42 124 L27 124 Z" fill="#ff3347"/>
+        <ellipse id="headBeam" cx="560" cy="118" rx="90" ry="26" fill="url(#beam)" opacity="0"/>
+        <circle cx="486" cy="116" r="10" fill="#fff6c8" filter="url(#glowF)" opacity=".8"/>
+        <circle cx="34" cy="118" r="9" fill="#ff3347" filter="url(#glowF)" opacity=".7"/>
+      </g>
+      <g id="wheels" opacity="0">
+        <g class="wheel" data-cx="130" data-cy="150">
+          <circle cx="130" cy="150" r="34" fill="#15181e"/><circle cx="130" cy="150" r="20" fill="#c7d0db"/>
+          <g class="spokes"><path d="M130 132 L130 168 M112 150 L148 150 M117 137 L143 163 M143 137 L117 163" stroke="#8a95a5" stroke-width="4"/></g>
+          <circle cx="130" cy="150" r="6" fill="#4b5563"/>
+        </g>
+        <g class="wheel" data-cx="390" data-cy="150">
+          <circle cx="390" cy="150" r="34" fill="#15181e"/><circle cx="390" cy="150" r="20" fill="#c7d0db"/>
+          <g class="spokes"><path d="M390 132 L390 168 M372 150 L408 150 M377 137 L403 163 M403 137 L377 163" stroke="#8a95a5" stroke-width="4"/></g>
+          <circle cx="390" cy="150" r="6" fill="#4b5563"/>
+        </g>
+      </g>
+      <g id="sparks" stroke-linecap="round"></g>
+    </g>
+
+    <!-- foreground columns -->
+    <g id="frontCols"></g>
+  </g>
+</svg>
+
+<header class="hud" id="hud">
+  <div class="step swap" id="step">01 / 03</div>
+  <h1 class="swap" id="title">Svarka sexi</h1>
+  <p class="swap" id="sub"></p>
+  <ul class="chips swap" id="chips"></ul>
+  <div class="status swap" id="status" role="status" aria-live="polite"><span class="dot"></span><span id="statusText"></span></div>
+</header>
+
+<nav class="nav" aria-label="Slaydlar boshqaruvi">
+  <button class="arrow" id="prev" type="button" aria-label="Oldingi slayd">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg>
+  </button>
+  <div class="dots" id="dots"></div>
+  <button class="arrow" id="next" type="button" aria-label="Keyingi slayd">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+  </button>
+</nav>
+<p class="sr" id="live" aria-live="polite"></p>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (id) => document.getElementById(id);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const SLIDES = [
+    { num: '01', title: 'Svarka sexi', short: 'Svarka', accent: '#ff8a3d',
+      sub: 'Payvandlash: kuzov karkasi mustahkam yigʻiladi',
+      chips: ['Kuzov asosi', 'Tom va ustunlar', 'Eshik panellari'],
+      busy: 'Payvandlanmoqda…', done: 'Karkas tayyor' },
+    { num: '02', title: 'Boʻyoqlash sexi', short: 'Boʻyoqlash', accent: '#2ec4d6',
+      sub: 'Kuzov tozalanadi, gruntlanadi va rangga boʻyaladi',
+      chips: ['Tozalash', 'Grunt', 'Rang va lak'],
+      busy: 'Boʻyalmoqda…', done: 'Rang berildi' },
+    { num: '03', title: 'Zborka sexi', short: 'Zborka', accent: '#3ddc97',
+      sub: 'Yigʻuv: gʻildirak, oyna va chiroqlar oʻrnatiladi',
+      chips: ['Gʻildiraklar', 'Oynalar', 'Chiroqlar'],
+      busy: 'Yigʻilmoqda…', done: 'Avtomobil tayyor' },
+  ];
+  const BAY = 1600, CAR_W = 520, CAR_SCALE = 1.08, GROUND = 720;
+  const stationX = (i) => i * BAY + 800;
+
+  /* ---------- build repeated background pieces ---------- */
+  (function buildBackground() {
+    let d = '';
+    for (let x = -1600; x < 6400; x += 160) d += `M${x} 40 L${x + 80} 120 L${x + 160} 40 M${x} 40 L${x + 160} 40 M${x} 120 L${x + 160} 120 `;
+    $('truss').setAttribute('d', d);
+    const sky = $('skylights'), pan = $('panels'), rol = $('rollers'), div = $('dividers'), cols = $('frontCols');
+    for (let x = -1500; x < 6400; x += 400) {
+      const r = document.createElementNS(NS, 'rect');
+      r.setAttribute('x', x); r.setAttribute('y', 132); r.setAttribute('width', 240); r.setAttribute('height', 110); r.setAttribute('rx', 6);
+      sky.appendChild(r);
+    }
+    for (let x = -1600; x < 6400; x += 200) {
+      const l = document.createElementNS(NS, 'line');
+      l.setAttribute('x1', x); l.setAttribute('x2', x); l.setAttribute('y1', 260); l.setAttribute('y2', 720);
+      pan.appendChild(l);
+    }
+    for (let x = -1600; x < 6400; x += 60) {
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', x); c.setAttribute('cy', 748); c.setAttribute('r', 6);
+      rol.appendChild(c);
+    }
+    // doorways between bays: a steel frame + plastic strip curtain
+    [0, 1600, 3200, 4800].forEach((x) => {
+      const g = document.createElementNS(NS, 'g');
+      g.innerHTML = `<rect x="${x - 26}" y="250" width="52" height="470" fill="#232a3b"/>
+        <rect x="${x - 34}" y="250" width="68" height="26" fill="#2f3850"/>
+        ${Array.from({ length: 5 }, (_, k) => `<rect x="${x - 24 + k * 10}" y="276" width="8" height="${300 + (k % 2) * 30}" fill="rgba(180,210,255,.10)"/>`).join('')}
+        <circle cx="${x}" cy="300" r="6" fill="#ffd166" class="blink ${x % 3200 ? 'b2' : ''}"/>`;
+      div.appendChild(g);
+    });
+    // a few foreground columns for depth (they pass in front of the line)
+    [1590, 3190, 4790].forEach((x) => {
+      const r = document.createElementNS(NS, 'rect');
+      r.setAttribute('x', x - 10); r.setAttribute('y', 0); r.setAttribute('width', 20); r.setAttribute('height', 250);
+      r.setAttribute('fill', '#1b2133');
+      cols.appendChild(r);
+    });
+  })();
+
+  /* ---------- robot arms (welding) ---------- */
+  function makeRobot(host, flip) {
+    host.innerHTML = `
+      <rect x="-46" y="-40" width="92" height="40" rx="6" fill="#3b2f52"/>
+      <rect x="-30" y="-70" width="60" height="34" rx="6" fill="#ff8a3d"/>
+      <g class="shoulder" transform="translate(0,-62)">
+        <rect x="-14" y="-170" width="28" height="176" rx="12" fill="#ff8a3d"/>
+        <circle r="18" fill="#ffb27a" stroke="#b85a1f" stroke-width="4"/>
+        <g class="elbow" transform="translate(0,-160)">
+          <circle r="14" fill="#ffb27a" stroke="#b85a1f" stroke-width="4"/>
+          <rect x="${flip ? -150 : 0}" y="-10" width="150" height="20" rx="10" fill="#ff9a52"/>
+          <g class="tip" transform="translate(${flip ? -150 : 150},0)">
+            <rect x="-9" y="-6" width="18" height="40" rx="4" fill="#5a4a73"/>
+            <circle cy="38" r="5" fill="#ffd166" class="torch" opacity=".9"/>
+          </g>
+        </g>
+      </g>`;
+    return { host, shoulder: host.querySelector('.shoulder'), elbow: host.querySelector('.elbow'), torch: host.querySelector('.torch'), flip };
+  }
+  const robots = [makeRobot($('robotL'), false), makeRobot($('robotR'), true)];
+
+  /* ---------- weld points on the car (local coordinates) ---------- */
+  const WELD_POINTS = [[160, 94], [204, 54], [276, 46], [354, 54], [402, 94], [276, 96], [276, 150], [176, 100], [176, 148], [392, 98], [392, 148], [430, 100], [80, 104], [240, 94], [330, 94]];
+  const weldDotEls = WELD_POINTS.map(([x, y]) => {
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 4); c.setAttribute('opacity', 0);
+    $('weldDots').appendChild(c); return c;
+  });
+
+  /* ---------- spark particle pool ---------- */
+  const SPARK_N = 90, sparks = [], sparkEls = [];
+  for (let i = 0; i < SPARK_N; i++) {
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('stroke-width', 2.4); l.setAttribute('opacity', 0);
+    $('sparks').appendChild(l); sparkEls.push(l); sparks.push({ life: 0 });
+  }
+  let sparkCursor = 0;
+  function burst(x, y, n, hot) {
+    if (reduce) return;
+    for (let k = 0; k < n; k++) {
+      const p = sparks[sparkCursor]; sparkCursor = (sparkCursor + 1) % SPARK_N;
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.6, v = 120 + Math.random() * 220;
+      Object.assign(p, { x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.35 + Math.random() * 0.35, max: 0.7, col: hot ? (Math.random() < 0.5 ? '#ffd166' : '#ffffff') : '#ff8a3d' });
+    }
+  }
+
+  /* ---------- state ---------- */
+  const S = { cur: 0, carX: -620, camX: 0, weld: 0, paint: 0, asm: 0, weldActive: false, paintActive: false, asmActive: false, token: 0, started: false };
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const bounce = (t) => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375; return n * (t -= 2.625 / d) * t + 0.984375; };
+
+  function tween(dur, update, ease = easeInOut, token = S.token) {
+    if (reduce) dur = Math.min(dur, 0.12);
+    return new Promise((resolve) => {
+      const t0 = performance.now();
+      const step = (now) => {
+        if (token !== S.token) return resolve(false);
+        const t = clamp((now - t0) / (dur * 1000));
+        update(ease(t), t);
+        if (t < 1) requestAnimationFrame(step); else resolve(true);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+  const wait = (s, token = S.token) => new Promise((r) => setTimeout(() => r(token === S.token), reduce ? 0 : s * 1000));
+
+  /* ---------- render the car + camera from state ---------- */
+  const car = $('car'), cam = $('cam');
+  const el = (id) => $(id);
+  const parts = { weldCabin: el('weldCabin'), weldSeams: el('weldSeams'), openings: el('openings'), paintedOpenings: el('paintedOpenings'),
+    glass: el('glassParts'), trim: el('trimParts'), lights: el('lightParts'), wheels: el('wheels'), skid: el('skid'), beam: el('headBeam') };
+  const wheelEls = [...document.querySelectorAll('#wheels .wheel')];
+  function render() {
+    cam.setAttribute('transform', `translate(${(-S.camX).toFixed(2)},0)`);
+    const carTop = GROUND - 184 * CAR_SCALE + 6;
+    car.setAttribute('transform', `translate(${(S.carX - (CAR_W / 2) * CAR_SCALE).toFixed(2)},${carTop.toFixed(2)}) scale(${CAR_SCALE})`);
+    // welding
+    const w = S.weld;
+    parts.weldCabin.setAttribute('opacity', clamp(w / 0.5).toFixed(3));
+    parts.weldSeams.setAttribute('opacity', clamp((w - 0.45) / 0.35).toFixed(3));
+    parts.openings.setAttribute('opacity', clamp((w - 0.3) / 0.3).toFixed(3));
+    weldDotEls.forEach((c, k) => {
+      const th = (k + 1) / (WELD_POINTS.length + 1);
+      const on = w >= th;
+      const hot = S.weldActive && w - th < 0.12;
+      c.setAttribute('opacity', on ? (hot ? 1 : 0.55) : 0);
+      c.setAttribute('fill', hot ? '#ffd166' : '#6b7480');
+      c.setAttribute('r', hot ? 5.5 : 3.2);
+    });
+    // paint: primer then colour
+    const p = S.paint;
+    $('primerRect').setAttribute('width', (clamp(p / 0.45) * 560).toFixed(1));
+    $('colorRect').setAttribute('width', (clamp((p - 0.4) / 0.6) * 560).toFixed(1));
+    parts.paintedOpenings.setAttribute('opacity', p > 0 ? 1 : 0);
+    // assembly
+    const a = S.asm;
+    const aw = clamp(a / 0.35);
+    parts.wheels.setAttribute('opacity', clamp(a * 8).toFixed(3));
+    parts.wheels.setAttribute('transform', `translate(0,${((1 - bounce(aw)) * -230).toFixed(2)})`);
+    parts.skid.setAttribute('opacity', (1 - clamp((a - 0.3) / 0.1)).toFixed(3));
+    parts.glass.setAttribute('opacity', clamp((a - 0.35) / 0.22).toFixed(3));
+    parts.trim.setAttribute('opacity', clamp((a - 0.55) / 0.2).toFixed(3));
+    parts.lights.setAttribute('opacity', clamp((a - 0.7) / 0.15).toFixed(3));
+    parts.beam.setAttribute('opacity', (clamp((a - 0.85) / 0.15) * 0.9).toFixed(3));
+    // wheels spin with travel (only once they are on the car)
+    const ang = ((S.carX / (34 * CAR_SCALE)) * 180 / Math.PI) % 360;
+    wheelEls.forEach((g) => { const s = g.querySelector('.spokes'); s.setAttribute('transform', `rotate(${ang.toFixed(1)} ${g.dataset.cx} ${g.dataset.cy})`); });
+    // chips + status follow the progress of the current stage
+    const prog = [S.weld, S.paint, S.asm][S.cur];
+    const th = S.cur === 1 ? [0.05, 0.35, 0.7] : [0.05, 0.4, 0.75];
+    chipEls.forEach((li, k) => li.classList.toggle('on', prog >= th[k]));
+  }
+
+  /* ---------- ambient loop (robots, gantry, hoist, sparks) ---------- */
+  let last = performance.now();
+  function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const t = now / 1000;
+    const k = reduce ? 0 : 1;
+    // robots: slow idle sway; faster, larger reach while welding
+    robots.forEach((r, i) => {
+      const act = S.weldActive ? 1 : 0;
+      const sh = (r.flip ? -1 : 1) * (18 + 10 * act) + Math.sin(t * (0.7 + act * 2.2) + i) * (6 + 10 * act) * k;
+      const el2 = (r.flip ? 1 : -1) * 40 + Math.sin(t * (0.9 + act * 2.6) + i * 2) * (8 + 12 * act) * k;
+      r.shoulder.setAttribute('transform', `translate(0,-62) rotate(${sh.toFixed(2)})`);
+      r.elbow.setAttribute('transform', `translate(0,-160) rotate(${el2.toFixed(2)})`);
+      r.torch.setAttribute('opacity', S.weldActive ? (0.6 + 0.4 * Math.random()).toFixed(2) : 0.5);
+    });
+    // spray gantry nozzle: idle drift; sweeps over the car while painting
+    const nx = S.paintActive ? 1800 + 560 + (S.paint * 520) - 0 : 2400 + Math.sin(t * 0.4) * 160 * k;
+    $('nozzle').setAttribute('transform', `translate(${nx.toFixed(1)},362)`);
+    $('sprayCone').setAttribute('opacity', S.paintActive ? (0.25 + 0.1 * Math.sin(t * 20) * k).toFixed(2) : 0);
+    $('paintMist').setAttribute('opacity', S.paintActive ? 0.35 : (S.paint > 0.99 && S.cur === 1 ? 0.08 : 0));
+    $('paintMist').setAttribute('cx', nx.toFixed(1));
+    // hoist: gentle bob
+    $('hoistCable').setAttribute('y2', (150 + Math.sin(t * 0.8) * 18 * k).toFixed(1));
+    $('hoistLoad').setAttribute('transform', `translate(0,${(150 + Math.sin(t * 0.8) * 18 * k).toFixed(1)})`);
+    $('archLight').setAttribute('opacity', S.asm > 0.99 ? (0.75 + 0.25 * Math.sin(t * 3) * k).toFixed(2) : 0.25);
+    // sparks: ambient from the background welding cell, bursts on the car while welding
+    if (!reduce) {
+      if (Math.random() < 0.06) burstWorld(1350 + Math.random() * 20, 500, 4, false);
+      if (S.weldActive && Math.random() < 0.55) {
+        const idx = Math.min(WELD_POINTS.length - 1, Math.floor(S.weld * WELD_POINTS.length));
+        const [px, py] = WELD_POINTS[idx]; burst(px, py, 3, true);
+      }
+    }
+    sparks.forEach((p, i) => {
+      const l = sparkEls[i];
+      if (p.life <= 0) { if (l.getAttribute('opacity') !== '0') l.setAttribute('opacity', 0); return; }
+      p.life -= dt; p.vy += 520 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+      l.setAttribute('x1', p.x.toFixed(1)); l.setAttribute('y1', p.y.toFixed(1));
+      l.setAttribute('x2', (p.x - p.vx * 0.03).toFixed(1)); l.setAttribute('y2', (p.y - p.vy * 0.03).toFixed(1));
+      l.setAttribute('stroke', p.col); l.setAttribute('opacity', clamp(p.life / 0.35).toFixed(2));
+    });
+    render();
+    requestAnimationFrame(loop);
+  }
+  // world-space sparks are converted into car-local space (the spark pool lives inside the car group)
+  function burstWorld(wx, wy, n, hot) {
+    const carTop = GROUND - 184 * CAR_SCALE + 6, carLeft = S.carX - (CAR_W / 2) * CAR_SCALE;
+    burst((wx - carLeft) / CAR_SCALE, (wy - carTop) / CAR_SCALE, n, hot);
+  }
+
+  /* ---------- HUD ---------- */
+  const hud = $('hud'), chipsBox = $('chips');
+  let chipEls = [];
+  function setHud(i, instant) {
+    const s = SLIDES[i];
+    const apply = () => {
+      document.documentElement.style.setProperty('--accent', s.accent);
+      $('step').textContent = `${s.num} / 03`;
+      $('title').textContent = s.title;
+      $('sub').textContent = s.sub;
+      chipsBox.innerHTML = s.chips.map((c) => `<li><i aria-hidden="true"></i>${c}</li>`).join('');
+      chipEls = [...chipsBox.children];
+      hud.classList.remove('out');
+    };
+    if (instant || reduce) apply(); else { hud.classList.add('out'); setTimeout(apply, 380); }
+    [...dots.children].forEach((b, k) => b.setAttribute('aria-current', k === i ? 'true' : 'false'));
+    $('prev').disabled = i === 0; $('next').disabled = i === SLIDES.length - 1;
+    $('live').textContent = `${i + 1}-slayd, 3 tadan: ${s.title}`;
+  }
+  function setStatus(text, done) {
+    $('statusText').textContent = text;
+    $('status').classList.toggle('done', !!done);
+  }
+
+  const dots = $('dots');
+  SLIDES.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = `<i aria-hidden="true"></i>${s.short}`;
+    b.setAttribute('aria-label', `${i + 1}-slayd: ${s.title}`);
+    b.addEventListener('click', () => go(i));
+    dots.appendChild(b);
+  });
+
+  /* ---------- processes ---------- */
+  async function weldProcess(tok) {
+    S.weldActive = true; setStatus(SLIDES[0].busy);
+    const ok = await tween(3.0, (e) => { S.weld = e; }, (t) => t, tok);
+    S.weldActive = false;
+    if (ok) { S.weld = 1; setStatus(SLIDES[0].done + ' ✓', true); }
+  }
+  async function paintProcess(tok) {
+    S.paintActive = true; setStatus(SLIDES[1].busy);
+    const ok = await tween(3.2, (e) => { S.paint = e; }, (t) => t, tok);
+    S.paintActive = false;
+    if (ok) { S.paint = 1; setStatus(SLIDES[1].done + ' ✓', true); }
+  }
+  async function asmProcess(tok) {
+    S.asmActive = true; setStatus(SLIDES[2].busy);
+    const ok = await tween(3.4, (e) => { S.asm = e; }, (t) => t, tok);
+    S.asmActive = false;
+    if (ok) { S.asm = 1; setStatus(SLIDES[2].done + ' ✓', true); }
+  }
+  const PROCESS = [weldProcess, paintProcess, asmProcess];
+  const LEVEL = ['weld', 'paint', 'asm'];
+
+  /* ---------- navigation ---------- */
+  async function go(i) {
+    i = clamp(i, 0, SLIDES.length - 1);
+    if (S.started && i === S.cur) return;
+    const tok = ++S.token;
+    const from = S.started ? S.cur : -1;
+    S.started = true; S.cur = i;
+    S.weldActive = S.paintActive = S.asmActive = false;
+    setHud(i, from === -1);
+    const forward = i > from;
+    setStatus(forward ? 'Liniya boʻylab harakatlanmoqda…' : 'Orqaga qaytilmoqda…');
+
+    // stages after the target slide are undone when going back
+    const revert = { weld: i >= 0 ? S.weld : 0, paint: i >= 1 ? S.paint : 0, asm: i >= 2 ? S.asm : 0 };
+    const start = { weld: S.weld, paint: S.paint, asm: S.asm, carX: S.carX, camX: S.camX };
+    const tx = stationX(i), cx = i * BAY;
+    const dist = Math.abs(tx - start.carX);
+    const dur = from === -1 ? 3.0 : clamp(1.4 + dist / 1600 * 0.9, 1.6, 3.4);
+
+    const drive = tween(dur, (e) => {
+      S.carX = start.carX + (tx - start.carX) * e;
+      S.camX = start.camX + (cx - start.camX) * easeInOut(clamp((e - 0.04) / 0.96));
+      if (!forward) { S.weld = start.weld + (revert.weld - start.weld) * e; S.paint = start.paint + (revert.paint - start.paint) * e; S.asm = start.asm + (revert.asm - start.asm) * e; }
+      else {
+        // passing through a workshop on a jump (1 -> 3): finish the skipped stage on the way
+        for (let k = Math.max(0, from); k < i; k++) {
+          if (S.carX > stationX(k) - 200) { const key = LEVEL[k]; if (S[key] < 1) S[key] = Math.min(1, S[key] + 0.035); }
+        }
+      }
+    }, from === -1 ? easeOut : easeInOut, tok);
+    const done = await drive;
+    if (!done) return;
+    if (forward) for (let k = 0; k < i; k++) S[LEVEL[k]] = 1;
+    if (S[LEVEL[i]] < 1) {
+      if (!(await wait(0.25, tok))) return;
+      await PROCESS[i](tok);
+    } else {
+      setStatus(SLIDES[i].done + ' ✓', true);
+    }
+  }
+
+  $('prev').addEventListener('click', () => go(S.cur - 1));
+  $('next').addEventListener('click', () => go(S.cur + 1));
+  window.addEventListener('keydown', (e) => {
+    if (e.target && /input|textarea/i.test(e.target.tagName)) return;
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(S.cur + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(S.cur - 1); }
+    else if (e.key === 'Home') go(0); else if (e.key === 'End') go(SLIDES.length - 1);
+  });
+  // swipe
+  let sx = null, sy = null;
+  const stage = $('stage');
+  stage.addEventListener('pointerdown', (e) => { if (e.target.closest('.nav')) return; sx = e.clientX; sy = e.clientY; });
+  stage.addEventListener('pointerup', (e) => {
+    if (sx === null) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) go(S.cur + (dx < 0 ? 1 : -1));
+  });
+
+  /* ---------- start ---------- */
+  render();
+  requestAnimationFrame((t) => { last = t; requestAnimationFrame(loop); });
+  go(0);
+})();
+</script>
+</body>
+</html>

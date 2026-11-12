@@ -1,0 +1,87 @@
+{
+ "lines": {
+  "f0": {
+   "sim": 0.995,
+   "adm": true,
+   "heard": "Assalomu alaykum, ADM Jizzax xodimlari. Xayrli tong! Ertalabki badantarbiya mashqlarimizni boshlaymiz. Dastlab, oralik masofani saqlash maqsadida qo'llarimizni ikki yonga yoygan holda o'ngga va chapga qarab olamiz."
+  },
+  "m0": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Juda ham ajoyib"
+  },
+  "m1": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Bizda birinchi mashqimiz. Tanamizni yengil qizdirib olish maqsadida o'z joyimizda turgan holda yugurib olamiz. Qani boshladik"
+  },
+  "f1": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Bizda keyingi mashqimiz, bo'yin mashqi. Qo'llarimiz belda, oyoqlarimiz esa yelka kengligida. Boshimizni o'ngga va chapga to'rt martadan aylantirib olamiz"
+  },
+  "m2": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Qani bo'shashmasdan davom ettiramiz"
+  },
+  "m3": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Juda ham ajoyib! Bizda keyingi mashqimiz. Oyoqlarimiz yelka kengligida, qo'llarimiz esa yelkada. Yelkalarimizni oldinga va orqaga to'rt martadan aylantirib olamiz"
+  },
+  "f2": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Bizda navbatdagi mashqimiz. Tirsaklarimiz bukilgan, qo'llarimizni gavdamizga to'g'ri olib kelib, musht qilgan holatda ichkariga hamda tashqariga to'rt martadan aylantirib olamiz."
+  },
+  "m4": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Ajoyib! Bizda keyingi mashqimiz. Oyoqlar yelka kengligida, qo'llarimiz esa belda"
+  },
+  "m5": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Belimizni o'ng va chap tomonga to'rt martadan aylantirib olamiz"
+  },
+  "f3a": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Bizda keyingi mashqimiz. Oyoqlarimiz yelka kengligida, qo'llarimiz esa ikki yonga yoygan holatda. O'ng va chap tomonga qayrilib olamiz"
+  },
+  "f3b": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Bo'shashmaymiz. ADM Jizzax xodimlari"
+  },
+  "m6": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Juda ham ajoyib! Bizda navbatdagi mashqimiz. Oyoqlar yelka kengligida, qo'llarimiz esa tizzada. Tizzalarimizni ichkariga va tashqariga to'rt martadan aylantirib olamiz."
+  },
+  "m7": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Yaxshi, endi oyoqlarimizni juft qilgan holatda o'ngga va chapga to'rt martadan aylantirib olamiz"
+  },
+  "f4": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Bizda so'nggi mashqimiz. Oyoqlarimiz kengroq holatda, qo'llarimizni tizzalarimizga qo'yib, o'ng va chap tizzalarimizga tayangan holda oyoqlarimiz paylarini cho'zib olamiz."
+  },
+  "f5": {
+   "sim": 1,
+   "adm": true,
+   "heard": "Hammaga rahmat! Xavfsizlik qoidalariga rioya qilgan holda o'z ish faoliyatingizni davom ettirishingiz mumkin. Olg'a ADM!"
+  }
+ },
+ "tabiiy": {
+  "mean": 0.53,
+  "sd": 0.15
+ },
+ "sekin": {
+  "mean": 0.74,
+  "sd": 0.08
+ }
+}

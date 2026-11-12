@@ -17,3 +17,28 @@ video/pptx-film/assets/logo2*.png
 video/pptx-film/assets/building.png
 video/pptx-film/assets/image*
 video/pptx-film/out/
+
+# boshqa muallif reelidan olingan natija (repoga kiritilmaydi)
+video/kia-sonet/swap/*.mp4
+
+# 120 MB master (GitHub 100 MB chegarasi) — repoda siqilgan nusxa turadi
+video/hrm-edolus/HRM_2026_Sentabr_EDOLUS.mp4
+
+# montaj: foydalanuvchi videolari, rasmlari va namuna (repoga kirmaydi)
+video/montaj/kirish/
+video/montaj/ish/
+video/montaj/tahlil/*.png
+hisobot/spqrc/kirish/
+hisobot/spqrc/un/
+hisobot/spqrc/base.pptx
+hisobot/spqrc/*.pdf
+hisobot/spqrc/hrm_thumbs*
+hisobot/spqrc/tpl_text.md
+hisobot/spqrc/base_tpl.pptx
+hisobot/spqrc/tplr/
+hisobot/nizom/kirish/
+hisobot/nizom/un/
+hisobot/nizom/base.pptx
+hisobot/nizom/r/
+hisobot/kun_tartibi/kirish/
+hisobot/kun_tartibi/r/

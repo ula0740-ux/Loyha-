@@ -1,0 +1,121 @@
+{
+ "lines": {
+  "f0": {
+   "sim": 0.995,
+   "adm": true
+  },
+  "m0": {
+   "sim": 1,
+   "adm": true
+  },
+  "m1": {
+   "sim": 1,
+   "adm": true
+  },
+  "f1": {
+   "sim": 1,
+   "adm": true
+  },
+  "m2": {
+   "sim": 1,
+   "adm": true
+  },
+  "m3": {
+   "sim": 1,
+   "adm": true
+  },
+  "f2": {
+   "sim": 1,
+   "adm": true
+  },
+  "m4": {
+   "sim": 1,
+   "adm": true
+  },
+  "m5": {
+   "sim": 1,
+   "adm": true
+  },
+  "f3": {
+   "sim": 0.987,
+   "adm": false,
+   "text": "Bizda keyingi mashqimiz: oyoqlarimiz yelka kengligida, qoʻllarimiz esa ikki yonga yoygan holatda. Oʻng va chap tomonga qayrilib olamiz. Boʻshashmaymiz, ADM Jizzax!"
+  },
+  "m6": {
+   "sim": 1,
+   "adm": true
+  },
+  "m7": {
+   "sim": 1,
+   "adm": true
+  },
+  "f4": {
+   "sim": 1,
+   "adm": true
+  },
+  "f5": {
+   "sim": 1,
+   "adm": true,
+   "text": "Hammaga rahmat! Xavfsizlik qoidalariga rioya qilgan holda oʻz ish faoliyatingizni davom ettirishingiz mumkin. Olgʻa, ADM Jizzax!"
+  }
+ },
+ "counts": [
+  {
+   "file": "counts/c1.mp3",
+   "words": [
+    {
+     "text": "Bir,",
+     "start": 0.16,
+     "end": 0.52
+    },
+    {
+     "text": "ikki,",
+     "start": 0.64,
+     "end": 1.16
+    },
+    {
+     "text": "uch,",
+     "start": 1.28,
+     "end": 1.64
+    },
+    {
+     "text": "toʻrt,",
+     "start": 1.76,
+     "end": 2.427
+    },
+    {
+     "text": "bir,",
+     "start": 2.533,
+     "end": 2.76
+    },
+    {
+     "text": "ikki,",
+     "start": 2.88,
+     "end": 3.4
+    },
+    {
+     "text": "uch,",
+     "start": 3.52,
+     "end": 3.84
+    },
+    {
+     "text": "toʻrt!",
+     "start": 3.92,
+     "end": 4.44
+    },
+    {
+     "text": "Qani-qani",
+     "start": 4.64,
+     "end": 5.12
+    },
+    {
+     "text": "boʻshashmaymiz!",
+     "start": 5.16,
+     "end": 6.24
+    }
+   ],
+   "mean": 0.5371428571428571,
+   "sd": 0.14055037589158312
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "i": 14,
+ "text": "Rol — uning vazifasi va umumiy jarayondagi oʻrni.",
+ "tts": "Rol — uning vazifasi va umumiy jarayondagi oʻrni.",
+ "hash": "6ff6540c72be7619",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/6ff6540c72be7619.mp3",
+ "duration": 4.754286,
+ "takes": 1,
+ "similarity": 0.9782608695652174,
+ "problems": [
+  {
+   "expected": "rol",
+   "heard": "role"
+  }
+ ],
+ "heard": "role uning vazifasi va umumiy jarayondagi o'rni"
+}

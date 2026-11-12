@@ -1,0 +1,37 @@
+{
+ "i": 29,
+ "text": "Ish joyida xavfsiz mehnat muhitini taʼminlaydi, talab — Global Call to Actions, Pi Ay ikki va Pi Ay uch.",
+ "tts": "Ish joyida khavfsiz mehnat muhitini taʼminlaydi, talab — Global Call to Actions, Pi Ay ikki va Pi Ay uch.",
+ "hash": "cae2da2629aa6bf9",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/cae2da2629aa6bf9.mp3",
+ "duration": 8.829388,
+ "takes": 3,
+ "similarity": 0.8484848484848485,
+ "problems": [
+  {
+   "expected": "pi",
+   "heard": "∅"
+  },
+  {
+   "expected": "ay",
+   "heard": "∅"
+  },
+  {
+   "expected": "ikki",
+   "heard": "pa2"
+  },
+  {
+   "expected": "pi",
+   "heard": "∅"
+  },
+  {
+   "expected": "ay",
+   "heard": "∅"
+  },
+  {
+   "expected": "uch",
+   "heard": "pa3"
+  }
+ ],
+ "heard": "ish joyida xavfsiz mehnat muhitini ta'minlaydi talab global call to actions pa2 va pa3"
+}
