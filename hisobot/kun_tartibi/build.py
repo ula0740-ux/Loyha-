@@ -42,6 +42,7 @@ for r in src:
         STEPS.append((t(a), t(b), NAMUNA[len(STEPS)], ' '.join(str(r[2]).split()), r[3]))
 assert len(STEPS) == len(NAMUNA)
 
+CHARTS = []
 wb = openpyxl.Workbook(); wb.calculation = CalcProperties(fullCalcOnLoad=True); wb.remove(wb.active)
 
 def build(ws, steps, title, who):
@@ -73,6 +74,11 @@ def build(ws, steps, title, who):
         ws[f'U{q}'] = f'=IF(Q{q}="",0,IF({lun},-1,1))'
         ws[f'T{q}'] = f'=IF(U{q}=1,R{q}+ROW()/10000,-1)'
     tw = f'SUM($R${QA}:$R${QB})'
+    from openpyxl.workbook.defined_name import DefinedName
+    sq = "'" + ws.title.replace("'", "''") + "'"
+    cnt = f'MAX(1,COUNTIF({sq}!$U${QA}:$U${QB},1))'
+    ws.defined_names.add(DefinedName('ToifaNom', attr_text=f'OFFSET({sq}!$Q${QA},0,0,{cnt},1)'))
+    ws.defined_names.add(DefinedName('ToifaDaq', attr_text=f'OFFSET({sq}!$R${QA},0,0,{cnt},1)'))
     for k in range(NC): ws[f'S{QA + k}'] = f'=IF({tw}=0,0,R{QA + k}/{tw})'
     # --- jadval
     dv = DataValidation(type='list', formula1=f'=$Q${QA}:$Q${QB}', allow_blank=True, showErrorMessage=False); ws.add_data_validation(dv)
@@ -116,6 +122,9 @@ def build(ws, steps, title, who):
         c2 = f'ЭНГ КЎП ВАҚТ:  {tc}\n{tm // 60} соат {tm % 60} дақиқа  ·  иш вақтининг {round(tm / twv * 100)}%'
     else: c2 = 'ЭНГ КЎП ВАҚТ: —'
     c3 = f'Жами иш вақти: {twv // 60} соат {twv % 60} дақ. (тушликсиз)\n{len(mins)} хил иш тоифаси'
+    order = [c for c in cats if c in mins]
+    CHARTS.append(dict(sheet=ws.title, kind='bar', title=('Q2', c2, 1300, '1F2937'), cats=order, vals=[mins[c] for c in order]))
+    CHARTS.append(dict(sheet=ws.title, kind='donut', title=('Q3', c3, 1050, '374151'), cats=order, vals=[mins[c] for c in order]))
     sname = ws.title.replace("'", "''")
     def ttl(cell, cache, size=1300, color='1F2937'):
         sr = StrRef(f=f"'{sname}'!${cell[0]}${cell[1:]}", strCache=StrData(ptCount=1, pt=[StrVal(idx=0, v=cache)]))
@@ -166,4 +175,50 @@ def build(ws, steps, title, who):
 build(wb.create_sheet('Намуна — Бўёқлаш'), STEPS, 'Бўёқлаш цехи бошлиғи', 'Ф.И.Ш.: ______________________     ·     Сана: ____.____.2026     ·     Иш вақти: 08:50 – 18:00')
 build(wb.create_sheet('Бўш шаблон'), [], 'Лавозим: ______________________', 'Ф.И.Ш.: ______________________     ·     Сана: ____.____.2026     ·     Иш вақти: ____ – ____')
 wb.save(OUT)
+
+import zipfile
+from xml.sax.saxutils import escape as X
+def rpr(sz, color, b=1): return f'<a:defRPr sz="{sz}" b="{b}"><a:solidFill><a:srgbClr val="{color}"/></a:solidFill><a:latin typeface="Segoe UI"/><a:cs typeface="Segoe UI"/></a:defRPr>'
+def txpr(sz, color, b=0): return f'<c:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr>{rpr(sz, color, b)}</a:pPr><a:endParaRPr lang="ru-RU"/></a:p></c:txPr>'
+def chart_xml(ch):
+    sq = "'" + ch['sheet'].replace("'", "''") + "'"
+    cell, cache, sz, col = ch['title']; n = max(1, len(ch['cats']))
+    cats = ch['cats'] or ['']; vals = ch['vals'] or [0]
+    strc = f'<c:ptCount val="{n}"/>' + ''.join(f'<c:pt idx="{i}"><c:v>{X(c)}</c:v></c:pt>' for i, c in enumerate(cats))
+    numc = f'<c:formatCode>General</c:formatCode><c:ptCount val="{n}"/>' + ''.join(f'<c:pt idx="{i}"><c:v>{v}</c:v></c:pt>' for i, v in enumerate(vals))
+    title = (f'<c:title><c:tx><c:strRef><c:f>{sq}!${cell[0]}${cell[1:]}</c:f><c:strCache><c:ptCount val="1"/><c:pt idx="0"><c:v>{X(cache)}</c:v></c:pt></c:strCache></c:strRef></c:tx>'
+             f'<c:overlay val="0"/>{txpr(sz, col, 1)}</c:title><c:autoTitleDeleted val="0"/>')
+    if ch['kind'] == 'bar':
+        dpt = ''.join(f'<c:dPt><c:idx val="{k}"/><c:invertIfNegative val="0"/><c:bubble3D val="0"/><c:spPr><a:solidFill><a:srgbClr val="{PAL[k]}"/></a:solidFill></c:spPr></c:dPt>' for k in range(NC))
+        lbl = f'<c:dLbls><c:numFmt formatCode="0&quot; дақ.&quot;;;;" sourceLinked="0"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>{txpr(900, "374151", 1)}<c:dLblPos val="outEnd"/><c:showLegendKey val="0"/><c:showVal val="1"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbls>'
+        plot = (f'<c:barChart><c:barDir val="bar"/><c:grouping val="clustered"/><c:varyColors val="0"/><c:ser><c:idx val="0"/><c:order val="0"/>'
+                f'<c:spPr><a:solidFill><a:srgbClr val="{PAL[0]}"/></a:solidFill></c:spPr><c:invertIfNegative val="0"/>{dpt}{lbl}'
+                f'<c:cat><c:strRef><c:f>{sq}!ToifaNom</c:f><c:strCache>{strc}</c:strCache></c:strRef></c:cat>'
+                f'<c:val><c:numRef><c:f>{sq}!ToifaDaq</c:f><c:numCache>{numc}</c:numCache></c:numRef></c:val></c:ser>'
+                f'<c:gapWidth val="45"/><c:axId val="111"/><c:axId val="222"/></c:barChart>'
+                f'<c:catAx><c:axId val="111"/><c:scaling><c:orientation val="maxMin"/></c:scaling><c:delete val="0"/><c:axPos val="l"/><c:numFmt formatCode="General" sourceLinked="0"/>'
+                f'<c:majorTickMark val="none"/><c:minorTickMark val="none"/><c:tickLblPos val="nextTo"/><c:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="D1D5DB"/></a:solidFill></a:ln></c:spPr>{txpr(900, "374151", 0)}'
+                f'<c:crossAx val="222"/><c:crosses val="autoZero"/><c:auto val="1"/><c:lblAlgn val="ctr"/><c:lblOffset val="100"/><c:noMultiLvlLbl val="0"/></c:catAx>'
+                f'<c:valAx><c:axId val="222"/><c:scaling><c:orientation val="minMax"/><c:min val="0"/></c:scaling><c:delete val="1"/><c:axPos val="b"/><c:numFmt formatCode="General" sourceLinked="1"/>'
+                f'<c:majorTickMark val="none"/><c:minorTickMark val="none"/><c:tickLblPos val="nextTo"/><c:crossAx val="111"/><c:crosses val="max"/><c:crossBetween val="between"/></c:valAx>')
+    else:
+        dpt = ''.join(f'<c:dPt><c:idx val="{k}"/><c:bubble3D val="0"/><c:spPr><a:solidFill><a:srgbClr val="{PAL[k]}"/></a:solidFill><a:ln w="19050"><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill></a:ln></c:spPr></c:dPt>' for k in range(NC))
+        lbl = f'<c:dLbls><c:numFmt formatCode="0%;;;" sourceLinked="0"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>{txpr(900, "1F2937", 1)}<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="1"/><c:showBubbleSize val="0"/><c:showLeaderLines val="0"/></c:dLbls>'
+        plot = (f'<c:doughnutChart><c:varyColors val="1"/><c:ser><c:idx val="0"/><c:order val="0"/>{dpt}{lbl}'
+                f'<c:cat><c:strRef><c:f>{sq}!ToifaNom</c:f><c:strCache>{strc}</c:strCache></c:strRef></c:cat>'
+                f'<c:val><c:numRef><c:f>{sq}!ToifaDaq</c:f><c:numCache>{numc}</c:numCache></c:numRef></c:val></c:ser>'
+                f'<c:firstSliceAng val="0"/><c:holeSize val="55"/></c:doughnutChart>')
+    return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" '
+            'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><c:roundedCorners val="0"/>'
+            f'<c:chart>{title}<c:plotArea><c:layout/>{plot}<c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr></c:plotArea>'
+            '<c:plotVisOnly val="0"/><c:dispBlanksAs val="gap"/></c:chart>'
+            '<c:spPr><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill><a:ln w="9525"><a:solidFill><a:srgbClr val="E5E7EB"/></a:solidFill></a:ln></c:spPr>'
+            '<c:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr><a:latin typeface="Segoe UI"/></a:defRPr></a:pPr><a:endParaRPr lang="ru-RU"/></a:p></c:txPr></c:chartSpace>')
+zin = zipfile.ZipFile(OUT); files = {n: zin.read(n) for n in zin.namelist()}; zin.close()
+for i, ch in enumerate(CHARTS, 1):
+    assert f'xl/charts/chart{i}.xml' in files
+    files[f'xl/charts/chart{i}.xml'] = chart_xml(ch).encode('utf-8')
+with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED) as z:
+    for n, b in files.items(): z.writestr(n, b)
 print('ok', OUT, len(STEPS), 'qadam')
