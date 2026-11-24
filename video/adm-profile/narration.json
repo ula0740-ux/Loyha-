@@ -10,12 +10,32 @@
   {
    "id": "hist1",
    "slide": 2,
-   "text": "Kompaniyaga 2014-yilda asos solingan, 2020-yilda esa ADM Jizzax avtozavodi qurilishi boshlandi."
+   "text": "Kompaniyaga 2014-yilda asos solingan."
   },
   {
-   "id": "hist2",
+   "id": "h2020",
    "slide": 2,
-   "text": "2024-yil martda CKD texnologiyasida yigʻish boshlandi, 2026-yil aprelda esa Kia K3 uchun yangi liniya ishga tushirildi."
+   "text": "2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich SKD boʻldi."
+  },
+  {
+   "id": "h2021",
+   "slide": 2,
+   "text": "2021-yil martda mijozlarga ilk avtomobillar yetkazildi."
+  },
+  {
+   "id": "h2022",
+   "slide": 2,
+   "text": "2022-yil oktabrda Chery avtomobillarini SKD texnologiyasida, yaʼni yirik uzellardan yigʻish boshlandi."
+  },
+  {
+   "id": "h2024",
+   "slide": 2,
+   "text": "2024-yil martda CKD texnologiyasida Kia Sonet yigʻish boshlandi."
+  },
+  {
+   "id": "h2026",
+   "slide": 2,
+   "text": "2026-yil aprelda esa Kia K3 uchun yangi CKD ishlab chiqarish liniyasi ishga tushirildi."
   },
   {
    "id": "struct",
@@ -65,7 +85,7 @@
   {
    "id": "c_nev",
    "slide": 5,
-   "text": "Yangi loyihalar. CKD NEV: investitsiya 100 million dollar, 1 200 ish oʻrni."
+   "text": "Yangi loyihalar. CKD, {\"New energy vehicle\"}, investitsiya 100 million dollar, 1 200 ish oʻrni."
   },
   {
    "id": "c_rd",

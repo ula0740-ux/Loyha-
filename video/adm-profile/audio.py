@@ -27,8 +27,14 @@ for lid, l in L.items(): put(voice, l["vo"], load(HERE / f"audio/t/{lid}.wav"))
 
 # music: fitted to the film length with atempo (pitch kept), fade in/out
 md = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(HERE / "audio/music.mp3")], capture_output=True, text=True).stdout)
-tempo = md / (T + .5)
-music = np.zeros(N); put(music, 0, load(HERE / "audio/music.mp3", f"atempo={tempo:.5f}"))
+tempo = max(.95, md / (T + .5))                 # at most 5 % slower; the rest is filled by a crossfaded repeat
+m = load(HERE / "audio/music.mp3", f"atempo={tempo:.5f}")
+if len(m) < N:                                  # repeat the body (from 40 s) with a 3 s equal-power crossfade until long enough
+    body, xf = m[int(40 * SR): int(len(m) - 8 * SR)], int(3 * SR)
+    while len(m) < N:
+        k = np.linspace(0, np.pi / 2, xf)
+        m = np.concatenate([m[:-xf], m[-xf:] * np.cos(k) + body[:xf] * np.sin(k), body[xf:]])
+music = np.zeros(N); put(music, 0, m[:N])
 t = np.arange(N) / SR
 music *= np.clip(t / 2.0, 0, 1) * np.clip((T - t) / 3.0, 0, 1)
 env = np.convolve(np.abs(voice), np.ones(int(.2 * SR)) / int(.2 * SR), "same")
@@ -45,7 +51,7 @@ put(sfx, S["cluster"]["start"] - 1.9, X["rise"], .22); hit("impact", S["cluster"
 hit("impact", S["rnd"]["start"], .25)
 for lid in ["c_kia", "c_skd", "c_lok", "c_sht", "c_nev", "c_rd", "c_dost"]:
     b0 = L[lid]["vo"] - .45; hit("whoosh", b0 + .2, .14); hit("pop", b0 + .8, .25)           # fly-to + panel pop
-hit("pop", W("c_skd", 17), .22)                                                      # "250 nafar xodim" badge
+hit("pop", W("c_skd", [w["text"] for w in L["c_skd"]["words"]].index(next(w["text"] for w in L["c_skd"]["words"] if w["text"].lower().startswith("zavod")))), .22)                                                      # "250 nafar xodim" badge
 for i in range(4): hit("tick", S["struct"]["start"] + .8 + i * .45, .18)            # structure nodes
 for i in range(7): hit("tick", S["goals"]["start"] + .6 + i * .45, .14)             # goal rows
 put(sfx, S["dost"]["start"] + .2, X["car"], .22); put(sfx, S["dost"]["start"] + 1.4, X["car"], .16)   # vans drive in
@@ -57,9 +63,9 @@ mix *= .9 / np.abs(mix).max()
 st = np.stack([mix, mix], 1).astype(np.float32)
 raw = HERE / "out/raw.wav"; raw.parent.mkdir(exist_ok=True)
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "2", "-i", "-", str(raw)], input=st.tobytes(), check=True)
-m = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(raw), "-af", "loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
+m = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(raw), "-af", "loudnorm=I=-16:TP=-2:LRA=11:print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
 j = json.loads(m[m.rindex("{"):m.rindex("}") + 1])
-af = (f"loudnorm=I=-16:TP=-1.5:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}"
+af = (f"loudnorm=I=-16:TP=-2:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}"
       f":measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true")
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-af", af, "-ar", str(SR), str(HERE / "out/audio.wav")], check=True)
 print("audio ->", HERE / "out/audio.wav", f"{T:.2f}s, music tempo x{tempo:.4f}")

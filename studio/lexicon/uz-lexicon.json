@@ -42,6 +42,19 @@
       "testedAt": "2026-10-13T06:53:59.516Z",
       "notes": "eleven_v4 da x -> kh bilan 'Akhborot' deb yuboriladi. v3 da 'Ax-borot' sinalgan edi."
     },
+    "ckd": {
+      "original": "CKD",
+      "latin": "CKD",
+      "cyrillic": "CКД",
+      "spoken": {
+        "latin": "Si-Ke-Di",
+        "cyrillic": "CКД"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "kind": "abbr",
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-11-24, ADM profil filmi): 'Si-Ke-Di' (namunalar: Si-Ka-De, Si-Ke-Di, Se-Ka-De, Si-Kay-Di). Undan keyingi 'sex' soʻzi film skriptida 'tsekh' deb aytiladi."
+    },
     "deadline": {
       "original": "deadline",
       "latin": "deadline",
@@ -148,12 +161,13 @@
       "latin": "KD",
       "cyrillic": "КД",
       "spoken": {
-        "latin": "Ka-de",
+        "latin": "Ke-Di",
         "cyrillic": "КД"
       },
       "prefer": "latin",
       "status": "candidate",
-      "kind": "abbr"
+      "kind": "abbr",
+      "notes": "CKD tanloviga moslab 'Ke-Di' (2026-11-24). Avvalgi 'Ka-de' STT da 'kada'; undan oldin harf nomlari 'kabi' deb eshitilgan."
     },
     "manager": {
       "original": "manager",
@@ -177,7 +191,8 @@
       },
       "prefer": "latin",
       "status": "candidate",
-      "kind": "abbr"
+      "kind": "abbr",
+      "notes": "eleven_v4 harf nomlarini qoʻshib 'Innova' deb oʻqidi; 'En-e-ve' bilan STT 'NV' (2026-11-24). Quloq bilan tasdiqlanmagan."
     },
     "onboarding": {
       "original": "onboarding",
@@ -215,6 +230,19 @@
       "status": "candidate",
       "kind": "term",
       "notes": "R&D oʻrniga oʻzbekcha muqobil."
+    },
+    "skd": {
+      "original": "SKD",
+      "latin": "SKD",
+      "cyrillic": "СКД",
+      "spoken": {
+        "latin": "Es-Ki-Di",
+        "cyrillic": "СКД"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "kind": "abbr",
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-11-24, ADM profil filmi): 'Es-Ki-Di'."
     },
     "team": {
       "original": "team",

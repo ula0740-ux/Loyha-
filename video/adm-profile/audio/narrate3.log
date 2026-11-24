@@ -1,0 +1,45 @@
+  hist1 #1: STT 100.0%
+  hist1: Kompaniyaga ikki ming oʻn toʻrtinchi yilda asos solingan.
+✓ hist1 3.87s  8/4 soʻz
+  h2020 #1: STT 100.0%
+  h2020: Ikki ming yigirmanchi yilda A-de-em, Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.
+✓ h2020 8.28s  13/10 soʻz
+  h2021 #1: STT 100.0%
+  h2021: Ikki ming yigirma birinchi yil martda mijozlarga ilk avtomobillar yetkazildi.
+✓ h2021 5.25s  10/6 soʻz
+  h2022 #1: STT 99.2%  ✗ oktabrda->oktyabrda
+  h2022: Ikki ming yigirma ikkinchi yil oktabrda Chery avtomobillarini Es-Ki-Di tekhnologiyasida, yaʼni yirik uzellardan yigʻish boshlandi.
+✓ h2022 9.56s  15/11 soʻz
+  h2024 #1: STT 100.0%
+  h2024: Ikki ming yigirma toʻrtinchi yil martda Si-Ke-Di tekhnologiyasida Kia Sonet yigʻish boshlandi.
+✓ h2024 6.43s  12/8 soʻz
+  h2026 #1: STT 100.0%
+  h2026: Ikki ming yigirma oltinchi yil aprelda esa Kia K3 uchun yangi Si-Ke-Di ishlab chiqarish liniyasi ishga tushirildi.
+✓ h2026 8.20s  17/13 soʻz
+  c_kia #1: STT 100.0%
+  c_kia: Kia Si-Ke-Di loyihasi: investitsiya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.
+✓ c_kia 7.81s  16/11 soʻz
+  c_skd #1: STT 100.0%
+  c_skd: Es-Ki-Di tsekhi: investitsiya oʻn ikki butun oʻndan olti million dollar, toʻrt yuz ellik ish oʻrni. Zavod faoliyatini dastlab aynan shu Es-Ki-Di tsekhida ikki yuz ellik nafar khodim bilan boshlagan.
+✓ c_skd 14.21s  29/21 soʻz
+  c_sht #1: STT 94.6%  ✗ shtamplash->stamplyash  ✗ sexi->cehi
+  c_sht #2: STT 100.0%
+  c_sht: Shtamplash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni.
+✓ c_sht 6.35s  11/9 soʻz
+  c_nev #1: STT 98.8%  ✗ nev->nv
+  c_nev: Yangi loyihalar. Si-Ke-Di En-e-ve: investitsiya yuz million dollar, bir ming ikki yuz ish oʻrni.
+✓ c_nev 8.67s  14/12 soʻz
+  cl4 #1: STT 92.9%  ✗ ckd->sekedi
+  cl4 #2: STT 92.9%  ✗ ckd->sekedi
+  cl4 #3: STT 92.9%  ✗ ckd->sekedi
+  cl4: Si-Ke-Di loyihalari yiliga yuz ming avtomobilga moʻljallangan.
+✓ cl4 4.44s  7/7 soʻz
+  logi #1: STT 97.8%  ✗ kd->kedi
+  logi: United Auto Alliance Ke-Di toʻplamlar va tayyor mahsulotni Jizzakhdan har bir hududga yetkazadi.
+✓ logi 7.39s  13/13 soʻz
+  dost2 #1: STT 100.0%
+  dost2: Investitsiya oʻttiz million dollar, bir ming ikki yuz ish oʻrni. Es-Ki-Di starti ikki ming yigirma yettinchi yilning birinchi choragida.
+✓ dost2 9.33s  19/13 soʻz
+  eco #1: STT 100.0%
+  eco: A-de-em, ekotizimi toʻrt yoʻnalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi khizmat va yangi mobillik.
+✓ eco 9.87s  15/15 soʻz

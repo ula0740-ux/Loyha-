@@ -9,7 +9,7 @@ HERE = Path(__file__).parent
 TEMPO = 1.0   # no speed-up: the user asked for an unhurried, word-by-word delivery
 SCENES = [  # narrative order (not slide order): identity -> origins -> scale -> standing -> the plant -> national brand ->
             # innovation -> portfolio -> reach (localization, logistics) -> 2035 goals -> ecosystem -> close
-    ("title", ["title"]), ("hist", ["hist1", "hist2"]), ("struct", ["struct", "sales"]), ("kpi", ["kpi", "brands"]),
+    ("title", ["title"]), ("hist", ["hist1", "h2020", "h2021", "h2022", "h2024", "h2026"]), ("struct", ["struct", "sales"]), ("kpi", ["kpi", "brands"]),
     ("cluster", ["cl0", "c_kia", "c_skd", "c_lok", "c_sht", "c_nev", "c_rd", "c_dost", "cl4"]),
     ("dost", ["dost1", "dost2"]), ("rnd", ["rnd"]), ("seg", []), ("geo", ["geo"]), ("logi", ["logi"]),
     ("goals", ["goals"]), ("eco", ["eco"]), ("outro", ["outro"]),

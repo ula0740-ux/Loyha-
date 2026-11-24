@@ -1,6 +1,6 @@
-# ADM Jizzax — korporativ profil filmi (v1)
+# ADM Jizzax — korporativ profil filmi (v2)
 
-- **Fayl:** `ADM_Global_Profile_v1.mp4` — 1920×1080, 30 fps, H.264 + AAC, 3:50,9, 83,5 MB (ikki oʻtishli kodlash, 2,7 Mbit/s), ovoz −16 LUFS, true peak −1,3 dBFS.
+- **Fayl:** `ADM_Global_Profile_v2.mp4` — 1920×1080, 30 fps, H.264 + AAC, 4:16,5, 83,8 MB (ikki oʻtishli kodlash, 2,45 Mbit/s), ovoz −16,0 LUFS, true peak −1,8 dBFS. (Oldingi versiya `ADM_Global_Profile_v1.mp4` (3:51) taqqoslash uchun saqlangan.)
 - **Manba:** `src/ADM_Global_Company_Profile_UZB.pptx` (12 slayd) — yagona faktlar manbai. Uslub uchun namunalar: `src/reference.mp4` (umumiy uslub) va `src/reference_map.mp4` (klaster xaritasi). `src/` papkasi repoga kirmaydi.
 - **Ovoz:** ElevenLabs, `eleven_v4` modeli, `language_code: uz`, Sarah ovozi. Matn `prepareUzbek` orqali yuboriladi (x → kh, F varianti), qoʻshni jumlalar kontekst sifatida beriladi va har jumla STT bilan tekshiriladi. Tasdiqlangan baza sozlamalari oʻzgartirilmagan, ovoz tezlashtirilmagan (TEMPO = 1.0).
 - **Foydalanuvchining keyingi talablari (2026-11):** slayd emas, original kino dunyosi; hikoya tartibi;
@@ -44,20 +44,20 @@ Statistikalar koʻrsatilayotganda ekrandagi har bir tasvir harakatda boʻladi: p
 | Vaqt | Slayd | Maʼlumot | Vizual / 3D / kamera / oʻtish / effekt | Ekrandagi matn |
 |---|---|---|---|---|
 | 0:00–0:07 | 1 | Kim: koʻp brendli ishlab chiqaruvchi | Qorongʻi fazo, nur dogʻi, letterbox ochiladi; logo chiqadi, sarlavha harfma-harf xira holatdan ochiladi; zavod fotosi suzuvchi 3D plita boʻlib pastdan koʻtariladi va egilishdan tekislanadi; ustidan nur oʻtadi, flare bor | ADM JIZZAX · MULTI BREND AVTOMOBIL ISHLAB CHIQARUVCHI |
-| 0:07–0:30 | 2 | Tarix: 6 bosqich | "Rivojlanish" soʻzi ochiladi; devorlari foto-ekranlar bilan qoplangan 3D tunnel: kamera chuqurlikka uchadi, shisha kartochkalar navbat bilan oʻngda va chapda turadi, apelsin rang ramka halqalari bor (push oʻtish) | 2014 … Aprel 2026, slayddagi matnlar bilan |
-| 0:30–0:36 | 2 | Tuzilma | Egilgan shisha panel, 33 va 5 900 sanagichlari, 4 tugun | KOMPANIYA TUZILMASI va 4 boʻgʻin izohlari |
-| 0:36–0:50 | 2 | Savdo va ulush | Shisha progress-trubka 0,5% dan 11% gacha toʻladi, yillar belgilari, sotuv sanagichi, prognoz chiplari | 2017 0,5% / 650 … 2025 11% / 46 439; 2030 PROG. 30% · 130 000; 2035 PROG. 35% · 210 000 |
-| 0:50–1:02 | 3 | Koʻrsatkichlar | $1 024 mln sanagichi; 5 kartochka 3D da kirib keladi, №2 belgilanadi (whip oʻtish) | BIRINCHI, №2, TOP-10, YETAKCHI ×2 |
-| 1:02–1:08 | 3 | Brendlar, DOST | DOST avtomobili fotosi suzuvchi plita boʻlib turadi; dolly, orbita, nur va flare | JORIY BRENDLAR roʻyxati · MARKAZIY OSIYODAGI BIRINCHI MILLIY AVTOMOBIL BRENDI |
-| 1:08–2:23 | 5 | Klaster: 7 sex | Chaqnash va impact bilan kirish. Havodan olingan sxema qorongʻi fazoda 3D plita. Kamera navbat bilan uchadi: KIA CKD → SKD → Lokalizatsiya klasteri → Shtamplash sexi → CKD NEV → R&D → DOST CKD. Har sexda bino yorugʻ hajm boʻlib koʻtariladi, halqa toʻlqinlanadi, xarita xiralashadi, panel va yetakchi chiziq chiqadi. Oxirida umumiy koʻrinish: 7 yorliq va model paneli | Har panelda yillar, nomi, investitsiya va ish oʻrni (slayd 5). SKD panelida "DASTLAB · SKD SEXI 250 nafar xodim". CKD loyihalari 100 000 (yiliga) (ICE + NEV); modellar 2024–2030 |
-| 2:23–2:42 | 9 | DOST tijorat transporti | Ikki furgon tozalangan fon plitasida chuqurlikdan haydab keladi: uzoqda kichik va xira, faralari yongan; fotodagi joyida toʻxtaydi, ostida soya va pol aksi bor. Keyin 3 tur ham chuqurlikdan haydab kelib qatorga turadi | JIZZAX COMMERCIAL VEHICLE; 30 mln $, Yiliga 30 ming, 30 %, 1200, I chorak 2027, III chorak 2028; 3 tur nomi |
-| 2:42–2:56 | 10–11 | R&D | R&D binosi 3D ramkada (dolly va nur); 4 bosqich kartochkasi, maqsadlar narratsiya bilan yonadi. Keyin ESKIZ → RENDER → CAD-CHIZMA → PROTOTIP rasmlari kamera yonidan uchib oʻtadi (flash oʻtish) | slayd 10/11 matnlari |
-| 2:56–3:00 | 8 | Segmentlar | Avtomobil kesmalari 3D cover-flow qatorida oʻtadi (ovozsiz koʻprik sahna) | ISHTIROK SEGMENTLARI; model nomlari va segmentlar |
-| 3:00–3:10 | 6 | Lokalizatsiya geografiyasi | Manbadagi 3D xarita qiyalanib aylanadi; pinlar narratsiya bilan birga koʻtariladi | 7 nom; JAMI ISH OʻRINLARI: 5900 |
-| 3:10–3:18 | 7 | Logistika | Manbadagi rangli 3D xarita qiyalanib aylanadi; Jizzaxdan hududlarga harakatlanuvchi yoy chiziqlar | MARKAZLASHGAN LOGISTIKA; 14 hudud; slayd 7 dagi ikki izoh |
-| 3:18–3:29 | 4 | 2035 maqsadlari | Oʻz dunyosidagi fon (slayd foni emas). Jadval qatorlari birma-bir sanagich bilan ochiladi. 3 ta 3D ustun navbat bilan koʻtariladi (nisbat 0,53 : 0,70 : 1), polda aks va nur bor, kamera orbita boʻylab aylanadi, strelka yuqoriga chiziladi | 2026-2035 MAQSADLARI: 7 qator |
-| 3:29–3:41 | 12 | Ekotizim | Oʻz dunyosidagi fon. 4 shisha ustun 3D da koʻtariladi, xizmat chiplari | ADM ekotizimi … toʻrtta biznes yoʻnalishini birlashtiradi; 4 yoʻnalish; 11 ta xizmat |
-| 3:41–3:51 | 10 | Yakun | Logo, "ADM JIZZAX", shior; oq chaqnash, oq kartada logo; letterbox yopiladi, qorongʻilashadi | Innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz |
+| 0:07–0:53 | 2 | Tarix: 6 bosqich, har yil alohida aytiladi | "Rivojlanish" soʻzi ochiladi; devorlari foto-ekranlar bilan qoplangan 3D tunnel: kamera chuqurlikka uchadi; har bir yil kartochkasi oʻz jumlasi aytilayotgan butun vaqt davomida markazda turadi, kamera faqat pauzalarda keyingisiga uchadi; oxirgi kartochka (2026) markazda; apelsin rang ramka halqalari (push oʻtish) | 2014 … Aprel 2026, slayddagi matnlar bilan |
+| 0:53–0:59 | 2 | Tuzilma | Egilgan shisha panel, 33 va 5 900 sanagichlari, 4 tugun | KOMPANIYA TUZILMASI va 4 boʻgʻin izohlari |
+| 0:59–1:13 | 2 | Savdo va ulush | Shisha progress-trubka 0,5% dan 11% gacha toʻladi, yillar belgilari, sotuv sanagichi, prognoz chiplari | 2017 0,5% / 650 … 2025 11% / 46 439; 2030 PROG. 30% · 130 000; 2035 PROG. 35% · 210 000 |
+| 1:13–1:25 | 3 | Koʻrsatkichlar | $1 024 mln sanagichi; 5 kartochka 3D da kirib keladi, №2 belgilanadi (whip oʻtish) | BIRINCHI, №2, TOP-10, YETAKCHI ×2 |
+| 1:25–1:30 | 3 | Brendlar, DOST | DOST avtomobili fotosi suzuvchi plita boʻlib turadi; dolly, orbita, nur va flare | JORIY BRENDLAR roʻyxati · MARKAZIY OSIYODAGI BIRINCHI MILLIY AVTOMOBIL BRENDI |
+| 1:30–2:46 | 5 | Klaster: 7 sex | Chaqnash va impact bilan kirish. Havodan olingan sxema qorongʻi fazoda 3D plita. Kamera navbat bilan uchadi: KIA CKD → SKD → Lokalizatsiya klasteri → Shtamplash sexi → CKD NEV → R&D → DOST CKD. Har sexda bino yorugʻ hajm boʻlib koʻtariladi, halqa toʻlqinlanadi, xarita xiralashadi, panel va yetakchi chiziq chiqadi. Oxirida umumiy koʻrinish: 7 yorliq va model paneli | Har panelda yillar, nomi, investitsiya va ish oʻrni (slayd 5). SKD panelida "DASTLAB · SKD SEXI 250 nafar xodim". CKD loyihalari 100 000 (yiliga) (ICE + NEV); modellar 2024–2030 |
+| 2:46–3:06 | 9 | DOST tijorat transporti | Ikki furgon tozalangan fon plitasida chuqurlikdan haydab keladi: uzoqda kichik va xira, faralari yongan; fotodagi joyida toʻxtaydi, ostida soya va pol aksi bor. Keyin 3 tur ham chuqurlikdan haydab kelib qatorga turadi | JIZZAX COMMERCIAL VEHICLE; 30 mln $, Yiliga 30 ming, 30 %, 1200, I chorak 2027, III chorak 2028; 3 tur nomi |
+| 3:06–3:20 | 10–11 | R&D | R&D binosi 3D ramkada (dolly va nur); 4 bosqich kartochkasi, maqsadlar narratsiya bilan yonadi. Keyin ESKIZ → RENDER → CAD-CHIZMA → PROTOTIP rasmlari kamera yonidan uchib oʻtadi (flash oʻtish) | slayd 10/11 matnlari |
+| 3:20–3:24 | 8 | Segmentlar | Avtomobil kesmalari 3D cover-flow qatorida oʻtadi (ovozsiz koʻprik sahna) | ISHTIROK SEGMENTLARI; model nomlari va segmentlar |
+| 3:24–3:35 | 6 | Lokalizatsiya geografiyasi | Manbadagi 3D xarita qiyalanib aylanadi; pinlar narratsiya bilan birga koʻtariladi | 7 nom; JAMI ISH OʻRINLARI: 5900 |
+| 3:35–3:43 | 7 | Logistika | Manbadagi rangli 3D xarita qiyalanib aylanadi; Jizzaxdan hududlarga harakatlanuvchi yoy chiziqlar | MARKAZLASHGAN LOGISTIKA; 14 hudud; slayd 7 dagi ikki izoh |
+| 3:43–3:54 | 4 | 2035 maqsadlari | Oʻz dunyosidagi fon (slayd foni emas). Jadval qatorlari birma-bir sanagich bilan ochiladi. 3 ta 3D ustun navbat bilan koʻtariladi (nisbat 0,53 : 0,70 : 1), polda aks va nur bor, kamera orbita boʻylab aylanadi, strelka yuqoriga chiziladi | 2026-2035 MAQSADLARI: 7 qator |
+| 3:54–4:05 | 12 | Ekotizim | Oʻz dunyosidagi fon. 4 shisha ustun 3D da koʻtariladi, xizmat chiplari | ADM ekotizimi … toʻrtta biznes yoʻnalishini birlashtiradi; 4 yoʻnalish; 11 ta xizmat |
+| 4:05–4:15 | 10 | Yakun | Logo, "ADM JIZZAX", shior; oq chaqnash, oq kartada logo; letterbox yopiladi, qorongʻilashadi | Innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz |
 
 ## Sahnalar boʻyicha vizual promptlar (literal / abstrakt)
 Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
@@ -89,8 +89,12 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 | Sahna | Matn (yozma shakl; TTS ga `prepareUzbek` orqali boradi) |
 |---|---|
 | title | ADM Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya. |
-| hist1 | Kompaniyaga 2014-yilda asos solingan, 2020-yilda esa ADM Jizzax avtozavodi qurilishi boshlandi. |
-| hist2 | 2024-yil martda CKD texnologiyasida yigʻish boshlandi, 2026-yil aprelda esa Kia K3 uchun yangi liniya ishga tushirildi. |
+| hist1 | Kompaniyaga 2014-yilda asos solingan. |
+| h2020 | 2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich SKD boʻldi. |
+| h2021 | 2021-yil martda mijozlarga ilk avtomobillar yetkazildi. |
+| h2022 | 2022-yil oktabrda Chery avtomobillarini SKD texnologiyasida, yaʼni yirik uzellardan yigʻish boshlandi. |
+| h2024 | 2024-yil martda CKD texnologiyasida Kia Sonet yigʻish boshlandi. |
+| h2026 | 2026-yil aprelda esa Kia K3 uchun yangi CKD ishlab chiqarish liniyasi ishga tushirildi. |
 | struct | Guruh tarkibida 33 ta kompaniya va 5 900 nafar xodim bor. |
 | sales | 2017-yilda bozor ulushi 0,5 foiz edi. 2025-yilga kelib ulush 11 foizga, sotuv esa 46 439 taga yetdi. |
 | kpi | 2025-yilda yillik aylanma 1 024 million dollarni tashkil etdi. Kompaniya avtomobil sotuvi hajmi boʻyicha ikkinchi oʻrinda. |
@@ -100,7 +104,7 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 | c_skd | SKD sexi: investitsiya 12,6 million dollar, 450 ish oʻrni. **Zavod faoliyatini dastlab aynan shu SKD sexida 250 nafar xodim bilan boshlagan.** |
 | c_lok | Lokalizatsiya klasteri: investitsiya 150 million dollar, 350 ish oʻrni. |
 | c_sht | Shtamplash sexi: investitsiya 55 million dollar, 150 ish oʻrni. |
-| c_nev | Yangi loyihalar. CKD NEV: investitsiya 100 million dollar, 1 200 ish oʻrni. |
+| c_nev | Yangi loyihalar. CKD, {"New energy vehicle"}, investitsiya 100 million dollar, 1 200 ish oʻrni. (`{…}` qismi inglizcha oʻqiladi) |
 | c_rd | Ilmiy-tadqiqot markazi: investitsiya 100 million dollar, 500 muhandis. |
 | c_dost | DOST tijorat avtomobillari: investitsiya 30 million dollar, 1 200 ish oʻrni. |
 | cl4 | CKD loyihalari yiliga 100 000 avtomobilga moʻljallangan. |
@@ -113,20 +117,43 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 | eco | ADM ekotizimi toʻrt yoʻnalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi xizmat va yangi mobillik. |
 | outro | ADM Jizzax: innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz. |
 
-**Talaffuz izohlari:**
-- **ADM** lugʻatdagi tasdiqlangan "A-de-em" shaklida va undan keyin qisqa pauza bilan oʻqiladi. Foydalanuvchi xohlasa, badantarbiya audiosidagi "A. De. Em." shaklini tanlash mumkin; u holda kerakli jumlalar qayta yoziladi.
-- **Jizzax** ovozga "Jizzakh" boʻlib boradi. Yozuvda x saqlanadi.
-- **SKD, CKD** oʻzbekcha harf nomlari bilan oʻqiladi: "es-ka-de", "se-ka-de". STT ularni "sekada" deb yozadi, bu STT qulogʻining xususiyati.
-- **NEV** uchun lugʻatga yangi yozuv qoʻshildi: `NEV → "En-e-ve"` (abbr, candidate). Usiz model "Innova" deb oʻqiyotgan edi.
-- **KD** uchun lugʻatga yangi yozuv qoʻshildi: `KD → "Ka-de"` (abbr, candidate). Usiz STT "kabi" deb eshitgan edi, endi "kada".
-- **R&D** narratsiyada oʻzbekcha "ilmiy-tadqiqot markazi" va "tadqiqot va ishlanmalar markazi" deb aytiladi. Ekranda slayddagidek "R&D" yozilgan.
-- **SUV** narratsiyada aytilmaydi. Ekranda slayddagi "SUV-B/SUV-C" yozuvlari qoldi.
-- Sonlar soʻz bilan oʻqiladi: 100–199 oraligʻi "yuz …" deb, "12,6" esa "oʻn ikki butun oʻndan olti" deb.
-- Har jumla STT bilan tekshirildi va 92,9–100% natija oldi. Yakuniy natijalar `audio/stt_report.json` da. Eng past natijalar (`cl4` 92,9%, `c_kia` 95,7%) STT "CKD"ni "sekada" deb yozgani uchun chiqdi; matnda xato yoʻq. Ayrim jumlalarni STT kirill yozuvida qaytardi, bu ham oʻzbekcha.
-- Yakuniy narratsiya: 196,8 s ovoz ichida 292 ta yozma soʻz, oʻrtacha 1,48 soʻz/s; eng tez jumla `struct`, 1,94 soʻz/s. Bu ≤ 2,3 soʻz/s talabiga mos.
+**Talaffuz (v2, foydalanuvchi quloq bilan tanlagan, 2026-11-24):**
+- **CKD → "Si-Ke-Di"**. Lugʻatda `abbr`, approved. Sinalgan variantlar: Si-Ka-De, Si-Ke-Di, Se-Ka-De, Si-Kay-Di.
+- **SKD → "Es-Ki-Di"**. Lugʻatda `abbr`, approved.
+- **KD → "Ke-Di"** (CKD ga moslab). Avvalgi "Ka-de" yozuvi almashtirildi.
+- **"sex"** ning barcha shakllari (sexi, sexida …) ovozga **"tsekh…"** boʻlib boradi ("Si-Ke-Di tsekhida"). Bu harflarni oʻzgartiradi, shuning uchun lugʻatga yozilmadi (`sameLetters` qoidasi). Almashtirish faqat shu filmning `narrate.mts` skriptida, `tsekh()` funksiyasida bajariladi, kontekst jumlalarida ham. Yozma matn, ekrandagi yozuvlar va STT etaloni "sex" boʻlib qoladi.
+- **ADM →** lugʻatdagi "A-de-em," (1-variant, tasdiqlangan baza). v1 da notoʻgʻri eshitilgan "ADM ekotizimi …" jumlasi qayta yozildi; STT endi "ADM ekotizimi" deb eshitadi.
+- Namunalar `audio/variants/` papkasida (`CKD_*`, `SKD_*`, `ADM_*`, `*_variantlar.mp3`). Skript: `build/variants.mts`.
+- **CKD NEV → "Si-Ke-Di, New energy vehicle"**. "New energy vehicle" foydalanuvchining aniq tanlovi bilan **inglizcha** oʻqiladi. Narratsiyada `{"New energy vehicle"}` shaklida yoziladi va `prepareUzbek` dan oʻtmaydi. Ekrandagi kartochkada slayddagidek "CKD NEV" qoladi.
+  - 4 ta variant sinaldi: `audio/variants5/CKD_NEV_variantlar.mp3`, skript `build/variants_nev.mts`.
+  - Filmda 2-variant ishlatildi: qoʻshtirnoq va vergullar bilan, bitta jumla. STT (uz va en) "CKD New Energy Vehicle" deb eshitdi.
+  - Uch boʻlakdan ulangan 3-variantda inglizcha STT "CKG" deb eshitdi.
+  - Lugʻatdagi `NEV → En-e-ve` yozuvi bu filmda endi ishlatilmaydi.
+- **Jizzax** ovozga "Jizzakh" boʻlib boradi, yozuvda x saqlanadi.
+- **R&D** narratsiyada "ilmiy-tadqiqot markazi" va "tadqiqot va ishlanmalar markazi" deb aytiladi.
+- Sonlar soʻz bilan oʻqiladi: 100–199 oraligʻi "yuz …", "12,6" esa "oʻn ikki butun oʻndan olti".
+- **STT:** har jumla tekshirildi, natija 92,9–100%. Yakuniy natijalar `audio/stt_report.json` da.
+  - `cl4` (92,9%) da STT "CKD"ni "sekedi" deb yozadi, bu qisqartmaning harf nomi bilan oʻqilishidan.
+  - Yakuniy baho foydalanuvchi qulogʻida.
+- **Temp:** 219,1 s ovoz ichida 317 ta yozma soʻz, oʻrtacha 1,45 soʻz/s, eng tez jumla 1,94 soʻz/s (talab ≤ 2,3).
+
+## v2 da tuzatilganlar (foydalanuvchi talabi va oʻz tekshiruvim)
+1. **Talaffuz:** CKD, SKD, KD, "sex" va ADM yuqoridagidek. Bu soʻzlar bor barcha jumlalar qayta yozildi: tarix, c_kia, c_skd, c_sht, c_nev, cl4, logi, dost2, eco.
+2. **Tarix:**
+   - 2020, 2021 va 2022-yillar har biri alohida, toʻliq aytiladi.
+   - 2024-yil uchun yigʻila boshlagan model aytiladi: slayd 2 dagi "CKD texnologiyasida yigʻish boshlandi (Kia Sonet)" asosida.
+   - Har kartochka oʻz jumlasi davomida ekranda turadi; v1 da 2021 va 2022 bir zumda oʻtib ketardi.
+   - Kartochkalar endi kadr chetidan chiqib ketmaydi, oxirgisi markazda.
+3. **Sanagichlar:**
+   - Klaster panellari va $1 024 mln sanagichi aytilishidan oldin "0" ni koʻrsatmaydi: raqam xira turadi va aytilgan soʻzda sanay boshlaydi.
+   - Barcha sanagichlar 0,6–0,7 s ichida aniq yakuniy qiymatga yetadi va kamera ketguncha shu qiymatda turadi. v1 da CKD NEV kartochkasida "99 mln $" va "0 ish oʻrni" koʻrinib qolgan edi. Raqam soʻzlari endi matn boʻyicha topiladi (`WI()`), shuning uchun qayta yozilgan jumlalarda sinxron buzilmaydi.
+4. **Oʻtishlar:** klaster va R&D ga kirishdagi kulrang "flash", akt soʻzining qorongʻi pardasi bilan ustma-ust tushib qolardi; bu yerlarda yumshoq oʻtishga almashtirildi (impact SFX qoldi).
+5. **Musiqa:** film uzaygani uchun trek ortiqcha sekinlashtirilmaydi. Tezlik koʻpi bilan ×0,95; qolgan qism trek tanasini 3 soniyalik crossfade bilan takrorlash orqali toʻldiriladi.
+6. **Tunnel kamerasi:** v1 dagi 17,9 s dagi bir kadrlik sakrash (kalitlar tartibi xatosi) toʻliq tuzatildi.
+7. **SKD jumlasi** ("dastlab aynan shu SKD sexida 250 nafar xodim bilan boshlagan") saqlandi.
 
 ## Musiqa va SFX
-- **Musiqa:** `audio/music.mp3`, ElevenLabs Music API (instrumental). Bu tayyor ishlab chiqarilgan trek, numpy sintezi emas. Prompt `build/gen_audio_assets.py` da. Trek 217 s chiqdi, `atempo` (×0,938, balandligi saqlanadi) bilan film uzunligiga moslandi. Diktor gapirayotganda musiqa taxminan 10 dB pasaytiriladi.
+- **Musiqa:** `audio/music.mp3`, ElevenLabs Music API (instrumental). Bu tayyor ishlab chiqarilgan trek, numpy sintezi emas. Prompt `build/gen_audio_assets.py` da. Trek 217 s chiqdi. U ×0,95 tezlikka (`atempo`, ohang balandligi oʻzgarmaydi) oʻtkazildi, yetmagan qismi esa trek tanasini 3 s crossfade bilan takrorlash orqali toʻldirildi. Diktor gapirayotganda musiqa taxminan 10 dB pasaytiriladi.
 - **SFX:** `audio/sfx/*.mp3`, ElevenLabs Sound Effects API: whoosh, impact, tick, pop, rise, chime, car. Har biri kadrdagi hodisaga oʻz choʻqqisi boʻyicha joylanadi:
   - whip va boshqa oʻtishlar;
   - klasterga kirishdagi impact;
@@ -141,7 +168,7 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 | Raqam / daʼvo | Slayd |
 |---|---|
 | MULTI BREND AVTOMOBIL ISHLAB CHIQARUVCHI | 1 |
-| 2014 asos solindi; 2020 ADM JIZZAKH avtozavodi qurilishi (1-bosqich — SKD); Mart 2021 ilk avtomobillar; Oktabr 2022 Chery SKD; Mart 2024 CKD (Kia Sonet); Aprel 2026 yangi CKD liniyasi (Kia K3) | 2 |
+| 2014 asos solindi; 2020 ADM JIZZAKH avtozavodi qurilishi (1-bosqich — SKD); Mart 2021 ilk avtomobillar; Oktabr 2022 Chery SKD (yirik uzellardan); Mart 2024 CKD (Kia Sonet); Aprel 2026 yangi CKD ishlab chiqarish liniyasi (Kia K3). Barchasi narratsiyada ham aytiladi | 2 |
 | 33 kompaniya, 5 900 xodim; ADM Jizzakh, Fincom, Diler tarmogʻi (3S, 2S), 124 ta dilerlik markazi, United Auto Alliance va ularning izohlari | 2 |
 | Bozor ulushi va sotuv: 2017 0,5% / 650; 2020 1,6% / 4 604; 2022 2,8% / 8 198; 2024 7,5% / 30 349; 2025 11% / 46 439; 2030 prog. 30% / 130 000; 2035 prog. 35% / 210 000 | 2 |
 | $1 024 mln (2025-yildagi yillik aylanma); №2 sotuv hajmi; TOP-10 soliq toʻlovchilar; BIRINCHI xususiy koʻp brendli; YETAKCHI ×2 | 3 |
@@ -180,7 +207,7 @@ python3 -I build/prep_assets.py src/ADM_Global_Company_Profile_UZB.pptx assets  
 python3 -I build/cut_vans.py assets                                               # furgonlar kesmasi + toza fon (GrabCut)
 (cd ../../studio && ELEVENLABS_API_KEY=... ATTEMPTS=3 npx tsx ../video/adm-profile/narrate.mts)   # ONLY=id1,id2 — faqat shular
 python3 timeline.py && python3 audio.py
-python3 build/render.py out/final_v.mp4 --fps 30 --sub 1 --chunks 4                # 4 ta parallel boʻlak (JPEG skrinshot, render_short.py bilan bir xil seek(t) shartnomasi)
-ffmpeg -i out/final_v.mp4 -i out/audio.wav -c:v libx264 -b:v 2700k -pass 1/2 … ADM_Global_Profile_v1.mp4
+python3 build/render.py out/v2_master.mp4 --fps 30 --sub 1 --chunks 4                # 4 ta parallel boʻlak (JPEG skrinshot, render_short.py bilan bir xil seek(t) shartnomasi)
+ffmpeg -i out/final_v.mp4 -i out/audio.wav -c:v libx264 -b:v 2700k -pass 1/2 … ADM_Global_Profile_v2.mp4
 python3 build/still.py out/st 80 120 …                                            # QA kadrlari
 ```

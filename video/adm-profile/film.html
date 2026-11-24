@@ -439,6 +439,8 @@ const fx = F.mount(stage, { w: 1920, h: 1080, seed: 11 });
 const SC = (id) => TL.scenes.find((s) => s.id === id);
 const L = (id) => TL.lines[id];
 const W = (id, i) => TL.lines[id].words[Math.min(i, TL.lines[id].words.length - 1)].t;
+// index of the n-th spoken word of a line matching re (timing words are the TTS tokens, e.g. "Es-Ki-Di", "tsekhida")
+const WI = (id, re, n = 1) => { let c = 0; const ws = TL.lines[id].words; for (let i = 0; i < ws.length; i++) if (re.test(ws[i].text) && ++c === n) return i; throw new Error(`no word ${re} in ${id}`); };
 const sm = (k) => k * k * (3 - 2 * k);
 const ramp01 = (t, a, d) => sm(prog(t, a, d));
 const fmt = (s) => s;
@@ -541,13 +543,13 @@ function buildTicks() {
 // cluster workshops: exact slide-5 wording; p = callout dot on the aerial photo, f = footprint of the building at that dot
 // [x0, y0, x1, y1] (normalized on the photo; the dot positions come from the slide's callout lines)
 const CL = [
-  { id: 'kia', line: 'c_kia', yr: '2021-2026', nm: 'KIA CKD', inv: [242, 0], job: [2700, 'ish oʻrni'], iw: 6, jw: 12, p: [.250, .669], f: [.100, .522, .328, .795] },
-  { id: 'skd', line: 'c_skd', yr: '2020-2021', nm: 'SKD', inv: [12.6, 1], job: [450, 'ish oʻrni'], iw: 5, jw: 12, p: [.364, .679], f: [.346, .507, .401, .805] },
-  { id: 'lok', line: 'c_lok', yr: '2022-2027', nm: 'Lokalizatsiya klasteri', inv: [150, 0], job: [350, 'ish oʻrni'], iw: 3, jw: 7, p: [.695, .690], f: [.647, .491, .738, .910] },
-  { id: 'sht', line: 'c_sht', yr: '2024-2026', nm: 'Shtamplash sexi', inv: [55, 0], job: [150, 'ish oʻrni'], iw: 3, jw: 7, p: [.799, .654], f: [.770, .507, .854, .690] },
-  { id: 'nev', line: 'c_nev', yr: '2026-2028', nm: 'CKD NEV', inv: [100, 0], job: [1200, 'ish oʻrni'], iw: 7, jw: 10, p: [.330, .113], f: [.246, .067, .439, .159] },
-  { id: 'rd', line: 'c_rd', yr: '2026-2030', nm: 'R&amp;D', inv: [100, 0], job: [500, 'muhandis'], iw: 3, jw: 6, p: [.731, .266], f: [.721, .201, .772, .390] },
-  { id: 'dost', line: 'c_dost', yr: '2026-2030', nm: 'DOST CKD', sb: 'Tijorat avtomobillari', inv: [30, 0], job: [1200, 'ish oʻrni'], iw: 4, jw: 7, p: [.838, .243], f: [.806, .180, .861, .386] },
+  { id: 'kia', line: 'c_kia', yr: '2021-2026', nm: 'KIA CKD', inv: [242, 0], job: [2700, 'ish oʻrni'], p: [.250, .669], f: [.100, .522, .328, .795] },
+  { id: 'skd', line: 'c_skd', yr: '2020-2021', nm: 'SKD', inv: [12.6, 1], job: [450, 'ish oʻrni'], p: [.364, .679], f: [.346, .507, .401, .805] },
+  { id: 'lok', line: 'c_lok', yr: '2022-2027', nm: 'Lokalizatsiya klasteri', inv: [150, 0], job: [350, 'ish oʻrni'], p: [.695, .690], f: [.647, .491, .738, .910] },
+  { id: 'sht', line: 'c_sht', yr: '2024-2026', nm: 'Shtamplash sexi', inv: [55, 0], job: [150, 'ish oʻrni'], p: [.799, .654], f: [.770, .507, .854, .690] },
+  { id: 'nev', line: 'c_nev', yr: '2026-2028', nm: 'CKD NEV', inv: [100, 0], job: [1200, 'ish oʻrni'], p: [.330, .113], f: [.246, .067, .439, .159] },
+  { id: 'rd', line: 'c_rd', yr: '2026-2030', nm: 'R&amp;D', inv: [100, 0], job: [500, 'muhandis'], p: [.731, .266], f: [.721, .201, .772, .390] },
+  { id: 'dost', line: 'c_dost', yr: '2026-2030', nm: 'DOST CKD', sb: 'Tijorat avtomobillari', inv: [30, 0], job: [1200, 'ish oʻrni'], p: [.838, .243], f: [.806, .180, .861, .386] },
 ];
 const VOLH = 110; // extrusion height (plane px) of a highlighted building
 const cnum = (t, t0, d, v, dec) => { const x = v * E.expo(clamp((t - t0) / d)); return dec ? x.toFixed(dec).replace('.', ',') : Math.round(x).toString(); };
@@ -644,19 +646,22 @@ SCN.title = (t, s) => {
 // history: camera dollies down a corridor of milestone cards
 SCN.hist = (t, s) => {
   // focus time per card (spoken years on the word; the two unspoken ones in between)
-  const FOC = [W('hist1', 1), W('hist1', 8), W('hist1', 15) + .4, 0, W('hist2', 0), W('hist2', 12)];
-  FOC[3] = (FOC[2] + FOC[4]) / 2;   // the unspoken 2022 card sits halfway between its neighbours
-  const ks = [[s.start, -1.2 * HZ]]; FOC.forEach((f, i) => { ks.push([f - .55, i * HZ - (i ? 120 : 0)]); ks.push([f + .35, i * HZ]); });
-  ks.push([s.end + .5, 5 * HZ + 260]);
+  const HL = ['hist1', 'h2020', 'h2021', 'h2022', 'h2024', 'h2026'];
+  const ks = [[s.start, -1.1 * HZ]];
+  HL.forEach((id, i) => {
+    ks.push([L(id).vo - .5, i * HZ - 140]);                         // arrive just before the sentence starts
+    ks.push([i < 5 ? L(HL[i + 1]).vo - .95 : s.end - .3, i * HZ + 50]);   // slow push while it is read, then fly on
+  });
+  ks.push([s.end + .5, 5 * HZ + 90]);
   for (let i = ks.length - 1; i > 0; i--) if (ks[i][0] <= ks[i - 1][0]) ks.splice(i - 1, 1);   // keys must be strictly increasing in time
   const cz = keys(t, ks, E.io);
   const lt = t - s.start;
   $('h-cam').style.transform = `translateZ(${cz.toFixed(1)}px) rotateY(${(3 * Math.sin(lt * .25)).toFixed(2)}deg)`;
   HIST.forEach((_, i) => {
-    const el = $('hc' + i), side = i % 2 ? 1 : -1, zz = -i * HZ;
+    const el = $('hc' + i), side = i === 5 ? 0 : i % 2 ? 1 : -1, zz = -i * HZ;   // the last milestone ends centred
     const dist = cz - i * HZ;                              // 0 = in focus
     const a = clamp(1 - Math.abs(dist) / (HZ * 1.15)) * (dist > 520 ? clamp(1 - (dist - 520) / 300) : 1);
-    el.style.transform = `translate(-50%,-50%) translate3d(${side * 330}px, ${-40 + 10 * Math.sin(lt * .5 + i)}px, ${zz}px) rotateY(${(-side * 14).toFixed(1)}deg)`;
+    el.style.transform = `translate(-50%,-50%) translate3d(${side * 230}px, ${-40 + 10 * Math.sin(lt * .5 + i)}px, ${zz}px) rotateY(${(-side * 14).toFixed(1)}deg)`;
     show(el, a);
     el.classList.toggle('on', Math.abs(dist) < 300);
   });
@@ -682,8 +687,8 @@ SCN.struct = (t, s) => {
   if (ab < 1) {
     const pn = pop($('s-panel'), t, s.start + .2, { y: 80, base: `rotateX(${(12 + 2 * Math.sin(lt * .5)).toFixed(2)}deg) rotateY(${(4 * Math.sin(lt * .3)).toFixed(2)}deg)` });
     pop($('s-n1'), t, W('struct', 2) - .1); pop($('s-n2'), t, W('struct', 7) - .1);
-    $('s-v1').textContent = F.counter(t, W('struct', 2), .9, 33);
-    $('s-v2').textContent = F.counter(t, W('struct', 7), 1.3, 5900);
+    $('s-v1').textContent = F.counter(t, W('struct', 2), .6, 33);
+    $('s-v2').textContent = F.counter(t, W('struct', 7), .7, 5900);
     [0, 1, 2, 3].forEach((i) => pop($('s-node' + i), t, s.start + .8 + i * .45, { y: 30 }));
   }
   if (ab > 0) {
@@ -696,7 +701,7 @@ SCN.struct = (t, s) => {
     const fw = Math.max(150, 1600 * v / TUBE_MAX); $('tubePct').textContent = pct + '%'; $('tubePct').style.left = (fw > 330 ? fw - 30 - $('tubePct').offsetWidth : fw + 30).toFixed(0) + 'px'; $('tubePct').style.color = fw > 330 ? '#fff' : 'var(--o2)';
     pop($('tube'), t, split + .1, { y: 40, base: `perspective(1400px) rotateX(${(8 * Math.sin(lt * .4)).toFixed(2)}deg)` });
     TICKS.forEach((k, i) => pop($('tk' + i), t, ks[i + 1][0] - .2, { y: 20 }));
-    $('s-sales').textContent = F.counter(t, W('sales', 25), 1.6, 46439);
+    $('s-sales').textContent = F.counter(t, W('sales', 25), .7, 46439);
     show($('s-sales'), ramp01(t, W('sales', 25) - .1, .3)); show($('s-saleskick'), ramp01(t, W('sales', 25) - .1, .3)); show($('s-saleslb'), 0);
     pop($('s-fc0'), t, L('sales').end - .2, { y: 20 }); pop($('s-fc1'), t, L('sales').end + .1, { y: 20 });
   }
@@ -707,7 +712,7 @@ SCN.kpi = (t, s) => {
   show($('k-a'), 1 - ab); show($('k-b'), ab);
   if (ab < 1) {
     pop($('k-money'), t, s.start + .3, { y: 50 });
-    const mv = F.counter(t, W('kpi', 7), 1.6, 1024); $('k-mv').textContent = '$' + mv;
+    const mv = F.counter(t, W('kpi', 7), .7, 1024); $('k-mv').textContent = '$' + mv; $('k-mv').parentElement.style.opacity = t < W('kpi', 7) - .05 ? .25 : 1;
     for (let i = 0; i < 5; i++) {
       const t0 = W('kpi', 15) + i * .3;
       pop($('k' + i), t, t0, { y: 30, base: `perspective(1200px) rotateY(${(-8 + 2 * Math.sin(lt * .6 + i)).toFixed(2)}deg)` });
@@ -765,10 +770,12 @@ SCN.cluster = (t, s) => {
     const card = $('cc-' + q.id);
     const a = pop(card, t, b0 + .8, { y: 30, out: b1 - .2, base: `perspective(1200px) rotateY(${(-10 + 2 * Math.sin(lt * .5)).toFixed(2)}deg)` });
     if (a > 0) {
-      card.querySelector('.iv').textContent = cnum(t, W(q.line, q.iw), 1.1, q.inv[0], q.inv[1]);
-      card.querySelector('.jv').textContent = cnum(t, W(q.line, q.jw), 1.0, q.job[0], 0);
-      if (q.id === 'skd') { const st = card.querySelector('.start'); const s0 = W('c_skd', 17) - .1; show(st, ramp01(t, s0, .4)); st.style.transform = `translateY(${(14 * (1 - ramp01(t, s0, .5))).toFixed(1)}px)`;
-        card.querySelector('.sv').textContent = cnum(t, W('c_skd', 26), .9, 250, 0); }
+      { const ti = W(q.line, WI(q.line, /^investitsiya/i) + 1), tj = W(q.line, WI(q.line, /^dollar/i) + 1);   // numbers stay dim until spoken
+        card.querySelectorAll('.v')[0].style.opacity = t < ti - .05 ? .25 : 1; card.querySelectorAll('.v')[1].style.opacity = t < tj - .05 ? .25 : 1; }
+      card.querySelector('.iv').textContent = cnum(t, W(q.line, WI(q.line, /^investitsiya/i) + 1), .6, q.inv[0], q.inv[1]);
+      card.querySelector('.jv').textContent = cnum(t, W(q.line, WI(q.line, /^dollar/i) + 1), .6, q.job[0], 0);
+      if (q.id === 'skd') { const st = card.querySelector('.start'); const s0 = W('c_skd', WI('c_skd', /^zavod/i)) - .1; show(st, ramp01(t, s0, .4)); st.style.transform = `translateY(${(14 * (1 - ramp01(t, s0, .5))).toFixed(1)}px)`;
+        card.querySelector('.sv').textContent = cnum(t, W('c_skd', WI('c_skd', /(se|tse)(x|kh)ida/i) + 1), .6, 250, 0); }
     }
     // leader line from the building top to the panel
     const [mx, my] = center($('cm-' + q.id)), ln = $('cl-' + q.id);
@@ -806,7 +813,7 @@ SCN.logi = (t, s) => {
   const sc = zoomKeys(t, [[s.start, 1.1], [s.end, 1.24]], E.io);
   $('l-plane').style.transform = `translate(-50%,-50%) translateY(90px) rotateX(${rx.toFixed(2)}deg) rotateZ(${rz.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
   const [jx, jy] = center($('lm0'));
-  const go = W('logi', 9) - .3;  // "Jizzaxdan har bir hududga"
+  const go = W('logi', WI('logi', /^jizza/i)) - .3;  // "Jizzaxdan har bir hududga"
   LOGI.forEach((r, i) => {
     const [x, y] = center($('lm' + i)), l = $('ll' + i);
     l.style.left = x.toFixed(1) + 'px'; l.style.top = y.toFixed(1) + 'px';
@@ -908,8 +915,8 @@ SCN.goals = (t, s) => {
   for (let i = 0; i < 7; i++) {
     pop($('gr' + i), t, RT[i], { y: 16 });
     const row = $('gr' + i), b = row.querySelector('.b'), c = row.querySelector('.c');
-    cellCount(b, t, RT[i], .9);
-    cellCount(c, t, i === 0 ? W('goals', 11) : i === 1 ? W('goals', 17) : RT[i] + .2, i < 2 ? 1.0 : .9);
+    cellCount(b, t, RT[i], .6);
+    cellCount(c, t, i === 0 ? W('goals', 11) : i === 1 ? W('goals', 17) : RT[i] + .2, .6);
   }
   $('gr0').classList.toggle('on', t > W('goals', 10) && t < W('goals', 16) + .2);
   $('gr1').classList.toggle('on', t > W('goals', 16) + .2);
@@ -953,7 +960,7 @@ SCN.outro = (t, s) => {
 };
 
 // scene-to-scene transitions: crossfade + blur, with whips / flashes on some boundaries
-const TRANS = { struct: 'fade', kpi: 'whip', cluster: 'flash', geo: 'fade', logi: 'fade', seg: 'whip', dost: 'fade', rnd: 'flash', goals: 'whip', eco: 'fade', outro: 'fade', hist: 'push' };
+const TRANS = { struct: 'fade', kpi: 'whip', cluster: 'fade', geo: 'fade', logi: 'fade', seg: 'whip', dost: 'fade', rnd: 'fade', goals: 'whip', eco: 'fade', outro: 'fade', hist: 'push' };
 let fadeEl = null;
 window.seek = async (t) => {
   const post = { grain: .05, vignette: .75 };

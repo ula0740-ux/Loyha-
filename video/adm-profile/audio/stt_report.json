@@ -5,19 +5,35 @@
  },
  {
   "id": "hist1",
-  "out": "eshitildi: Kompaniyaga 2014-yilda asos solingan, 2020-yilda esa ADM Jizzax avtozavodi qurilishi boshlandi.\noʻxshashlik 100.0% []"
+  "out": "eshitildi: Kompaniyaga 2014-yilda asos solingan\noʻxshashlik 100.0% []"
  },
  {
-  "id": "hist2",
-  "out": "eshitildi: 2024-yil martda Sekada texnologiyasida yig'ish boshlandi. 2026-yil aprelda esa Kia K3 uchun yangi liniya ishga tushirildi\noʻxshashlik 97.5% [ { expected: 'ckd', heard: 'sekada' } ]"
+  "id": "h2020",
+  "out": "eshitildi: 2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "h2021",
+  "out": "eshitildi: 2021-yil martda mijozlarga ilk avtomobillar yetkazildi\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "h2022",
+  "out": "eshitildi: 2022-yil oktyabrda Cherry avtomobillarini SKD texnologiyasida, ya'ni yirik uzellardan yig'ish boshlandi.\noʻxshashlik 98.4% [\n  { expected: 'oktabrda', heard: 'oktyabrda' },\n  { expected: 'chery', heard: 'cherry' }\n]"
+ },
+ {
+  "id": "h2024",
+  "out": "eshitildi: 2024-yil martda CKD texnologiyasida Kia Sonet yig'ish boshlandi.\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "h2026",
+  "out": "eshitildi: 2026-yil aprelda esa KIA K3 uchun yangi CKD ishlab chiqarish liniyasi ishga tushirildi.\noʻxshashlik 100.0% []"
  },
  {
   "id": "struct",
-  "out": "eshitildi: Guruh tarkibida o'ttiz uchta kompaniya va besh ming to'qqiz yuz nafar xodim bor.\noʻxshashlik 98.8% [ { expected: 'uch', heard: '∅' }, { expected: 'ta', heard: 'uchta' } ]"
+  "out": "eshitildi: Guruh tarkibida 33 ta kompaniya va 5900 nafar xodim bor\noʻxshashlik 100.0% []"
  },
  {
   "id": "sales",
-  "out": "eshitildi: 2017-yilda бозор улуши 0,5% эди. 2025-йилга келиб улуш 11%га, сотув эса 46 439 тага етти.\noʻxshashlik 99.5% [ { expected: 'yetdi', heard: 'yetti' } ]"
+  "out": "eshitildi: 2017-yilda бозор улуши 0,5% эди. 2025-yilга келиб улуш 11%га, сотув эса 46 439 тага етди.\noʻxshashlik 100.0% []"
  },
  {
   "id": "kpi",
@@ -29,15 +45,15 @@
  },
  {
   "id": "cl0",
-  "out": "eshitildi: Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz\noʻxshashlik 100.0% []"
+  "out": "eshitildi: Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz.\noʻxshashlik 100.0% []"
  },
  {
   "id": "c_kia",
-  "out": "eshitildi: Kia Sekada loyihasi investitsiya 242 million dollar 2700 ish o'rni\noʻxshashlik 95.7% [ { expected: 'ckd', heard: 'sekada' } ]"
+  "out": "eshitildi: Kia CKD loyihasi investitsiya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish o'rni\noʻxshashlik 100.0% []"
  },
  {
   "id": "c_skd",
-  "out": "eshitildi: Eskada sexi investitsiya o'n ikki butun o'ndan olti million dollar to'rt yuz ellik ish o'rni zavod faoliyatini dastlab aynan shu Eskada sexida ikki yuz ellik nafar xodim bilan boshlagan.\noʻxshashlik 96.6% [\n  { expected: 'skd', heard: 'eskada' },\n  { expected: 'skd', heard: 'eskada' }\n]"
+  "out": "eshitildi: SKD цехи. Инвестиция $12.6 миллион, 450 иш ўрни. Завод фаолиятини дастлаб айнан шу SKD цехида 250 нафар ходим билан бошлаган.\noʻxshashlik 96.1% [ { expected: 'dollar', heard: '∅' } ]"
  },
  {
   "id": "c_lok",
@@ -49,11 +65,11 @@
  },
  {
   "id": "c_nev",
-  "out": "eshitildi: Yangi loyihalar: CKD NV. Investitsiya 100 million dollar, 1200 ish o'rni\noʻxshashlik 98.8% [ { expected: 'nev', heard: 'nv' } ]"
+  "out": "eshitildi: Yangi loyihalar: CKD New Energy Vehicle. Investitsiya 100 million dollar, 1200 ish o'rni.\noʻxshashlik 100.0% []"
  },
  {
   "id": "c_rd",
-  "out": "eshitildi: Ilmiy tadqiqot markazi. Investitsiya 100 million dollar, 500 muhandis\noʻxshashlik 98.6% [ { expected: 'ilmiytadqiqot', heard: 'tadqiqot' } ]"
+  "out": "eshitildi: Ilmiy tadqiqot markazi. Investitsiya yuz million dollar, besh yuz muhandis\noʻxshashlik 98.6% [ { expected: 'ilmiytadqiqot', heard: 'tadqiqot' } ]"
  },
  {
   "id": "c_dost",
@@ -61,27 +77,27 @@
  },
  {
   "id": "cl4",
-  "out": "eshitildi: SECA-da loyihalari yiliga yuz ming avtomobilga mo'ljallangan.\noʻxshashlik 92.9% [ { expected: 'ckd', heard: 'secada' } ]"
+  "out": "eshitildi: SEKEDI loyihalari yiliga yuz ming avtomobilga mo'ljallangan\noʻxshashlik 92.9% [ { expected: 'ckd', heard: 'sekedi' } ]"
  },
  {
   "id": "geo",
-  "out": "eshitildi: Lokallizatsiya loyihalari Jizzax, Toshkent, Farg'ona, Andijon, Nukus va Xorazmda, shuningdek Qozog'istonda joylashgan\noʻxshashlik 99.1% [ { expected: 'lokalizatsiya', heard: 'lokallizatsiya' } ]"
+  "out": "eshitildi: Lokallizatsiya loyihalari Jizzax, Toshkent, Farg‘ona, Andijon, Nukus va Xorazmda, shuningdek Qozog‘istonda joylashgan\noʻxshashlik 99.1% [ { expected: 'lokalizatsiya', heard: 'lokallizatsiya' } ]"
  },
  {
   "id": "logi",
-  "out": "eshitildi: United Auto Alliance kada to'plamlar va tayyor mahsulotni Jizzaxdan har bir hududga yetkazadi.\noʻxshashlik 97.8% [ { expected: 'kd', heard: 'kada' } ]"
+  "out": "eshitildi: United Auto Alliance kedi to'plamlar va tayyor mahsulotni Jizzaxdan har bir hududga yetkazadi.\noʻxshashlik 97.8% [ { expected: 'kd', heard: 'kedi' } ]"
  },
  {
   "id": "dost1",
-  "out": "eshitildi: Jizzax tijorat transporti loyihasida Dost milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi.\noʻxshashlik 100.0% []"
+  "out": "eshitildi: Jizzax tijorat transporti loyihasida Do’st milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi\noʻxshashlik 99.2% [ { expected: 'dost', heard: \"do'st\" } ]"
  },
  {
   "id": "dost2",
-  "out": "eshitildi: Investitsiya o'ttiz million dollar, bir ming ikki yuz ish o'rni. SKD starti 2027-yilning birinchi choragida\noʻxshashlik 100.0% []"
+  "out": "eshitildi: Investitsiya o'ttiz million dollar bir ming ikki yuz ish o'rni. SKD starti ikki ming yigirma yettinchi yilning birinchi choragida\noʻxshashlik 100.0% []"
  },
  {
   "id": "rnd",
-  "out": "eshitildi: Tadqiqot va Ishlanmalar Markazining maqsadi texnologik mustaqillik, Dost brendi ostida yangi modellar va jahon bozoriga chiqish\noʻxshashlik 100.0% []"
+  "out": "eshitildi: Tadqiqot va ishlanmalar markazining maqsadi texnologik mustaqillik, Dost brendi ostida yangi modellar va jahon bozoriga chiqish\noʻxshashlik 100.0% []"
  },
  {
   "id": "goals",
@@ -89,7 +105,7 @@
  },
  {
   "id": "eco",
-  "out": "eshitildi: ATM ekotizimi to'rt yo'nalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi xizmat va yangi mobillik.\noʻxshashlik 99.2% [ { expected: 'adm', heard: 'atm' } ]"
+  "out": "eshitildi: ADM ekotizimi to'rt yo'nalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi xizmat va yangi mobillik\noʻxshashlik 100.0% []"
  },
  {
   "id": "outro",
