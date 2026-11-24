@@ -1,0 +1,98 @@
+[
+ {
+  "id": "title",
+  "out": "eshitildi: ADM Jizzakh ko'p brendli avtomobil ishlab chiqaruvchi kompaniya\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "hist1",
+  "out": "eshitildi: Kompaniyaga 2014-yilda asos solingan, 2020-yilda esa ADM Jizzax avtozavodi qurilishi boshlandi.\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "hist2",
+  "out": "eshitildi: 2024-yil martda Sekada texnologiyasida yig'ish boshlandi. 2026-yil aprelda esa Kia K3 uchun yangi liniya ishga tushirildi\noʻxshashlik 97.5% [ { expected: 'ckd', heard: 'sekada' } ]"
+ },
+ {
+  "id": "struct",
+  "out": "eshitildi: Guruh tarkibida o'ttiz uchta kompaniya va besh ming to'qqiz yuz nafar xodim bor.\noʻxshashlik 98.8% [ { expected: 'uch', heard: '∅' }, { expected: 'ta', heard: 'uchta' } ]"
+ },
+ {
+  "id": "sales",
+  "out": "eshitildi: 2017-yilda бозор улуши 0,5% эди. 2025-йилга келиб улуш 11%га, сотув эса 46 439 тага етти.\noʻxshashlik 99.5% [ { expected: 'yetdi', heard: 'yetti' } ]"
+ },
+ {
+  "id": "kpi",
+  "out": "eshitildi: 2025-yilda йиллик айланма 1024 миллион долларни ташкил этди. Компания автомобиль сотуви ҳажми бўйича иккинчи ўринда.\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "brands",
+  "out": "eshitildi: Do‘st esa Markaziy Osiyodagi birinchi milliy avtomobil brendi\noʻxshashlik 98.3% [ { expected: 'dost', heard: \"do'st\" } ]"
+ },
+ {
+  "id": "cl0",
+  "out": "eshitildi: Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "c_kia",
+  "out": "eshitildi: Kia Sekada loyihasi investitsiya 242 million dollar 2700 ish o'rni\noʻxshashlik 95.7% [ { expected: 'ckd', heard: 'sekada' } ]"
+ },
+ {
+  "id": "c_skd",
+  "out": "eshitildi: Eskada sexi investitsiya o'n ikki butun o'ndan olti million dollar to'rt yuz ellik ish o'rni zavod faoliyatini dastlab aynan shu Eskada sexida ikki yuz ellik nafar xodim bilan boshlagan.\noʻxshashlik 96.6% [\n  { expected: 'skd', heard: 'eskada' },\n  { expected: 'skd', heard: 'eskada' }\n]"
+ },
+ {
+  "id": "c_lok",
+  "out": "eshitildi: Lokalisatsiya klasteri. Investitsiya yuz ellik million dollar, uch yuz ellik ish o'rni.\noʻxshashlik 98.8% [ { expected: 'lokalizatsiya', heard: 'lokalisatsiya' } ]"
+ },
+ {
+  "id": "c_sht",
+  "out": "eshitildi: Штамплаш цехи. Инвестиция эллик беш миллион доллар, юз эллик иш ўрни\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "c_nev",
+  "out": "eshitildi: Yangi loyihalar: CKD NV. Investitsiya 100 million dollar, 1200 ish o'rni\noʻxshashlik 98.8% [ { expected: 'nev', heard: 'nv' } ]"
+ },
+ {
+  "id": "c_rd",
+  "out": "eshitildi: Ilmiy tadqiqot markazi. Investitsiya 100 million dollar, 500 muhandis\noʻxshashlik 98.6% [ { expected: 'ilmiytadqiqot', heard: 'tadqiqot' } ]"
+ },
+ {
+  "id": "c_dost",
+  "out": "eshitildi: Do'st tijorat avtomobillari. Investitsiya o'ttiz million dollar, bir ming ikki yuz ish o'rni\noʻxshashlik 98.9% [ { expected: 'dost', heard: \"do'st\" } ]"
+ },
+ {
+  "id": "cl4",
+  "out": "eshitildi: SECA-da loyihalari yiliga yuz ming avtomobilga mo'ljallangan.\noʻxshashlik 92.9% [ { expected: 'ckd', heard: 'secada' } ]"
+ },
+ {
+  "id": "geo",
+  "out": "eshitildi: Lokallizatsiya loyihalari Jizzax, Toshkent, Farg'ona, Andijon, Nukus va Xorazmda, shuningdek Qozog'istonda joylashgan\noʻxshashlik 99.1% [ { expected: 'lokalizatsiya', heard: 'lokallizatsiya' } ]"
+ },
+ {
+  "id": "logi",
+  "out": "eshitildi: United Auto Alliance kada to'plamlar va tayyor mahsulotni Jizzaxdan har bir hududga yetkazadi.\noʻxshashlik 97.8% [ { expected: 'kd', heard: 'kada' } ]"
+ },
+ {
+  "id": "dost1",
+  "out": "eshitildi: Jizzax tijorat transporti loyihasida Dost milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi.\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "dost2",
+  "out": "eshitildi: Investitsiya o'ttiz million dollar, bir ming ikki yuz ish o'rni. SKD starti 2027-yilning birinchi choragida\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "rnd",
+  "out": "eshitildi: Tadqiqot va Ishlanmalar Markazining maqsadi texnologik mustaqillik, Dost brendi ostida yangi modellar va jahon bozoriga chiqish\noʻxshashlik 100.0% []"
+ },
+ {
+  "id": "goals",
+  "out": "eshitildi: 2027-yildan 2035-yilgacha qo'shimcha 400 million dollar investitsiya va 5 mingta yangi ish o'rni ko'zda tutilgan.\noʻxshashlik 99.4% [\n  { expected: 'ming', heard: '∅' },\n  { expected: 'ta', heard: 'mingta' }\n]"
+ },
+ {
+  "id": "eco",
+  "out": "eshitildi: ATM ekotizimi to'rt yo'nalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi xizmat va yangi mobillik.\noʻxshashlik 99.2% [ { expected: 'adm', heard: 'atm' } ]"
+ },
+ {
+  "id": "outro",
+  "out": "eshitildi: ADM Jizzakh innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz.\noʻxshashlik 100.0% []"
+ }
+]

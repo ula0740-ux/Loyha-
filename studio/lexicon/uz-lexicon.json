@@ -143,6 +143,18 @@
       "kind": "word",
       "testedAt": "2026-10-13"
     },
+    "kd": {
+      "original": "KD",
+      "latin": "KD",
+      "cyrillic": "КД",
+      "spoken": {
+        "latin": "Ka-de",
+        "cyrillic": "КД"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "abbr"
+    },
     "manager": {
       "original": "manager",
       "latin": "manager",
@@ -154,6 +166,18 @@
       "status": "candidate",
       "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
       "prefer": "latin"
+    },
+    "nev": {
+      "original": "NEV",
+      "latin": "NEV",
+      "cyrillic": "НЕВ",
+      "spoken": {
+        "latin": "En-e-ve",
+        "cyrillic": "НЕВ"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "abbr"
     },
     "onboarding": {
       "original": "onboarding",

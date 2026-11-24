@@ -12,9 +12,8 @@ def media(name): return Image.open(io.BytesIO(z.read('ppt/media/' + name)))
 def save_jpg(im, name, q=88): im.convert('RGB').save(out / name, quality=q, optimize=True)
 def up(im, f): return im.resize((round(im.width * f), round(im.height * f)), Image.LANCZOS)
 
-# full-bleed photos (slides 1, 3, 4, 7, 9, 12)
-for n, f in [('hero_factory.jpg', 'image33.jpeg'), ('dost_car.jpg', 'image34.jpeg'), ('goals_bg.jpg', 'image45.jpeg'),
-             ('dost_vans.jpg', 'image109.jpeg'), ('eco_bg.jpg', 'image144.jpeg')]:
+# photos used as 3D layers (slides 1, 3, 9); slide backgrounds themselves are not used
+for n, f in [('hero_factory.jpg', 'image33.jpeg'), ('dost_car.jpg', 'image34.jpeg'), ('dost_vans.jpg', 'image109.jpeg')]:
     save_jpg(media(f), n)
 # slide 5: aerial site plan, cropped from the slide picture (deck callout boxes left out), upscaled 2x
 aer = media('image47.jpeg').crop((450, 276, 1548, 753))
@@ -22,7 +21,6 @@ aer = up(aer, 2).filter(ImageFilter.UnsharpMask(2, 60, 2)); save_jpg(ImageEnhanc
 # slide 6 / 7 3D maps (RGBA), upscaled 2x
 up(media('image48.png'), 2).filter(ImageFilter.UnsharpMask(2, 50, 2)).save(out / 'map_geo.png', optimize=True)
 up(media('image78.png'), 2).filter(ImageFilter.UnsharpMask(2, 50, 2)).save(out / 'map_logi.png', optimize=True)
-media('image46.png').save(out / 'goals_bars.png', optimize=True)
 # slide 10: R&D centre building (top-right photo of the slide header)
 rd = media('image114.jpeg'); save_jpg(up(rd.crop((1030, 0, 1500, 150)), 2.4), 'rnd_building.jpg')
 # ADM logo (vector)

@@ -5,57 +5,82 @@
   {
    "id": "title",
    "slide": 1,
-   "text": "ADM Global, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."
+   "text": "ADM Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."
   },
   {
    "id": "hist1",
    "slide": 2,
-   "text": "Kompaniyaga 2014-yilda asos solingan. 2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi, 2021-yil martda esa mijozlarga ilk avtomobillar yetkazildi."
+   "text": "Kompaniyaga 2014-yilda asos solingan, 2020-yilda esa ADM Jizzax avtozavodi qurilishi boshlandi."
   },
   {
    "id": "hist2",
    "slide": 2,
-   "text": "2022-yil oktabrda Chery avtomobillari SKD, 2024-yil martda esa Kia Sonet CKD texnologiyasida yigʻila boshladi. 2026-yil aprelda Kia K3 uchun yangi CKD liniyasi ishga tushirildi."
+   "text": "2024-yil martda CKD texnologiyasida yigʻish boshlandi, 2026-yil aprelda esa Kia K3 uchun yangi liniya ishga tushirildi."
   },
   {
    "id": "struct",
    "slide": 2,
-   "text": "ADM Global tarkibida 33 ta kompaniya va 5 900 nafar xodim bor. Ular orasida ADM Jizzax zavodi, Fincom, 124 ta dilerlik markazi va United Auto Alliance."
+   "text": "Guruh tarkibida 33 ta kompaniya va 5 900 nafar xodim bor."
   },
   {
    "id": "sales",
    "slide": 2,
-   "text": "2017-yilda bozor ulushi 0,5 foiz, sotuv 650 ta edi. 2025-yilda ulush 11 foizga, sotuv esa 46 439 taga yetdi. Prognozga koʻra, 2035-yilda ulush 35 foiz, sotuv 210 000 ta boʻladi."
+   "text": "2017-yilda bozor ulushi 0,5 foiz edi. 2025-yilga kelib ulush 11 foizga, sotuv esa 46 439 taga yetdi."
   },
   {
    "id": "kpi",
    "slide": 3,
-   "text": "2025-yilda yillik aylanma 1 024 million dollarni tashkil etdi. Kompaniya avtomobil sotuvi hajmi boʻyicha ikkinchi oʻrinda va eng yirik xususiy soliq toʻlovchilar oʻntaligida."
+   "text": "2025-yilda yillik aylanma 1 024 million dollarni tashkil etdi. Kompaniya avtomobil sotuvi hajmi boʻyicha ikkinchi oʻrinda."
   },
   {
    "id": "brands",
    "slide": 3,
-   "text": "Joriy brendlar qatorida Kia, Chery, Hyundai va Changan bor. DOST esa Markaziy Osiyodagi birinchi milliy avtomobil brendi."
+   "text": "DOST esa Markaziy Osiyodagi birinchi milliy avtomobil brendi."
   },
   {
-   "id": "cl1",
+   "id": "cl0",
    "slide": 5,
-   "text": "Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz. Zavod faoliyatini dastlab SKD sexida 250 nafar xodim bilan boshlagan."
+   "text": "Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz."
   },
   {
-   "id": "cl2",
+   "id": "c_kia",
    "slide": 5,
-   "text": "SKD loyihasi: 12,6 million dollar va 450 ish oʻrni. Kia CKD: 242 million dollar va 2 700 ish oʻrni. Lokalizatsiya klasteri: 150 million dollar va 350 ish oʻrni. Shtamplash sexi: 55 million dollar va 150 ish oʻrni."
+   "text": "Kia CKD loyihasi: investitsiya 242 million dollar, 2 700 ish oʻrni."
   },
   {
-   "id": "cl3",
+   "id": "c_skd",
    "slide": 5,
-   "text": "Yangi loyihalar: CKD NEV uchun 100 million dollar va 1 200 ish oʻrni, ilmiy-tadqiqot ishlari uchun 100 million dollar va 500 muhandis, DOST tijorat avtomobillari uchun 30 million dollar va 1 200 ish oʻrni."
+   "text": "SKD sexi: investitsiya 12,6 million dollar, 450 ish oʻrni. Zavod faoliyatini dastlab aynan shu SKD sexida 250 nafar xodim bilan boshlagan."
+  },
+  {
+   "id": "c_lok",
+   "slide": 5,
+   "text": "Lokalizatsiya klasteri: investitsiya 150 million dollar, 350 ish oʻrni."
+  },
+  {
+   "id": "c_sht",
+   "slide": 5,
+   "text": "Shtamplash sexi: investitsiya 55 million dollar, 150 ish oʻrni."
+  },
+  {
+   "id": "c_nev",
+   "slide": 5,
+   "text": "Yangi loyihalar. CKD NEV: investitsiya 100 million dollar, 1 200 ish oʻrni."
+  },
+  {
+   "id": "c_rd",
+   "slide": 5,
+   "text": "Ilmiy-tadqiqot markazi: investitsiya 100 million dollar, 500 muhandis."
+  },
+  {
+   "id": "c_dost",
+   "slide": 5,
+   "text": "DOST tijorat avtomobillari: investitsiya 30 million dollar, 1 200 ish oʻrni."
   },
   {
    "id": "cl4",
    "slide": 5,
-   "text": "CKD loyihalari yiliga 100 000 avtomobilga moʻljallangan, model qatori esa 2024-yildagi Sonetdan 2030-yildagi Sonet 2 gacha kengayadi."
+   "text": "CKD loyihalari yiliga 100 000 avtomobilga moʻljallangan."
   },
   {
    "id": "geo",
@@ -65,12 +90,7 @@
   {
    "id": "logi",
    "slide": 7,
-   "text": "Jizzax viloyati sharqiy va gʻarbiy hududlar oʻrtasidagi strategik boʻgʻin. Shu yerdan United Auto Alliance KD toʻplamlar va tayyor mahsulotni har bir hududga yetkazadi."
-  },
-  {
-   "id": "seg",
-   "slide": 8,
-   "text": "Kompaniya sedan, yoʻltanlamas va tijorat avtomobillari segmentlarida ishtirok etadi."
+   "text": "United Auto Alliance KD toʻplamlar va tayyor mahsulotni Jizzaxdan har bir hududga yetkazadi."
   },
   {
    "id": "dost1",
@@ -80,7 +100,7 @@
   {
    "id": "dost2",
    "slide": 9,
-   "text": "Investitsiya 30 million dollar, quvvat yiliga 30 ming, lokalizatsiya 30 foiz, 1 200 ish oʻrni. SKD starti 2027-yilning birinchi choragida, CKD starti esa 2028-yilning uchinchi choragida."
+   "text": "Investitsiya 30 million dollar, 1 200 ish oʻrni. SKD starti 2027-yilning birinchi choragida."
   },
   {
    "id": "rnd",
@@ -88,24 +108,19 @@
    "text": "Tadqiqot va ishlanmalar markazining maqsadi: texnologik mustaqillik, DOST brendi ostida yangi modellar va jahon bozoriga chiqish."
   },
   {
-   "id": "rnd2",
-   "slide": 11,
-   "text": "Markaz yengil tijorat avtomobilini eskizdan prototipgacha ishlab chiqdi va detallarning oʻz uch oʻlchamli chizmalarini chiqarmoqda."
-  },
-  {
    "id": "goals",
    "slide": 4,
-   "text": "2027-yildan 2035-yilgacha boʻlgan maqsadlar: qoʻshimcha 400 million dollar investitsiya, 5 000 ta yangi ish oʻrni, tovar aylanmasida qoʻshimcha 4 700 million dollar va eksportda qoʻshimcha 150 million dollar."
+   "text": "2027-yildan 2035-yilgacha qoʻshimcha 400 million dollar investitsiya va 5 000 ta yangi ish oʻrni koʻzda tutilgan."
   },
   {
    "id": "eco",
    "slide": 12,
-   "text": "ADM ekotizimi toʻrtta biznes yoʻnalishini birlashtiradi: avtomobil ishlab chiqarish, avtomobil savdosi, sotuvdan keyingi xizmat va yangi mobillik."
+   "text": "ADM ekotizimi toʻrt yoʻnalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi xizmat va yangi mobillik."
   },
   {
    "id": "outro",
    "slide": 10,
-   "text": "ADM Global: innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz."
+   "text": "ADM Jizzax: innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz."
   }
  ]
 }
