@@ -1,4 +1,4 @@
-"""Soundtrack: ElevenLabs narration on the timeline + ElevenLabs Music bed (time-fitted, ducked ~10 dB under the voice)
+"""Soundtrack: ElevenLabs narration on the timeline + the user's music (bar-line arrangement, ducked ~11 dB under the voice)
 + a few ElevenLabs SFX placed on picture cues (whips, reveals, panels, van drive-ins, logo). No synthesized audio.
 Two-pass loudnorm to -16 LUFS integrated, true peak -1.5 dBTP. Writes out/audio.wav."""
 import json, subprocess
@@ -25,23 +25,31 @@ def peak_at(x):  # SFX are placed by their measured peak, so the hit lands on th
 voice = np.zeros(N)
 for lid, l in L.items(): put(voice, l["vo"], load(HERE / f"audio/t/{lid}.wav"))
 
-# music: fitted to the film length with atempo (pitch kept), fade in/out
-md = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(HERE / "audio/music.mp3")], capture_output=True, text=True).stdout)
-tempo = max(.95, md / (T + .5))                 # at most 5 % slower; the rest is filled by a crossfaded repeat
-m = load(HERE / "audio/music.mp3", f"atempo={tempo:.5f}")
-if len(m) < N:                                  # repeat the body (from 40 s) with a 3 s equal-power crossfade until long enough
-    body, xf = m[int(40 * SR): int(len(m) - 8 * SR)], int(3 * SR)
-    while len(m) < N:
-        k = np.linspace(0, np.pi / 2, xf)
-        m = np.concatenate([m[:-xf], m[-xf:] * np.cos(k) + body[:xf] * np.sin(k), body[xf:]])
-music = np.zeros(N); put(music, 0, m[:N])
+# music (v3): the user's own track (src/music_user.m4a, decoded to out/music_user.wav), arranged on bar lines following the
+# plan in timeline.json (no time-stretch): bars straight through to the climax under the cluster, section A repeated after
+# it, the final accent on the outro flash. 0.3 s equal-power crossfades at the joins, fades at the very start/end.
+track = load(HERE / "out/music_user.wav")
+music = np.zeros(N); XF = int(.3 * SR)
+for k, sg in enumerate(TL["music"]["segments"]):
+    t0, d = sg["track"], sg["dur"]
+    pad = max(0, -t0); a = int(max(0, t0) * SR); n = int((d - pad) * SR) + XF
+    seg = np.concatenate([np.zeros(int(pad * SR)), track[a:a + n]])
+    env = np.ones(len(seg))
+    if k: env[:XF] = np.sin(np.linspace(0, np.pi / 2, XF))                 # fade in over the join
+    if k < len(TL["music"]["segments"]) - 1: env[-XF:] = np.cos(np.linspace(0, np.pi / 2, XF))
+    put(music, sg["film"] - (XF / SR if k else 0), seg * env)
 t = np.arange(N) / SR
-music *= np.clip(t / 2.0, 0, 1) * np.clip((T - t) / 3.0, 0, 1)
-env = np.convolve(np.abs(voice), np.ones(int(.2 * SR)) / int(.2 * SR), "same")
-duck = 1 - .68 * np.clip(env / (np.percentile(env[env > 1e-4], 60) + 1e-9), 0, 1)       # ~ -10 dB while speaking
-duck = np.convolve(duck, np.ones(int(.25 * SR)) / int(.25 * SR), "same")
+music *= np.clip(t / .8, 0, 1) * np.clip((T - t) / 2.5, 0, 1)
+# ducking: voice activity at 100 Hz -> target -11 dB while speaking, attack 0.15 s / release 0.3 s (one-pole smoothing)
+CR = 100; hop = SR // CR
+va = np.abs(voice[: len(voice) // hop * hop]).reshape(-1, hop).max(1)
+active = np.convolve(va > .02, np.ones(8), "same") > 0                       # bridge tiny gaps between words
+g_target = np.where(active, 10 ** (-11 / 20), 1.0); g = np.ones_like(g_target)
+for i in range(1, len(g)):
+    tau = .15 if g_target[i] < g[i - 1] else .30
+    g[i] = g[i - 1] + (g_target[i] - g[i - 1]) * (1 - np.exp(-1 / (CR * tau)))
+duck = np.interp(np.arange(N), np.arange(len(g)) * hop, g)
 music *= duck
-
 sfx = np.zeros(N)
 X = {k: load(HERE / f"audio/sfx/{k}.mp3") for k in ["whoosh", "impact", "tick", "pop", "rise", "chime", "car"]}
 def hit(name, t0, g): put(sfx, t0 - peak_at(X[name]), X[name], g)
@@ -55,10 +63,11 @@ hit("pop", W("c_skd", [w["text"] for w in L["c_skd"]["words"]].index(next(w["tex
 for i in range(4): hit("tick", S["struct"]["start"] + .8 + i * .45, .18)            # structure nodes
 for i in range(7): hit("tick", S["goals"]["start"] + .6 + i * .45, .14)             # goal rows
 put(sfx, S["dost"]["start"] + .2, X["car"], .22); put(sfx, S["dost"]["start"] + 1.4, X["car"], .16)   # vans drive in
-hit("chime", L["outro"]["end"] + .55, .35)                                           # white logo card
+hit("chime", TL["flash"], .2)                                           # white logo card
 
-mix = voice * 1.0 + music * .32 + sfx * .9
+mix = voice * 1.0 + music * .42 + sfx * .7   # the user's track is mastered loud: -7.5 dB under the voice at full level
 mix = mix[: int(T * SR)]
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", str(HERE / "out/music_stem.wav")], input=(music[: int(T * SR)] * .42).astype(np.float32).tobytes(), check=True)   # QA stem
 mix *= .9 / np.abs(mix).max()
 st = np.stack([mix, mix], 1).astype(np.float32)
 raw = HERE / "out/raw.wav"; raw.parent.mkdir(exist_ok=True)
@@ -68,4 +77,4 @@ j = json.loads(m[m.rindex("{"):m.rindex("}") + 1])
 af = (f"loudnorm=I=-16:TP=-2:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}"
       f":measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true")
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-af", af, "-ar", str(SR), str(HERE / "out/audio.wav")], check=True)
-print("audio ->", HERE / "out/audio.wav", f"{T:.2f}s, music tempo x{tempo:.4f}")
+print("audio ->", HERE / "out/audio.wav", f"{T:.2f}s, music: user track, bar-line arrangement")

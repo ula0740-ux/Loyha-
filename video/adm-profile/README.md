@@ -1,10 +1,10 @@
-# ADM Jizzax — korporativ profil filmi (v2)
+# ADM Jizzakh — korporativ profil filmi (v3)
 
-- **Fayl:** `ADM_Global_Profile_v2.mp4` — 1920×1080, 30 fps, H.264 + AAC, 4:16,5, 83,8 MB (ikki oʻtishli kodlash, 2,45 Mbit/s), ovoz −16,0 LUFS, true peak −1,8 dBFS. (Oldingi versiya `ADM_Global_Profile_v1.mp4` (3:51) taqqoslash uchun saqlangan.)
+- **Fayl:** `ADM_Global_Profile_v3.mp4` — 1920×1080, 30 fps, H.264 + AAC, 4:38 (277,8 s), 83,6 MB, ovoz −16,0 LUFS, true peak −1,9 dBFS. Oldingi versiyalar (`…_v1.mp4`, `…_v2.mp4`) taqqoslash uchun saqlangan.
 - **Manba:** `src/ADM_Global_Company_Profile_UZB.pptx` (12 slayd) — yagona faktlar manbai. Uslub uchun namunalar: `src/reference.mp4` (umumiy uslub) va `src/reference_map.mp4` (klaster xaritasi). `src/` papkasi repoga kirmaydi.
 - **Ovoz:** ElevenLabs, `eleven_v4` modeli, `language_code: uz`, Sarah ovozi. Matn `prepareUzbek` orqali yuboriladi (x → kh, F varianti), qoʻshni jumlalar kontekst sifatida beriladi va har jumla STT bilan tekshiriladi. Tasdiqlangan baza sozlamalari oʻzgartirilmagan, ovoz tezlashtirilmagan (TEMPO = 1.0).
 - **Foydalanuvchining keyingi talablari (2026-11):** slayd emas, original kino dunyosi; hikoya tartibi;
-  - bosh sarlavha "ADM JIZZAX";
+  - bosh sarlavha "ADM JIZZAKH" (v3; v1–v2 da "ADM JIZZAX");
   - furgonlar sahnaning ichkarisidan haydab kelib, fotodagi joyida toʻxtaydi;
   - 3D ustunli maqsadlar grafigi;
   - klaster xaritasi `reference_map` uslubida: kamera har bir sexga uchadi.
@@ -43,21 +43,21 @@ Statistikalar koʻrsatilayotganda ekrandagi har bir tasvir harakatda boʻladi: p
 
 | Vaqt | Slayd | Maʼlumot | Vizual / 3D / kamera / oʻtish / effekt | Ekrandagi matn |
 |---|---|---|---|---|
-| 0:00–0:07 | 1 | Kim: koʻp brendli ishlab chiqaruvchi | Qorongʻi fazo, nur dogʻi, letterbox ochiladi; logo chiqadi, sarlavha harfma-harf xira holatdan ochiladi; zavod fotosi suzuvchi 3D plita boʻlib pastdan koʻtariladi va egilishdan tekislanadi; ustidan nur oʻtadi, flare bor | ADM JIZZAX · MULTI BREND AVTOMOBIL ISHLAB CHIQARUVCHI |
-| 0:07–0:53 | 2 | Tarix: 6 bosqich, har yil alohida aytiladi | "Rivojlanish" soʻzi ochiladi; devorlari foto-ekranlar bilan qoplangan 3D tunnel: kamera chuqurlikka uchadi; har bir yil kartochkasi oʻz jumlasi aytilayotgan butun vaqt davomida markazda turadi, kamera faqat pauzalarda keyingisiga uchadi; oxirgi kartochka (2026) markazda; apelsin rang ramka halqalari (push oʻtish) | 2014 … Aprel 2026, slayddagi matnlar bilan |
-| 0:53–0:59 | 2 | Tuzilma | Egilgan shisha panel, 33 va 5 900 sanagichlari, 4 tugun | KOMPANIYA TUZILMASI va 4 boʻgʻin izohlari |
-| 0:59–1:13 | 2 | Savdo va ulush | Shisha progress-trubka 0,5% dan 11% gacha toʻladi, yillar belgilari, sotuv sanagichi, prognoz chiplari | 2017 0,5% / 650 … 2025 11% / 46 439; 2030 PROG. 30% · 130 000; 2035 PROG. 35% · 210 000 |
-| 1:13–1:25 | 3 | Koʻrsatkichlar | $1 024 mln sanagichi; 5 kartochka 3D da kirib keladi, №2 belgilanadi (whip oʻtish) | BIRINCHI, №2, TOP-10, YETAKCHI ×2 |
-| 1:25–1:30 | 3 | Brendlar, DOST | DOST avtomobili fotosi suzuvchi plita boʻlib turadi; dolly, orbita, nur va flare | JORIY BRENDLAR roʻyxati · MARKAZIY OSIYODAGI BIRINCHI MILLIY AVTOMOBIL BRENDI |
-| 1:30–2:46 | 5 | Klaster: 7 sex | Chaqnash va impact bilan kirish. Havodan olingan sxema qorongʻi fazoda 3D plita. Kamera navbat bilan uchadi: KIA CKD → SKD → Lokalizatsiya klasteri → Shtamplash sexi → CKD NEV → R&D → DOST CKD. Har sexda bino yorugʻ hajm boʻlib koʻtariladi, halqa toʻlqinlanadi, xarita xiralashadi, panel va yetakchi chiziq chiqadi. Oxirida umumiy koʻrinish: 7 yorliq va model paneli | Har panelda yillar, nomi, investitsiya va ish oʻrni (slayd 5). SKD panelida "DASTLAB · SKD SEXI 250 nafar xodim". CKD loyihalari 100 000 (yiliga) (ICE + NEV); modellar 2024–2030 |
-| 2:46–3:06 | 9 | DOST tijorat transporti | Ikki furgon tozalangan fon plitasida chuqurlikdan haydab keladi: uzoqda kichik va xira, faralari yongan; fotodagi joyida toʻxtaydi, ostida soya va pol aksi bor. Keyin 3 tur ham chuqurlikdan haydab kelib qatorga turadi | JIZZAX COMMERCIAL VEHICLE; 30 mln $, Yiliga 30 ming, 30 %, 1200, I chorak 2027, III chorak 2028; 3 tur nomi |
-| 3:06–3:20 | 10–11 | R&D | R&D binosi 3D ramkada (dolly va nur); 4 bosqich kartochkasi, maqsadlar narratsiya bilan yonadi. Keyin ESKIZ → RENDER → CAD-CHIZMA → PROTOTIP rasmlari kamera yonidan uchib oʻtadi (flash oʻtish) | slayd 10/11 matnlari |
-| 3:20–3:24 | 8 | Segmentlar | Avtomobil kesmalari 3D cover-flow qatorida oʻtadi (ovozsiz koʻprik sahna) | ISHTIROK SEGMENTLARI; model nomlari va segmentlar |
-| 3:24–3:35 | 6 | Lokalizatsiya geografiyasi | Manbadagi 3D xarita qiyalanib aylanadi; pinlar narratsiya bilan birga koʻtariladi | 7 nom; JAMI ISH OʻRINLARI: 5900 |
-| 3:35–3:43 | 7 | Logistika | Manbadagi rangli 3D xarita qiyalanib aylanadi; Jizzaxdan hududlarga harakatlanuvchi yoy chiziqlar | MARKAZLASHGAN LOGISTIKA; 14 hudud; slayd 7 dagi ikki izoh |
-| 3:43–3:54 | 4 | 2035 maqsadlari | Oʻz dunyosidagi fon (slayd foni emas). Jadval qatorlari birma-bir sanagich bilan ochiladi. 3 ta 3D ustun navbat bilan koʻtariladi (nisbat 0,53 : 0,70 : 1), polda aks va nur bor, kamera orbita boʻylab aylanadi, strelka yuqoriga chiziladi | 2026-2035 MAQSADLARI: 7 qator |
-| 3:54–4:05 | 12 | Ekotizim | Oʻz dunyosidagi fon. 4 shisha ustun 3D da koʻtariladi, xizmat chiplari | ADM ekotizimi … toʻrtta biznes yoʻnalishini birlashtiradi; 4 yoʻnalish; 11 ta xizmat |
-| 4:05–4:15 | 10 | Yakun | Logo, "ADM JIZZAX", shior; oq chaqnash, oq kartada logo; letterbox yopiladi, qorongʻilashadi | Innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz |
+| 0:00–0:10 | 1 | Kim: koʻp brendli ishlab chiqaruvchi | Qorongʻi fazo, nur dogʻi, letterbox ochiladi; logo chiqadi, sarlavha harfma-harf xira holatdan ochiladi; zavod fotosi suzuvchi 3D plita boʻlib pastdan koʻtariladi va egilishdan tekislanadi; ustidan nur oʻtadi, flare bor | ADM JIZZAX · MULTI BREND AVTOMOBIL ISHLAB CHIQARUVCHI |
+| 0:10–0:58 | 2 | Tarix: 6 bosqich, har yil alohida aytiladi | "Rivojlanish" soʻzi ochiladi; devorlari foto-ekranlar bilan qoplangan 3D tunnel: kamera chuqurlikka uchadi; har bir yil kartochkasi oʻz jumlasi aytilayotgan butun vaqt davomida markazda turadi, kamera faqat pauzalarda keyingisiga uchadi; oxirgi kartochka (2026) markazda; apelsin rang ramka halqalari (push oʻtish) | 2014 … Aprel 2026, slayddagi matnlar bilan |
+| 0:58–1:04 | 2 | Tuzilma | Egilgan shisha panel, 33 va 5 900 sanagichlari, 4 tugun | KOMPANIYA TUZILMASI va 4 boʻgʻin izohlari |
+| 1:04–1:19 | 2 | Savdo va ulush | Shisha progress-trubka 0,5% dan 11% gacha toʻladi, yillar belgilari, sotuv sanagichi, prognoz chiplari | 2017 0,5% / 650 … 2025 11% / 46 439; 2030 PROG. 30% · 130 000; 2035 PROG. 35% · 210 000 |
+| 1:19–1:31 | 3 | Koʻrsatkichlar | $1 024 mln sanagichi; 5 kartochka 3D da kirib keladi, №2 belgilanadi (whip oʻtish) | BIRINCHI, №2, TOP-10, YETAKCHI ×2 |
+| 1:31–1:38 | 3 | Brendlar, DOST | DOST avtomobili fotosi suzuvchi plita boʻlib turadi; dolly, orbita, nur va flare | JORIY BRENDLAR roʻyxati · MARKAZIY OSIYODAGI BIRINCHI MILLIY AVTOMOBIL BRENDI |
+| 1:38–2:58 | 5 | Klaster: 7 sex | Chaqnash va impact bilan kirish. Havodan olingan sxema qorongʻi fazoda 3D plita. Kamera navbat bilan uchadi: KIA CKD → SKD → Lokalizatsiya klasteri → Shtamplash sexi → CKD NEV → R&D → DOST CKD. Har sexda bino yorugʻ hajm boʻlib koʻtariladi, halqa toʻlqinlanadi, xarita xiralashadi, panel va yetakchi chiziq chiqadi. Oxirida umumiy koʻrinish: 7 yorliq va model paneli | Har panelda yillar, nomi, investitsiya va ish oʻrni (slayd 5). SKD panelida "DASTLAB · SKD SEXI 250 nafar xodim". CKD loyihalari 100 000 (yiliga) (ICE + NEV); modellar 2024–2030 |
+| 2:58–3:19 | 9 | DOST tijorat transporti | Ikki furgon tozalangan fon plitasida chuqurlikdan haydab keladi: uzoqda kichik va xira, faralari yongan; fotodagi joyida toʻxtaydi, ostida soya va pol aksi bor. Keyin 3 tur ham chuqurlikdan haydab kelib qatorga turadi | JIZZAX COMMERCIAL VEHICLE; 30 mln $, Yiliga 30 ming, 30 %, 1200, I chorak 2027, III chorak 2028; 3 tur nomi |
+| 3:19–3:34 | 10–11 | R&D | R&D binosi 3D ramkada (dolly va nur); 4 bosqich kartochkasi, maqsadlar narratsiya bilan yonadi. Keyin ESKIZ → RENDER → CAD-CHIZMA → PROTOTIP rasmlari kamera yonidan uchib oʻtadi (flash oʻtish) | slayd 10/11 matnlari |
+| 3:34–3:38 | 8 | Segmentlar | Avtomobil kesmalari 3D cover-flow qatorida oʻtadi (ovozsiz koʻprik sahna) | ISHTIROK SEGMENTLARI; model nomlari va segmentlar |
+| 3:38–3:50 | 6 | Lokalizatsiya geografiyasi | Manbadagi 3D xarita qiyalanib aylanadi; pinlar narratsiya bilan birga koʻtariladi | 7 nom; JAMI ISH OʻRINLARI: 5900 |
+| 3:50–4:00 | 7 | Logistika | Manbadagi rangli 3D xarita qiyalanib aylanadi; Jizzaxdan hududlarga harakatlanuvchi yoy chiziqlar | MARKAZLASHGAN LOGISTIKA; 14 hudud; slayd 7 dagi ikki izoh |
+| 4:00–4:12 | 4 | 2035 maqsadlari | Oʻz dunyosidagi fon (slayd foni emas). Jadval qatorlari birma-bir sanagich bilan ochiladi. 3 ta 3D ustun navbat bilan koʻtariladi (nisbat 0,53 : 0,70 : 1), polda aks va nur bor, kamera orbita boʻylab aylanadi, strelka yuqoriga chiziladi | 2026-2035 MAQSADLARI: 7 qator |
+| 4:12–4:24 | 12 | Ekotizim | Oʻz dunyosidagi fon. 4 shisha ustun 3D da koʻtariladi, xizmat chiplari | ADM ekotizimi … toʻrtta biznes yoʻnalishini birlashtiradi; 4 yoʻnalish; 11 ta xizmat |
+| 4:24–4:38 | 10 | Yakun | Logo (ADM / JIZZAKH), "ADM JIZZAKH", shior; oq chaqnash musiqaning yakuniy urgʻusida; oq chaqnash, oq kartada logo; letterbox yopiladi, qorongʻilashadi | Innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz |
 
 ## Sahnalar boʻyicha vizual promptlar (literal / abstrakt)
 Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
@@ -152,8 +152,24 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 6. **Tunnel kamerasi:** v1 dagi 17,9 s dagi bir kadrlik sakrash (kalitlar tartibi xatosi) toʻliq tuzatildi.
 7. **SKD jumlasi** ("dastlab aynan shu SKD sexida 250 nafar xodim bilan boshlagan") saqlandi.
 
+## v3 da tuzatilganlar
+1. **Logo:** "GLOBAL" oʻrniga "JIZZAKH" (vektor va jonli matn, aniq tasvir). Ochilish, yakun va oq logo kartasida.
+2. **Yozuv:** ekrandagi barcha "JIZZAX" yozuvlari endi "JIZZAKH".
+3. **Musiqa:** ElevenLabs treki oʻrniga foydalanuvchining treki. Takt chiziqlarida aranjirovka qilingan, tempo oʻzgartirilmagan, ovoz ostida ducking bor.
+4. **Montaj musiqaga moslandi:** sahnalar taktga tushadi, klaster choʻqqiga, chaqnash yakuniy urgʻuga.
+5. **Oʻrinbosar qiymatlar:** hech qayerda notoʻgʻri oraliq qiymat koʻrinmaydi. Raqam aytilguncha joyi boʻsh turadi va aytilgan soʻzda 0,6–0,7 s ichida sanab yakuniy qiymatda toʻxtaydi. Bu klaster panellariga (investitsiya, ish oʻrni, 250 nishoni), $1 024 mln, 33 / 5 900 va maqsadlar jadvalining +400 / +5 000 qatorlariga tegishli.
+
 ## Musiqa va SFX
-- **Musiqa:** `audio/music.mp3`, ElevenLabs Music API (instrumental). Bu tayyor ishlab chiqarilgan trek, numpy sintezi emas. Prompt `build/gen_audio_assets.py` da. Trek 217 s chiqdi. U ×0,95 tezlikka (`atempo`, ohang balandligi oʻzgarmaydi) oʻtkazildi, yetmagan qismi esa trek tanasini 3 s crossfade bilan takrorlash orqali toʻldirildi. Diktor gapirayotganda musiqa taxminan 10 dB pasaytiriladi.
+- **Musiqa (v3):** foydalanuvchining treki: **AShamaluev Music — "Epic Motivational Music"** (`src/music_user.m4a`, 200 s). Fayl repoga kiritilmaydi; litsenziya va ishlatish huquqi foydalanuvchida.
+  - **Tahlil** (`build/music_analyze.py`, librosa): 99,4 BPM, takt (bar) 2,40 s, 80 ta takt.
+  - **Energiya xaritasi:** kirish 0–21 s, A boʻlimi 40–76 s, pasayish 81–97 s, choʻqqi 97,8–155 s, yakuniy urgʻu 174,6 s.
+  - **Aranjirovka** (`timeline.json` → `music`), tempo oʻzgartirilmagan:
+    1. trek boshidan 71-taktgacha uzluksiz. Klaster fly-over aynan choʻqqining kirish taktida (40-takt) boshlanadi;
+    2. keyin A boʻlimidan (16-takt) takrorlanadi, pasayish orqali yana choʻqqiga chiqib, maqsadlar, ekotizim va yakun ostida yangraydi;
+    3. trekning yakuniy urgʻusi (72-takt) oq chaqnashga toʻgʻri keladi.
+    - Ulanishlar takt chizigʻida, 0,3 s equal-power crossfade bilan.
+  - **Montaj musiqaga mos:** sahna boshlanishlari takt chiziqlariga (bar downbeat) suriladi, jumlalar yaqin boʻlsa keyingi beat dan keyin boshlanadi, oq chaqnash yakuniy urgʻuda. Ovozlar qayta yozilmadi, faqat pauzalar surildi.
+  - **Ducking:** diktor gapirayotganda musiqa −11 dB ga tushadi (attack 0,15 s, release 0,3 s). Pauzalar, kirish va yakunda toʻliq balandlikda.
 - **SFX:** `audio/sfx/*.mp3`, ElevenLabs Sound Effects API: whoosh, impact, tick, pop, rise, chime, car. Har biri kadrdagi hodisaga oʻz choʻqqisi boʻyicha joylanadi:
   - whip va boshqa oʻtishlar;
   - klasterga kirishdagi impact;
@@ -195,9 +211,9 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
    - slayd 3: KIA, CHERY, GWM, HYUNDAI, CHANGAN.
    - Narratsiyada brendlar sanab oʻtilmaydi. Ekranda faqat koʻrsatilayotgan slayd 3 roʻyxati turibdi.
 7. **6-slayddagi pinlar:** Andijon va Fargʻona pinlari slayddagi chiziqlar boʻyicha joylashtirildi. Geografik jihatdan ular teskari koʻrinadi. Filmda slayddagidek qoldirildi.
-8. **Sarlavha:** foydalanuvchi talabi bilan bosh sarlavha va yakun "ADM JIZZAX". Slayd 1 da "ADM GLOBAL".
+8. **Sarlavha:** foydalanuvchi talabi bilan ekrandagi barcha "JIZZAX" yozuvlari "JIZZAKH" qilindi: sarlavha, yakun kartasi, "JIZZAKH COMMERCIAL VEHICLE", pin va hudud yorligʻi. Slayd 1 da "ADM GLOBAL", slayd 6/7 da "JIZZAX" yozilgan. Narratsiya matnida "Jizzax" qoldi, ovozda baribir "Jizzakh" eshitiladi.
    - Slayd 2 dagi tuzilma sarlavhasi ("ADM Global") va slayd 6 nomi ("ADM GLOBAL LOKALIZATSIYA …") slayd iqtibosi sifatida oʻzgarmagan.
-   - Logotip (`assets/adm_logo.svg`, pptx dan) ichida kichik "GLOBAL" yozuvi bor.
+   - Logotip: ADM belgisi va harflari pptx dagi vektor SVG dan olindi. Ostidagi kichik "GLOBAL" soʻzi oʻsha joy, eni, rangi va harf balandligida jonli matn "JIZZAKH" bilan almashtirildi (`assets/adm_logo_jizzakh.svg`, sahifaga inline, Montserrat).
 9. **Ochilgan qisqartmalar:** ICE + NEV ekranda slayddagidek. KIA CKD 2021-2026 investitsiya davri, CKD yigʻish esa slayd 2 boʻyicha 2024-yil martda boshlangan; bu ikki xil sana maʼnosi boʻlishi mumkin.
 
 ## Build
