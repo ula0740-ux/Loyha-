@@ -1,0 +1,26 @@
+3 TA BEPUL DASTUR — RASMIY HAVOLALAR (Zehn Blog)
+Faqat shu havolalardan yuklab oling.
+
+1) OPEN GENERATIVE AI — Higgsfield o'rniga (rasm va video yaratish)
+   GitHub:        https://github.com/Anil-matcha/Open-Generative-AI
+   Yuklab olish:  https://github.com/Anil-matcha/Open-Generative-AI/releases
+   Brauzerda:     https://muapi.ai/open-generative-ai  (bulut modellari — pullik)
+   Litsenziya:    MIT
+
+2) APPFLOWY — Notion o'rniga (eslatma, hujjat, vazifalar)
+   GitHub:        https://github.com/AppFlowy-IO/AppFlowy
+   Yuklab olish:  https://github.com/AppFlowy-IO/AppFlowy/releases
+   Sayt:          https://appflowy.com
+   iPhone:        https://apps.apple.com/app/appflowy/id6457261352
+   Android:       https://play.google.com/store/apps/details?id=io.appflowy.appflowy
+   Linux:         https://flathub.org/apps/io.appflowy.AppFlowy
+                  https://snapcraft.io/appflowy
+   Litsenziya:    AGPL-3.0
+
+3) VOICESTUDIO — ElevenLabs o'rniga (ovoz yaratish, ovoz klonlash, dublyaj)
+   GitHub:        https://github.com/debpalash/VoiceStudio
+   Yuklab olish:  https://github.com/debpalash/VoiceStudio/releases/latest
+   Sayt:          https://voicestudio.sh
+   Qo'llanmalar:  https://github.com/debpalash/VoiceStudio/tree/main/docs/install
+   Litsenziya:    AGPL-3.0 (dastur); standart ovoz modeli CC-BY-NC — faqat notijorat
+   Eski nomi:     OmniVoice Studio
