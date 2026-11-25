@@ -42,3 +42,10 @@ hisobot/nizom/base.pptx
 hisobot/nizom/r/
 hisobot/kun_tartibi/kirish/
 hisobot/kun_tartibi/r/
+
+# bepul-platformalar: uchinchi tomon manbasi + node_modules/.venv/modellar repoga kirmaydi.
+# Qayta o'rnatish: sh tools/open-generative-ai/setup.sh, sh tools/voicestudio/setup.sh
+tools/open-generative-ai/*
+!tools/open-generative-ai/setup.sh
+tools/voicestudio/*
+!tools/voicestudio/setup.sh
