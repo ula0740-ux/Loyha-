@@ -28,6 +28,11 @@ function prepMixed(t: string) {
 // ("Si-Ke-Di tsekhida"). It changes letters, so it is NOT a lexicon word entry (sameLetters rule); the written text,
 // captions and the STT reference keep "sex".
 const tsekh = (tts: string) => tts.replace(/(^|[^\p{L}ʻʼ'])([Ss])ekh/gu, (_m, pre, s) => pre + (s === 'S' ? 'Tsekh' : 'tsekh'));
+// Film-only spoken override (v4, 2026-11-26): "ADM" is said the way the user's reference video says it
+// (src/user_ref_adm.mp4: English letter names "Ey-di-em", run straight into "Jizzakh" with no pause; candidates and the
+// comparison in audio/variants6/). Changes letters, so not a lexicon entry; written text, captions and STT keep "ADM".
+const eydiem = (tts: string) => tts.replace(/A-de-em,?/g, 'Ey-di-em');
+const spoken = (tts: string) => eydiem(tsekh(tts));
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const cfg = JSON.parse(await readFile(HERE + 'narration.json', 'utf8'));
 const voice = process.env.VOICE || cfg.voice;
@@ -40,7 +45,7 @@ if (only.length) timing = JSON.parse(await readFile(HERE + 'audio/timing.json', 
 for (const line of cfg.lines) {
   if (only.length && !only.includes(line.id)) continue;
   // text stays in correct literary spelling; prepareUzbek (Uzbek Latin only) applies the tested lexicon and numbers
-  const prep = { tts: tsekh(prepMixed(line.text).tts) };
+  const prep = { tts: spoken(prepMixed(line.text).tts) };
   const shown = plain(line.text).split(/\s+/).filter(Boolean);
   // automatic ear: each take is transcribed (STT) and compared; up to ATTEMPTS takes, the best one is kept (CHECK=0 skips)
   const attempts = process.env.CHECK === '0' ? 1 : Number(process.env.ATTEMPTS || 4);
@@ -51,7 +56,7 @@ for (const line of cfg.lines) {
     const idx = cfg.lines.indexOf(line);
     // context sentences go through prepareUzbek in full (English words included): English context pulled
     // "ADM" towards an English reading (heard by the user, 2026-10-15)
-    const ctx = { previousText: cfg.lines[idx - 1] && tsekh(prepareUzbek(plain(cfg.lines[idx - 1].text), 'latin').tts), nextText: cfg.lines[idx + 1] && tsekh(prepareUzbek(plain(cfg.lines[idx + 1].text), 'latin').tts) };
+    const ctx = { previousText: cfg.lines[idx - 1] && spoken(prepareUzbek(plain(cfg.lines[idx - 1].text), 'latin').tts), nextText: cfg.lines[idx + 1] && spoken(prepareUzbek(plain(cfg.lines[idx + 1].text), 'latin').tts) };
     const s = await synth(prep.tts, { voice, model: cfg.model, ...ctx });
     const sc = process.env.CHECK === '0' ? undefined : score(spokenReference(plain(line.text)), await transcribe(s.mp3));
     if (sc) console.log(`  ${line.id} #${k + 1}: STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);

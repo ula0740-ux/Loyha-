@@ -1,0 +1,18 @@
+SHT6_A_1 [tasdiqlangan shakl, yangi take] tts="Shtamplash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu tsekh kuzov panellarini ishlab chiqaradi."
+  STT uz: Штамплаш цехи. Инвестиция: 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларни ишлаб чиқаради.
+  STT ru: Штамплаш цехи. Инвестиция: 55 миллион доллар. 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+SHT6_A_2 [tasdiqlangan shakl, yangi take] tts="Shtamplash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu tsekh kuzov panellarini ishlab chiqaradi."
+  STT uz: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+  STT ru: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+SHT6_B_1 [boʻgʻin chizigʻi: Shtamp-lash] tts="Shtamp-lash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu tsekh kuzov panellarini ishlab chiqaradi."
+  STT uz: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+  STT ru: Штампляш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+SHT6_B_2 [boʻgʻin chizigʻi: Shtamp-lash] tts="Shtamp-lash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu tsekh kuzov panellarini ishlab chiqaradi."
+  STT uz: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+  STT ru: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+SHT6_C_1 [oʻzbekcha sex -> sekh (tsekh emas)] tts="Shtamplash sekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu sekh kuzov panellarini ishlab chiqaradi."
+  STT uz: Ştamplaş sexi. Investisiya 55 million dollar, 150 ish o'rni. Bu sex kuzov panellarini ishlab chiqaradi.
+  STT ru: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+SHT6_C_2 [oʻzbekcha sex -> sekh (tsekh emas)] tts="Shtamplash sekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu sekh kuzov panellarini ishlab chiqaradi."
+  STT uz: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларини ишлаб чиқаради.
+  STT ru: Штамплаш цехи. Инвестиция 55 миллион доллар, 150 иш ўрни. Бу цех кузов панелларни ишлаб чиқаради.

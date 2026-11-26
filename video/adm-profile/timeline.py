@@ -19,9 +19,10 @@ SCENES = [  # narrative order (not slide order): identity -> origins -> scale ->
     ("dost", ["dost1", "dost2"]), ("rnd", ["rnd"]), ("seg", []), ("geo", ["geo"]), ("logi", ["logi"]),
     ("goals", ["goals"]), ("eco", ["eco"]), ("outro", ["outro"]),
 ]
-LEAD = {"title": 1.8, "cluster": 1.4}   # picture before the first voice line of a scene
+LEAD = {"title": 6.5, "cluster": 1.4}   # v4: title = 5.9 s logo reveal (user's reference opening) + white bloom, then the voice   # picture before the first voice line of a scene
 TAIL = {"outro": 3.2, "cluster": 2.6, "rnd": 3.6}   # picture after the last line
 GAP, BRIDGE = 0.7, 3.8
+PAD = 0.06   # v4: silence before each take + 5 ms fade-in, so a take that starts mid-fricative ("Shtamplash") is not clicked/clipped
 
 timing = json.loads((HERE / "audio/timing.json").read_text())
 (HERE / "audio/t").mkdir(exist_ok=True)
@@ -44,28 +45,38 @@ for sid, ids in SCENES:
     cur += LEAD.get(sid, 0.55)
     for i, lid in enumerate(ids):
         src, out = HERE / f"audio/{lid}.mp3", HERE / f"audio/t/{lid}.wav"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-ar", "48000", "-ac", "1", str(out)], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-af", f"afade=t=in:d=0.005,adelay={int(PAD*1000)}", "-ar", "48000", "-ac", "1", str(out)], check=True)
         d = dur(out)
         nb = math.ceil((cur - .02) / BEAT) * BEAT + .05            # start just after the next beat when it is close
         if 0 <= nb - cur < .35: cur = nb
         lines[lid] = {"vo": round(cur, 3), "end": round(cur + d, 3), "scene": sid,
-                      "words": [{"text": w["text"], "t": round(cur + w["start"] / TEMPO, 3), "e": round(cur + w["end"] / TEMPO, 3)} for w in timing[lid]["words"]]}
+                      "words": [{"text": w["text"], "t": round(cur + PAD + w["start"] / TEMPO, 3), "e": round(cur + PAD + w["end"] / TEMPO, 3)} for w in timing[lid]["words"]]}
         cur += d + (GAP if i < len(ids) - 1 else 0); last_voice = lines[lid]["end"]
     cur += TAIL.get(sid, 0.4)
     scenes.append({"id": sid, "start": round(start, 3), "end": round(cur, 3), "lines": ids})
 # outro: the white flash on the first bar line after the last word, then 4.2 s of logo card
 flash = math.ceil((lines["outro"]["end"] + .35) / P) * P
 total = round(flash + 4.2, 3); scenes[-1]["end"] = total
-# music plan: film bar k <-> track bar k + off, so that the cluster starts on the climax entry
+# music plan: film bar k <-> track bar k + off, so that the cluster starts on the climax entry. v4: the film before the
+# cluster is now longer than the track before its climax, so `pad` bars (a multiple of 4, one phrase) of section A are
+# repeated early on (bar line join) instead of leaving silence at the start.
 kc = round(next(x["start"] for x in scenes if x["id"] == "cluster") / P)
-off = CLIMAX_BAR - kc
-s0 = TB[off] if off >= 0 else TB[0] + off * P             # negative: a little silence before the track starts
-seg1_end = (ACCENT_BAR - off) * P                           # bars off .. 71 play straight through
-music = {"bar": P, "s0": round(s0, 3), "segments": [
-    {"film": 0.0, "track": round(s0, 3), "dur": round(seg1_end, 3)},
-    {"film": round(seg1_end, 3), "track": TB[REPEAT_FROM], "dur": round(flash - seg1_end, 3)},   # section A again, on through the breakdown into the climax
-    {"film": round(flash, 3), "track": TB[ACCENT_BAR], "dur": round(total - flash + .3, 3)},       # final accent on the flash
-]}
+pad = 0 if kc <= CLIMAX_BAR else math.ceil((kc - CLIMAX_BAR) / 4) * 4
+sb = CLIMAX_BAR + pad - kc                                  # track bar under film bar 0 (negative: silence first)
+s0 = TB[sb] if sb >= 0 else TB[0] + sb * P
+segs = []
+if pad:
+    F1 = REPEAT_FROM + pad - sb                             # film bar where the track jumps back to bar 16
+    segs.append({"film": 0.0, "track": round(s0, 3), "dur": round(F1 * P, 3)})
+    f72 = ACCENT_BAR - REPEAT_FROM + F1
+    segs.append({"film": round(F1 * P, 3), "track": TB[REPEAT_FROM], "dur": round((f72 - F1) * P, 3)})
+else:
+    f72 = ACCENT_BAR - sb
+    segs.append({"film": 0.0, "track": round(s0, 3), "dur": round(f72 * P, 3)})
+seg1_end = f72 * P
+segs.append({"film": round(seg1_end, 3), "track": TB[REPEAT_FROM], "dur": round(flash - seg1_end, 3)})   # section A again, through the breakdown into the climax
+segs.append({"film": round(flash, 3), "track": TB[ACCENT_BAR], "dur": round(total - flash + .3, 3)})     # final accent on the flash
+music = {"bar": P, "s0": round(s0, 3), "pad": pad, "segments": segs}
 (HERE / "audio/timeline.json").write_text(json.dumps({"total": total, "tempo": TEMPO, "flash": round(flash, 3), "music": music, "scenes": scenes, "lines": lines}, ensure_ascii=False, indent=1))
 print("music", music)
 print(f"total {total:.2f}s")

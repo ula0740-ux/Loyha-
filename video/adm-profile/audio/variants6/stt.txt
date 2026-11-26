@@ -1,0 +1,24 @@
+ADM6_A_1 [namunadagidek: inglizcha harf nomlari, pauzasiz] tts="Ey-di-em Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-1.47s
+  STT uz: ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_A_2 [namunadagidek: inglizcha harf nomlari, pauzasiz] tts="Ey-di-em Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-1.47s
+  STT uz: ADM Jizzakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_B_1 [inglizcha harf nomlari, ADM dan keyin qisqa pauza (F uslubi)] tts="Ey-Di-Em, Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-1.87s
+  STT uz: IDM Jizzakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: IDM Jizzakh. Ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_B_2 [inglizcha harf nomlari, ADM dan keyin qisqa pauza (F uslubi)] tts="Ey-Di-Em, Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-2.03s
+  STT uz: IDM Jizzakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: IDM Jizzakh. Ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_C_1 [inglizcha harf nomlari bitta soʻz boʻlib] tts="Eydiem Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-1.47s
+  STT uz: EDM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: EDM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_C_2 [inglizcha harf nomlari bitta soʻz boʻlib] tts="Eydiem Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-1.55s
+  STT uz: IDM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: IDM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_D_1 [oʻzbekcha harf nomlari alohida (lugʻat izohidagi muqobil)] tts="A. De. Em. Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-2.99s
+  STT uz: A.DM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: ADMDizak ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+ADM6_D_2 [oʻzbekcha harf nomlari alohida (lugʻat izohidagi muqobil)] tts="A. De. Em. Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya."  span 0.00-2.83s
+  STT uz: ADAM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.
+  STT en: ADMDizak ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.

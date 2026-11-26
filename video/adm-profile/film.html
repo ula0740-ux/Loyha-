@@ -57,11 +57,21 @@ img { display: block; }
 #t-photo { left: 50%; top: 50%; width: 1500px; height: 844px; border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 60px 140px rgba(0,0,0,.85), 0 0 80px rgba(233,113,50,.18); }
 #t-photo img { width: 100%; height: 100%; object-fit: cover; }
 
+/* --- v4 opening: chrome 3D logo on a concrete wall, ignites in the brand colour (recreates src/user_ref_adm.mp4 0-7 s) --- */
+#t-intro { z-index: 3; overflow: hidden; background: #050506; }
+#t-wall { position: absolute; inset: -4%; background: url(assets/concrete.jpg) center/cover; }
+#t-wlight { position: absolute; inset: 0; }
+#t-wglow { position: absolute; inset: 0; background: radial-gradient(38% 34% at 50% 50%, rgba(233,113,50,.34), rgba(233,113,50,.08) 55%, transparent 75%); opacity: 0; mix-blend-mode: screen; }
+#t-l3d { position: absolute; left: 50%; top: 50%; width: 1100px; height: 324px; transform-style: preserve-3d; }
+.lyr { position: absolute; inset: 0; }
+.lyr svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
 /* --- history tunnel --- */
 .hcard { position: absolute; left: 50%; top: 50%; width: 720px; padding: 44px 50px 48px; }
 .hcard .yr { font-size: 132px; line-height: .95; color: var(--o); }
 .hcard .mo { font: 600 30px/1 'Montserrat'; letter-spacing: .2em; text-transform: uppercase; color: var(--t); margin-bottom: 14px; }
 .hcard .tx { font: 400 34px/1.32 'Inter'; color: var(--t); margin-top: 22px; }
+.hcard .tx2 { font: 500 25px/1.35 'Inter'; color: var(--o2); margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.14); }
 .tile { position: absolute; left: 50%; top: 50%; width: 1000px; height: 562px; padding: 10px; border-radius: 22px; }
 .tile img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; filter: saturate(.75) brightness(.9); }
 .wall { position: absolute; left: 50%; top: 50%; border: 1px solid rgba(255,255,255,.08); }
@@ -116,6 +126,14 @@ img { display: block; }
 .cpanel .start .a { font: 600 19px/1 'Montserrat'; letter-spacing: .18em; color: var(--o2); }
 .cpanel .start .b { font-size: 56px; margin-top: 6px; }
 .cpanel .start small { font: 500 26px 'Inter'; color: var(--t); }
+.cpanel .xf { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+.cpanel .xf .it { padding: 7px 12px; border-radius: 8px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); font: 600 19px/1.2 'Inter'; color: var(--t); }
+.cpanel .xf .it b { font: 600 24px/1 'Oswald'; color: var(--o2); margin-right: 6px; }
+.xbox .hd { font: 600 18px/1.25 'Montserrat'; letter-spacing: .16em; color: var(--mute); }
+.xbox .bg { font: 600 64px/1.05 'Oswald'; color: var(--o2); margin-top: 6px; }
+.xbox .bg small { font: 500 26px 'Inter'; color: var(--t); margin-left: 8px; }
+.xbox .cs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.xbox .cs span { padding: 8px 14px; border-radius: 8px; background: rgba(233,113,50,.16); border: 1px solid rgba(233,113,50,.55); font: 600 22px/1 'Montserrat'; letter-spacing: .06em; }
 #c-svg { position: absolute; inset: 0; width: 1920px; height: 1080px; z-index: 6; pointer-events: none; }
 .vol { position: absolute; transform-style: preserve-3d; transform-origin: 50% 50% 0; }
 .vol > div { opacity: var(--a, 1); }
@@ -207,6 +225,8 @@ img { display: block; }
 
   <!-- 1. TITLE (slide 1) -->
   <section class="scene" id="sc-title">
+    <div class="full" id="t-intro"><div id="t-wall"></div><div id="t-wlight"></div><div id="t-wglow"></div>
+      <div class="full" style="perspective:1300px;perspective-origin:50% 45%"><div id="t-l3d"></div></div></div>
     <div class="full" id="t-world" style="perspective:1500px">
       <div class="abs" id="t-photo"><img src="assets/hero_factory.jpg"><div class="sweep" id="t-sweep"></div></div>
     </div>
@@ -287,6 +307,7 @@ img { display: block; }
     <div class="abs" id="c-title">«ADM JIZZAKH» AVTOMOBIL KLASTERI</div>
     <div id="c-tags"></div>
     <div id="c-cards"></div>
+    <div class="abs dark xbox" id="c-area" style="left:40px;top:150px;width:400px;padding:16px 24px;z-index:8"><div class="hd">ISHLAB CHIQARISH MAYDONI</div><div class="bg num"><span id="c-area-v">75</span><small>gektar</small></div></div>
     <div class="abs dark" id="c-models">
       <div class="hd">CKD loyihalari:<span class="num">100 000</span>avtomobil (yiliga)<br><span style="font:500 21px Inter;color:var(--mute)">(ICE + NEV)</span></div>
       <div id="c-rows" style="margin-top:14px"></div>
@@ -321,6 +342,8 @@ img { display: block; }
     <div class="abs" style="left:90px;top:142px;z-index:7;font:600 28px/1 Inter;color:var(--mute)">United Auto Alliance</div>
     <div class="abs dark" id="l-b1" style="left:90px;bottom:60px;width:620px;padding:16px 22px;z-index:7;font:600 22px/1.3 Montserrat">JIZZAKH VILOYATI — SHARQIY VA GʻARBIY HUDUDLAR OʻRTASIDAGI STRATEGIK BOʻGʻIN</div>
     <div class="abs dark" id="l-b2" style="right:90px;bottom:60px;width:520px;padding:16px 22px;z-index:7;font:600 22px/1.3 Montserrat;text-align:right">KD-TOʻPLAMLAR VA TAYYOR MAHSULOTNI TASHISH</div>
+    <div class="abs dark xbox" id="l-imp" style="right:90px;top:56px;width:600px;padding:18px 22px;z-index:7"><div class="hd">TOʻPLAMLAR VA BUTLOVCHI QISMLAR</div>
+      <div class="cs"><span id="li0">KOREYA</span><span id="li1">XITOY</span><span id="li2">HINDISTON</span><span id="li3">ROSSIYA</span><span id="li4">VA BOSHQALAR</span></div></div>
   </section>
 
   <!-- 8. SEGMENTS (slide 8) -->
@@ -495,17 +518,17 @@ function particles(t, amt, warm = true) {
 const HIST = [
   ['2014', '', 'Kompaniyaga asos solindi'],
   ['2020', '', 'ADM JIZZAKH avtozavodi qurilishi boshlandi (1-bosqich — SKD)'],
-  ['2021', 'Mart', 'Mijozlarga ilk avtomobillar yetkazildi'],
+  ['2021', 'Mart', 'Mijozlarga ilk avtomobillar yetkazildi', '1-bosqich: Kia, Lada va Ravon yirik uzellardan (SKD) yigʻildi', 'h2021', /^birinchi$/i],
   ['2022', 'Oktabr', 'Chery avtomobillarini SKD texnologiyasida (yirik uzellardan) yigʻish boshlandi'],
-  ['2024', 'Mart', 'CKD texnologiyasida yigʻish boshlandi (Kia Sonet)'],
+  ['2024', 'Mart', 'CKD texnologiyasida yigʻish boshlandi (Kia Sonet)', '2-bosqich — toʻliq sikl: payvandlash, kuzovni boʻyash, yakuniy yigʻish', 'h2024', /^ikkinchi$/i],
   ['2026', 'Aprel', 'Yangi CKD ishlab chiqarish liniyasi ishga tushirildi (Kia K3)'],
 ];
 const HZ = 1400; // depth step between cards
 function buildHist() {
   const cam = $('h-cam');
-  HIST.forEach(([y, m, tx], i) => {
+  HIST.forEach(([y, m, tx, tx2], i) => {
     const d = document.createElement('div'); d.className = 'hcard glass'; d.id = 'hc' + i;
-    d.innerHTML = `${m ? `<div class="mo">${m}</div>` : '<div class="mo">&nbsp;</div>'}<div class="yr num">${y}</div><div class="tx">${tx}</div>`;
+    d.innerHTML = `${m ? `<div class="mo">${m}</div>` : '<div class="mo">&nbsp;</div>'}<div class="yr num">${y}</div><div class="tx">${tx}</div>${tx2 ? `<div class="tx2">${tx2}</div>` : ''}`;
     cam.appendChild(d);
   });
   // corridor walls lined with glowing "screens" (reference.mp4 tunnel); tiles show the film's own source photos
@@ -545,9 +568,9 @@ function buildTicks() {
 // [x0, y0, x1, y1] (normalized on the photo; the dot positions come from the slide's callout lines)
 const CL = [
   { id: 'kia', line: 'c_kia', yr: '2021-2026', nm: 'KIA CKD', inv: [242, 0], job: [2700, 'ish oʻrni'], p: [.250, .669], f: [.100, .522, .328, .795] },
-  { id: 'skd', line: 'c_skd', yr: '2020-2021', nm: 'SKD', inv: [12.6, 1], job: [450, 'ish oʻrni'], p: [.364, .679], f: [.346, .507, .401, .805] },
-  { id: 'lok', line: 'c_lok', yr: '2022-2027', nm: 'Lokalizatsiya klasteri', inv: [150, 0], job: [350, 'ish oʻrni'], p: [.695, .690], f: [.647, .491, .738, .910] },
-  { id: 'sht', line: 'c_sht', yr: '2024-2026', nm: 'Shtamplash sexi', inv: [55, 0], job: [150, 'ish oʻrni'], p: [.799, .654], f: [.770, .507, .854, .690] },
+  { id: 'skd', line: 'c_skd', yr: '2020-2021', nm: 'SKD', inv: [12.6, 1], job: [450, 'ish oʻrni'], xf: [['<b>1</b>yilda qurilgan', /^bir$/i], ['<b>25</b>gektar', /^yigirma$/i], ['<b>60 000</b>avto / yil', /^oltmish$/i]], p: [.364, .679], f: [.346, .507, .401, .805] },
+  { id: 'lok', line: 'c_lok', yr: '2022-2027', nm: 'Lokalizatsiya klasteri', inv: [150, 0], job: [350, 'ish oʻrni'], xf: [['Oʻrindiqlar', /^o.rindiq/i], ['Press panellari', /^press$/i], ['Old va orqa bamperlar', /^bamper/i], ['Elektr qismlari', /^elektr$/i], ['Interyer va eksteryer plastik qismlari', /^plastik$/i], ['<b>30%</b>mahalliylashtirish · dastlab', /^o.ttiz$/i], ['<b>40–45%</b>kelgusida', /^qirq$/i]], p: [.695, .690], f: [.647, .491, .738, .910] },
+  { id: 'sht', line: 'c_sht', yr: '2024-2026', nm: 'Shtamplash sexi', inv: [55, 0], job: [150, 'ish oʻrni'], xf: [['Kuzov panellari', /^kuzov$/i], ['Poʻlatdan tayyor avtomobilgacha — butun zanjir', /^po.?latdan$/i]], p: [.799, .654], f: [.770, .507, .854, .690] },
   { id: 'nev', line: 'c_nev', yr: '2026-2028', nm: 'CKD NEV', inv: [100, 0], job: [1200, 'ish oʻrni'], p: [.330, .113], f: [.246, .067, .439, .159] },
   { id: 'rd', line: 'c_rd', yr: '2026-2030', nm: 'R&amp;D', inv: [100, 0], job: [500, 'muhandis'], p: [.731, .266], f: [.721, .201, .772, .390] },
   { id: 'dost', line: 'c_dost', yr: '2026-2030', nm: 'DOST CKD', sb: 'Tijorat avtomobillari', inv: [30, 0], job: [1200, 'ish oʻrni'], p: [.838, .243], f: [.806, .180, .861, .386] },
@@ -574,6 +597,7 @@ function buildCluster() {
     d.innerHTML = `<div class="yr">${c.yr}</div><div class="nm">${c.nm}</div>${c.sb ? `<div class="sb">${c.sb}</div>` : ''}
       <div class="row"><div class="lb">INVESTITSIYA</div><div class="v num"><span class="iv">0</span> mln $</div></div>
       <div class="row"><div class="lb">${c.job[1] === 'muhandis' ? 'MUHANDISLAR' : 'ISH OʻRINLARI'}</div><div class="v num"><span class="jv">0</span> <small>${c.job[1]}</small></div></div>
+      ${c.xf ? `<div class="xf">${c.xf.map(([h]) => `<div class="it">${h}</div>`).join('')}</div>` : ''}
       ${c.id === 'skd' ? '<div class="start"><div class="a">DASTLAB · SKD SEXI</div><div class="b num"><span class="sv">250</span> <small>nafar xodim</small></div></div>' : ''}`;
     cards.appendChild(d);
     const g = document.createElement('div'); g.className = 'ctag'; g.id = 'ct-' + c.id; g.innerHTML = c.nm; tags.appendChild(g);
@@ -626,23 +650,81 @@ function buildEco() {
 
 // ---------- scenes ----------
 const SCN = {};
+// v4 opening, modelled on the user's reference video (src/user_ref_adm.mp4, 0-7 s): a chrome, extruded ADM / JIZZAKH logo
+// on a dark concrete wall, first seen at a grazing angle while a light sweeps across it (the mark blooms white-blue),
+// the camera swings face-on, the chrome dims, then the letters and the mark ignite in the brand colour one after the
+// other and the lit logo holds; a white bloom cuts to the factory (the reference cuts to plant footage), and only then
+// does the voice say "ADM Jizzakh". Brand colour stays the pptx logo orange (the reference logo is red).
+const INTRO = 5.9;                        // seconds of logo reveal before the factory title card
+const LC = { a: 0, d: 1, m: 2, mk1: 3, mk2: 4, tx: 5 };
+function logoVar(fills, defs = '') {
+  let i = 0; let x = LOGO_SVG.replace(/fill="#E97132"/g, () => `fill="${fills[i++]}"`);
+  if (defs) x = x.replace(/(<svg[^>]*>)/, `$1<defs>${defs}</defs>`);
+  return x;
+}
+let LOGO_SVG = '';
+function buildIntro() {
+  const host = $('t-l3d'), N = 14;
+  const add = (id, html, z) => { const d = document.createElement('div'); d.className = 'lyr'; if (id) d.id = id; d.innerHTML = html; d.style.transform = `translateZ(${z}px)`; host.appendChild(d); return d; };
+  for (let i = N; i >= 1; i--) {         // extrusion: grey slices, darker towards the back
+    const k = i / N, g = Math.round(lerp(92, 22, k)), c = `rgb(${g},${g + 2},${g + 6})`;
+    add('', logoVar([c, c, c, c, c, c]), -i * 1.6);
+  }
+  const ch = 'url(#chrG)';
+  add('t-chrome', logoVar([ch, ch, ch, ch, ch, ch], '<linearGradient id="chrG" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="60" y2="48">' +
+    '<stop offset="0" stop-color="#2c2f35"/><stop offset=".38" stop-color="#7d838c"/><stop offset=".49" stop-color="#f6f9ff"/><stop offset=".53" stop-color="#ffffff"/>' +
+    '<stop offset=".62" stop-color="#8b929b"/><stop offset="1" stop-color="#262a30"/></linearGradient>'), 0);
+  const glint = add('t-glint', logoVar(['none', 'none', 'none', '#f2f8ff', '#f2f8ff', 'none']), .4);
+  glint.style.filter = 'drop-shadow(0 0 10px #d8ecff) drop-shadow(0 0 34px #8ec8ff)';
+  const nl = add('t-neonL', logoVar(['#E97132', '#E97132', '#E97132', 'none', 'none', '#E97132']), .6);
+  const nm = add('t-neonM', logoVar(['none', 'none', 'none', '#E97132', '#E97132', 'none']), .6);
+  [nl, nm].forEach((e) => { e.style.filter = 'drop-shadow(0 0 6px rgba(255,150,80,.95)) drop-shadow(0 0 26px rgba(233,113,50,.8))'; });
+}
+// neon ignition: off -> flicker -> on (deterministic)
+const ignite = (lt, t0) => { const x = lt - t0; if (x < 0) return 0; if (x > .34) return 1; return [1, .15, .9, .3, 1, .7, 1][Math.min(6, Math.floor(x / .05))]; };
 SCN.title = (t, s) => {
   const lt = t - s.start;
-  const pin = ramp01(t, s.start + 2.6, 1.6);          // photo rises in after the type
+  // ---- logo reveal ----
+  const intro = $('t-intro');
+  const ia = lt < INTRO ? 1 : 0;                                // hard cut hidden inside the white bloom
+  show(intro, ia);
+  if (ia > 0) {
+    const cam = keys(lt, [[0, [74, -7, -90, 70, .92]], [1.75, [64, -3, 60, 40, .98]], [2.45, [9, 0, 0, 0, 1.0]], [3.6, [4, 0, 0, 0, 1.03]], [INTRO, [1, 0, 0, -6, 1.09]]], E.io);
+    const swing = clamp(1 - Math.abs(lt - 2.1) / .35);           // motion blur on the fast swing
+    $('t-l3d').style.transform = `translate(-50%,-50%) translate(${cam[2].toFixed(1)}px,${cam[3].toFixed(1)}px) rotateX(${cam[0].toFixed(2)}deg) rotateZ(${cam[1].toFixed(2)}deg) rotateY(${(1.5 * Math.sin(lt * .6)).toFixed(2)}deg) scale(${cam[4].toFixed(4)})`;
+    $('t-wall').style.transform = `translate(${(-cam[2] * .15).toFixed(1)}px,${(10 * Math.sin(lt * .3)).toFixed(1)}px) scale(${(1.02 + .03 * clamp(lt / INTRO)).toFixed(4)})`;
+    // light sweeps across the chrome: fast pass at the grazing angle, a slower one face-on
+    const sw = lt < 2.2 ? lerp(-50, 210, E.io(clamp(lt / 1.9))) : lerp(-60, 220, E.io(clamp((lt - 2.4) / 1.8)));
+    const g = document.getElementById('chrG'); if (g) { g.setAttribute('x1', (sw - 34).toFixed(1)); g.setAttribute('x2', (sw + 26).toFixed(1)); g.setAttribute('y2', '48'); }
+    const nL = ignite(lt, 3.75), nM = ignite(lt, 4.3);
+    const dim = 1 - .35 * ramp01(lt, 2.9, .6);                    // chrome dims before the ignition
+    const chrome = $('t-chrome');
+    chrome.style.filter = `brightness(${(dim * (1 - .65 * Math.max(nL, nM))).toFixed(3)})${swing > .02 ? ` blur(${(swing * 3).toFixed(1)}px)` : ''}`;
+    $('t-glint').style.opacity = (Math.sin(Math.PI * clamp((lt - .55) / 1.3)) * .95).toFixed(3);
+    $('t-neonL').style.opacity = nL.toFixed(3); $('t-neonM').style.opacity = nM.toFixed(3);
+    // wall light: a cool key light that follows the sweep, then the orange bounce of the lit logo
+    const lx = lt < 2.2 ? lerp(20, 80, clamp(lt / 1.9)) : 50, la = .55 * ramp01(lt, .05, .5);
+    $('t-wlight').style.background = `radial-gradient(48% 46% at ${lx.toFixed(1)}% ${lerp(62, 48, clamp(lt / 2.5)).toFixed(1)}%, rgba(205,222,245,${(la * .32).toFixed(3)}), rgba(205,222,245,${(la * .08).toFixed(3)}) 55%, transparent 78%), linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.15) 45%, rgba(0,0,0,.6))`;
+    $('t-wglow').style.opacity = (.9 * Math.max(nL * .7, nM) * (.94 + .06 * Math.sin(lt * 9))).toFixed(3);
+  }
+  // ---- factory title card (after the white bloom) ----
+  const T0 = s.start + INTRO;
+  const pin = ramp01(t, T0 - .1, 1.0);
   const ph = $('t-photo');
   show(ph, pin);
-  const z = lerp(.86, .80, E.out(clamp(lt / 8)));
-  const rx = lerp(14, 2, E.out(pin)) + 1.2 * Math.sin(lt * .4);
-  ph.style.transform = `translate(-50%,-50%) translateY(${lerp(320, 200, E.out(pin)).toFixed(1)}px) rotateX(${rx.toFixed(2)}deg) rotateY(${(2 * Math.sin(lt * .3)).toFixed(2)}deg) scale(${z.toFixed(4)})`;
+  const z = lerp(.84, .80, E.out(clamp((t - T0) / 8)));
+  const rx = lerp(10, 2, E.out(pin)) + 1.2 * Math.sin(lt * .4);
+  ph.style.transform = `translate(-50%,-50%) translateY(${lerp(260, 200, E.out(pin)).toFixed(1)}px) rotateX(${rx.toFixed(2)}deg) rotateY(${(2 * Math.sin(lt * .3)).toFixed(2)}deg) scale(${z.toFixed(4)})`;
   sweep($('t-sweep'), t, 6, 2);
   show($('t-shade'), pin);
-  blurChars($('t-name'), t, s.start + .5, { st: .07, d: .7 });
-  const up = E.io(ramp01(t, s.start + 2.6, 1.4));      // title lifts to the upper third when the photo arrives
-  $('t-name').style.transform = `translateY(${(-275 * up).toFixed(1)}px) scale(${lerp(1, .78, up).toFixed(3)})`;
-  pop($('t-logo'), t, s.start + .25, { base: `translateX(-50%) translateY(${(-275 * up).toFixed(1)}px) scale(${lerp(1, .8, up).toFixed(3)})` });
-  blurChars($('t-sub'), t, s.start + 1.8, { st: .018, d: .5 });
-  $('t-sub').style.transform = `translateY(${(-330 * up).toFixed(1)}px)`;
-  return { grain: .05, leak: .25 * pin, letterbox: 1 - ramp01(t, s.start + .1, 1.6), flare: { x: 30 + 40 * clamp(lt / 7), y: 46, a: .5 * (1 - pin) * ramp01(t, s.start + .3, .6) } };
+  blurChars($('t-name'), t, T0 + .05, { st: .05, d: .6 });
+  $('t-name').style.transform = `translateY(-275px) scale(.78)`;
+  pop($('t-logo'), t, T0 - .05, { base: `translateX(-50%) translateY(-275px) scale(.8)` });
+  blurChars($('t-sub'), t, T0 + .7, { st: .018, d: .5 });
+  $('t-sub').style.transform = `translateY(-330px)`;
+  const fl = Math.max(F.flash(t, T0, .22), lt < INTRO ? E.in(clamp((lt - (INTRO - .3)) / .3)) : 0) * .9;   // white bloom on the cut, as in the reference
+  return { grain: .05, leak: .25 * pin, flash: fl, vignette: lt < INTRO ? .9 : .75,
+    flare: lt < 2.2 ? { x: lerp(18, 82, clamp(lt / 1.9)), y: 50, a: .45 * ramp01(lt, .2, .4) * (1 - ramp01(lt, 1.8, .4)) } : null };
 };
 // history: camera dollies down a corridor of milestone cards
 SCN.hist = (t, s) => {
@@ -665,6 +747,9 @@ SCN.hist = (t, s) => {
     el.style.transform = `translate(-50%,-50%) translate3d(${side * 230}px, ${-40 + 10 * Math.sin(lt * .5 + i)}px, ${zz}px) rotateY(${(-side * 14).toFixed(1)}deg)`;
     show(el, a);
     el.classList.toggle('on', Math.abs(dist) < 300);
+    const [, , , tx2, lid, re] = HIST[i];       // v4: second line (user's reference video) appears on its spoken sentence
+    if (tx2) { const x2 = el.querySelector('.tx2'), t2 = W(lid, WI(lid, re)) - .15, k2 = ramp01(t, t2, .45);
+      x2.style.opacity = k2.toFixed(3); x2.style.transform = `translateY(${(12 * (1 - k2)).toFixed(1)}px)`; }
   });
   for (let i = 0; i < 16; i++) {
     const w = $('hw' + i), zz = -i * 520 + 1200;
@@ -695,11 +780,12 @@ SCN.struct = (t, s) => {
   if (ab > 0) {
     // tube fills through the five measured years, ending on 11 % as the word is spoken
     const hit = W('sales', 20);
-    const ks = [[W('sales', 0), 0], [W('sales', 7), .5], [W('sales', 13), 1.6], [W('sales', 17), 2.8], [W('sales', 19), 7.5], [hit + .5, 11]];
+    const ks = [[W('sales', 0), .5], [W('sales', 7), .5], [W('sales', 13), 1.6], [W('sales', 17), 2.8], [W('sales', 19), 7.5], [hit + .5, 11]];
     const v = keys(t, ks, E.io);
     $('tubeFill').style.width = (Math.max(150, 1600 * v / TUBE_MAX)).toFixed(1) + 'px';
     const pct = v < 1 ? v.toFixed(1).replace('.', ',') : (v < 10 ? v.toFixed(1).replace('.', ',') : Math.round(v).toString());
     const fw = Math.max(150, 1600 * v / TUBE_MAX); $('tubePct').textContent = pct + '%'; $('tubePct').style.left = (fw > 330 ? fw - 30 - $('tubePct').offsetWidth : fw + 30).toFixed(0) + 'px'; $('tubePct').style.color = fw > 330 ? '#fff' : 'var(--o2)';
+    $('tubePct').style.visibility = t < W('sales', 7) - .05 ? 'hidden' : 'inherit';
     pop($('tube'), t, split + .1, { y: 40, base: `perspective(1400px) rotateX(${(8 * Math.sin(lt * .4)).toFixed(2)}deg)` });
     TICKS.forEach((k, i) => pop($('tk' + i), t, ks[i + 1][0] - .2, { y: 20 }));
     $('s-sales').textContent = F.counter(t, W('sales', 25), .7, 46439);
@@ -778,6 +864,7 @@ SCN.cluster = (t, s) => {
       if (q.id === 'skd') { const st = card.querySelector('.start'); const s0 = W('c_skd', WI('c_skd', /^zavod/i)) - .1; show(st, ramp01(t, s0, .4)); st.style.transform = `translateY(${(14 * (1 - ramp01(t, s0, .5))).toFixed(1)}px)`;
         { const t250 = W('c_skd', WI('c_skd', /(se|tse)(x|kh)ida/i) + 1); card.querySelector('.sv').textContent = cnum(t, t250, .6, 250, 0); card.querySelector('.start .b').style.visibility = t < t250 - .05 ? 'hidden' : 'inherit'; } }
     }
+    if (a > 0 && q.xf) card.querySelectorAll('.xf .it').forEach((it, j) => { const tj = W(q.line, WI(q.line, q.xf[j][1])) - .1; pop(it, t, tj, { y: 10, s: .9 }); });
     // leader line from the building top to the panel
     const [mx, my] = center($('cm-' + q.id)), ln = $('cl-' + q.id);
     const px = 1330, py = 360, kk = E.out(clamp((t - b0 - .9) / .5));
@@ -787,6 +874,8 @@ SCN.cluster = (t, s) => {
     const tg = $('ct-' + q.id); tg.style.left = mx.toFixed(1) + 'px'; tg.style.top = (my - 18).toFixed(1) + 'px';
     show(tg, overview * clamp((t - L('cl4').vo - i * .12) / .3));
   });
+  { const ta = W('cl4', WI('cl4', /^yetmish$/i)); const aa = pop($('c-area'), t, ta - .35, { y: -14 });   // v4: 75 ha (user's reference video)
+    if (aa > 0) { $('c-area-v').textContent = cnum(t, ta, .6, 75, 0); $('c-area-v').style.visibility = t < ta - .05 ? 'hidden' : 'inherit'; } }
   const mp = pop($('c-models'), t, L('cl4').vo - .1, { y: 0, base: `translateX(${(-40 * (1 - clamp((t - L('cl4').vo) / .5))).toFixed(1)}px)` });
   if (mp > 0) MODELS.forEach((_, i) => pop($('mr' + i), t, L('cl4').vo + .3 + i * .22, { y: 12 }));
   return { grain: .05, leak: .1, vignette: .85 };
@@ -827,6 +916,8 @@ SCN.logi = (t, s) => {
     p.style.clipPath = 'none'; p.setAttribute('opacity', (k * .9).toFixed(2));
     p.setAttribute('stroke', i % 2 ? '#ffffff' : '#ffc08f');
   });
+  { const ti = W('logi', WI('logi', /^koreya/i)) - .3; pop($('l-imp'), t, ti, { y: -16 });   // v4: import origins (user's reference video)
+    [/^koreya/i, /^(x|kh)itoy/i, /^hindiston/i, /^rossiya/i, /^boshqa/i].forEach((re, i) => pop($('li' + i), t, W('logi', WI('logi', re)) - .08, { y: 8, s: .85 })); }
   pop($('l-b1'), t, s.start + 1.2, { y: 20 }); pop($('l-b2'), t, W('logi', 3), { y: 20 });
   return { grain: .05, leak: .08, vignette: .85 };
 };
@@ -911,8 +1002,8 @@ function cellCount(el, t, t0, d) {
 SCN.goals = (t, s) => {
   const lt = t - s.start;
   live($('g-bg'), t, s.start, { z0: 1.05, z1: 1.15, rx: 1, ry: 2, dur: 11, seed: 9 });
-  pop($('g-table'), t, s.start + .2, { y: 40, base: `perspective(1600px) rotateY(${(4 + 2 * Math.sin(lt * .3)).toFixed(2)}deg)` });
-  const RT = [0, 1, 2, 3, 4, 5, 6].map((i) => s.start + .6 + i * .45);
+  pop($('g-table'), t, s.start + 1.0, { y: 40, base: `perspective(1600px) rotateY(${(4 + 2 * Math.sin(lt * .3)).toFixed(2)}deg)` });
+  const RT = [0, 1, 2, 3, 4, 5, 6].map((i) => s.start + 1.25 + i * .4);
   for (let i = 0; i < 7; i++) {
     pop($('gr' + i), t, RT[i], { y: 16 });
     const row = $('gr' + i), b = row.querySelector('.b'), c = row.querySelector('.c');
@@ -946,7 +1037,7 @@ SCN.eco = (t, s) => {
     el.style.transform = `translateY(${((1 - k) * 160).toFixed(1)}px) rotateX(${((1 - k) * 40 + 3 * Math.sin(lt * .5 + i)).toFixed(2)}deg) rotateY(${(2 * Math.sin(lt * .4 + i * 1.3)).toFixed(2)}deg)`;
     show(el, a);
   }
-  CHIPS.forEach((_, i) => pop($('ch' + i), t, W('eco', 1) + i * .18, { y: 14 }));
+  CHIPS.forEach((_, i) => pop($('ch' + i), t, Math.max(W('eco', 1), s.start + 1.45) + i * .18, { y: 14 }));
   return { grain: .05, leak: .2 };
 };
 SCN.outro = (t, s) => {
@@ -1022,6 +1113,7 @@ window.seek = async (t) => {
   TL = await (await fetch('audio/timeline.json')).json();
   const LOGO = await (await fetch('assets/adm_logo_jizzakh.svg')).text();   // inline, so the live text uses the page fonts
   document.querySelectorAll('.admlogo').forEach((el) => { el.innerHTML = LOGO; });
+  LOGO_SVG = LOGO; buildIntro();
   buildHist(); buildTicks(); buildCluster(); buildGeo(); buildLogi(); buildSeg(); buildEco();
   await document.fonts.ready;
   await Promise.all(Array.from(document.images).map((im) => im.decode().catch(() => {})));

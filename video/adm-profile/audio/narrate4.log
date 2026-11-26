@@ -1,0 +1,36 @@
+  title #1: STT 100.0%
+  title: Ey-di-em Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.
+✓ title 4.91s  8/8 soʻz
+  h2020 #1: STT 100.0%
+  h2020: Ikki ming yigirmanchi yilda Ey-di-em Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.
+✓ h2020 8.05s  13/10 soʻz
+  h2021 #1: STT 100.0%
+  h2021: Ikki ming yigirma birinchi yil martda mijozlarga ilk avtomobillar yetkazildi. Birinchi bosqichda Kia, Lada va Ravon avtomobillari yirik uzellardan yigʻildi.
+✓ h2021 12.04s  20/16 soʻz
+  h2024 #1: STT 100.0%
+  h2024: Ikki ming yigirma toʻrtinchi yil martda Si-Ke-Di tekhnologiyasida Kia Sonet yigʻish boshlandi. Ikkinchi bosqich toʻliq siklli ishlab chiqarish boʻldi: payvandlash, kuzovlarni boʻyash va yakuniy yigʻish.
+✓ h2024 14.11s  25/21 soʻz
+  cl0 #1: STT 100.0%
+  cl0: Endi Ey-di-em Jizzakh avtomobil klasteriga nazar tashlaymiz.
+✓ cl0 4.83s  7/7 soʻz
+  c_skd #1: STT 100.0%
+  c_skd: Es-Ki-Di tsekhi: investitsiya oʻn ikki butun oʻndan olti million dollar, toʻrt yuz ellik ish oʻrni. Zavod faoliyatini dastlab aynan shu Es-Ki-Di tsekhida ikki yuz ellik nafar khodim bilan boshlagan. Es-Ki-Di zavodi bir yil ichida qurilgan: u yigirma besh gektar maydonni egallaydi va yiliga oltmish ming avtomobil yigʻish quvvatiga ega.
+✓ c_skd 23.72s  49/40 soʻz
+  c_lok #1: STT 100.0%
+  c_lok: Lokalizatsiya klasteri: investitsiya yuz ellik million dollar, uch yuz ellik ish oʻrni. Klaster oʻrindiqlar, press panellari, old va orqa bamperlar, elektr qismlari hamda interyer va eksteryerning plastik qismlarini ishlab chiqaradi. Mahalliylashtirish darajasi dastlabki bosqichdayoq oʻttiz foiz, kelgusida uni qirq foizdan qirq besh foizgacha yetkazish rejalashtirilgan.
+✓ c_lok 26.67s  45/41 soʻz
+  c_sht #1: STT 99.0%  ✗ panellarini->panellarni  ✗ po'latdan->polatdan
+  c_sht: Shtamplash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu tsekh kuzov panellarini ishlab chiqaradi. Shu tariqa poʻlatdan tayyor avtomobilgacha butun ishlab chiqarish zanjiri oʻzlashtiriladi.
+✓ c_sht 15.23s  27/25 soʻz
+  cl4 #1: STT 100.0%
+  cl4: Bugungi kunda ishlab chiqarish quvvatlari yetmish besh gektar maydonda joylashgan. Si-Ke-Di loyihalari yiliga yuz ming avtomobilga moʻljallangan.
+✓ cl4 9.87s  17/16 soʻz
+  logi #1: STT 100.0%
+  logi: United Auto Alliance Ke-Di toʻplamlar va tayyor mahsulotni Jizzakhdan har bir hududga yetkazadi. Toʻplamlar va butlovchi qismlar Koreya, Khitoy, Hindiston, Rossiya va boshqa mamlakatlardan yetkazib beriladi.
+✓ logi 15.49s  26/26 soʻz
+  eco #1: STT 100.0%
+  eco: Ey-di-em ekotizimi toʻrt yoʻnalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi khizmat va yangi mobillik.
+✓ eco 9.72s  15/15 soʻz
+  outro #1: STT 100.0%
+  outro: Ey-di-em Jizzakh: innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz.
+✓ outro 6.03s  9/9 soʻz

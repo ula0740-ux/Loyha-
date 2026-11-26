@@ -1,46 +1,46 @@
 {
  "title": {
-  "duration": 5.146122,
+  "duration": 4.91102,
   "words": [
    {
     "text": "ADM",
     "start": 0,
-    "end": 0.96
+    "end": 0.48
    },
    {
     "text": "Jizzax,",
-    "start": 1.04,
-    "end": 1.92
+    "start": 0.56,
+    "end": 1.44
    },
    {
     "text": "koʻp",
-    "start": 2,
-    "end": 2.24
+    "start": 1.52,
+    "end": 1.76
    },
    {
     "text": "brendli",
-    "start": 2.32,
-    "end": 2.72
+    "start": 1.8,
+    "end": 2.24
    },
    {
     "text": "avtomobil",
-    "start": 2.8,
-    "end": 3.36
+    "start": 2.32,
+    "end": 2.88
    },
    {
     "text": "ishlab",
-    "start": 3.44,
-    "end": 3.68
+    "start": 2.96,
+    "end": 3.2
    },
    {
     "text": "chiqaruvchi",
-    "start": 3.72,
-    "end": 4.16
+    "start": 3.24,
+    "end": 3.68
    },
    {
     "text": "kompaniya.",
-    "start": 4.24,
-    "end": 5.12
+    "start": 3.76,
+    "end": 4.88
    }
   ]
  },
@@ -1240,42 +1240,92 @@
   ]
  },
  "cl4": {
-  "duration": 4.440816,
+  "duration": 9.874286,
   "words": [
    {
-    "text": "CKD",
+    "text": "Bugungi",
     "start": 0,
-    "end": 0.48
+    "end": 0.4
    },
    {
-    "text": "loyihalari",
-    "start": 0.56,
-    "end": 1.28
+    "text": "kunda",
+    "start": 0.44,
+    "end": 0.88
    },
    {
-    "text": "yiliga",
-    "start": 1.44,
-    "end": 1.92
+    "text": "ishlab",
+    "start": 0.96,
+    "end": 1.2
    },
    {
-    "text": "100",
-    "start": 2,
-    "end": 2.16
+    "text": "chiqarish",
+    "start": 1.28,
+    "end": 1.6
    },
    {
-    "text": "000",
-    "start": 2.24,
+    "text": "quvvatlari",
+    "start": 1.68,
     "end": 2.4
    },
    {
+    "text": "yetmish",
+    "start": 2.56,
+    "end": 2.88
+   },
+   {
+    "text": "besh",
+    "start": 2.96,
+    "end": 3.2
+   },
+   {
+    "text": "gektar",
+    "start": 3.28,
+    "end": 3.6
+   },
+   {
+    "text": "maydonda",
+    "start": 3.68,
+    "end": 4.08
+   },
+   {
+    "text": "joylashgan.",
+    "start": 4.2,
+    "end": 5.32
+   },
+   {
+    "text": "Si-Ke-Di",
+    "start": 5.36,
+    "end": 5.8
+   },
+   {
+    "text": "loyihalari",
+    "start": 5.84,
+    "end": 6.64
+   },
+   {
+    "text": "yiliga",
+    "start": 6.8,
+    "end": 7.28
+   },
+   {
+    "text": "yuz",
+    "start": 7.44,
+    "end": 7.6
+   },
+   {
+    "text": "ming",
+    "start": 7.68,
+    "end": 7.84
+   },
+   {
     "text": "avtomobilga",
-    "start": 2.48,
-    "end": 3.12
+    "start": 7.92,
+    "end": 8.56
    },
    {
     "text": "moʻljallangan.",
-    "start": 3.16,
-    "end": 4.4
+    "start": 8.6,
+    "end": 9.92
    }
   ]
  },
@@ -1345,7 +1395,7 @@
   ]
  },
  "logi": {
-  "duration": 7.392653,
+  "duration": 15.490612,
   "words": [
    {
     "text": "United",
@@ -1364,53 +1414,118 @@
    },
    {
     "text": "KD",
-    "start": 1.52,
-    "end": 1.92
+    "start": 1.44,
+    "end": 1.84
    },
    {
     "text": "toʻplamlar",
-    "start": 2,
-    "end": 2.72
+    "start": 1.92,
+    "end": 2.64
    },
    {
     "text": "va",
-    "start": 2.8,
-    "end": 2.96
+    "start": 2.72,
+    "end": 2.88
    },
    {
     "text": "tayyor",
-    "start": 3.04,
-    "end": 3.44
+    "start": 2.92,
+    "end": 3.28
    },
    {
     "text": "mahsulotni",
-    "start": 3.56,
-    "end": 4.48
+    "start": 3.36,
+    "end": 4.32
    },
    {
     "text": "Jizzaxdan",
-    "start": 4.56,
-    "end": 5.28
+    "start": 4.4,
+    "end": 5.12
    },
    {
     "text": "har",
-    "start": 5.4,
-    "end": 5.52
+    "start": 5.24,
+    "end": 5.36
    },
    {
     "text": "bir",
-    "start": 5.6,
-    "end": 5.68
+    "start": 5.44,
+    "end": 5.52
    },
    {
     "text": "hududga",
-    "start": 5.76,
-    "end": 6.16
+    "start": 5.6,
+    "end": 6
    },
    {
     "text": "yetkazadi.",
-    "start": 6.28,
-    "end": 7.36
+    "start": 6.08,
+    "end": 7.173
+   },
+   {
+    "text": "Toʻplamlar",
+    "start": 7.227,
+    "end": 7.84
+   },
+   {
+    "text": "va",
+    "start": 7.92,
+    "end": 8
+   },
+   {
+    "text": "butlovchi",
+    "start": 8.08,
+    "end": 8.48
+   },
+   {
+    "text": "qismlar",
+    "start": 8.56,
+    "end": 9.28
+   },
+   {
+    "text": "Koreya,",
+    "start": 9.36,
+    "end": 10.12
+   },
+   {
+    "text": "Xitoy,",
+    "start": 10.16,
+    "end": 10.827
+   },
+   {
+    "text": "Hindiston,",
+    "start": 10.853,
+    "end": 11.72
+   },
+   {
+    "text": "Rossiya",
+    "start": 11.76,
+    "end": 12.56
+   },
+   {
+    "text": "va",
+    "start": 12.64,
+    "end": 12.72
+   },
+   {
+    "text": "boshqa",
+    "start": 12.8,
+    "end": 13.04
+   },
+   {
+    "text": "mamlakatlardan",
+    "start": 13.12,
+    "end": 13.92
+   },
+   {
+    "text": "yetkazib",
+    "start": 14,
+    "end": 14.48
+   },
+   {
+    "text": "beriladi.",
+    "start": 14.6,
+    "end": 15.52
    }
   ]
  },
@@ -1945,137 +2060,137 @@
   ]
  },
  "eco": {
-  "duration": 9.874286,
+  "duration": 9.717551,
   "words": [
    {
     "text": "ADM",
     "start": 0,
-    "end": 0.88
+    "end": 0.64
    },
    {
     "text": "ekotizimi",
-    "start": 0.96,
-    "end": 1.68
+    "start": 0.72,
+    "end": 1.44
    },
    {
     "text": "toʻrt",
-    "start": 1.76,
-    "end": 2
+    "start": 1.52,
+    "end": 1.76
    },
    {
     "text": "yoʻnalishni",
-    "start": 2.04,
-    "end": 2.56
+    "start": 1.84,
+    "end": 2.32
    },
    {
     "text": "birlashtiradi:",
-    "start": 2.6,
-    "end": 3.8
+    "start": 2.4,
+    "end": 3.48
    },
    {
     "text": "avtomobil",
-    "start": 3.84,
-    "end": 4.4
+    "start": 3.52,
+    "end": 4
    },
    {
     "text": "ishlab",
-    "start": 4.48,
-    "end": 4.72
+    "start": 4.08,
+    "end": 4.32
    },
    {
     "text": "chiqarish,",
-    "start": 4.76,
-    "end": 5.56
+    "start": 4.4,
+    "end": 5.16
    },
    {
     "text": "savdo,",
-    "start": 5.6,
-    "end": 6.4
+    "start": 5.2,
+    "end": 6.04
    },
    {
     "text": "sotuvdan",
-    "start": 6.48,
-    "end": 6.96
+    "start": 6.08,
+    "end": 6.56
    },
    {
     "text": "keyingi",
-    "start": 7.04,
-    "end": 7.4
+    "start": 6.64,
+    "end": 7
    },
    {
     "text": "xizmat",
-    "start": 7.44,
-    "end": 8
+    "start": 7.04,
+    "end": 7.68
    },
    {
     "text": "va",
-    "start": 8.08,
-    "end": 8.32
+    "start": 7.76,
+    "end": 8.08
    },
    {
     "text": "yangi",
-    "start": 8.4,
-    "end": 8.72
+    "start": 8.16,
+    "end": 8.44
    },
    {
     "text": "mobillik.",
-    "start": 8.84,
-    "end": 9.92
+    "start": 8.48,
+    "end": 9.68
    }
   ]
  },
  "outro": {
-  "duration": 6.687347,
+  "duration": 6.034286,
   "words": [
    {
     "text": "ADM",
     "start": 0,
-    "end": 0.88
+    "end": 0.56
    },
    {
     "text": "Jizzax:",
-    "start": 0.96,
-    "end": 2
+    "start": 0.64,
+    "end": 1.6
    },
    {
     "text": "innovatsiyalar",
-    "start": 2.08,
-    "end": 2.8
+    "start": 1.68,
+    "end": 2.4
    },
    {
     "text": "orqali",
-    "start": 2.88,
-    "end": 3.52
+    "start": 2.48,
+    "end": 3.04
    },
    {
     "text": "kelajak",
-    "start": 3.64,
-    "end": 4
+    "start": 3.16,
+    "end": 3.52
    },
    {
     "text": "mobilligi",
-    "start": 4.08,
-    "end": 4.64
+    "start": 3.6,
+    "end": 4.08
    },
    {
     "text": "uchun",
-    "start": 4.76,
-    "end": 5.12
+    "start": 4.2,
+    "end": 4.56
    },
    {
     "text": "yechimlar",
-    "start": 5.2,
-    "end": 5.68
+    "start": 4.6,
+    "end": 5.12
    },
    {
     "text": "yaratamiz.",
-    "start": 5.76,
-    "end": 6.72
+    "start": 5.16,
+    "end": 6.08
    }
   ]
  },
  "cl0": {
-  "duration": 4.91102,
+  "duration": 4.832653,
   "words": [
    {
     "text": "Endi",
@@ -2084,33 +2199,33 @@
    },
    {
     "text": "ADM",
-    "start": 0.48,
-    "end": 1.36
+    "start": 0.56,
+    "end": 1.12
    },
    {
     "text": "Jizzax",
-    "start": 1.44,
-    "end": 1.84
+    "start": 1.36,
+    "end": 1.76
    },
    {
     "text": "avtomobil",
-    "start": 1.92,
-    "end": 2.48
+    "start": 1.84,
+    "end": 2.4
    },
    {
     "text": "klasteriga",
-    "start": 2.56,
-    "end": 3.2
+    "start": 2.48,
+    "end": 3.12
    },
    {
     "text": "nazar",
-    "start": 3.28,
-    "end": 3.6
+    "start": 3.16,
+    "end": 3.44
    },
    {
     "text": "tashlaymiz.",
-    "start": 3.64,
-    "end": 4.88
+    "start": 3.48,
+    "end": 4.8
    }
   ]
  },
@@ -2200,56 +2315,56 @@
   ]
  },
  "c_skd": {
-  "duration": 14.210612,
+  "duration": 23.719184,
   "words": [
    {
     "text": "Es-Ki-Di",
     "start": 0,
-    "end": 0.56
+    "end": 0.64
    },
    {
     "text": "tsekhi:",
-    "start": 0.64,
+    "start": 0.68,
     "end": 1.6
    },
    {
     "text": "investitsiya",
     "start": 1.8,
-    "end": 2.56
+    "end": 2.48
    },
    {
     "text": "oʻn",
-    "start": 2.6,
-    "end": 2.72
+    "start": 2.56,
+    "end": 2.68
    },
    {
     "text": "ikki",
-    "start": 2.8,
+    "start": 2.72,
     "end": 2.88
    },
    {
     "text": "butun",
     "start": 2.96,
-    "end": 3.36
+    "end": 3.28
    },
    {
     "text": "oʻndan",
-    "start": 3.4,
-    "end": 3.76
+    "start": 3.36,
+    "end": 3.68
    },
    {
     "text": "olti",
-    "start": 3.84,
-    "end": 4.08
+    "start": 3.76,
+    "end": 4.04
    },
    {
     "text": "million",
-    "start": 4.16,
-    "end": 4.48
+    "start": 4.08,
+    "end": 4.4
    },
    {
     "text": "dollar,",
-    "start": 4.52,
+    "start": 4.48,
     "end": 5.28
    },
    {
@@ -2264,32 +2379,32 @@
    },
    {
     "text": "ellik",
-    "start": 5.92,
+    "start": 5.96,
     "end": 6.24
    },
    {
     "text": "ish",
     "start": 6.32,
-    "end": 6.48
+    "end": 6.4
    },
    {
     "text": "oʻrni.",
-    "start": 6.52,
-    "end": 7.44
+    "start": 6.48,
+    "end": 7.36
    },
    {
     "text": "Zavod",
-    "start": 7.48,
-    "end": 7.84
+    "start": 7.44,
+    "end": 7.76
    },
    {
     "text": "faoliyatini",
-    "start": 7.88,
+    "start": 7.84,
     "end": 8.4
    },
    {
     "text": "dastlab",
-    "start": 8.44,
+    "start": 8.48,
     "end": 8.96
    },
    {
@@ -2299,93 +2414,193 @@
    },
    {
     "text": "shu",
-    "start": 9.52,
+    "start": 9.48,
     "end": 9.76
    },
    {
     "text": "Es-Ki-Di",
     "start": 9.84,
-    "end": 10.32
+    "end": 10.4
    },
    {
     "text": "tsekhida",
-    "start": 10.4,
+    "start": 10.48,
     "end": 11.2
    },
    {
     "text": "ikki",
     "start": 11.28,
-    "end": 11.44
+    "end": 11.52
    },
    {
     "text": "yuz",
-    "start": 11.52,
+    "start": 11.56,
     "end": 11.76
    },
    {
     "text": "ellik",
-    "start": 11.84,
+    "start": 11.88,
     "end": 12.08
    },
    {
     "text": "nafar",
     "start": 12.16,
-    "end": 12.4
+    "end": 12.48
    },
    {
     "text": "khodim",
-    "start": 12.48,
+    "start": 12.52,
     "end": 12.8
    },
    {
     "text": "bilan",
-    "start": 12.84,
+    "start": 12.88,
     "end": 13.04
    },
    {
     "text": "boshlagan.",
-    "start": 13.08,
-    "end": 14.24
+    "start": 13.12,
+    "end": 14.2
+   },
+   {
+    "text": "Es-Ki-Di",
+    "start": 14.24,
+    "end": 14.72
+   },
+   {
+    "text": "zavodi",
+    "start": 14.8,
+    "end": 15.36
+   },
+   {
+    "text": "bir",
+    "start": 15.44,
+    "end": 15.52
+   },
+   {
+    "text": "yil",
+    "start": 15.6,
+    "end": 15.76
+   },
+   {
+    "text": "ichida",
+    "start": 15.84,
+    "end": 16.08
+   },
+   {
+    "text": "qurilgan:",
+    "start": 16.16,
+    "end": 17.08
+   },
+   {
+    "text": "u",
+    "start": 17.12,
+    "end": 17.36
+   },
+   {
+    "text": "yigirma",
+    "start": 17.44,
+    "end": 17.76
+   },
+   {
+    "text": "besh",
+    "start": 17.84,
+    "end": 18
+   },
+   {
+    "text": "gektar",
+    "start": 18.08,
+    "end": 18.4
+   },
+   {
+    "text": "maydonni",
+    "start": 18.48,
+    "end": 18.88
+   },
+   {
+    "text": "egallaydi",
+    "start": 18.96,
+    "end": 19.84
+   },
+   {
+    "text": "va",
+    "start": 19.92,
+    "end": 20
+   },
+   {
+    "text": "yiliga",
+    "start": 20.08,
+    "end": 20.56
+   },
+   {
+    "text": "oltmish",
+    "start": 20.64,
+    "end": 21.04
+   },
+   {
+    "text": "ming",
+    "start": 21.12,
+    "end": 21.28
+   },
+   {
+    "text": "avtomobil",
+    "start": 21.36,
+    "end": 21.92
+   },
+   {
+    "text": "yigʻish",
+    "start": 22,
+    "end": 22.24
+   },
+   {
+    "text": "quvvatiga",
+    "start": 22.32,
+    "end": 22.8
+   },
+   {
+    "text": "ega.",
+    "start": 23.24,
+    "end": 23.76
    }
   ]
  },
  "c_lok": {
-  "duration": 7.079184,
+  "duration": 26.67102,
   "words": [
    {
     "text": "Lokalizatsiya",
     "start": 0,
-    "end": 0.72
+    "end": 0.8
    },
    {
     "text": "klasteri:",
-    "start": 0.8,
-    "end": 1.84
+    "start": 0.88,
+    "end": 1.88
    },
    {
     "text": "investitsiya",
     "start": 1.92,
-    "end": 2.8
+    "end": 2.88
    },
    {
     "text": "yuz",
     "start": 2.96,
-    "end": 3.2
+    "end": 3.12
    },
    {
     "text": "ellik",
-    "start": 3.32,
-    "end": 3.6
+    "start": 3.2,
+    "end": 3.52
    },
    {
     "text": "million",
-    "start": 3.76,
+    "start": 3.6,
     "end": 3.92
    },
    {
     "text": "dollar,",
     "start": 4,
-    "end": 4.72
+    "end": 4.76
    },
    {
     "text": "uch",
@@ -2394,28 +2609,193 @@
    },
    {
     "text": "yuz",
-    "start": 5.04,
-    "end": 5.28
+    "start": 5,
+    "end": 5.2
    },
    {
     "text": "ellik",
-    "start": 5.4,
-    "end": 5.76
+    "start": 5.28,
+    "end": 5.6
    },
    {
     "text": "ish",
-    "start": 5.84,
-    "end": 5.92
+    "start": 5.68,
+    "end": 5.84
    },
    {
     "text": "oʻrni.",
-    "start": 6,
-    "end": 7.04
+    "start": 5.92,
+    "end": 6.747
+   },
+   {
+    "text": "Klaster",
+    "start": 6.773,
+    "end": 7.2
+   },
+   {
+    "text": "oʻrindiqlar,",
+    "start": 7.28,
+    "end": 8.2
+   },
+   {
+    "text": "press",
+    "start": 8.24,
+    "end": 8.48
+   },
+   {
+    "text": "panellari,",
+    "start": 8.56,
+    "end": 9.52
+   },
+   {
+    "text": "old",
+    "start": 9.6,
+    "end": 9.84
+   },
+   {
+    "text": "va",
+    "start": 9.96,
+    "end": 10.08
+   },
+   {
+    "text": "orqa",
+    "start": 10.16,
+    "end": 10.4
+   },
+   {
+    "text": "bamperlar,",
+    "start": 10.48,
+    "end": 11.48
+   },
+   {
+    "text": "elektr",
+    "start": 11.52,
+    "end": 11.92
+   },
+   {
+    "text": "qismlari",
+    "start": 11.96,
+    "end": 12.64
+   },
+   {
+    "text": "hamda",
+    "start": 12.72,
+    "end": 13.12
+   },
+   {
+    "text": "interyer",
+    "start": 13.2,
+    "end": 13.76
+   },
+   {
+    "text": "va",
+    "start": 13.84,
+    "end": 14
+   },
+   {
+    "text": "eksteryerning",
+    "start": 14.08,
+    "end": 14.96
+   },
+   {
+    "text": "plastik",
+    "start": 15.04,
+    "end": 15.44
+   },
+   {
+    "text": "qismlarini",
+    "start": 15.493,
+    "end": 16.08
+   },
+   {
+    "text": "ishlab",
+    "start": 16.16,
+    "end": 16.4
+   },
+   {
+    "text": "chiqaradi.",
+    "start": 16.44,
+    "end": 17.44
+   },
+   {
+    "text": "Mahalliylashtirish",
+    "start": 17.52,
+    "end": 18.24
+   },
+   {
+    "text": "darajasi",
+    "start": 18.32,
+    "end": 18.96
+   },
+   {
+    "text": "dastlabki",
+    "start": 19,
+    "end": 19.44
+   },
+   {
+    "text": "bosqichdayoq",
+    "start": 19.52,
+    "end": 20.28
+   },
+   {
+    "text": "oʻttiz",
+    "start": 20.32,
+    "end": 20.72
+   },
+   {
+    "text": "foiz,",
+    "start": 20.8,
+    "end": 21.48
+   },
+   {
+    "text": "kelgusida",
+    "start": 21.52,
+    "end": 22.16
+   },
+   {
+    "text": "uni",
+    "start": 22.24,
+    "end": 22.56
+   },
+   {
+    "text": "qirq",
+    "start": 22.6,
+    "end": 22.72
+   },
+   {
+    "text": "foizdan",
+    "start": 22.8,
+    "end": 23.44
+   },
+   {
+    "text": "qirq",
+    "start": 23.52,
+    "end": 23.6
+   },
+   {
+    "text": "besh",
+    "start": 23.76,
+    "end": 24
+   },
+   {
+    "text": "foizgacha",
+    "start": 24.08,
+    "end": 24.56
+   },
+   {
+    "text": "yetkazish",
+    "start": 24.68,
+    "end": 25.12
+   },
+   {
+    "text": "rejalashtirilgan.",
+    "start": 25.2,
+    "end": 26.72
    }
   ]
  },
  "c_sht": {
-  "duration": 6.347755,
+  "duration": 15.229388,
   "words": [
    {
     "text": "Shtamplash",
@@ -2429,27 +2809,27 @@
    },
    {
     "text": "investitsiya",
-    "start": 1.8,
-    "end": 2.48
+    "start": 1.68,
+    "end": 2.56
    },
    {
     "text": "ellik",
-    "start": 2.56,
+    "start": 2.64,
     "end": 2.88
    },
    {
     "text": "besh",
-    "start": 2.92,
+    "start": 2.96,
     "end": 3.12
    },
    {
     "text": "million",
     "start": 3.2,
-    "end": 3.52
+    "end": 3.44
    },
    {
     "text": "dollar,",
-    "start": 3.56,
+    "start": 3.52,
     "end": 4.24
    },
    {
@@ -2469,8 +2849,88 @@
    },
    {
     "text": "oʻrni.",
-    "start": 5.36,
+    "start": 5.32,
+    "end": 6.16
+   },
+   {
+    "text": "Bu",
+    "start": 6.24,
     "end": 6.32
+   },
+   {
+    "text": "tsekh",
+    "start": 6.4,
+    "end": 6.88
+   },
+   {
+    "text": "kuzov",
+    "start": 6.96,
+    "end": 7.28
+   },
+   {
+    "text": "panellarini",
+    "start": 7.36,
+    "end": 7.92
+   },
+   {
+    "text": "ishlab",
+    "start": 8,
+    "end": 8.24
+   },
+   {
+    "text": "chiqaradi.",
+    "start": 8.28,
+    "end": 9.16
+   },
+   {
+    "text": "Shu",
+    "start": 9.2,
+    "end": 9.32
+   },
+   {
+    "text": "tariqa",
+    "start": 9.36,
+    "end": 10
+   },
+   {
+    "text": "poʻlatdan",
+    "start": 10.04,
+    "end": 10.72
+   },
+   {
+    "text": "tayyor",
+    "start": 10.76,
+    "end": 11.2
+   },
+   {
+    "text": "avtomobilgacha",
+    "start": 11.28,
+    "end": 12.32
+   },
+   {
+    "text": "butun",
+    "start": 12.44,
+    "end": 12.72
+   },
+   {
+    "text": "ishlab",
+    "start": 12.8,
+    "end": 13.04
+   },
+   {
+    "text": "chiqarish",
+    "start": 13.12,
+    "end": 13.44
+   },
+   {
+    "text": "zanjiri",
+    "start": 13.52,
+    "end": 13.92
+   },
+   {
+    "text": "oʻzlashtiriladi.",
+    "start": 13.96,
+    "end": 15.28
    }
   ]
  },
@@ -2680,77 +3140,77 @@
   ]
  },
  "h2020": {
-  "duration": 8.280816,
+  "duration": 8.045714,
   "words": [
    {
     "text": "Ikki",
     "start": 0,
-    "end": 0.2
+    "end": 0.24
    },
    {
     "text": "ming",
-    "start": 0.24,
-    "end": 0.48
+    "start": 0.32,
+    "end": 0.4
    },
    {
     "text": "yigirmanchi",
-    "start": 0.533,
+    "start": 0.48,
     "end": 1.04
    },
    {
     "text": "yilda",
-    "start": 1.12,
-    "end": 1.6
+    "start": 1.08,
+    "end": 1.52
    },
    {
-    "text": "A-de-em,",
-    "start": 1.68,
-    "end": 2.68
+    "text": "Ey-di-em",
+    "start": 1.76,
+    "end": 2.24
    },
    {
     "text": "Jizzakh",
-    "start": 2.72,
-    "end": 3.2
+    "start": 2.32,
+    "end": 2.72
    },
    {
     "text": "avtozavodi",
-    "start": 3.28,
-    "end": 3.84
+    "start": 2.8,
+    "end": 3.52
    },
    {
     "text": "qurilishi",
-    "start": 3.92,
-    "end": 4.32
+    "start": 3.56,
+    "end": 4
    },
    {
     "text": "boshlandi.",
-    "start": 4.4,
-    "end": 5.52
+    "start": 4.04,
+    "end": 5.2
    },
    {
     "text": "Birinchi",
-    "start": 5.56,
-    "end": 5.84
+    "start": 5.253,
+    "end": 5.52
    },
    {
     "text": "bosqich",
-    "start": 5.92,
-    "end": 6.56
+    "start": 5.6,
+    "end": 6.24
    },
    {
     "text": "Es-Ki-Di",
-    "start": 6.64,
-    "end": 7.28
+    "start": 6.36,
+    "end": 6.88
    },
    {
     "text": "boʻldi.",
-    "start": 7.32,
-    "end": 8.32
+    "start": 6.96,
+    "end": 8
    }
   ]
  },
  "h2021": {
-  "duration": 5.250612,
+  "duration": 12.042449,
   "words": [
    {
     "text": "Ikki",
@@ -2765,42 +3225,92 @@
    {
     "text": "yigirma",
     "start": 0.48,
-    "end": 0.72
+    "end": 0.8
    },
    {
     "text": "birinchi",
-    "start": 0.8,
-    "end": 1.12
+    "start": 0.88,
+    "end": 1.2
    },
    {
     "text": "yil",
-    "start": 1.2,
-    "end": 1.36
+    "start": 1.28,
+    "end": 1.44
    },
    {
     "text": "martda",
-    "start": 1.44,
-    "end": 2.08
+    "start": 1.52,
+    "end": 2.16
    },
    {
     "text": "mijozlarga",
-    "start": 2.12,
-    "end": 2.88
+    "start": 2.24,
+    "end": 2.96
    },
    {
     "text": "ilk",
-    "start": 2.96,
-    "end": 3.2
+    "start": 3.04,
+    "end": 3.28
    },
    {
     "text": "avtomobillar",
-    "start": 3.28,
-    "end": 4
+    "start": 3.36,
+    "end": 4.08
    },
    {
     "text": "yetkazildi.",
-    "start": 4.08,
-    "end": 5.28
+    "start": 4.16,
+    "end": 5.36
+   },
+   {
+    "text": "Birinchi",
+    "start": 5.413,
+    "end": 5.68
+   },
+   {
+    "text": "bosqichda",
+    "start": 5.76,
+    "end": 6.64
+   },
+   {
+    "text": "Kia,",
+    "start": 6.72,
+    "end": 7.4
+   },
+   {
+    "text": "Lada",
+    "start": 7.44,
+    "end": 8
+   },
+   {
+    "text": "va",
+    "start": 8.08,
+    "end": 8.32
+   },
+   {
+    "text": "Ravon",
+    "start": 8.4,
+    "end": 8.8
+   },
+   {
+    "text": "avtomobillari",
+    "start": 8.88,
+    "end": 9.84
+   },
+   {
+    "text": "yirik",
+    "start": 9.92,
+    "end": 10.16
+   },
+   {
+    "text": "uzellardan",
+    "start": 10.24,
+    "end": 10.88
+   },
+   {
+    "text": "yigʻildi.",
+    "start": 10.96,
+    "end": 12.08
    }
   ]
  },
@@ -2885,7 +3395,7 @@
   ]
  },
  "h2024": {
-  "duration": 6.426122,
+  "duration": 14.106122,
   "words": [
    {
     "text": "Ikki",
@@ -2899,12 +3409,12 @@
    },
    {
     "text": "yigirma",
-    "start": 0.48,
-    "end": 0.72
+    "start": 0.44,
+    "end": 0.8
    },
    {
     "text": "toʻrtinchi",
-    "start": 0.8,
+    "start": 0.84,
     "end": 1.28
    },
    {
@@ -2929,23 +3439,88 @@
    },
    {
     "text": "Kia",
-    "start": 4.2,
-    "end": 4.48
+    "start": 4.24,
+    "end": 4.56
    },
    {
     "text": "Sonet",
-    "start": 4.56,
+    "start": 4.68,
     "end": 4.96
    },
    {
     "text": "yigʻish",
     "start": 5.04,
-    "end": 5.28
+    "end": 5.36
    },
    {
     "text": "boshlandi.",
-    "start": 5.36,
-    "end": 6.48
+    "start": 5.4,
+    "end": 6.52
+   },
+   {
+    "text": "Ikkinchi",
+    "start": 6.56,
+    "end": 6.88
+   },
+   {
+    "text": "bosqich",
+    "start": 6.96,
+    "end": 7.6
+   },
+   {
+    "text": "toʻliq",
+    "start": 7.68,
+    "end": 8
+   },
+   {
+    "text": "siklli",
+    "start": 8.04,
+    "end": 8.48
+   },
+   {
+    "text": "ishlab",
+    "start": 8.56,
+    "end": 8.88
+   },
+   {
+    "text": "chiqarish",
+    "start": 8.92,
+    "end": 9.28
+   },
+   {
+    "text": "boʻldi:",
+    "start": 9.32,
+    "end": 10.04
+   },
+   {
+    "text": "payvandlash,",
+    "start": 10.08,
+    "end": 11.08
+   },
+   {
+    "text": "kuzovlarni",
+    "start": 11.12,
+    "end": 11.76
+   },
+   {
+    "text": "boʻyash",
+    "start": 11.8,
+    "end": 12.32
+   },
+   {
+    "text": "va",
+    "start": 12.4,
+    "end": 12.64
+   },
+   {
+    "text": "yakuniy",
+    "start": 12.72,
+    "end": 13.24
+   },
+   {
+    "text": "yigʻish.",
+    "start": 13.28,
+    "end": 14.16
    }
   ]
  },
