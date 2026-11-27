@@ -33,7 +33,10 @@ const tsekh = (tts: string) => tts.replace(/(^|[^\p{L}ʻʼ'])([Ss])ekh/gu, (_m, 
 // lexicon's "A-de-em," (with pause). Only capitals change (sameLetters holds), but the lexicon keeps the approved
 // baseline of the other films; written text, captions and STT keep "ADM".
 const adeem = (tts: string) => tts.replace(/A-de-em,?\s*/g, 'A-De-Em ');
-const spoken = (tts: string) => adeem(tsekh(tts));
+// Film-only spoken override (2026-11-27): the user corrected "Ravon" to Renault; the brand is spoken the French way
+// "Reno" (on-screen text and STT reference keep "Renault"). Form to be confirmed by ear (audio/variants8/RENAULT_*).
+const reno = (tts: string) => tts.replace(/Renault/g, process.env.RENO_FORM || 'Reno');
+const spoken = (tts: string) => reno(adeem(tsekh(tts)));
 // v5: "investitsiya" — the v4 takes ended in a weak "-ya" (Russian STT of the cut word: "инвестиции"). The cut word of a
 // take is checked with Russian STT and must end in "-ия"; otherwise the take is regenerated (spelling stays plain).
 const API = 'https://api.elevenlabs.io';

@@ -91,7 +91,7 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 | title | ADM Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya. |
 | hist1 | Kompaniyaga 2014-yilda asos solingan. |
 | h2020 | 2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich SKD boʻldi. |
-| h2021 | 2021-yil martda mijozlarga ilk avtomobillar yetkazildi. **Birinchi bosqichda Kia, Lada va Ravon avtomobillari yirik uzellardan yigʻildi.** (v4) |
+| h2021 | 2021-yil martda mijozlarga ilk avtomobillar yetkazildi. **Birinchi bosqichda Kia, Lada va Renault avtomobillari yirik uzellardan yigʻildi.** (v4) |
 | h2022 | 2022-yil oktabrda Chery avtomobillarini SKD texnologiyasida, yaʼni yirik uzellardan yigʻish boshlandi. |
 | h2024 | 2024-yil martda CKD texnologiyasida Kia Sonet yigʻish boshlandi. **Ikkinchi bosqich toʻliq siklli ishlab chiqarish boʻldi: payvandlash, kuzovlarni boʻyash va yakuniy yigʻish.** (v4) |
 | h2026 | 2026-yil aprelda esa Kia K3 uchun yangi CKD ishlab chiqarish liniyasi ishga tushirildi. |
@@ -202,7 +202,7 @@ Foydalanuvchining v3 haqidagi fikri: boshidagi "ADM JIZZAX" yana notoʻgʻri, "S
 ### 4. v4: namuna videodan olingan faktlar (manba: `src/user_ref_adm.mp4`, vaqt belgisi STT soʻz vaqtidan)
 | Fakt (filmda) | Namunada | Filmda qayerda |
 |---|---|---|
-| Birinchi bosqichda Kia, Lada va Ravon avtomobillari yirik uzellardan (SKD) yigʻilgan | 0:14,9 | h2021 jumlasi, 2021 kartochkasi |
+| Birinchi bosqichda Kia, Lada va Renault avtomobillari yirik uzellardan (SKD) yigʻilgan | 0:14,9 | h2021 jumlasi, 2021 kartochkasi |
 | Ikkinchi bosqich — toʻliq sikl: payvandlash, kuzovni boʻyash, yakuniy yigʻish | 0:49,8 | h2024 jumlasi, 2024 kartochkasi |
 | SKD zavodi bir yil ichida qurilgan, 25 gektar maydonni egallaydi | 0:24,0 | c_skd, SKD paneli |
 | SKD quvvati yiliga 60 ming avtomobil | 0:29,8 (investitsiya 12,6 mln $ ham shu yerda — pptx bilan mos) | c_skd, SKD paneli |
@@ -222,6 +222,10 @@ Namunadagi, pptx bilan mos keladigan (yangi emas) faktlar: SKD investitsiyasi 12
 4. "Kompleks faoliyatini **2021-yilda** boshlagan" (0:10,6). pptx da 2014 asos solingan, 2020 qurilish, 2021-yil mart ilk avtomobillar. Bu ikkinchisi bilan mos boʻlishi mumkin; alohida qoʻshilmadi.
 5. "2024-yil oxirigacha model qatorini yangilash va gibrid avtomobillarni yigʻish rejalashtirilgan" (0:42,4) va "2025-yilda presslash zavodi ish boshlaydi" (1:01,5). Bular eski rejalar. pptx da Shtamplash sexi 2024–2026. Sana qoʻshilmadi.
 6. Namunaning yakuniy shiori "ADM Jizzakh. Yangi imkoniyatlarni yaratmoqdamiz" (2:32,4). Filmda pptx shiori qoldi.
+
+## v7 tayyorgarligi (2026-11-27, render qilinmagan)
+- Foydalanuvchi: "JIZZAKH yana JIZZAQ deb aytilyapti". Filmdagi barcha "Jizzax" soʻzlari kesib tekshirildi. title, h2020, cl0 va dost1 da oxiri q/k ga oʻxshaydi. Sarlavhada sabab: "Jizzakh" dan keyin darhol "koʻp" keladi. geo, outro va logi da x eshitiladi. Nomzodlar: `audio/variants8/` (`izoh.txt`), skript `build/variants8.mts`.
+- **Renault:** foydalanuvchi tuzatdi (2026-11-27): 1-bosqichda **Ravon emas, Renault** yigʻilgan. Namuna video (0:14,9) va filmdagi "Ravon" Renault ga almashtirildi: h2021 jumlasi va 2021 kartochkasi. Ovozda "Reno" deyiladi (`narrate.mts` → `reno()`), yozuvda "Renault" qoladi. Nomzodlar: `audio/variants8/RENAULT_1/2`.
 
 ## v6 (2026-11-27)
 Foydalanuvchining v5 haqidagi fikri: namuna videodan (`src/user_ref_adm.mp4`) CKD sexi haqida koʻproq maʼlumot olinsin, CKD nima ekani tushuntirilsin; boshidagi "ADM JIZZAKH" yana notoʻgʻri aytilgan.
@@ -308,7 +312,7 @@ Foydalanuvchining v4 haqidagi fikri: boshidagi "ADM Jizzakh" notoʻgʻri; "inves
 | $1 024 mln (2025-yildagi yillik aylanma); №2 sotuv hajmi; TOP-10 soliq toʻlovchilar; BIRINCHI xususiy koʻp brendli; YETAKCHI ×2 | 3 |
 | Joriy brendlar KIA, CHERY, GWM, HYUNDAI TRUCK & BUS, CHANGAN (logolar matn bilan); DOST — Markaziy Osiyodagi birinchi milliy avtomobil brendi | 3 |
 | KIA CKD 2021-2026, 242 mln $, 2700; SKD 2020-2021, 12,6 mln $, 450; Lokalizatsiya klasteri 2022-2027, 150 mln $, 350; Shtamplash sexi 2024-2026, 55 mln $, 150; CKD NEV 2026-2028, 100 mln $, 1200; R&D 2026-2030, 100 mln $, 500 muhandis; DOST CKD 2026-2030, Tijorat avtomobillari, 30 mln $, 1200; CKD loyihalari 100 000 avtomobil (yiliga) (ICE + NEV); modellar Sonet 2024 … Sonet 2 2030 | 5 |
-| v4 qoʻshimchalari (Lada/Ravon, 25 ga, 1 yilda, 60 ming, kuzov panellari, 75 ga, komponentlar, 30% → 40–45%, import mamlakatlari) | `src/user_ref_adm.mp4`, vaqtlar "v4" boʻlimida |
+| v4 qoʻshimchalari (Lada/Renault, 25 ga, 1 yilda, 60 ming, kuzov panellari, 75 ga, komponentlar, 30% → 40–45%, import mamlakatlari) | `src/user_ref_adm.mp4`, vaqtlar "v4" boʻlimida |
 | "250 nafar xodim bilan SKD sexida boshlagan" | **foydalanuvchi bergan fakt** (slaydda yoʻq). Slayddagi 450 ish oʻrni ham saqlangan |
 | Lokalizatsiya geografiyasi: Jizzax, Toshkent, Fargʻona, Andijon, Nukus, Xorazm, Qozogʻiston; JAMI ISH OʻRINLARI: 5900 | 6 |
 | Markazlashgan logistika, 14 ta hudud nomi, ikki izoh | 7 |
