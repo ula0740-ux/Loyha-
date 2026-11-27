@@ -1,6 +1,6 @@
-# ADM Jizzakh — korporativ profil filmi (v5)
+# ADM Jizzakh — korporativ profil filmi (v6)
 
-- **Fayl:** `ADM_Global_Profile_v5.mp4` — 1920×1080, 30 fps, H.264 + AAC, 5:40 (340,2 s), 84,8 MB, ovoz −16,0 LUFS, true peak −1,9 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v4.mp4`) taqqoslash uchun saqlangan.
+- **Fayl:** `ADM_Global_Profile_v6.mp4` — 1920×1080, 30 fps, H.264 + AAC, 6:16 (376,2 s), 86,7 MB, ovoz −16,0 LUFS, true peak −1,9 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v5.mp4`) taqqoslash uchun saqlangan.
 - **Manba:** `src/ADM_Global_Company_Profile_UZB.pptx` (12 slayd) — asosiy faktlar manbai. v4 dan qoʻshimcha manba: foydalanuvchining videosi `src/user_ref_adm.mp4` (165 s) — undan faqat aniq aytilgan faktlar olindi, har biri vaqt belgisi bilan quyida ("v4: namuna videodan olingan faktlar"). Uslub uchun namunalar: `src/reference.mp4` (umumiy uslub) va `src/reference_map.mp4` (klaster xaritasi). `src/` papkasi repoga kirmaydi.
 - **Ovoz:** ElevenLabs, `eleven_v4` modeli, `language_code: uz`, Sarah ovozi. Matn `prepareUzbek` orqali yuboriladi (x → kh, F varianti), qoʻshni jumlalar kontekst sifatida beriladi va har jumla STT bilan tekshiriladi. Tasdiqlangan baza sozlamalari oʻzgartirilmagan, ovoz tezlashtirilmagan (TEMPO = 1.0).
 - **Foydalanuvchining keyingi talablari (2026-11):** slayd emas, original kino dunyosi; hikoya tartibi;
@@ -100,14 +100,14 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 | kpi | 2025-yilda yillik aylanma 1 024 million dollarni tashkil etdi. Kompaniya avtomobil sotuvi hajmi boʻyicha ikkinchi oʻrinda. |
 | brands | DOST esa Markaziy Osiyodagi birinchi milliy avtomobil brendi. |
 | cl0 | Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz. |
-| c_kia | Kia CKD loyihasi: investitsiya 242 million dollar, 2 700 ish oʻrni. |
+| c_kia | Kia CKD loyihasi: investitsiya 242 million dollar, 2 700 ish oʻrni. CKD, inglizcha {"Completely Knocked Down"}, avtomobil toʻliq qismlarga ajratilgan holda keltirilib, zavodda noldan yigʻilishini anglatadi. SKD da esa avtomobil yirik uzellardan yigʻiladi. CKD sexida toʻliq sikl bor: kuzov payvandlanadi, boʻyaladi va yakuniy yigʻishdan oʻtadi. (v6) |
 | c_skd | SKD sexi: investitsiya 12,6 million dollar, 450 ish oʻrni. **Zavod faoliyatini dastlab aynan shu SKD sexida 250 nafar xodim bilan boshlagan.** **SKD zavodi bir yil ichida qurilgan: u 25 gektar maydonni egallaydi va yiliga 60 ming avtomobil yigʻish quvvatiga ega.** (v4) |
 | c_lok | Lokalizatsiya klasteri: investitsiya 150 million dollar, 350 ish oʻrni. **Klaster oʻrindiqlar, press panellari, old va orqa bamperlar, elektr qismlari hamda interyer va eksteryerning plastik qismlarini ishlab chiqaradi. Mahalliylashtirish darajasi dastlabki bosqichdayoq 30 foiz, kelgusida uni 40 foizdan 45 foizgacha yetkazish rejalashtirilgan.** (v4) |
 | c_sht | Shtamplash sexi: investitsiya 55 million dollar, 150 ish oʻrni. **Bu sex kuzov panellarini ishlab chiqaradi. Shu tariqa poʻlatdan tayyor avtomobilgacha butun ishlab chiqarish zanjiri oʻzlashtiriladi.** (v4) |
 | c_nev | Yangi loyihalar. CKD, {"New energy vehicle"}, investitsiya 100 million dollar, 1 200 ish oʻrni. (`{…}` qismi inglizcha oʻqiladi) |
 | c_rd | Ilmiy-tadqiqot markazi: investitsiya 100 million dollar, 500 muhandis. |
 | c_dost | DOST tijorat avtomobillari: investitsiya 30 million dollar, 1 200 ish oʻrni. |
-| cl4 | **Bugungi kunda ishlab chiqarish quvvatlari 75 gektar maydonda joylashgan.** (v4) CKD loyihalari yiliga 100 000 avtomobilga moʻljallangan. |
+| cl4 | Bugungi kunda ishlab chiqarish quvvatlari 75 gektar maydonda joylashgan: bunga CKD zavodining oʻzi va butlovchi qismlar yetkazib beruvchi korxonalar klasteri kiradi. CKD loyihalarining toʻliq siklli ishlab chiqarish quvvati yiliga 100 000 avtomobil. 2030-yilgacha CKD loyihalarida toʻqqizta model rejalashtirilgan. (v6) |
 | geo | Lokalizatsiya loyihalari Jizzax, Toshkent, Fargʻona, Andijon, Nukus va Xorazmda, shuningdek Qozogʻistonda joylashgan. |
 | logi | United Auto Alliance KD toʻplamlar va tayyor mahsulotni Jizzaxdan har bir hududga yetkazadi. **Toʻplamlar va butlovchi qismlar Koreya, Xitoy, Hindiston, Rossiya va boshqa mamlakatlardan yetkazib beriladi.** (v4) |
 | dost1 | Jizzax tijorat transporti loyihasida DOST milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi. |
@@ -222,6 +222,33 @@ Namunadagi, pptx bilan mos keladigan (yangi emas) faktlar: SKD investitsiyasi 12
 4. "Kompleks faoliyatini **2021-yilda** boshlagan" (0:10,6). pptx da 2014 asos solingan, 2020 qurilish, 2021-yil mart ilk avtomobillar. Bu ikkinchisi bilan mos boʻlishi mumkin; alohida qoʻshilmadi.
 5. "2024-yil oxirigacha model qatorini yangilash va gibrid avtomobillarni yigʻish rejalashtirilgan" (0:42,4) va "2025-yilda presslash zavodi ish boshlaydi" (1:01,5). Bular eski rejalar. pptx da Shtamplash sexi 2024–2026. Sana qoʻshilmadi.
 6. Namunaning yakuniy shiori "ADM Jizzakh. Yangi imkoniyatlarni yaratmoqdamiz" (2:32,4). Filmda pptx shiori qoldi.
+
+## v6 (2026-11-27)
+Foydalanuvchining v5 haqidagi fikri: namuna videodan (`src/user_ref_adm.mp4`) CKD sexi haqida koʻproq maʼlumot olinsin, CKD nima ekani tushuntirilsin; boshidagi "ADM JIZZAKH" yana notoʻgʻri aytilgan.
+
+### 1. "ADM Jizzakh" talaffuzi
+- v5 dagi title take qayta yaratilgan edi va tasdiqlangan namuna bilan bit-baravar bir xil emasdi (ElevenLabs bir xil seed da ham farq qiladi). Akustik jihatdan yaqin chiqdi (MFCC-DTW 2,28), lekin foydalanuvchi qulogʻiga notoʻgʻri eshitildi.
+- **title.mp3 = `audio/variants7/ADM_JIZZAKH_2.mp3` ning oʻzi** (foydalanuvchi quloq bilan tasdiqlagan take, jumla matni bir xil, butun jumla, ulama yoʻq). **h2020.mp3 = `ADM_ICHIDA_2.mp3`** (u ham tasdiqlangan). Soʻz vaqtlari scribe STT dan olindi. STT ikkalasida "ADM Jizzakh" (kh bilan).
+- Qolgan ADM lar tasdiqlangan ikki namunaning "ADM" boʻlagi bilan solishtirildi (`build/adm_pick.py`, MFCC-DTW; ikki tasdiqlangan take orasidagi farq ~3,6). cl0 (5,38) va eco (4,73) aniq farq qildi: 5 tadan take yozildi (`build/adm_takes.mts`) va eng yaqini olindi: cl0 → 3,41, eco → 3,58. outro (3,56) meʼyorda, oʻzgarmadi.
+
+### 2. CKD haqida qoʻshilganlar
+- **c_kia** (KIA CKD sexi) yangi matni: "… CKD, inglizcha {"Completely Knocked Down"}, avtomobil toʻliq qismlarga ajratilgan holda keltirilib, zavodda noldan yigʻilishini anglatadi. SKD da esa avtomobil yirik uzellardan yigʻiladi. CKD sexida toʻliq sikl bor: kuzov payvandlanadi, boʻyaladi va yakuniy yigʻishdan oʻtadi." Inglizcha qism inglizcha oʻqiladi (STT uz/ru/en: "completely knocked down"), CKD = "Si-Ke-Di".
+- **cl4** yangi matni: "Bugungi kunda ishlab chiqarish quvvatlari 75 gektar maydonda joylashgan: bunga CKD zavodining oʻzi va butlovchi qismlar yetkazib beruvchi korxonalar klasteri kiradi. CKD loyihalarining toʻliq siklli ishlab chiqarish quvvati yiliga 100 000 avtomobil. 2030-yilgacha CKD loyihalarida toʻqqizta model rejalashtirilgan."
+- Manbalar (namuna video vaqtlari, toʻliq matn: `audio/user_ref_transcript.txt`):
+
+| Fakt | Manba |
+|---|---|
+| Toʻliq sikl: payvandlash, kuzovlarni boʻyash, yakuniy yigʻish | namuna 0:49,8 (h2024 da ham bor) |
+| 75 gektarga CKD zavodining oʻzi va butlovchi qismlar yetkazib beruvchi korxonalar klasteri kiradi | namuna 1:19,3 + 1:23,8 |
+| Toʻliq sikl boʻyicha quvvat yiliga 100 000 avtomobil | namuna 1:29,8 (pptx slayd 5: CKD loyihalari 100 000/yil — mos) |
+| Poʻlatdan tayyor avtomobilgacha butun zanjir | namuna 1:06,4–1:09,7 (c_sht da bor) |
+| 2024–2030 yillarda 9 model (Sonet … Sonet 2) | pptx slayd 5 (klaster panelidagi roʻyxat) |
+| CKD = Completely Knocked Down; SKD = yirik uzellardan yigʻish | umumiy atama izohi (foydalanuvchi soʻragan); SKD izohi pptx slayd 2 |
+
+- **Qoʻshilmadi (pptx ga zid yoki vaqtga bogʻliq):** toʻliq siklga jami 226 mln $ (namuna 1:12,3; pptx: KIA CKD 242 mln $); "hozirda 1 800 dan ortiq kishi ishlaydi, toʻliq quvvatda ikki baravar koʻpayadi" (namuna 1:35,7 / 1:39,7; 2×1 800 pptx dagi 2 700 ish oʻrniga toʻgʻri kelmaydi); "2025-yilda presslash zavodi ish boshlaydi" (1:01,5; pptx: Shtamplash 2024–2026); "2024-yil oxirigacha gibrid avtomobillar" (0:42,4, eski reja).
+- **Vizual:** KIA CKD bekatida "CKD NIMA?" shisha kartasi (xarita orqada xiralashadi, oʻngda KIA CKD paneli qoladi). "Completely Knocked Down" (C, K, D apelsin rangda), izoh qatori. Kia K3 siluetini 8 ta boʻlak qilib, har bosqich oʻz soʻzida koʻrsatiladi: "qismlarga" — boʻlaklar ajraladi; "Es-Ki-Di" — boʻlaklar 3 ta yirik uzelga birlashadi (SKD chipi yonadi); "payvandlanadi" — boʻlaklar ulanadi, choklarda payvand uchqunlari; "boʻyaladi" — kulrang kuzov rang bilan boʻyaladi; "yakuniy" — yorugʻlik oʻtadi, pastdan nur. Pastda 4 bosqichli chiziq (01 QISMLAR KELADI → 02 PAYVANDLASH → 03 BOʻYASH → 04 YAKUNIY YIGʻISH) soʻzlarga mos toʻladi.
+- Render: 11 285 kadr (`--sub 1`, 4 boʻlak), 2-pass H.264 1650k + AAC 192k. QA kadrlari `out/v6_final_qa/` (ochilish, CKD kartasining barcha bosqichlari, klaster umumiy koʻrinishi, yakun); video 376,17 s / audio 376,15 s.
+- Film 376,2 s (v5 340,2 s); klaster 156 s, musiqa aranjirovkasi `timeline.py` da avtomatik qayta hisoblandi (klaster choʻqqida, oq chaqnash yakuniy urgʻuda).
 
 ## v5 (2026-11-27)
 

@@ -4,43 +4,43 @@
   "words": [
    {
     "text": "ADM",
-    "start": 0,
-    "end": 0.56
+    "start": 0.1,
+    "end": 0.6
    },
    {
     "text": "Jizzax,",
-    "start": 0.64,
-    "end": 1.52
+    "start": 0.68,
+    "end": 1.16
    },
    {
-    "text": "koʻp",
-    "start": 1.6,
+    "text": "ko\u02bbp",
+    "start": 1.62,
     "end": 1.84
    },
    {
     "text": "brendli",
-    "start": 1.92,
-    "end": 2.24
+    "start": 1.88,
+    "end": 2.32
    },
    {
     "text": "avtomobil",
-    "start": 2.32,
-    "end": 2.88
+    "start": 2.4,
+    "end": 2.92
    },
    {
     "text": "ishlab",
-    "start": 2.96,
-    "end": 3.2
+    "start": 2.98,
+    "end": 3.24
    },
    {
     "text": "chiqaruvchi",
-    "start": 3.24,
-    "end": 3.68
+    "start": 3.26,
+    "end": 3.72
    },
    {
     "text": "kompaniya.",
-    "start": 3.76,
-    "end": 4.8
+    "start": 3.78,
+    "end": 4.4
    }
   ]
  },
@@ -63,12 +63,12 @@
     "end": 1.36
    },
    {
-    "text": "oʻn",
+    "text": "o\u02bbn",
     "start": 1.44,
     "end": 1.52
    },
    {
-    "text": "toʻrtinchi",
+    "text": "to\u02bbrtinchi",
     "start": 1.6,
     "end": 2
    },
@@ -108,7 +108,7 @@
     "end": 0.72
    },
    {
-    "text": "toʻrtinchi",
+    "text": "to\u02bbrtinchi",
     "start": 0.8,
     "end": 1.28
    },
@@ -143,7 +143,7 @@
     "end": 3.84
    },
    {
-    "text": "yigʻish",
+    "text": "yig\u02bbish",
     "start": 3.88,
     "end": 4.16
    },
@@ -238,7 +238,7 @@
     "end": 1.04
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 1.12,
     "end": 1.44
    },
@@ -273,7 +273,7 @@
     "end": 3.52
    },
    {
-    "text": "toʻqqiz",
+    "text": "to\u02bbqqiz",
     "start": 3.56,
     "end": 3.92
    },
@@ -313,7 +313,7 @@
     "end": 0.4
    },
    {
-    "text": "oʻn",
+    "text": "o\u02bbn",
     "start": 0.48,
     "end": 0.6
    },
@@ -348,7 +348,7 @@
     "end": 3.28
    },
    {
-    "text": "oʻndan",
+    "text": "o\u02bbndan",
     "start": 3.36,
     "end": 3.76
    },
@@ -403,7 +403,7 @@
     "end": 7.92
    },
    {
-    "text": "oʻn",
+    "text": "o\u02bbn",
     "start": 8,
     "end": 8.16
    },
@@ -443,7 +443,7 @@
     "end": 11.04
    },
    {
-    "text": "toʻrt",
+    "text": "to\u02bbrt",
     "start": 11.08,
     "end": 11.28
    },
@@ -453,12 +453,12 @@
     "end": 11.52
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 11.56,
     "end": 11.84
    },
    {
-    "text": "toʻqqiz",
+    "text": "to\u02bbqqiz",
     "start": 11.88,
     "end": 12.16
    },
@@ -528,7 +528,7 @@
     "end": 4
    },
    {
-    "text": "toʻrt",
+    "text": "to\u02bbrt",
     "start": 4.08,
     "end": 4.24
    },
@@ -573,7 +573,7 @@
     "end": 8.56
    },
    {
-    "text": "boʻyicha",
+    "text": "bo\u02bbyicha",
     "start": 8.64,
     "end": 9.12
    },
@@ -583,7 +583,7 @@
     "end": 9.6
    },
    {
-    "text": "oʻrinda.",
+    "text": "o\u02bbrinda.",
     "start": 9.68,
     "end": 10.64
    }
@@ -768,7 +768,7 @@
     "end": 1.52
    },
    {
-    "text": "oʻn",
+    "text": "o\u02bbn",
     "start": 1.56,
     "end": 1.68
    },
@@ -783,7 +783,7 @@
     "end": 2.32
    },
    {
-    "text": "oʻndan",
+    "text": "o\u02bbndan",
     "start": 2.36,
     "end": 2.72
    },
@@ -808,7 +808,7 @@
     "end": 4.32
    },
    {
-    "text": "toʻrt",
+    "text": "to\u02bbrt",
     "start": 4.4,
     "end": 4.56
    },
@@ -828,7 +828,7 @@
     "end": 5.6
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 5.68,
     "end": 6.44
    },
@@ -913,7 +913,7 @@
     "end": 11.36
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 11.4,
     "end": 12.12
    },
@@ -973,7 +973,7 @@
     "end": 16.88
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 16.96,
     "end": 17.64
    },
@@ -1028,7 +1028,7 @@
     "end": 21.84
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 21.88,
     "end": 22.64
    }
@@ -1123,7 +1123,7 @@
     "end": 6.16
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 6.2,
     "end": 7.2
    },
@@ -1188,7 +1188,7 @@
     "end": 14.96
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 15,
     "end": 15.36
    },
@@ -1233,14 +1233,14 @@
     "end": 17.84
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 17.92,
     "end": 18.72
    }
   ]
  },
  "cl4": {
-  "duration": 9.874286,
+  "duration": 23.640816,
   "words": [
    {
     "text": "Bugungi",
@@ -1265,67 +1265,192 @@
    {
     "text": "quvvatlari",
     "start": 1.68,
-    "end": 2.4
+    "end": 2.56
    },
    {
     "text": "yetmish",
-    "start": 2.56,
-    "end": 2.88
+    "start": 2.64,
+    "end": 3.04
    },
    {
     "text": "besh",
-    "start": 2.96,
-    "end": 3.2
+    "start": 3.08,
+    "end": 3.28
    },
    {
     "text": "gektar",
-    "start": 3.28,
-    "end": 3.6
+    "start": 3.36,
+    "end": 3.76
    },
    {
     "text": "maydonda",
-    "start": 3.68,
-    "end": 4.08
+    "start": 3.84,
+    "end": 4.24
    },
    {
-    "text": "joylashgan.",
-    "start": 4.2,
-    "end": 5.32
+    "text": "joylashgan:",
+    "start": 4.36,
+    "end": 5.4
+   },
+   {
+    "text": "bunga",
+    "start": 5.44,
+    "end": 6
    },
    {
     "text": "Si-Ke-Di",
-    "start": 5.36,
-    "end": 5.8
+    "start": 6.08,
+    "end": 6.48
    },
    {
-    "text": "loyihalari",
-    "start": 5.84,
-    "end": 6.64
+    "text": "zavodining",
+    "start": 6.56,
+    "end": 7.12
+   },
+   {
+    "text": "o\u02bbzi",
+    "start": 7.2,
+    "end": 7.76
+   },
+   {
+    "text": "va",
+    "start": 7.88,
+    "end": 8
+   },
+   {
+    "text": "butlovchi",
+    "start": 8.08,
+    "end": 8.48
+   },
+   {
+    "text": "qismlar",
+    "start": 8.52,
+    "end": 8.96
+   },
+   {
+    "text": "yetkazib",
+    "start": 9.04,
+    "end": 9.36
+   },
+   {
+    "text": "beruvchi",
+    "start": 9.44,
+    "end": 9.84
+   },
+   {
+    "text": "korkhonalar",
+    "start": 9.92,
+    "end": 10.56
+   },
+   {
+    "text": "klasteri",
+    "start": 10.64,
+    "end": 11.12
+   },
+   {
+    "text": "kiradi.",
+    "start": 11.2,
+    "end": 12.04
+   },
+   {
+    "text": "Si-Ke-Di",
+    "start": 12.08,
+    "end": 12.48
+   },
+   {
+    "text": "loyihalarining",
+    "start": 12.6,
+    "end": 13.36
+   },
+   {
+    "text": "to\u02bbliq",
+    "start": 13.44,
+    "end": 13.76
+   },
+   {
+    "text": "siklli",
+    "start": 13.8,
+    "end": 14.24
+   },
+   {
+    "text": "ishlab",
+    "start": 14.32,
+    "end": 14.56
+   },
+   {
+    "text": "chiqarish",
+    "start": 14.64,
+    "end": 15.04
+   },
+   {
+    "text": "quvvati",
+    "start": 15.12,
+    "end": 15.84
    },
    {
     "text": "yiliga",
-    "start": 6.8,
-    "end": 7.28
+    "start": 15.92,
+    "end": 16.48
    },
    {
     "text": "yuz",
-    "start": 7.44,
-    "end": 7.6
+    "start": 16.56,
+    "end": 16.72
    },
    {
     "text": "ming",
-    "start": 7.68,
-    "end": 7.84
+    "start": 16.8,
+    "end": 17.04
    },
    {
-    "text": "avtomobilga",
-    "start": 7.92,
-    "end": 8.56
+    "text": "avtomobil.",
+    "start": 17.12,
+    "end": 18.12
    },
    {
-    "text": "moʻljallangan.",
-    "start": 8.6,
-    "end": 9.92
+    "text": "Ikki",
+    "start": 18.16,
+    "end": 18.32
+   },
+   {
+    "text": "ming",
+    "start": 18.4,
+    "end": 18.48
+   },
+   {
+    "text": "o\u02bbttizinchi",
+    "start": 18.56,
+    "end": 19.12
+   },
+   {
+    "text": "yilgacha",
+    "start": 19.16,
+    "end": 19.76
+   },
+   {
+    "text": "Si-Ke-Di",
+    "start": 19.84,
+    "end": 20.28
+   },
+   {
+    "text": "loyihalarida",
+    "start": 20.32,
+    "end": 21.28
+   },
+   {
+    "text": "to\u02bbqqizta",
+    "start": 21.36,
+    "end": 21.84
+   },
+   {
+    "text": "model",
+    "start": 22.04,
+    "end": 22.24
+   },
+   {
+    "text": "rejalashtirilgan.",
+    "start": 22.32,
+    "end": 23.68
    }
   ]
  },
@@ -1353,7 +1478,7 @@
     "end": 3.2
    },
    {
-    "text": "Fargʻona,",
+    "text": "Farg\u02bbona,",
     "start": 3.28,
     "end": 4.24
    },
@@ -1383,7 +1508,7 @@
     "end": 7.6
    },
    {
-    "text": "Qozogʻistonda",
+    "text": "Qozog\u02bbistonda",
     "start": 7.64,
     "end": 8.32
    },
@@ -1418,7 +1543,7 @@
     "end": 1.84
    },
    {
-    "text": "toʻplamlar",
+    "text": "to\u02bbplamlar",
     "start": 1.92,
     "end": 2.64
    },
@@ -1463,7 +1588,7 @@
     "end": 7.173
    },
    {
-    "text": "Toʻplamlar",
+    "text": "To\u02bbplamlar",
     "start": 7.227,
     "end": 7.84
    },
@@ -1543,7 +1668,7 @@
     "end": 1.52
    },
    {
-    "text": "yoʻltanlamas",
+    "text": "yo\u02bbltanlamas",
     "start": 1.6,
     "end": 2.48
    },
@@ -1673,7 +1798,7 @@
     "end": 0.88
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 0.96,
     "end": 1.36
    },
@@ -1713,7 +1838,7 @@
     "end": 3.92
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 4,
     "end": 4.92
    },
@@ -1903,7 +2028,7 @@
     "end": 6.08
    },
    {
-    "text": "oʻz",
+    "text": "o\u02bbz",
     "start": 6.16,
     "end": 6.4
    },
@@ -1913,7 +2038,7 @@
     "end": 6.56
    },
    {
-    "text": "oʻlchamli",
+    "text": "o\u02bblchamli",
     "start": 6.64,
     "end": 7.12
    },
@@ -1968,7 +2093,7 @@
     "end": 2.24
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 2.28,
     "end": 2.48
    },
@@ -1983,12 +2108,12 @@
     "end": 3.84
    },
    {
-    "text": "qoʻshimcha",
+    "text": "qo\u02bbshimcha",
     "start": 3.92,
     "end": 4.48
    },
    {
-    "text": "toʻrt",
+    "text": "to\u02bbrt",
     "start": 4.56,
     "end": 4.72
    },
@@ -2043,12 +2168,12 @@
     "end": 8.56
    },
    {
-    "text": "oʻrni",
+    "text": "o\u02bbrni",
     "start": 8.64,
     "end": 8.88
    },
    {
-    "text": "koʻzda",
+    "text": "ko\u02bbzda",
     "start": 8.96,
     "end": 9.2
    },
@@ -2065,31 +2190,31 @@
    {
     "text": "ADM",
     "start": 0,
-    "end": 0.64
+    "end": 0.56
    },
    {
     "text": "ekotizimi",
-    "start": 0.72,
+    "start": 0.64,
     "end": 1.52
    },
    {
-    "text": "toʻrt",
+    "text": "to\u02bbrt",
     "start": 1.6,
-    "end": 1.76
+    "end": 1.84
    },
    {
-    "text": "yoʻnalishni",
-    "start": 1.84,
-    "end": 2.32
+    "text": "yo\u02bbnalishni",
+    "start": 1.88,
+    "end": 2.4
    },
    {
     "text": "birlashtiradi:",
-    "start": 2.4,
-    "end": 3.48
+    "start": 2.48,
+    "end": 3.56
    },
    {
     "text": "avtomobil",
-    "start": 3.52,
+    "start": 3.6,
     "end": 4.08
    },
    {
@@ -2100,31 +2225,31 @@
    {
     "text": "chiqarish,",
     "start": 4.48,
-    "end": 5.28
+    "end": 5.24
    },
    {
     "text": "savdo,",
-    "start": 5.4,
-    "end": 6.16
+    "start": 5.28,
+    "end": 6.12
    },
    {
     "text": "sotuvdan",
-    "start": 6.24,
-    "end": 6.72
+    "start": 6.16,
+    "end": 6.64
    },
    {
     "text": "keyingi",
-    "start": 6.8,
-    "end": 7.12
+    "start": 6.72,
+    "end": 7.04
    },
    {
     "text": "xizmat",
-    "start": 7.16,
-    "end": 7.76
+    "start": 7.12,
+    "end": 7.68
    },
    {
     "text": "va",
-    "start": 7.92,
+    "start": 7.76,
     "end": 8.08
    },
    {
@@ -2190,7 +2315,7 @@
   ]
  },
  "cl0": {
-  "duration": 4.675918,
+  "duration": 4.597551,
   "words": [
    {
     "text": "Endi",
@@ -2200,7 +2325,7 @@
    {
     "text": "ADM",
     "start": 0.56,
-    "end": 1.12
+    "end": 1.2
    },
    {
     "text": "Jizzax",
@@ -2210,27 +2335,27 @@
    {
     "text": "avtomobil",
     "start": 1.84,
-    "end": 2.4
+    "end": 2.32
    },
    {
     "text": "klasteriga",
-    "start": 2.48,
-    "end": 3.12
+    "start": 2.4,
+    "end": 2.96
    },
    {
     "text": "nazar",
-    "start": 3.16,
-    "end": 3.44
+    "start": 3.04,
+    "end": 3.28
    },
    {
     "text": "tashlaymiz.",
-    "start": 3.52,
-    "end": 4.64
+    "start": 3.36,
+    "end": 4.56
    }
   ]
  },
  "c_kia": {
-  "duration": 7.627755,
+  "duration": 29.805714,
   "words": [
    {
     "text": "Kia",
@@ -2240,16 +2365,16 @@
    {
     "text": "Si-Ke-Di",
     "start": 0.4,
-    "end": 0.88
+    "end": 1.04
    },
    {
     "text": "loyihasi:",
-    "start": 0.96,
-    "end": 2.08
+    "start": 1.16,
+    "end": 2.16
    },
    {
     "text": "investitsiya",
-    "start": 2.16,
+    "start": 2.24,
     "end": 3.12
    },
    {
@@ -2265,52 +2390,222 @@
    {
     "text": "qirq",
     "start": 3.6,
-    "end": 3.84
+    "end": 3.76
    },
    {
     "text": "ikki",
-    "start": 3.92,
-    "end": 4.08
+    "start": 3.84,
+    "end": 4
    },
    {
     "text": "million",
-    "start": 4.16,
-    "end": 4.48
+    "start": 4.08,
+    "end": 4.4
    },
    {
     "text": "dollar,",
-    "start": 4.56,
-    "end": 5.36
+    "start": 4.48,
+    "end": 5.28
    },
    {
     "text": "ikki",
-    "start": 5.48,
-    "end": 5.6
+    "start": 5.4,
+    "end": 5.52
    },
    {
     "text": "ming",
-    "start": 5.68,
-    "end": 5.84
+    "start": 5.6,
+    "end": 5.76
    },
    {
     "text": "yetti",
-    "start": 5.92,
-    "end": 6.24
+    "start": 5.84,
+    "end": 6.16
    },
    {
     "text": "yuz",
-    "start": 6.32,
-    "end": 6.48
+    "start": 6.2,
+    "end": 6.4
    },
    {
     "text": "ish",
-    "start": 6.56,
-    "end": 6.72
+    "start": 6.48,
+    "end": 6.56
    },
    {
-    "text": "oʻrni.",
-    "start": 6.8,
+    "text": "o\u02bbrni.",
+    "start": 6.64,
     "end": 7.68
+   },
+   {
+    "text": "Si-Ke-Di,",
+    "start": 7.76,
+    "end": 8.72
+   },
+   {
+    "text": "inglizcha",
+    "start": 8.8,
+    "end": 9.6
+   },
+   {
+    "text": "\"Completely",
+    "start": 9.68,
+    "end": 10.24
+   },
+   {
+    "text": "Knocked",
+    "start": 10.4,
+    "end": 10.72
+   },
+   {
+    "text": "Down\",",
+    "start": 10.8,
+    "end": 11.52
+   },
+   {
+    "text": "avtomobil",
+    "start": 11.6,
+    "end": 12.24
+   },
+   {
+    "text": "to\u02bbliq",
+    "start": 12.32,
+    "end": 12.6
+   },
+   {
+    "text": "qismlarga",
+    "start": 12.64,
+    "end": 13.2
+   },
+   {
+    "text": "ajratilgan",
+    "start": 13.28,
+    "end": 13.84
+   },
+   {
+    "text": "holda",
+    "start": 13.92,
+    "end": 14.16
+   },
+   {
+    "text": "keltirilib,",
+    "start": 14.24,
+    "end": 15.12
+   },
+   {
+    "text": "zavodda",
+    "start": 15.2,
+    "end": 15.84
+   },
+   {
+    "text": "noldan",
+    "start": 15.92,
+    "end": 16.4
+   },
+   {
+    "text": "yig\u02bbilishini",
+    "start": 16.44,
+    "end": 16.88
+   },
+   {
+    "text": "anglatadi.",
+    "start": 16.96,
+    "end": 18.12
+   },
+   {
+    "text": "Es-Ki-Di",
+    "start": 18.16,
+    "end": 18.72
+   },
+   {
+    "text": "da",
+    "start": 18.76,
+    "end": 18.8
+   },
+   {
+    "text": "esa",
+    "start": 18.88,
+    "end": 19.36
+   },
+   {
+    "text": "avtomobil",
+    "start": 19.44,
+    "end": 20.08
+   },
+   {
+    "text": "yirik",
+    "start": 20.16,
+    "end": 20.48
+   },
+   {
+    "text": "uzellardan",
+    "start": 20.56,
+    "end": 21.12
+   },
+   {
+    "text": "yig\u02bbiladi.",
+    "start": 21.2,
+    "end": 22.36
+   },
+   {
+    "text": "Si-Ke-Di",
+    "start": 22.4,
+    "end": 22.92
+   },
+   {
+    "text": "tsekhida",
+    "start": 22.96,
+    "end": 23.6
+   },
+   {
+    "text": "to\u02bbliq",
+    "start": 23.68,
+    "end": 24
+   },
+   {
+    "text": "sikl",
+    "start": 24.08,
+    "end": 24.4
+   },
+   {
+    "text": "bor:",
+    "start": 24.72,
+    "end": 25.08
+   },
+   {
+    "text": "kuzov",
+    "start": 25.12,
+    "end": 25.44
+   },
+   {
+    "text": "payvandlanadi,",
+    "start": 25.52,
+    "end": 26.52
+   },
+   {
+    "text": "bo\u02bbyaladi",
+    "start": 26.56,
+    "end": 27.36
+   },
+   {
+    "text": "va",
+    "start": 27.44,
+    "end": 27.68
+   },
+   {
+    "text": "yakuniy",
+    "start": 27.76,
+    "end": 28.28
+   },
+   {
+    "text": "yig\u02bbishdan",
+    "start": 28.32,
+    "end": 28.8
+   },
+   {
+    "text": "o\u02bbtadi.",
+    "start": 28.827,
+    "end": 29.84
    }
   ]
  },
@@ -2333,7 +2628,7 @@
     "end": 2.48
    },
    {
-    "text": "oʻn",
+    "text": "o\u02bbn",
     "start": 2.52,
     "end": 2.64
    },
@@ -2348,7 +2643,7 @@
     "end": 3.2
    },
    {
-    "text": "oʻndan",
+    "text": "o\u02bbndan",
     "start": 3.28,
     "end": 3.68
    },
@@ -2368,7 +2663,7 @@
     "end": 5.12
    },
    {
-    "text": "toʻrt",
+    "text": "to\u02bbrt",
     "start": 5.2,
     "end": 5.36
    },
@@ -2388,7 +2683,7 @@
     "end": 6.24
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 6.32,
     "end": 7.28
    },
@@ -2548,7 +2843,7 @@
     "end": 21.6
    },
    {
-    "text": "yigʻish",
+    "text": "yig\u02bbish",
     "start": 21.64,
     "end": 21.92
    },
@@ -2623,7 +2918,7 @@
     "end": 5.6
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 5.68,
     "end": 6.427
    },
@@ -2633,7 +2928,7 @@
     "end": 6.8
    },
    {
-    "text": "oʻrindiqlar,",
+    "text": "o\u02bbrindiqlar,",
     "start": 6.96,
     "end": 7.88
    },
@@ -2738,7 +3033,7 @@
     "end": 19.88
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 19.92,
     "end": 20.24
    },
@@ -2848,7 +3143,7 @@
     "end": 5.2
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 5.28,
     "end": 6.08
    },
@@ -2893,7 +3188,7 @@
     "end": 10.08
    },
    {
-    "text": "poʻlatdan",
+    "text": "po\u02bblatdan",
     "start": 10.12,
     "end": 10.8
    },
@@ -2928,7 +3223,7 @@
     "end": 14.08
    },
    {
-    "text": "oʻzlashtiriladi.",
+    "text": "o\u02bbzlashtiriladi.",
     "start": 14.16,
     "end": 15.52
    }
@@ -3013,7 +3308,7 @@
     "end": 8.4
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 8.48,
     "end": 9.36
    }
@@ -3093,7 +3388,7 @@
     "end": 3.28
    },
    {
-    "text": "oʻttiz",
+    "text": "o\u02bbttiz",
     "start": 3.32,
     "end": 3.68
    },
@@ -3133,7 +3428,7 @@
     "end": 6.08
    },
    {
-    "text": "oʻrni.",
+    "text": "o\u02bbrni.",
     "start": 6.16,
     "end": 7.04
    }
@@ -3143,49 +3438,34 @@
   "duration": 8.045714,
   "words": [
    {
-    "text": "Ikki",
-    "start": 0,
-    "end": 0.2
+    "text": "2020-yilda",
+    "start": 0.14,
+    "end": 1.52
    },
    {
-    "text": "ming",
-    "start": 0.24,
-    "end": 0.4
+    "text": "ADM",
+    "start": 1.8,
+    "end": 2.36
    },
    {
-    "text": "yigirmanchi",
-    "start": 0.48,
-    "end": 1.04
-   },
-   {
-    "text": "yilda",
-    "start": 1.12,
-    "end": 1.68
-   },
-   {
-    "text": "A-De-Em",
-    "start": 1.76,
-    "end": 2.4
-   },
-   {
-    "text": "Jizzakh",
-    "start": 2.48,
-    "end": 2.96
+    "text": "Jizzax",
+    "start": 2.52,
+    "end": 2.94
    },
    {
     "text": "avtozavodi",
-    "start": 3.04,
-    "end": 3.6
+    "start": 3.02,
+    "end": 3.64
    },
    {
     "text": "qurilishi",
-    "start": 3.68,
-    "end": 4.08
+    "start": 3.7,
+    "end": 4.12
    },
    {
     "text": "boshlandi.",
     "start": 4.16,
-    "end": 5.32
+    "end": 4.76
    },
    {
     "text": "Birinchi",
@@ -3194,18 +3474,18 @@
    },
    {
     "text": "bosqich",
-    "start": 5.8,
-    "end": 6.32
+    "start": 5.72,
+    "end": 6.16
    },
    {
-    "text": "Es-Ki-Di",
-    "start": 6.4,
-    "end": 7.04
+    "text": "SKD",
+    "start": 6.46,
+    "end": 7
    },
    {
-    "text": "boʻldi.",
-    "start": 7.08,
-    "end": 8.08
+    "text": "bo\u02bbldi.",
+    "start": 7.06,
+    "end": 7.46
    }
   ]
  },
@@ -3308,7 +3588,7 @@
     "end": 10.88
    },
    {
-    "text": "yigʻildi.",
+    "text": "yig\u02bbildi.",
     "start": 10.96,
     "end": 12.08
    }
@@ -3368,7 +3648,7 @@
     "end": 6.28
    },
    {
-    "text": "yaʼni",
+    "text": "ya\u02bcni",
     "start": 6.32,
     "end": 6.88
    },
@@ -3383,7 +3663,7 @@
     "end": 7.92
    },
    {
-    "text": "yigʻish",
+    "text": "yig\u02bbish",
     "start": 8,
     "end": 8.32
    },
@@ -3413,7 +3693,7 @@
     "end": 0.8
    },
    {
-    "text": "toʻrtinchi",
+    "text": "to\u02bbrtinchi",
     "start": 0.84,
     "end": 1.28
    },
@@ -3448,7 +3728,7 @@
     "end": 4.96
    },
    {
-    "text": "yigʻish",
+    "text": "yig\u02bbish",
     "start": 5.04,
     "end": 5.36
    },
@@ -3468,7 +3748,7 @@
     "end": 7.6
    },
    {
-    "text": "toʻliq",
+    "text": "to\u02bbliq",
     "start": 7.68,
     "end": 8
    },
@@ -3488,7 +3768,7 @@
     "end": 9.28
    },
    {
-    "text": "boʻldi:",
+    "text": "bo\u02bbldi:",
     "start": 9.32,
     "end": 10.04
    },
@@ -3503,7 +3783,7 @@
     "end": 11.76
    },
    {
-    "text": "boʻyash",
+    "text": "bo\u02bbyash",
     "start": 11.8,
     "end": 12.32
    },
@@ -3518,7 +3798,7 @@
     "end": 13.24
    },
    {
-    "text": "yigʻish.",
+    "text": "yig\u02bbish.",
     "start": 13.28,
     "end": 14.16
    }

@@ -167,6 +167,31 @@ img { display: block; }
 #c-models .row { display: flex; justify-content: space-between; font: 600 25px/1.55 'Inter'; border-bottom: 1px solid rgba(255,255,255,.08); }
 #c-models .row .num { color: var(--o2); font-weight: 500; }
 
+/* v6: "CKD nima?" explainer inside the KIA CKD stop of the cluster */
+#ckd { left: 70px; top: 150px; width: 1220px; height: 840px; z-index: 9; padding: 0; overflow: hidden;
+  background: linear-gradient(160deg, rgba(12,13,16,.93), rgba(8,9,12,.86)) !important; }
+#ckd .kick { position: absolute; left: 50px; top: 42px; font-size: 22px; }
+#ckd-t { position: absolute; left: 50px; top: 78px; font: 700 62px/1 'Montserrat'; letter-spacing: .01em; white-space: nowrap; }
+#ckd-t b { color: var(--o); font-weight: 800; }
+#ckd-s { position: absolute; left: 50px; top: 158px; width: 1120px; font: 400 29px/1.3 'Inter'; color: var(--t); }
+#ckd-stage { position: absolute; left: 160px; top: 215px; width: 900px; height: 411px; }
+#ckd-glow { position: absolute; left: 60px; right: 60px; top: 340px; height: 90px; border-radius: 50%; background: radial-gradient(closest-side, rgba(233,113,50,.55), transparent); }
+.ckd-st { position: absolute; top: 0; height: 411px; width: 112.5px; background: url(assets/s8_00.png) no-repeat; background-size: 900px 411px; }
+#ckd-paint { position: absolute; inset: 0; -webkit-mask: url(assets/s8_00.png) 0 0 / 900px 411px no-repeat; mix-blend-mode: screen; }
+.ckd-sp { position: absolute; width: 0; height: 0; }
+.ckd-sp::before { content: ''; position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%;
+  background: radial-gradient(closest-side, #fff, rgba(255,190,110,.9) 30%, rgba(233,113,50,.35) 60%, transparent); mix-blend-mode: screen; }
+#ckd-skd { position: absolute; left: 50px; top: 646px; padding: 12px 18px; border-radius: 10px; font: 500 24px/1.2 'Inter'; color: var(--mute);
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.16); }
+#ckd-skd b { font: 700 24px 'Montserrat'; color: var(--t); letter-spacing: .08em; margin-right: 10px; }
+#ckd-line { position: absolute; left: 110px; top: 772px; width: 1000px; height: 3px; background: rgba(255,255,255,.12); }
+#ckd-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, var(--o), var(--o2)); box-shadow: 0 0 16px var(--o); }
+.ckd-n { position: absolute; top: 740px; width: 300px; margin-left: -150px; text-align: center; }
+.ckd-n i { display: block; margin: 0 auto; width: 64px; height: 64px; border-radius: 50%; font: 600 26px/60px 'Oswald'; font-style: normal; color: var(--mute);
+  background: #101216; border: 2px solid rgba(255,255,255,.2); }
+.ckd-n span { display: block; margin-top: 8px; font: 700 21px/1.1 'Montserrat'; letter-spacing: .12em; color: var(--mute); }
+.ckd-n.on i { color: #fff; background: var(--o); border-color: #ffd2b0; box-shadow: 0 0 26px var(--o); }
+.ckd-n.on span { color: var(--t); }
 /* --- maps --- */
 .pin { position: absolute; z-index: 6; }
 .pin .pole { position: absolute; left: -2px; width: 4px; background: linear-gradient(0deg, var(--o), rgba(255,180,120,.2)); bottom: 0; }
@@ -332,6 +357,13 @@ img { display: block; }
     <div class="abs" id="c-title">«ADM JIZZAKH» AVTOMOBIL KLASTERI</div>
     <div id="c-tags"></div>
     <div id="c-cards"></div>
+    <div class="abs dark" id="ckd"><div class="kick">CKD NIMA?</div>
+      <div id="ckd-t"><b>C</b>ompletely <b>K</b>nocked <b>D</b>own</div>
+      <div id="ckd-s">Avtomobil toʻliq qismlarga ajratilgan holda keltiriladi va zavodda noldan yigʻiladi</div>
+      <div id="ckd-stage"><div id="ckd-glow"></div><div id="ckd-car"></div><div id="ckd-paint"></div></div>
+      <div id="ckd-skd"><b>SKD</b>Semi Knocked Down — yirik uzellardan yigʻish</div>
+      <div id="ckd-line"><div id="ckd-fill"></div></div>
+    </div>
     <div class="abs dark xbox" id="c-area" style="left:40px;top:150px;width:400px;padding:16px 24px;z-index:8"><div class="hd">ISHLAB CHIQARISH MAYDONI</div><div class="bg num"><span id="c-area-v">75</span><small>gektar</small></div></div>
     <div class="abs dark" id="c-models">
       <div class="hd">CKD loyihalari:<span class="num">100 000</span>avtomobil (yiliga)<br><span style="font:500 21px Inter;color:var(--mute)">(ICE + NEV)</span></div>
@@ -603,6 +635,17 @@ const CL = [
 const VOLH = 110; // extrusion height (plane px) of a highlighted building
 const cnum = (t, t0, d, v, dec) => { const x = v * E.expo(clamp((t - t0) / d)); return dec ? x.toFixed(dec).replace('.', ',') : Math.round(x).toString(); };
 const MODELS = [['Sonet', '2024'], ['K3', '2026'], ['Sonet Prime', '2026'], ['Tiggo 8', '2027'], ['Tiggo 7', '2027'], ['CS55', '2028'], ['UNI-E', '2028'], ['K3 FL', '2029'], ['Sonet 2', '2030']];
+// v6: CKD explainer (car cut into 8 vertical strips that explode, group like SKD units, weld, get painted, assemble)
+const CKD_STEPS = [['01', 'QISMLAR KELADI'], ['02', 'PAYVANDLASH'], ['03', 'BOʻYASH'], ['04', 'YAKUNIY YIGʻISH']];
+const CKD_SEAMS = [[112, 250], [225, 205], [337, 280], [450, 230], [562, 265], [675, 215], [787, 255]];
+function buildCKD() {
+  const car = $('ckd-car');
+  for (let i = 0; i < 8; i++) { const d = document.createElement('div'); d.className = 'ckd-st'; d.id = 'cks' + i;
+    d.style.left = i * 112.5 + 'px'; d.style.backgroundPosition = `${-i * 112.5}px 0`; car.appendChild(d); }
+  CKD_SEAMS.forEach(([x, y], i) => { const d = document.createElement('div'); d.className = 'ckd-sp'; d.id = 'ckp' + i; d.style.left = x + 'px'; d.style.top = y + 'px'; $('ckd-stage').appendChild(d); });
+  CKD_STEPS.forEach(([n, l], i) => { const d = document.createElement('div'); d.className = 'ckd-n'; d.id = 'ckn' + i; d.style.left = (110 + i * 1000 / 3) + 'px';
+    d.innerHTML = `<i>${n}</i><span>${l}</span>`; $('ckd').appendChild(d); });
+}
 function buildCluster() {
   const vols = $('c-vols'), cards = $('c-cards'), tags = $('c-tags'), svg = $('c-svg');
   CL.forEach((c) => {
@@ -924,6 +967,48 @@ SCN.kpi = (t, s) => {
 // cluster: aerial fly-over, callouts pop one by one in slide order of narration
 // cluster: the camera flies to each workshop in narration order; the building rises as a glowing extrusion and its
 // data panel pops in with counters on the spoken numbers; at the end it pulls back over all seven (reference_map style)
+// v6: "CKD nima?" — on the second "Si-Ke-Di" of c_kia; words drive the stages
+function ckdExplainer(t) {
+  const lid = 'c_kia', w = (re, n = 1) => W(lid, WI(lid, re, n));
+  const t0 = w(/^si-ke-di/i, 2) - .35, t1 = L(lid).end + .05;
+  const k = ramp01(t, t0, .6) * (1 - ramp01(t, t1, .45));
+  const card = $('ckd'); show(card, k);
+  if (k <= 0) return 0;
+  card.style.transform = `perspective(1400px) rotateY(${(4 - 4 * E.out(clamp((t - t0) / .8)) + 1.2 * Math.sin(t * .4)).toFixed(2)}deg) translateY(${(30 * (1 - E.out(clamp((t - t0) / .7)))).toFixed(1)}px)`;
+  pop($('ckd-t'), t, w(/completely/i) - .1, { y: 20, s: .96 });
+  pop($('ckd-s'), t, w(/^avtomobil/i) - .1, { y: 14, s: .98 });
+  const tQ = w(/^qismlarga/i), tK = w(/^keltirilib/i), tS = w(/^es-ki-di/i), tC = w(/^si-ke-di/i, 3), tW = w(/^payvand/i), tP = w(/^bo.yaladi/i), tA = w(/^yakuniy/i);
+  pop($('ckd-skd'), t, tS - .1, { y: 10, s: .95 });
+  $('ckd-skd').style.borderColor = t >= tS && t < tC ? 'rgba(233,113,50,.8)' : 'rgba(255,255,255,.16)';
+  // car stage
+  pop($('ckd-stage'), t, t0 + .25, { y: 20, s: .94 });
+  const ex = E.io(clamp((t - (tQ - .3)) / .9)), sk = E.io(clamp((t - tS) / .7)) * (1 - E.io(clamp((t - tC) / .6))), wd = E.io(clamp((t - tW) / .9));
+  for (let i = 0; i < 8; i++) {
+    const g = i < 3 ? 0 : i < 6 ? 1 : 2, h = F.hash(i * 17 + 3);
+    const exX = (i - 3.5) * 46, exY = h * 46, exR = (i - 3.5) * 2.6 + h * 4;     // fully knocked down: every part apart
+    const skX = (g - 1) * 70, skY = 0, skR = 0;                                    // SKD: three big units
+    const m = ex * (1 - wd);
+    const x = lerp(exX, skX, sk) * m, y = lerp(exY, skY, sk) * m + 4 * Math.sin(t * 1.3 + i) * m, r = lerp(exR, skR, sk) * m;
+    $('cks' + i).style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${r.toFixed(2)}deg)`;
+  }
+  const paint = E.io(clamp((t - tP) / 1.1)), asm = E.out(clamp((t - tA) / .8));
+  const gray = 1 - paint;
+  $('ckd-car').style.filter = `grayscale(${gray.toFixed(3)}) brightness(${lerp(.62, 1, paint).toFixed(3)}) contrast(${lerp(1.25, 1.02, paint).toFixed(3)}) drop-shadow(0 0 ${(1.5 * gray).toFixed(1)}px #E97132) drop-shadow(0 26px 22px rgba(0,0,0,.6))`;
+  // paint pass: a warm band sweeps across the body (masked to the car), then the assembly light sweep
+  const pb = t >= tP && t < tP + 1.4 ? lerp(-20, 120, (t - tP) / 1.4) : t >= tA && t < tA + 1.1 ? lerp(-20, 120, (t - tA) / 1.1) : -100;
+  const pa = t < tA ? .85 : .6;
+  $('ckd-paint').style.background = pb > -50 ? `linear-gradient(100deg, transparent ${(pb - 14).toFixed(1)}%, rgba(255,170,100,${pa}) ${pb.toFixed(1)}%, rgba(255,255,255,${pa}) ${(pb + 3).toFixed(1)}%, transparent ${(pb + 16).toFixed(1)}%)` : 'none';
+  // welding sparks at the seams while the parts close
+  CKD_SEAMS.forEach((_, i) => { const sp = $('ckp' + i), f = Math.floor(t * 24), on = t >= tW - .1 && t < tW + 1.6;
+    const a = on ? (.35 + .65 * Math.abs(F.hash(f * 7 + i * 13))) * (1 - clamp((t - tW - 1.1) / .5)) : 0;
+    sp.style.opacity = a.toFixed(3); sp.style.transform = `scale(${(.6 + .8 * Math.abs(F.hash(f * 3 + i))).toFixed(2)})`; });
+  $('ckd-glow').style.opacity = (.25 + .75 * asm).toFixed(3);
+  // process line
+  const ts = [tK, tW, tP, tA], fill = ts.reduce((acc, tt, i) => acc + (i ? E.io(clamp((t - tt + .3) / .6)) : 0), 0) / 3;
+  $('ckd-fill').style.width = (fill * 100).toFixed(2) + '%';
+  ts.forEach((tt, i) => { const n = $('ckn' + i); pop(n, t, tK - .2 + i * .12, { y: 14, s: .9 }); n.classList.toggle('on', t >= tt - .05); });
+  return k;
+}
 SCN.cluster = (t, s) => {
   const lt = t - s.start;
   const beat = CL.map((c, i) => [L(c.line).vo - .45, i < CL.length - 1 ? L(CL[i + 1].line).vo - .45 : L('cl4').vo - .3]);
@@ -983,6 +1068,8 @@ SCN.cluster = (t, s) => {
     if (aa > 0) { $('c-area-v').textContent = cnum(t, ta, .6, 75, 0); $('c-area-v').style.visibility = t < ta - .05 ? 'hidden' : 'inherit'; } }
   const mp = pop($('c-models'), t, L('cl4').vo - .1, { y: 0, base: `translateX(${(-40 * (1 - clamp((t - L('cl4').vo) / .5))).toFixed(1)}px)` });
   if (mp > 0) MODELS.forEach((_, i) => pop($('mr' + i), t, L('cl4').vo + .3 + i * .22, { y: 12 }));
+  const xk = ckdExplainer(t);                                    // v6: map softens behind the CKD explainer
+  $('c-world').style.filter = xk > .01 ? `blur(${(5 * xk).toFixed(1)}px) brightness(${(1 - .35 * xk).toFixed(3)})` : 'none';
   return { grain: .05, leak: .1, vignette: .85 };
 };
 SCN.geo = (t, s) => {
@@ -1221,7 +1308,7 @@ window.seek = async (t) => {
   const LOGO = await (await fetch('assets/adm_logo_jizzakh.svg')).text();   // inline, so the live text uses the page fonts
   document.querySelectorAll('.admlogo').forEach((el) => { el.innerHTML = LOGO; });
   LOGO_SVG = LOGO; buildIntro();
-  buildHist(); buildTicks(); buildCluster(); buildGeo(); buildLogi(); buildSeg(); buildEco();
+  buildHist(); buildTicks(); buildCluster(); buildCKD(); buildGeo(); buildLogi(); buildSeg(); buildEco();
   await document.fonts.ready;
   await Promise.all(Array.from(document.images).map((im) => im.decode().catch(() => {})));
   window.TOTAL = TL.total;
