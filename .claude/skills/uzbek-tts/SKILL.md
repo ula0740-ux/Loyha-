@@ -49,6 +49,8 @@ Its settings are the default for every future Uzbek voice-over, so do not change
 - Default model: **`eleven_v4`** with `language_code: "uz"` plus x → kh. The user picked this by ear from 6 variants (v3/v4/multilingual_v2 × x/kh/Cyrillic). STT had rated plain-x v3 as "correct", but the user heard "eks". **The user's ear decides; STT is only a helper.**
 - On v4, always send the neighbouring sentences as `previous_text`/`next_text`. Without them, short lines ("Shaffof jarayon. Barqaror jamoa.") can come out with a Persian accent; STT then writes Arabic script. `segments.ts` and `narrate.mts` already do this.
 - ADM on v4: "ADM" is read as "adiyam". The lexicon form "A-de-em" is heard as "ADM".
+- **Film-level ADM override (ADM Jizzakh profile film, the user's choice by ear 2026-11-27):** in `video/adm-profile` ADM is spoken **"A-De-Em"** (Uzbek letter names, joined, no pause: "A-De-Em Jizzakh"), set in that film's `narrate.mts` (`adeem()`). There the user rejected "Ey-di-em" (English letters) and the lexicon's "A-de-em," (with a pause). The lexicon entry is unchanged (other films keep the baseline); if a new ADM film is made, offer "A-De-Em" first and confirm by ear.
+- **"investitsiya" on v4 (2026-11-27):** some takes end in a weak "-ya" that Uzbek STT misses; cut the word and check it with Russian STT ("инвестиция" OK, "инвестиции" = weak), regenerate if weak; keep the plain spelling (the user chose it over hyphenated forms).
 - Only send parameters the model accepts. `ttsBody()` and `MODEL_CAPS` encode the tested facts:
   - `language_code` → v4 only;
   - `previous_text`/`next_text` → v4 and multilingual_v2, not v3;

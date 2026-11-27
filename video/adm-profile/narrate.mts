@@ -28,11 +28,34 @@ function prepMixed(t: string) {
 // ("Si-Ke-Di tsekhida"). It changes letters, so it is NOT a lexicon word entry (sameLetters rule); the written text,
 // captions and the STT reference keep "sex".
 const tsekh = (tts: string) => tts.replace(/(^|[^\p{L}ʻʼ'])([Ss])ekh/gu, (_m, pre, s) => pre + (s === 'S' ? 'Tsekh' : 'tsekh'));
-// Film-only spoken override (v4, 2026-11-26): "ADM" is said the way the user's reference video says it
-// (src/user_ref_adm.mp4: English letter names "Ey-di-em", run straight into "Jizzakh" with no pause; candidates and the
-// comparison in audio/variants6/). Changes letters, so not a lexicon entry; written text, captions and STT keep "ADM".
-const eydiem = (tts: string) => tts.replace(/A-de-em,?/g, 'Ey-di-em');
-const spoken = (tts: string) => eydiem(tsekh(tts));
+// Film-only spoken override (v5, the user's choice by ear 2026-11-27, variant 2 of audio/variants7/): "ADM" is said
+// "A-De-Em" — Uzbek letter names, joined, no pause after it ("A-De-Em Jizzakh"). Rejected: v4 "Ey-di-em" and the
+// lexicon's "A-de-em," (with pause). Only capitals change (sameLetters holds), but the lexicon keeps the approved
+// baseline of the other films; written text, captions and STT keep "ADM".
+const adeem = (tts: string) => tts.replace(/A-de-em,?\s*/g, 'A-De-Em ');
+const spoken = (tts: string) => adeem(tsekh(tts));
+// v5: "investitsiya" — the v4 takes ended in a weak "-ya" (Russian STT of the cut word: "инвестиции"). The cut word of a
+// take is checked with Russian STT and must end in "-ия"; otherwise the take is regenerated (spelling stays plain).
+const API = 'https://api.elevenlabs.io';
+async function sttLang(mp3: Buffer, lang: string) {
+  const fd = new FormData(); fd.append('model_id', 'scribe_v1'); fd.append('language_code', lang);
+  fd.append('file', new Blob([new Uint8Array(mp3)], { type: 'audio/mpeg' }), 'a.mp3');
+  const r = await fetch(`${API}/v1/speech-to-text`, { method: 'POST', headers: { 'xi-api-key': process.env.ELEVENLABS_API_KEY || '' }, body: fd });
+  return ((await r.json()) as { text: string }).text || '';
+}
+async function invCheck(s: { mp3: Buffer; words: { text: string; start: number; end: number }[] }, tag: string) {
+  const ws = s.words.filter((w) => /^investitsiya/i.test(w.text));
+  const heard: string[] = [];
+  for (const w of ws) {
+    const f = `/tmp/inv_${process.pid}.mp3`, g = `/tmp/inv_${process.pid}_c.mp3`;
+    await writeFile(f, s.mp3);
+    await run('ffmpeg', ['-v', 'error', '-y', '-ss', String(Math.max(0, w.start - .04)), '-to', String(w.end + .06), '-i', f, '-c:a', 'libmp3lame', '-q:a', '2', g]);
+    heard.push(await sttLang(await readFile(g), 'rus'));
+  }
+  const ok = heard.every((h) => /ия[.,!?:;]*\s*$/i.test(h.trim()) || /ция/i.test(h) && !/ции/i.test(h));
+  if (ws.length) console.log(`    ${tag} investitsiya (ru STT): ${heard.join(' | ')} ${ok ? 'OK' : '✗ weak -ya'}`);
+  return ok;
+}
 const HERE = fileURLToPath(new URL('.', import.meta.url));
 const cfg = JSON.parse(await readFile(HERE + 'narration.json', 'utf8'));
 const voice = process.env.VOICE || cfg.voice;
@@ -57,11 +80,14 @@ for (const line of cfg.lines) {
     // context sentences go through prepareUzbek in full (English words included): English context pulled
     // "ADM" towards an English reading (heard by the user, 2026-10-15)
     const ctx = { previousText: cfg.lines[idx - 1] && spoken(prepareUzbek(plain(cfg.lines[idx - 1].text), 'latin').tts), nextText: cfg.lines[idx + 1] && spoken(prepareUzbek(plain(cfg.lines[idx + 1].text), 'latin').tts) };
-    const s = await synth(prep.tts, { voice, model: cfg.model, ...ctx });
+    // v5: seed 7 on the first take = the takes the user approved by ear in audio/variants7/ (same text and context)
+    const s = await synth(prep.tts, { voice, model: cfg.model, seed: 7 + k + Number(process.env.SEED_OFF || 0), ...ctx });
     const sc = process.env.CHECK === '0' ? undefined : score(spokenReference(plain(line.text)), await transcribe(s.mp3));
+    const inv = process.env.CHECK === '0' ? true : await invCheck(s, `${line.id} #${k + 1}`);
+    if (sc && !inv) sc.similarity -= .05;   // a weak "-ya" ranks the take below a clean one
     if (sc) console.log(`  ${line.id} #${k + 1}: STT ${(sc.similarity * 100).toFixed(1)}%${sc.problems.map((p) => `  ✗ ${p.expected}->${p.heard}`).join('')}`);
     if (!best || (sc && best.sc && sc.similarity > best.sc.similarity)) best = { s, sc };
-    if (!sc || (sc.similarity >= 0.97 && !sc.problems.some((p) => /x/.test(p.expected)))) break;
+    if (!sc || (inv && sc.similarity >= 0.97 && !sc.problems.some((p) => /x/.test(p.expected)))) break;
   }
   const s = best!.s;
   const mp3 = `${HERE}audio/${line.id}.mp3`;

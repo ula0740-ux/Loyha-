@@ -1,6 +1,6 @@
-# ADM Jizzakh — korporativ profil filmi (v4; v5 ishlanmoqda)
+# ADM Jizzakh — korporativ profil filmi (v5)
 
-- **Fayl:** `ADM_Global_Profile_v4.mp4` — 1920×1080, 30 fps, H.264 + AAC, 5:43 (342,6 s), 85,3 MB, ovoz −16,0 LUFS, true peak −1,75 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v3.mp4`) taqqoslash uchun saqlangan.
+- **Fayl:** `ADM_Global_Profile_v5.mp4` — 1920×1080, 30 fps, H.264 + AAC, 5:40 (340,2 s), 84,8 MB, ovoz −16,0 LUFS, true peak −1,9 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v4.mp4`) taqqoslash uchun saqlangan.
 - **Manba:** `src/ADM_Global_Company_Profile_UZB.pptx` (12 slayd) — asosiy faktlar manbai. v4 dan qoʻshimcha manba: foydalanuvchining videosi `src/user_ref_adm.mp4` (165 s) — undan faqat aniq aytilgan faktlar olindi, har biri vaqt belgisi bilan quyida ("v4: namuna videodan olingan faktlar"). Uslub uchun namunalar: `src/reference.mp4` (umumiy uslub) va `src/reference_map.mp4` (klaster xaritasi). `src/` papkasi repoga kirmaydi.
 - **Ovoz:** ElevenLabs, `eleven_v4` modeli, `language_code: uz`, Sarah ovozi. Matn `prepareUzbek` orqali yuboriladi (x → kh, F varianti), qoʻshni jumlalar kontekst sifatida beriladi va har jumla STT bilan tekshiriladi. Tasdiqlangan baza sozlamalari oʻzgartirilmagan, ovoz tezlashtirilmagan (TEMPO = 1.0).
 - **Foydalanuvchining keyingi talablari (2026-11):** slayd emas, original kino dunyosi; hikoya tartibi;
@@ -122,7 +122,9 @@ Har bir prompt kodda bajarilgan; generativ AI tasvirlari ishlatilmagan.
 - **SKD → "Es-Ki-Di"**. Lugʻatda `abbr`, approved.
 - **KD → "Ke-Di"** (CKD ga moslab). Avvalgi "Ka-de" yozuvi almashtirildi.
 - **"sex"** ning barcha shakllari (sexi, sexida …) ovozga **"tsekh…"** boʻlib boradi ("Si-Ke-Di tsekhida"). Bu harflarni oʻzgartiradi, shuning uchun lugʻatga yozilmadi (`sameLetters` qoidasi). Almashtirish faqat shu filmning `narrate.mts` skriptida, `tsekh()` funksiyasida bajariladi, kontekst jumlalarida ham. Yozma matn, ekrandagi yozuvlar va STT etaloni "sex" boʻlib qoladi.
-- **ADM → "Ey-di-em" (v4, shu film uchun):** foydalanuvchi talabi — ADM namuna videodagidek aytilsin (pastda "v4"). v2–v3 da lugʻatdagi "A-de-em," edi. v1 da notoʻgʻri eshitilgan "ADM ekotizimi …" jumlasi qayta yozildi; STT endi "ADM ekotizimi" deb eshitadi.
+- **ADM → "A-De-Em" (v5, foydalanuvchi quloq bilan tanlagan, 2026-11-27; `audio/variants7/` dagi 2-variant):** oʻzbekcha harf nomlari, qoʻshilgan, pauzasiz ("A-De-Em Jizzakh"). Barcha ADM (title, h2020, cl0, eco, outro) shunday. `narrate.mts` → `adeem()`; lugʻat oʻzgarmadi. Rad etilganlar: v4 dagi "Ey-di-em" va lugʻatdagi "A-de-em," (pauza bilan).
+- **investitsiya (v5):** oddiy yozuv, chiziqchasiz (foydalanuvchi tanlovi: 1-variant). Har take dagi soʻz kesib olinib ruscha STT da tekshiriladi va "-ия" bilan tugashi shart (`invCheck`); aks holda qayta yoziladi.
+- *Tarix:* **ADM → "Ey-di-em" (v4, shu film uchun):** foydalanuvchi talabi — ADM namuna videodagidek aytilsin (pastda "v4"). v2–v3 da lugʻatdagi "A-de-em," edi. v1 da notoʻgʻri eshitilgan "ADM ekotizimi …" jumlasi qayta yozildi; STT endi "ADM ekotizimi" deb eshitadi.
 - Namunalar `audio/variants/` papkasida (`CKD_*`, `SKD_*`, `ADM_*`, `*_variantlar.mp3`). Skript: `build/variants.mts`.
 - **CKD NEV → "Si-Ke-Di, New energy vehicle"**. "New energy vehicle" foydalanuvchining aniq tanlovi bilan **inglizcha** oʻqiladi. Narratsiyada `{"New energy vehicle"}` shaklida yoziladi va `prepareUzbek` dan oʻtmaydi. Ekrandagi kartochkada slayddagidek "CKD NEV" qoladi.
   - 4 ta variant sinaldi: `audio/variants5/CKD_NEV_variantlar.mp3`, skript `build/variants_nev.mts`.
@@ -221,7 +223,15 @@ Namunadagi, pptx bilan mos keladigan (yangi emas) faktlar: SKD investitsiyasi 12
 5. "2024-yil oxirigacha model qatorini yangilash va gibrid avtomobillarni yigʻish rejalashtirilgan" (0:42,4) va "2025-yilda presslash zavodi ish boshlaydi" (1:01,5). Bular eski rejalar. pptx da Shtamplash sexi 2024–2026. Sana qoʻshilmadi.
 6. Namunaning yakuniy shiori "ADM Jizzakh. Yangi imkoniyatlarni yaratmoqdamiz" (2:32,4). Filmda pptx shiori qoldi.
 
-## v5 — 1-bosqich (2026-11-27, yakuniy render hali qilinmagan)
+## v5 (2026-11-27)
+
+### 2-bosqich: yakuniy film
+- **Tanlov (foydalanuvchi qulogʻi, 2026-11-27):** ADM = "A-De-Em" (2-variant), investitsiya = oddiy yozuv (1-variant). K3/Sonet lavhalari 1-bosqichdagidek qoldi.
+- Qayta yozilgan jumlalar (`audio/narrate5.log`, seed 7 dan): title, h2020, cl0, eco, outro, c_kia, c_skd, c_lok, c_sht, c_nev, c_rd, c_dost, dost2, goals. Hammasida STT 98,6–100% (c_rd va c_dost dagi farqlar STT artefakti: "Ilmiy-tadqiqot" chiziqchasi, "DOST"→"doʻst"). "investitsiya" soʻzi hammasida ruscha STT da "инвестиция" (birlik): c_lok 5-take da, c_sht 4-, c_nev 3-, c_rd va c_dost 2-take da oʻtdi. CKD hammasida "Si-Ke-Di".
+- Film 340,2 s (v4 342,6 s); sahna tartibi oʻzgarmagan, klaster yana musiqa choʻqqisida.
+- Render: `build/render.py out/v5_master.mp4 --fps 30 --sub 1 --chunks 4` (10 206 kadr), 2-pass H.264 1800k + AAC 192k. QA: ochilish, Sonet, K3, klaster panellari (KIA CKD 242 mln $ / 2700), yakun kadrlari `out/v5_final_qa/`; video va audio 340,17/340,18 s, title ovozi 6,71 s da boshlanadi (timeline bilan mos); −16,0 LUFS, true peak −1,9 dBFS.
+
+### 1-bosqich
 Foydalanuvchining v4 haqidagi fikri: boshidagi "ADM Jizzakh" notoʻgʻri; "investitsiya" notoʻgʻri; "ADM" koʻp joyda butunlay notoʻgʻri ("Ey-di-em" ham, "A-de-em" ham qabul qilinmadi); Kia K3 (2026) va Kia Sonet (2024) videolari ishlab chiqarish boshlangan yilda chiroyli koʻrsatilsin.
 
 ### Talaffuz nomzodlari — `audio/variants7/` (izoh: `audio/variants7/izoh.txt`)
