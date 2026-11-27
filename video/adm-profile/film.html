@@ -1146,7 +1146,7 @@ SCN.dost = (t, s) => {
     show(el, clamp((t - t0) / .4));
     el.style.setProperty('--hl', (.25 + .75 * (1 - clamp((t - t0 - d * .8) / 1.2))).toFixed(3));   // headlights bright while approaching
   });
-  const VT = [W('dost1', 8), W('dost1', 9), W('dost1', 13)];
+  const VT = [/^mikroavtobus/i, /^bortli/i, /^furgon/i].map((re) => W('dost1', WI('dost1', re)));   // v7: by word, the line was reworded
   for (let i = 0; i < 3; i++) {   // slide-9 van types: drive in from the back of the scene and park in a row
     const el = $('v' + i), sp = spring(t, VT[i] - .6, .55, .74), a = clamp((t - VT[i] + .6) / .3);
     const sc = lerp(.3, 1, Math.min(1.02, sp)), y = (1 - Math.min(1, sp)) * -260, sway = Math.sin(lt * 2.1 + i) * 1.2 * Math.min(1, sp);

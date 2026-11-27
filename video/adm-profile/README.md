@@ -1,6 +1,6 @@
-# ADM Jizzakh — korporativ profil filmi (v6)
+# ADM Jizzakh — korporativ profil filmi (v7)
 
-- **Fayl:** `ADM_Global_Profile_v6.mp4` — 1920×1080, 30 fps, H.264 + AAC, 6:16 (376,2 s), 86,7 MB, ovoz −16,0 LUFS, true peak −1,9 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v5.mp4`) taqqoslash uchun saqlangan.
+- **Fayl:** `ADM_Global_Profile_v7.mp4` — 1920×1080, 30 fps, H.264 + AAC, 6:21 (381,0 s), 86,4 MB, ovoz −16,0 LUFS, true peak −1,6 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v6.mp4`) taqqoslash uchun saqlangan.
 - **Manba:** `src/ADM_Global_Company_Profile_UZB.pptx` (12 slayd) — asosiy faktlar manbai. v4 dan qoʻshimcha manba: foydalanuvchining videosi `src/user_ref_adm.mp4` (165 s) — undan faqat aniq aytilgan faktlar olindi, har biri vaqt belgisi bilan quyida ("v4: namuna videodan olingan faktlar"). Uslub uchun namunalar: `src/reference.mp4` (umumiy uslub) va `src/reference_map.mp4` (klaster xaritasi). `src/` papkasi repoga kirmaydi.
 - **Ovoz:** ElevenLabs, `eleven_v4` modeli, `language_code: uz`, Sarah ovozi. Matn `prepareUzbek` orqali yuboriladi (x → kh, F varianti), qoʻshni jumlalar kontekst sifatida beriladi va har jumla STT bilan tekshiriladi. Tasdiqlangan baza sozlamalari oʻzgartirilmagan, ovoz tezlashtirilmagan (TEMPO = 1.0).
 - **Foydalanuvchining keyingi talablari (2026-11):** slayd emas, original kino dunyosi; hikoya tartibi;
@@ -223,7 +223,25 @@ Namunadagi, pptx bilan mos keladigan (yangi emas) faktlar: SKD investitsiyasi 12
 5. "2024-yil oxirigacha model qatorini yangilash va gibrid avtomobillarni yigʻish rejalashtirilgan" (0:42,4) va "2025-yilda presslash zavodi ish boshlaydi" (1:01,5). Bular eski rejalar. pptx da Shtamplash sexi 2024–2026. Sana qoʻshilmadi.
 6. Namunaning yakuniy shiori "ADM Jizzakh. Yangi imkoniyatlarni yaratmoqdamiz" (2:32,4). Filmda pptx shiori qoldi.
 
-## v7 tayyorgarligi (2026-11-27, render qilinmagan)
+## v7 (2026-11-27)
+Foydalanuvchi tanlovlari (quloq bilan): Jizzakh = `audio/variants9/JIZZAKH_REF_tasdiqlangan.mp3` dagidek (tasdiqlangan ADM_HR_2026_v5 filmidagi "A-de-em, Jizzakh!"); Renault = "Renolt" (`RENAULT_UZ_2`).
+- **Topilgan qonuniyat:** eleven_v4 da "Jizzakh" faqat jumla oxirida, undov belgisi bilan (F varianti) toʻliq chuqur x bilan aytiladi. Gap ichida, ayniqsa k bilan boshlanadigan soʻzdan oldin, "Jizzaq" ga aylanadi. v7 da barcha shunday jumlalarda Jizzakh jumla oxiriga oʻtkazildi; har biridan 6 take yozildi va tasdiqlangan namunaga eng yaqini olindi (`build/jz_takes.mts`, `build/jz_pick.py`; MFCC-DTW, namunaning ikki Jizzakh i orasidagi farq 3,09).
+- **Matn oʻzgarishlari (eski → yangi; faktlar oʻzgarmagan, foydalanuvchi tasdigʻi kutilmoqda):**
+
+| Jumla | Eski | Yangi | Tanlangan take |
+|---|---|---|---|
+| title | ADM Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya. | ADM Jizzax! Koʻp brendli avtomobil ishlab chiqaruvchi kompaniya. (ovozda "A-de-em, Jizzakh!", namunadagidek) | DTW 2,41 (butun "A-de-em, Jizzakh!" iborasi), ru STT "Джазах!" |
+| h2020 | 2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich SKD boʻldi. | 2020-yilda avtozavod qurilishi boshlandi: ADM Jizzax! Birinchi bosqich SKD boʻldi. | DTW 3,98, "Джазах!" |
+| cl0 | Endi ADM Jizzax avtomobil klasteriga nazar tashlaymiz. | Endi avtomobil klasteriga nazar tashlaymiz: ADM Jizzax! | DTW 3,36, "Джазах!" |
+| dost1 | Jizzax tijorat transporti loyihasida DOST milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi. | Tijorat transporti loyihasi — Jizzax! DOST milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi. | DTW 3,92, "Джазах!" |
+
+- geo ("Jizzax, Toshkent …"), logi ("Jizzaxdan") va outro ("ADM Jizzax: …") da x toʻgʻri eshitilgan edi, ular oʻzgarmadi.
+- Sarlavhadagi ADM endi namunadagidek "A-de-em," (pauza bilan; `narrate.mts` → `spokenFor('title')`). Qolgan ADM lar "A-De-Em".
+- **Renault:** h2021 = `RENAULT_UZ_2.mp3` ning oʻzi (matni bir xil), ovozda "Renolt", ekranda "Renault" (`reno()`). STT 100%.
+- Render: 11 429 kadr, 2-pass H.264 1620k + AAC 192k; QA kadrlari `out/v7_final_qa/`. Yakuniy filmdan kesilgan ochilish iborasining STT si: uz "Adem, Jizzakh", ru "Адем, джазах!" — tasdiqlangan namunaning STT si bilan bir xil. Video va audio 380,97 / 380,95 s.
+- Ekrandagi matnlar bu jumlalardan iqtibos emas, ular oʻzgarmadi. Furgonlar chiqishi endi soʻz boʻyicha topiladi (dost1 qayta tuzilgani uchun).
+
+## v7 tayyorgarligi (2026-11-27)
 - Foydalanuvchi: "JIZZAKH yana JIZZAQ deb aytilyapti". Filmdagi barcha "Jizzax" soʻzlari kesib tekshirildi. title, h2020, cl0 va dost1 da oxiri q/k ga oʻxshaydi. Sarlavhada sabab: "Jizzakh" dan keyin darhol "koʻp" keladi. geo, outro va logi da x eshitiladi. Nomzodlar: `audio/variants8/` (`izoh.txt`), skript `build/variants8.mts`.
 - **Renault:** foydalanuvchi tuzatdi (2026-11-27): 1-bosqichda **Ravon emas, Renault** yigʻilgan. Namuna video (0:14,9) va filmdagi "Ravon" Renault ga almashtirildi: h2021 jumlasi va 2021 kartochkasi. Ovozda "Reno" deyiladi (`narrate.mts` → `reno()`), yozuvda "Renault" qoladi. Nomzodlar: `audio/variants8/RENAULT_1/2`.
 

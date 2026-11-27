@@ -33,10 +33,14 @@ const tsekh = (tts: string) => tts.replace(/(^|[^\p{L}ʻʼ'])([Ss])ekh/gu, (_m, 
 // lexicon's "A-de-em," (with pause). Only capitals change (sameLetters holds), but the lexicon keeps the approved
 // baseline of the other films; written text, captions and STT keep "ADM".
 const adeem = (tts: string) => tts.replace(/A-de-em,?\s*/g, 'A-De-Em ');
-// Film-only spoken override (2026-11-27): the user corrected "Ravon" to Renault; the brand is spoken the French way
-// "Reno" (on-screen text and STT reference keep "Renault"). Form to be confirmed by ear (audio/variants8/RENAULT_*).
-const reno = (tts: string) => tts.replace(/Renault/g, process.env.RENO_FORM || 'Reno');
-const spoken = (tts: string) => reno(adeem(tsekh(tts)));
+// Film-only spoken override (2026-11-27): the user corrected "Ravon" to Renault; the brand is spoken Uzbek-style
+// "Renolt" (user's choice by ear, RENAULT_UZ_2 of audio/variants9; on-screen text and STT reference keep "Renault").
+const reno = (tts: string) => tts.replace(/Renault/g, process.env.RENO_FORM || 'Renolt');
+// v7 (the user's choice by ear, 2026-11-27): the opening is said exactly like the approved film video/pptx-film
+// (ADM_HR_2026_v5): "A-de-em, Jizzakh!" — lexicon ADM with its pause, Jizzakh closing the exclamation (variant F).
+// Other ADMs keep "A-De-Em". Renault is spoken "Renolt" (RENAULT_UZ_2 of audio/variants9).
+const spokenFor = (id: string) => (tts: string) => reno(id === 'title' ? tsekh(tts) : adeem(tsekh(tts)));
+const spoken = spokenFor('');
 // v5: "investitsiya" — the v4 takes ended in a weak "-ya" (Russian STT of the cut word: "инвестиции"). The cut word of a
 // take is checked with Russian STT and must end in "-ия"; otherwise the take is regenerated (spelling stays plain).
 const API = 'https://api.elevenlabs.io';
@@ -71,7 +75,7 @@ if (only.length) timing = JSON.parse(await readFile(HERE + 'audio/timing.json', 
 for (const line of cfg.lines) {
   if (only.length && !only.includes(line.id)) continue;
   // text stays in correct literary spelling; prepareUzbek (Uzbek Latin only) applies the tested lexicon and numbers
-  const prep = { tts: spoken(prepMixed(line.text).tts) };
+  const prep = { tts: spokenFor(line.id)(prepMixed(line.text).tts) };
   const shown = plain(line.text).split(/\s+/).filter(Boolean);
   // automatic ear: each take is transcribed (STT) and compared; up to ATTEMPTS takes, the best one is kept (CHECK=0 skips)
   const attempts = process.env.CHECK === '0' ? 1 : Number(process.env.ATTEMPTS || 4);
