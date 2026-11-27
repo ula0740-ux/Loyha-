@@ -1,0 +1,68 @@
+  title #1: STT 100.0%
+  title: A-de-em, Global, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.
+✓ title 5.49s  8/8 soʻz
+  hist1 #1: STT 100.0%
+  hist1: Kompaniyaga ikki ming oʻn toʻrtinchi yilda asos solingan. Ikki ming yigirmanchi yilda A-de-em, Jizzakh avtozavodi qurilishi boshlandi, ikki ming yigirma birinchi yil martda esa mijozlarga ilk avtomobillar yetkazildi.
+✓ hist1 14.45s  28/17 soʻz
+  hist2 #1: STT 98.8%  ✗ oktabrda->oktyabrda  ✗ ckd->skd  ✗ ckd->skd
+  hist2: Ikki ming yigirma ikkinchi yil oktabrda Chery avtomobillari es ka de, ikki ming yigirma toʻrtinchi yil martda esa Kia Sonet se ka de tekhnologiyasida yigʻila boshladi. Ikki ming yigirma oltinchi yil aprelda Kia K3 uchun yangi se ka de liniyasi ishga tushirildi.
+✓ hist2 17.71s  42/24 soʻz
+  struct #1: STT 97.3%  ✗ uch->∅  ✗ ta->uchta  ✗ adm->idm  ✗ to'rt->∅  ✗ ta->to'rtta  ✗ dilerlik->dealerlik
+  struct: A-de-em, Global tarkibida oʻttiz uch ta kompaniya va besh ming toʻqqiz yuz nafar khodim bor. Ular orasida A-de-em, Jizzakh zavodi, Fincom, yuz yigirma toʻrt ta dilerlik markazi va United Auto Alliance.
+✓ struct 15.73s  31/26 soʻz
+  sales #1: STT 99.7%  ✗ ming->∅  ✗ ta->mingta
+  sales: Ikki ming oʻn yettinchi yilda bozor ulushi nol butun oʻndan besh foiz, sotuv olti yuz ellik ta edi. Ikki ming yigirma beshinchi yilda ulush oʻn bir foizga, sotuv esa qirq olti ming toʻrt yuz oʻttiz toʻqqiz taga yetdi. Prognozga koʻra, ikki ming oʻttiz beshinchi yilda ulush oʻttiz besh foiz, sotuv ikki yuz oʻn ming ta boʻladi.
+✓ sales 21.79s  56/30 soʻz
+  kpi #1: STT 100.0%
+  kpi: Ikki ming yigirma beshinchi yilda yillik aylanma bir ming yigirma toʻrt million dollarni tashkil etdi. Kompaniya avtomobil sotuvi hajmi boʻyicha ikkinchi oʻrinda va eng yirik khususiy soliq toʻlovchilar oʻntaligida.
+✓ kpi 14.45s  29/23 soʻz
+  brands #1: STT 100.0%
+  brands: Joriy brendlar qatorida Kia, Chery, Hyundai va Changan bor. DOST esa Markaziy Osiyodagi birinchi milliy avtomobil brendi.
+✓ brands 10.19s  17/17 soʻz
+  cl1 #1: STT 97.7%  ✗ skd->eskida
+  cl1: Endi A-de-em, Jizzakh avtomobil klasteriga nazar tashlaymiz. Zavod faoliyatini dastlab es ka de sekhida ikki yuz ellik nafar khodim bilan boshlagan.
+✓ cl1 10.37s  21/17 soʻz
+  cl2 #1: STT 96.6%  ✗ ckd->skd
+  cl2 #2: STT 98.7%  ✗ ckd->sekadi
+  cl2: Es ka de loyihasi: oʻn ikki butun oʻndan olti million dollar va toʻrt yuz ellik ish oʻrni. Kia se ka de: ikki yuz qirq ikki million dollar va ikki ming yetti yuz ish oʻrni. Lokalizatsiya klasteri: yuz ellik million dollar va uch yuz ellik ish oʻrni. Shtamplash sekhi: ellik besh million dollar va yuz ellik ish oʻrni.
+✓ cl2 22.52s  57/37 soʻz
+  cl3 #1: STT 97.0%  ✗ ckd->sekede  ✗ nev->nv  ✗ ilmiytadqiqot->tadqiqot  ✗ dost->do'st
+  cl3 #2: STT 96.1%  ✗ ckd->day  ✗ nev->nv  ✗ ilmiytadqiqot->tadqiqot  ✗ dost->do'st
+  cl3 #3: STT 97.0%  ✗ ckd->sekada  ✗ nev->nv  ✗ ilmiytadqiqot->tadqiqot  ✗ dost->do'st
+  cl3: Yangi loyihalar: se ka de en e ve uchun yuz million dollar va bir ming ikki yuz ish oʻrni, ilmiy-tadqiqot ishlari uchun yuz million dollar va besh yuz muhandis, DOST tijorat avtomobillari uchun oʻttiz million dollar va bir ming ikki yuz ish oʻrni.
+✓ cl3 18.44s  43/34 soʻz
+  cl4 #1: STT 97.7%  ✗ ckd->d
+  cl4: Se ka de loyihalari yiliga yuz ming avtomobilga moʻljallangan, model qatori esa ikki ming yigirma toʻrtinchi yildagi Sonetdan ikki ming oʻttizinchi yildagi Sonet ikki gacha kengayadi.
+✓ cl4 12.20s  26/17 soʻz
+  geo #1: STT 99.1%  ✗ lokalizatsiya->lokallizatsiya
+  geo: Lokalizatsiya loyihalari Jizzakh, Toshkent, Fargʻona, Andijon, Nukus va Khorazmda, shuningdek Qozogʻistonda joylashgan.
+✓ geo 9.56s  12/12 soʻz
+  logi #1: STT 98.8%  ✗ kd->kadi
+  logi: Jizzakh viloyati sharqiy va gʻarbiy hududlar oʻrtasidagi strategik boʻgʻin. Shu yerdan United Auto Alliance ka de toʻplamlar va tayyor mahsulotni har bir hududga yetkazadi.
+✓ logi 12.36s  24/23 soʻz
+  seg #1: STT 98.8%  ✗ yo'ltanlamas->tanlamas
+  seg: Kompaniya sedan, yoʻltanlamas va tijorat avtomobillari segmentlarida ishtirok etadi.
+✓ seg 6.27s  9/9 soʻz
+  dost1 #1: STT 100.0%
+  dost1: Jizzakh tijorat transporti loyihasida DOST milliy brendi ostida mikroavtobus, bortli yuk mashinasi va furgon ishlab chiqariladi.
+✓ dost1 9.09s  16/16 soʻz
+  dost2 #1: STT 96.4%  ✗ o'rni->orni  ✗ skd->scada  ✗ ckd->scada  ✗ sakkizinchi->sakkinchi
+  dost2 #2: STT 93.7%  ✗ skd->scada  ✗ yettinchi->yetti  ✗ ckd->secada  ✗ sakkizinchi->sakkiz
+  dost2 #3: STT 96.8%  ✗ o'ttiz->olttiz  ✗ o'ttiz->olttiz  ✗ o'ttiz->olttiz  ✗ ckd->sekad  ✗ sakkizinchi->sakkinchi
+  dost2: Investitsiya oʻttiz million dollar, quvvat yiliga oʻttiz ming, lokalizatsiya oʻttiz foiz, bir ming ikki yuz ish oʻrni. Es ka de starti ikki ming yigirma yettinchi yilning birinchi choragida, se ka de starti esa ikki ming yigirma sakkizinchi yilning uchinchi choragida.
+✓ dost2 17.63s  40/26 soʻz
+  rnd #1: STT 100.0%
+  rnd: Tadqiqot va ishlanmalar markazining maqsadi: tekhnologik mustaqillik, DOST brendi ostida yangi modellar va jahon bozoriga chiqish.
+✓ rnd 9.95s  16/16 soʻz
+  rnd2 #1: STT 100.0%
+  rnd2: Markaz yengil tijorat avtomobilini eskizdan prototipgacha ishlab chiqdi va detallarning oʻz uch oʻlchamli chizmalarini chiqarmoqda.
+✓ rnd2 8.99s  15/15 soʻz
+  goals #1: STT 98.6%  ✗ ming->∅  ✗ ta->mingta  ✗ aylanmasida->aylanishida
+  goals: Ikki ming yigirma yettinchi yildan ikki ming oʻttiz beshinchi yilgacha boʻlgan maqsadlar: qoʻshimcha toʻrt yuz million dollar investitsiya, besh ming ta yangi ish oʻrni, tovar aylanmasida qoʻshimcha toʻrt ming yetti yuz million dollar va eksportda qoʻshimcha yuz ellik million dollar.
+✓ goals 17.63s  40/28 soʻz
+  eco #1: STT 100.0%
+  eco: A-de-em, ekotizimi toʻrtta biznes yoʻnalishini birlashtiradi: avtomobil ishlab chiqarish, avtomobil savdosi, sotuvdan keyingi khizmat va yangi mobillik.
+✓ eco 11.65s  17/17 soʻz
+  outro #1: STT 100.0%
+  outro: A-de-em, Global: innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz.
+✓ outro 6.61s  9/9 soʻz

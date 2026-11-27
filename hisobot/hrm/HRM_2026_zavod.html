@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="uz-Cyrl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRM Ҳисоботи 2026</title>
+<style>
+  :root{
+    --bg:#0b1020; --ink:#f4f6fb; --muted:#a9b3c9; --line:rgba(255,255,255,.12);
+    --accent:#ff8a3d; --sky:#9aaecb; --hot:#ff6b7a;
+    --ease:cubic-bezier(.65,0,.35,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;
+    font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+  body{display:grid;place-items:center;height:100dvh;width:100vw}
+  .stage{position:relative;width:min(100vw,calc(100dvh*16/9));aspect-ratio:16/9;overflow:hidden;container-type:size;
+    background:#0d1326;box-shadow:0 30px 80px rgba(0,0,0,.45);touch-action:pan-y}
+  @supports not (height:100dvh){body{height:100vh}.stage{width:min(100vw,calc(100vh*16/9))}}
+  svg#world{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  /* ---------- report panel (only the report data, over the factory) ---------- */
+  .panel{--k:1;--u:calc(var(--k)*1cqw);position:absolute;left:2.2cqw;right:2.2cqw;top:2.4cqh;bottom:29.5cqh;
+    display:flex;flex-direction:column;gap:calc(var(--u)*.6);overflow:hidden;font-size:calc(var(--u)*.9);line-height:1.25;
+    transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  .panel.out{opacity:0;transform:translateY(1.4cqh)}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;gap:calc(var(--u)*1.2)}
+  .head .step{display:inline-flex;align-items:center;gap:.6em;font-size:calc(var(--u)*.78);font-weight:700;letter-spacing:.18em;color:var(--accent)}
+  .head .step::before{content:"";width:calc(var(--u)*2);height:2px;background:currentColor;border-radius:2px}
+  .head h1{font-size:calc(var(--u)*2.05);line-height:1.08;font-weight:800;letter-spacing:-.015em;margin-top:calc(var(--u)*.25);text-shadow:0 2px 14px rgba(0,0,0,.5)}
+  .head h1.long{font-size:calc(var(--u)*1.55)}
+  .head .sub{font-size:calc(var(--u)*1);color:#c9d3e6;margin-top:calc(var(--u)*.2);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+  .badge{display:flex;align-items:center;gap:calc(var(--u)*.8);padding:calc(var(--u)*.5) calc(var(--u)*1);border-radius:calc(var(--u)*.8);
+    background:rgba(8,13,27,.7);border:1px solid var(--line);border-left:4px solid var(--hot);flex:none}
+  .badge b{font-size:calc(var(--u)*2.6);font-weight:800}
+  .badge span{font-size:calc(var(--u)*.85);font-weight:700;line-height:1.15}
+  .badge em{display:block;font-style:normal;font-weight:400;color:var(--muted);font-size:calc(var(--u)*.75)}
+  .body{flex:1;min-height:0;display:grid;gap:calc(var(--u)*.6);align-content:stretch}
+  .col{display:flex;flex-direction:column;gap:calc(var(--u)*.6);min-width:0;min-height:0}
+
+  .card{background:rgba(8,13,27,.68);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border:1px solid var(--line);
+    border-radius:calc(var(--u)*.75);padding:calc(var(--u)*.7) calc(var(--u)*.9);display:flex;flex-direction:column;gap:calc(var(--u)*.45);min-width:0}
+  .card.grow{flex:1}
+  .card h3{font-size:calc(var(--u)*.9);font-weight:700;color:#eef2fa;line-height:1.2}
+  .card h3 small{font-weight:400;color:var(--muted);font-size:.9em}
+  .cap{font-size:calc(var(--u)*.7);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+  .muted{color:var(--muted)}
+  .note{font-size:calc(var(--u)*.72);color:var(--muted);line-height:1.3}
+  .txt{font-size:calc(var(--u)*.82);color:#dbe2ee;line-height:1.35}
+  .txt b{color:#fff}
+
+  .kpis{display:grid;grid-template-columns:repeat(var(--c,4),minmax(0,1fr));gap:calc(var(--u)*.5)}
+  .kpi{background:rgba(8,13,27,.7);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border:1px solid var(--line);
+    border-radius:calc(var(--u)*.7);padding:calc(var(--u)*.55) calc(var(--u)*.8);display:flex;flex-direction:column;gap:calc(var(--u)*.12);min-width:0}
+  .kpi .l{font-size:calc(var(--u)*.62);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .kpi b{font-size:calc(var(--u)*1.7);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .kpi b small{font-size:.5em;font-weight:600;color:var(--muted);margin-left:.25em}
+  .kpi .s{font-size:calc(var(--u)*.7);color:#cdd6e6;line-height:1.25}
+  .kpi.acc{background:color-mix(in srgb,var(--accent) 26%,rgba(8,13,27,.75));border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+  .kpi.hot b{color:var(--hot)}
+  .kpi.hotb{border-color:rgba(255,107,122,.7)}
+
+  /* horizontal bars */
+  .hb{display:grid;grid-template-columns:minmax(0,max-content) minmax(calc(var(--u)*4),1fr) max-content;column-gap:calc(var(--u)*.5);
+    row-gap:calc(var(--u)*.26);align-items:center;font-size:calc(var(--u)*.72)}
+  .hb .l{text-align:right;color:#d3dbea;max-width:calc(var(--u)*15);line-height:1.15}
+  .hb .t{height:calc(var(--u)*.78);background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+  .hb .f{height:100%;width:var(--w);background:var(--sky);border-radius:3px;transform-origin:left;transform:scaleX(0);
+    transition:transform .8s var(--ease) calc(var(--i)*35ms)}
+  .hb .f.hi{background:var(--accent)} .hb .f.hot{background:var(--hot)}
+  .hb .v{font-weight:700;font-variant-numeric:tabular-nums}
+  .in .hb .f{transform:none}
+
+  /* vertical bars */
+  .vb{display:flex;gap:calc(var(--u)*.3);flex:1;min-height:calc(var(--u)*var(--vh,6.5));align-items:stretch;padding-top:calc(var(--u)*1)}
+  .vb .c{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
+  .vb .bs{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:2px;border-bottom:1px solid rgba(255,255,255,.15)}
+  .vb .b{position:relative;flex:1;max-width:calc(var(--u)*2.4);height:var(--h);min-height:1px;background:var(--sky);border-radius:3px 3px 0 0;
+    transform-origin:bottom;transform:scaleY(0);transition:transform .8s var(--ease) calc(var(--i)*30ms)}
+  .vb .b.s2{background:var(--accent)} .vb .b.hi{background:var(--accent)} .vb .b.hot{background:var(--hot)}
+  .vb .b i{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-style:normal;font-size:calc(var(--u)*.6);font-weight:700;
+    white-space:nowrap;padding-bottom:1px;color:#e8edf6}
+  .vb .x{font-size:calc(var(--u)*.6);color:var(--muted);margin-top:calc(var(--u)*.2);white-space:nowrap;line-height:1.1;text-align:center}
+  .vb.rot .x{writing-mode:vertical-rl;transform:rotate(180deg)}
+  .in .vb .b{transform:none}
+  .lg{display:flex;gap:calc(var(--u)*.9);font-size:calc(var(--u)*.66);color:var(--muted)}
+  .lg i{display:inline-block;width:.8em;height:.8em;border-radius:2px;margin-right:.35em;vertical-align:-.05em;background:var(--sky)}
+  .lg i.s2{background:var(--accent)}
+
+  /* line chart */
+  .ln{width:100%;height:auto;display:block;overflow:visible}
+  .ln polyline{fill:none;stroke:var(--accent);stroke-width:2.4;stroke-linejoin:round;stroke-dasharray:900;stroke-dashoffset:900;transition:stroke-dashoffset 1.2s var(--ease)}
+  .in .ln polyline{stroke-dashoffset:0}
+  .ln circle{fill:#0b1020;stroke:var(--accent);stroke-width:2}
+  .ln text{fill:#dfe6f2;font-size:10px;font-weight:700;text-anchor:middle}
+  .ln text.x{fill:#a9b3c9;font-weight:400}
+
+  /* tables */
+  .tb{width:100%;border-collapse:collapse;font-size:calc(var(--u)*.7);font-variant-numeric:tabular-nums}
+  .tb th{background:color-mix(in srgb,var(--accent) 30%,rgba(20,28,48,.9));color:#fff;text-align:left;font-weight:700;padding:calc(var(--u)*.26) calc(var(--u)*.45)}
+  .tb td{padding:calc(var(--u)*.2) calc(var(--u)*.45);border-bottom:1px solid rgba(255,255,255,.07);color:#dde4ef;vertical-align:top}
+  .tb .r{text-align:right;white-space:nowrap}
+  .tb tr.tot td{font-weight:800;color:#fff;background:rgba(255,255,255,.07)}
+  .tb td.hot,.tb tr.hot td{color:var(--hot);font-weight:700}
+  .tb td.grp{font-weight:700;color:#fff;background:rgba(255,255,255,.04)}
+
+  /* lists */
+  .ls{list-style:none;display:flex;flex-direction:column;gap:calc(var(--u)*.35)}
+  .ls li{display:flex;gap:calc(var(--u)*.55);align-items:flex-start;font-size:calc(var(--u)*.78);line-height:1.28}
+  .ls li .n{flex:none;width:calc(var(--u)*1.45);height:calc(var(--u)*1.45);border-radius:50%;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--accent) 35%,transparent);color:#fff;font-weight:800;font-size:calc(var(--u)*.68)}
+  .ls li b{color:#fff}
+  .ls li .d{display:block;color:var(--muted);font-size:.92em}
+  .rows{display:flex;flex-direction:column;gap:calc(var(--u)*.18);font-size:calc(var(--u)*.74)}
+  .rows div{display:flex;justify-content:space-between;gap:1em;border-bottom:1px dashed rgba(255,255,255,.08);padding-bottom:2px}
+  .rows div b{font-variant-numeric:tabular-nums}
+  .rows .more{color:var(--muted);font-style:italic;border:0}
+
+  .grid{display:grid;gap:calc(var(--u)*.5)}
+  .ph{display:grid;gap:calc(var(--u)*.5)}
+  .ph figure{display:flex;flex-direction:column;gap:calc(var(--u)*.25);min-width:0}
+  .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--u)*.5);display:block}
+  .ph figcaption{font-size:calc(var(--u)*.68);color:#d6deeb;line-height:1.2}
+  .ph figcaption b{color:var(--accent)}
+
+  /* hero (title + section dividers) */
+  .hero{align-self:center;justify-self:start;width:min(100%,calc(var(--u)*46));padding:calc(var(--u)*1.8) calc(var(--u)*2.2);gap:calc(var(--u)*.6)}
+  .hero .num{font-size:calc(var(--u)*4.4);font-weight:900;line-height:.9;color:var(--accent);letter-spacing:-.03em}
+  .hero h2{font-size:calc(var(--u)*2.8);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+  .hero p{font-size:calc(var(--u)*1.15);color:#cfd8e8}
+  .hero .rule{height:3px;width:calc(var(--u)*8);background:var(--accent);border-radius:3px}
+  .logo{background:#fff;border-radius:calc(var(--u)*.6);padding:calc(var(--u)*.5) calc(var(--u)*.9);align-self:flex-start}
+  .logo img{height:calc(var(--u)*2.6);display:block}
+
+  .stair{display:flex;flex-direction:column;gap:calc(var(--u)*.35)}
+  .stair div{border-radius:calc(var(--u)*.45);padding:calc(var(--u)*.4) calc(var(--u)*.7);background:rgba(154,174,203,.18);font-size:calc(var(--u)*.8)}
+  .stair div b{display:block;font-size:1.15em}
+  .stair div span{color:var(--muted);font-size:.85em}
+  .flow{font-size:calc(var(--u)*.85);line-height:1.5;color:#e6ecf5}
+  .tag{display:inline-block;font-size:calc(var(--u)*.62);font-weight:800;letter-spacing:.1em;padding:.25em .7em;border-radius:999px;
+    background:color-mix(in srgb,var(--accent) 80%,#000 0%);color:#0b1020}
+  .doc{display:flex;justify-content:center;align-items:center;min-height:0}
+  .doc img{max-height:100%;max-width:100%;border-radius:calc(var(--u)*.4);box-shadow:0 10px 40px rgba(0,0,0,.5);background:#fff}
+
+  /* ---------- controls ---------- */
+  .nav{position:absolute;left:50%;bottom:2.2cqh;transform:translateX(-50%);display:flex;align-items:center;gap:1cqw;
+    padding:.5cqw .7cqw;border-radius:999px;background:rgba(8,12,26,.78);border:1px solid var(--line);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .nav button{appearance:none;border:0;cursor:pointer;color:var(--ink);background:transparent;font:inherit}
+  .arrow{width:2.7cqw;height:2.7cqw;min-width:30px;min-height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);transition:background .25s,transform .25s}
+  .arrow:hover{background:rgba(255,255,255,.18)} .arrow:active{transform:scale(.94)}
+  .arrow[disabled]{opacity:.35;cursor:default}
+  .arrow svg{width:46%;height:46%}
+  .dots{display:flex;align-items:center;gap:.15cqw}
+  .dots button{width:1.15cqw;height:1.8cqw;min-width:8px;min-height:18px;display:grid;place-items:center;border-radius:4px}
+  .dots button i{width:.42cqw;height:.42cqw;min-width:4px;min-height:4px;border-radius:50%;background:rgba(169,179,201,.5);transition:transform .3s,background .3s}
+  .dots button.done i{background:rgba(169,179,201,.95)}
+  .dots button[aria-current="true"] i{background:var(--accent);transform:scale(1.9)}
+  .count{font-size:max(11px,.95cqw);font-weight:700;letter-spacing:.08em;font-variant-numeric:tabular-nums;min-width:4.4em;text-align:center}
+  .nav button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ---------- ambient (CSS) ---------- */
+  .blink{animation:blink 2.4s ease-in-out infinite}
+  .blink.b2{animation-delay:.8s}.blink.b3{animation-delay:1.6s}
+  @keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+  .belt{animation:belt 1.6s linear infinite}
+  @keyframes belt{to{stroke-dashoffset:-48}}
+  .mist{animation:mist 7s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .mist.m2{animation-duration:9s;animation-delay:-3s}.mist.m3{animation-duration:11s;animation-delay:-6s}
+  @keyframes mist{0%,100%{transform:translate(0,0) scale(1);opacity:.18}50%{transform:translate(40px,-26px) scale(1.25);opacity:.32}}
+  .glowpulse{animation:glow 3.2s ease-in-out infinite}
+  @keyframes glow{0%,100%{opacity:.55}50%{opacity:.95}}
+  @media (prefers-reduced-motion: reduce){
+    .blink,.belt,.mist,.glowpulse{animation:none!important}.mist{opacity:.22}
+    .panel,.hb .f,.vb .b,.ln polyline{transition:none!important}
+  }
+</style>
+</head>
+<body>
+<main class="stage" id="stage" aria-roledescription="taqdimot" aria-label="HRM Ҳисоботи 2026">
+<svg id="world" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="wallWeld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1733"/><stop offset="1" stop-color="#3a2238"/></linearGradient>
+    <linearGradient id="wallPaint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b2a3a"/><stop offset="1" stop-color="#0f4155"/></linearGradient>
+    <linearGradient id="wallAsm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#10233d"/><stop offset="1" stop-color="#173d4a"/></linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2133"/><stop offset="1" stop-color="#0c111d"/></linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6eaf0"/><stop offset=".55" stop-color="#aeb6c2"/><stop offset="1" stop-color="#7d8796"/></linearGradient>
+    <linearGradient id="primer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe7ee"/><stop offset="1" stop-color="#9fb0bf"/></linearGradient>
+    <linearGradient id="paintCol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5d6c"/><stop offset=".5" stop-color="#e3263c"/><stop offset="1" stop-color="#8f1022"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfefff"/><stop offset=".5" stop-color="#6fb7d9"/><stop offset="1" stop-color="#2f6f93"/></linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd8ff" stop-opacity=".55"/><stop offset="1" stop-color="#9fd8ff" stop-opacity="0"/></linearGradient>
+    <radialGradient id="spot" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="beam" cx="0" cy=".5" r="1"><stop offset="0" stop-color="#fff6c8" stop-opacity=".85"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="glowF" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+    <clipPath id="clipPrimer"><rect id="primerRect" x="-20" y="0" width="0" height="220"/></clipPath>
+    <clipPath id="clipColor"><rect id="colorRect" x="-20" y="0" width="0" height="220"/></clipPath>
+    <!-- shared car body shapes (local car coordinates 0..520) -->
+    <path id="lowerBody" d="M26 150 L26 120 Q28 106 48 102 L152 94 L404 94 L456 100 Q490 106 496 124 L496 150 Q496 154 490 154 L432 154 A42 42 0 0 0 348 154 L172 154 A42 42 0 0 0 88 154 L32 154 Q26 154 26 150 Z"/>
+    <path id="cabin" d="M152 94 L204 52 Q214 44 232 44 L330 44 Q346 44 358 54 L404 94 Z"/>
+    <path id="winRear" d="M170 92 L210 57 Q216 52 228 52 L272 52 L272 92 Z"/>
+    <path id="winFront" d="M286 52 L328 52 Q340 52 350 60 L386 92 L286 92 Z"/>
+  </defs>
+
+  <g transform="translate(0,95)"><g id="cam">
+    <!-- ============ BAYS (background) ============ -->
+    <!-- walls -->
+    <rect x="-1600" y="0" width="1600" height="720" fill="#14172b"/>
+    <rect x="0" y="0" width="1600" height="720" fill="url(#wallWeld)"/>
+    <rect x="1600" y="0" width="1600" height="720" fill="url(#wallPaint)"/>
+    <rect x="3200" y="0" width="1600" height="720" fill="url(#wallAsm)"/>
+    <rect x="4800" y="0" width="1600" height="720" fill="#13283a"/>
+    <!-- roof trusses -->
+    <path id="truss" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="4"/>
+    <!-- skylights -->
+    <g id="skylights" fill="url(#sky)"></g>
+    <!-- wall panel lines -->
+    <g id="panels" stroke="rgba(255,255,255,.05)" stroke-width="2"></g>
+    <g id="machines"></g>
+
+    <!-- ===== BAY 1: WELDING ===== -->
+    <g id="bayWeld">
+      <!-- background welding cell (ambient sparks source) -->
+      <g transform="translate(1330,430)" opacity=".75">
+        <rect x="-60" y="0" width="160" height="290" fill="#251d33" stroke="#3d3352"/>
+        <rect x="-40" y="30" width="120" height="80" fill="#1a1426" stroke="#ff8a3d" stroke-opacity=".4"/>
+        <circle cx="20" cy="70" r="5" fill="#ffd166" class="glowpulse"/>
+        <circle cx="-40" cy="140" r="5" fill="#ff8a3d" class="blink"/><circle cx="-20" cy="140" r="5" fill="#ffd166" class="blink b2"/>
+      </g>
+      <!-- robot arms (left + right of station) -->
+      <g id="robotL" transform="translate(560,720)"></g>
+      <g id="robotR" transform="translate(1050,720)"></g>
+      <!-- control panel -->
+      <g transform="translate(150,520)">
+        <rect width="150" height="200" rx="8" fill="#2a2140" stroke="#463a63"/>
+        <rect x="18" y="20" width="114" height="60" rx="4" fill="#120e1e"/>
+        <polyline points="26,64 46,50 62,58 80,36 98,46 124,30" fill="none" stroke="#ff8a3d" stroke-width="3"/>
+        <circle cx="38" cy="112" r="8" fill="#3ddc97" class="blink"/><circle cx="68" cy="112" r="8" fill="#ffd166" class="blink b2"/><circle cx="98" cy="112" r="8" fill="#ff5d6c" class="blink b3"/>
+        <rect x="18" y="140" width="114" height="10" rx="5" fill="#463a63"/>
+      </g>
+      <ellipse cx="800" cy="300" rx="420" ry="260" fill="url(#spot)"/>
+    </g>
+
+    <!-- ===== BAY 2: PAINT ===== -->
+    <g id="bayPaint">
+      <!-- paint booth -->
+      <rect x="2050" y="300" width="700" height="420" rx="14" fill="rgba(142,240,255,.05)" stroke="rgba(142,240,255,.35)" stroke-width="3"/>
+      <rect x="2050" y="300" width="700" height="34" rx="10" fill="#0e3a4a"/>
+      <g fill="#8ef0ff"><circle cx="2090" cy="317" r="6" class="blink"/><circle cx="2115" cy="317" r="6" class="blink b2"/><circle cx="2140" cy="317" r="6" class="blink b3"/></g>
+      <!-- booth air vents -->
+      <g stroke="rgba(142,240,255,.18)" stroke-width="3">
+        <line x1="2090" y1="360" x2="2090" y2="690"/><line x1="2710" y1="360" x2="2710" y2="690"/>
+      </g>
+      <!-- spray gantry -->
+      <rect x="2070" y="350" width="660" height="12" rx="6" fill="#2b5566"/>
+      <g id="nozzle" transform="translate(2400,362)">
+        <rect x="-26" y="0" width="52" height="40" rx="6" fill="#3a7487"/>
+        <rect x="-8" y="40" width="16" height="70" fill="#5aa3b8"/>
+        <path d="M-6 110 L6 110 L4 124 L-4 124 Z" fill="#cfefff"/>
+        <path id="sprayCone" d="M0 124 L-70 260 L70 260 Z" fill="#ff5d6c" opacity="0"/>
+      </g>
+      <!-- paint mist -->
+      <g filter="url(#soft)">
+        <circle class="mist" cx="2250" cy="560" r="80" fill="#2ec4d6"/>
+        <circle class="mist m2" cx="2520" cy="500" r="100" fill="#8ef0ff"/>
+        <circle class="mist m3" cx="2650" cy="600" r="70" fill="#2ec4d6"/>
+        <circle id="paintMist" cx="2400" cy="560" r="150" fill="#ff5d6c" opacity="0"/>
+      </g>
+      <!-- paint drums -->
+      <g transform="translate(1760,610)">
+        <rect width="70" height="110" rx="8" fill="#e3263c"/><rect y="18" width="70" height="8" fill="#8f1022"/>
+        <rect x="84" y="20" width="60" height="90" rx="8" fill="#2ec4d6"/><rect x="84" y="36" width="60" height="7" fill="#0f6b7a"/>
+      </g>
+      <g transform="translate(2930,520)">
+        <rect width="130" height="200" rx="8" fill="#0e3a4a" stroke="#1e5b6d"/>
+        <rect x="16" y="18" width="98" height="54" rx="4" fill="#06202a"/>
+        <rect x="26" y="30" width="20" height="30" fill="#ff5d6c" class="glowpulse"/><rect x="54" y="38" width="20" height="22" fill="#2ec4d6"/><rect x="82" y="26" width="20" height="34" fill="#8ef0ff"/>
+        <circle cx="34" cy="104" r="7" fill="#3ddc97" class="blink"/><circle cx="64" cy="104" r="7" fill="#8ef0ff" class="blink b3"/>
+      </g>
+    </g>
+
+    <!-- ===== BAY 3: ASSEMBLY ===== -->
+    <g id="bayAsm">
+      <!-- overhead rail + hoist -->
+      <rect x="3420" y="250" width="760" height="14" rx="7" fill="#2b4f5e"/>
+      <g id="hoist" transform="translate(3560,264)">
+        <rect x="-30" y="0" width="60" height="26" rx="5" fill="#3ddc97"/>
+        <line id="hoistCable" x1="0" y1="26" x2="0" y2="150" stroke="#9fb3c2" stroke-width="3"/>
+        <g id="hoistLoad" transform="translate(0,150)">
+          <circle r="30" fill="#1b1f27" stroke="#3b4250" stroke-width="6"/><circle r="12" fill="#c7d0db"/>
+        </g>
+      </g>
+      <!-- inspection light arch -->
+      <g id="arch" transform="translate(4000,330)">
+        <path d="M-150 390 L-150 40 Q-150 0 -110 0 L110 0 Q150 0 150 40 L150 390" fill="none" stroke="#24485a" stroke-width="22" stroke-linecap="round"/>
+        <path id="archLight" d="M-150 390 L-150 40 Q-150 0 -110 0 L110 0 Q150 0 150 40 L150 390" fill="none" stroke="#9ff0c9" stroke-width="6" stroke-linecap="round" opacity=".25"/>
+      </g>
+      <!-- tool rack + screen -->
+      <g transform="translate(3300,540)">
+        <rect width="120" height="180" rx="8" fill="#123040" stroke="#1e4a5c"/>
+        <rect x="14" y="16" width="92" height="56" rx="4" fill="#07202a"/>
+        <path d="M42 44 L55 56 L80 30" fill="none" stroke="#3ddc97" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="glowpulse"/>
+        <circle cx="30" cy="104" r="7" fill="#3ddc97" class="blink"/><circle cx="60" cy="104" r="7" fill="#ffd166" class="blink b2"/><circle cx="90" cy="104" r="7" fill="#3ddc97" class="blink b3"/>
+      </g>
+      <!-- tyre stack -->
+      <g transform="translate(4520,600)" fill="#1b1f27" stroke="#2f3644" stroke-width="5">
+        <ellipse cx="60" cy="100" rx="60" ry="20"/><ellipse cx="60" cy="72" rx="60" ry="20"/><ellipse cx="60" cy="44" rx="60" ry="20"/><ellipse cx="60" cy="16" rx="60" ry="20"/>
+      </g>
+      <ellipse cx="4000" cy="320" rx="420" ry="260" fill="url(#spot)"/>
+    </g>
+
+    <!-- bay dividers with strip curtains -->
+    <g id="dividers"></g>
+
+    <!-- ============ FLOOR + CONVEYOR ============ -->
+    <rect x="-1600" y="720" width="8000" height="180" fill="url(#floor)"/>
+    <rect x="-1600" y="760" width="8000" height="8" fill="#ffd166" opacity=".55"/>
+    <line x1="-1600" y1="764" x2="6400" y2="764" stroke="#1a1f2d" stroke-width="8" stroke-dasharray="26 26"/>
+    <rect x="-1600" y="720" width="8000" height="30" fill="#2a3245"/>
+    <line class="belt" x1="-1600" y1="735" x2="6400" y2="735" stroke="#4a5570" stroke-width="10" stroke-dasharray="8 40"/>
+    <g id="rollers" fill="#566181"></g>
+
+    <!-- ============ CAR ============ -->
+    <g id="car">
+      <ellipse cx="260" cy="190" rx="250" ry="10" fill="rgba(0,0,0,.45)"/>
+      <!-- skid (transport fixture) -->
+      <g id="skid">
+        <rect x="70" y="154" width="380" height="14" rx="3" fill="#ffd166"/>
+        <rect x="90" y="168" width="22" height="16" fill="#c9a043"/><rect x="250" y="168" width="22" height="16" fill="#c9a043"/><rect x="408" y="168" width="22" height="16" fill="#c9a043"/>
+      </g>
+      <!-- bare metal body -->
+      <g id="bodyMetal">
+        <use href="#lowerBody" fill="url(#metal)" stroke="#5d6676" stroke-width="2.5"/>
+        <!-- cabin skeleton (before welding) -->
+        <use href="#cabin" fill="none" stroke="#7d8796" stroke-width="2.5" stroke-dasharray="6 6"/>
+        <!-- welded parts -->
+        <g id="weldCabin" opacity="0">
+          <use href="#cabin" fill="url(#metal)" stroke="#5d6676" stroke-width="2.5"/>
+        </g>
+        <g id="weldSeams" opacity="0" fill="none" stroke="#5d6676" stroke-width="2">
+          <path d="M276 96 L276 150 M176 98 L176 150 M392 96 L392 150 M404 94 L456 100 M152 94 L60 104"/>
+          <path d="M190 112 L262 112 M290 112 L378 112" stroke-opacity=".5"/>
+        </g>
+        <!-- dark window openings -->
+        <g id="openings" opacity="0" fill="#1d222c">
+          <use href="#winRear"/><use href="#winFront"/>
+        </g>
+        <g id="weldDots"></g>
+      </g>
+      <!-- paint: primer + colour, revealed by clip rects -->
+      <g id="primerLayer" clip-path="url(#clipPrimer)">
+        <use href="#lowerBody" fill="url(#primer)" stroke="#7b8b99" stroke-width="2"/>
+        <use href="#cabin" fill="url(#primer)" stroke="#7b8b99" stroke-width="2"/>
+      </g>
+      <g id="colorLayer" clip-path="url(#clipColor)">
+        <use href="#lowerBody" fill="url(#paintCol)" stroke="#6e0b18" stroke-width="2"/>
+        <use href="#cabin" fill="url(#paintCol)" stroke="#6e0b18" stroke-width="2"/>
+        <g fill="none" stroke="#7a0c1b" stroke-width="2"><path d="M276 96 L276 150 M176 98 L176 150 M392 96 L392 150 M404 94 L456 100"/></g>
+        <path d="M60 112 Q260 100 470 112" stroke="#fff" stroke-opacity=".45" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M222 50 L330 50" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <g id="paintedOpenings" fill="#1d222c" opacity="0"><use href="#winRear"/><use href="#winFront"/></g>
+      <!-- assembly parts -->
+      <g id="glassParts" opacity="0">
+        <use href="#winRear" fill="url(#glass)"/><use href="#winFront" fill="url(#glass)"/>
+        <path d="M232 58 L214 86 M318 58 L300 86" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <g id="trimParts" opacity="0">
+        <rect x="22" y="128" width="30" height="16" rx="6" fill="#2b2f38"/>
+        <rect x="470" y="128" width="30" height="16" rx="6" fill="#2b2f38"/>
+        <rect x="236" y="116" width="26" height="6" rx="3" fill="#e9eef4"/><rect x="336" y="116" width="26" height="6" rx="3" fill="#e9eef4"/>
+        <path d="M394 82 L414 78 L416 90 L398 92 Z" fill="#2b2f38"/>
+        <rect x="270" y="138" width="60" height="8" rx="4" fill="#2b2f38" opacity=".6"/>
+      </g>
+      <g id="lightParts" opacity="0">
+        <path d="M478 108 Q494 110 495 122 L476 120 Z" fill="#fff6c8"/>
+        <path d="M28 112 L42 110 L42 124 L27 124 Z" fill="#ff3347"/>
+        <ellipse id="headBeam" cx="560" cy="118" rx="90" ry="26" fill="url(#beam)" opacity="0"/>
+        <circle cx="486" cy="116" r="10" fill="#fff6c8" filter="url(#glowF)" opacity=".8"/>
+        <circle cx="34" cy="118" r="9" fill="#ff3347" filter="url(#glowF)" opacity=".7"/>
+      </g>
+      <g id="wheels" opacity="0">
+        <g class="wheel" data-cx="130" data-cy="150">
+          <circle cx="130" cy="150" r="34" fill="#15181e"/><circle cx="130" cy="150" r="20" fill="#c7d0db"/>
+          <g class="spokes"><path d="M130 132 L130 168 M112 150 L148 150 M117 137 L143 163 M143 137 L117 163" stroke="#8a95a5" stroke-width="4"/></g>
+          <circle cx="130" cy="150" r="6" fill="#4b5563"/>
+        </g>
+        <g class="wheel" data-cx="390" data-cy="150">
+          <circle cx="390" cy="150" r="34" fill="#15181e"/><circle cx="390" cy="150" r="20" fill="#c7d0db"/>
+          <g class="spokes"><path d="M390 132 L390 168 M372 150 L408 150 M377 137 L403 163 M403 137 L377 163" stroke="#8a95a5" stroke-width="4"/></g>
+          <circle cx="390" cy="150" r="6" fill="#4b5563"/>
+        </g>
+      </g>
+      <rect x="8" y="139" width="24" height="8" rx="3" fill="#4b5563"/>
+      <g id="sparks" stroke-linecap="round"></g>
+    </g>
+    <g id="smoke"></g>
+
+    <!-- foreground columns -->
+    <g id="frontCols"></g>
+  </g></g>
+</svg>
+
+<article class="panel" id="panel" aria-live="polite"></article>
+
+<nav class="nav" aria-label="Слайдлар">
+  <button class="arrow" id="prev" type="button" aria-label="Олдинги слайд"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button>
+  <div class="dots" id="dots"></div>
+  <span class="count" id="count" aria-hidden="true">01 / 29</span>
+  <button class="arrow" id="next" type="button" aria-label="Кейинги слайд"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
+  <button class="arrow" id="fs" type="button" aria-label="Тўлиқ экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</nav>
+<p class="sr" id="live" aria-live="polite"></p>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (id) => document.getElementById(id);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ================= report building blocks ================= */
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const fmt = (v) => String(v).replace('.', ',');
+  const card = (title, inner, cls = '', style = '') => `<section class="card ${cls}" style="${style}">${title ? `<h3>${title}</h3>` : ''}${inner}</section>`;
+  const kpi = (l, v, s = '', cls = '') => `<div class="kpi ${cls}">${l ? `<span class="l">${l}</span>` : ''}<b>${v}</b>${s ? `<span class="s">${s}</span>` : ''}</div>`;
+  const kpis = (arr, c) => `<div class="kpis" style="--c:${c || arr.length}">${arr.join('')}</div>`;
+  function hbar(items, o = {}) {
+    const max = o.max || Math.max(...items.map((d) => d[1]));
+    return `<div class="hb">${items.map((d, i) => `<span class="l">${d[0]}</span><span class="t"><span class="f ${d[2] || ''}" style="--w:${(d[1] / max * 100).toFixed(2)}%;--i:${i}"></span></span><span class="v">${o.f ? o.f(d[1]) : fmt(d[1])}${o.suf || ''}</span>`).join('')}</div>`;
+  }
+  function vbar(cats, series, o = {}) {
+    const max = o.max || Math.max(...series.flatMap((s) => s.v));
+    return `<div class="vb ${o.rot ? 'rot' : ''}" style="--vh:${o.h || 6.5}">${cats.map((c, i) => `<div class="c"><div class="bs">${series.map((s, k) => {
+      const v = s.v[i]; const cls = (s.cls || '') + ((o.hi || []).includes(i) ? ' hi' : '') + ((o.hot || []).includes(i) ? ' hot' : '');
+      return `<span class="b ${cls}" style="--h:${(v / max * 100).toFixed(2)}%;--i:${i}"><i>${o.f ? o.f(v) : fmt(v)}${o.suf || ''}</i></span>`;
+    }).join('')}</div><span class="x">${c}</span></div>`).join('')}</div>`;
+  }
+  const legend = (names) => `<div class="lg">${names.map((n, k) => `<span><i class="${k ? 's2' : ''}"></i>${n}</span>`).join('')}</div>`;
+  function line(cats, vals, o = {}) {
+    const W = 400, H = o.H || 130, pl = 14, pr = 14, pt = 18, pb = 22;
+    const mn = o.min ?? Math.min(...vals), mx = o.max ?? Math.max(...vals);
+    const X = (i) => pl + (W - pl - pr) * i / (cats.length - 1), Y = (v) => pt + (H - pt - pb) * (1 - (v - mn) / (mx - mn || 1));
+    const pts = vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+    return `<svg class="ln" viewBox="0 0 ${W} ${H}" aria-hidden="true"><line x1="${pl}" x2="${W - pr}" y1="${H - pb}" y2="${H - pb}" stroke="rgba(255,255,255,.15)"/>
+      <polyline points="${pts}"/>${vals.map((v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="3.4"/><text x="${X(i)}" y="${Y(v) - 7}">${o.f ? o.f(v) : fmt(v)}</text><text class="x" x="${X(i)}" y="${H - 6}">${cats[i]}</text>`).join('')}</svg>`;
+  }
+  function table(head, rows, o = {}) {
+    const r = o.r || [];
+    return `<table class="tb"><thead><tr>${head.map((h, i) => `<th class="${r.includes(i) ? 'r' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${rows.map((row, ri) => {
+      const cls = (o.tot && ri === rows.length - 1 ? 'tot' : '') + ((o.hotRows || []).includes(ri) ? ' hot' : '');
+      return `<tr class="${cls}">${row.map((c, i) => {
+        if (c === null) return '';
+        if (typeof c === 'object') return `<td class="${c.cls || ''} ${r.includes(i) ? 'r' : ''}" ${c.rs ? `rowspan="${c.rs}"` : ''}>${c.t}</td>`;
+        return `<td class="${r.includes(i) ? 'r' : ''}">${c}</td>`;
+      }).join('')}</tr>`;
+    }).join('')}</tbody></table>`;
+  }
+  const list = (items) => `<ul class="ls">${items.map((it, i) => `<li><span class="n">${it.n || i + 1}</span><span>${it.t}${it.d ? `<span class="d">${it.d}</span>` : ''}</span></li>`).join('')}</ul>`;
+  const rows = (arr, more) => `<div class="rows">${arr.map((r) => `<div><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}${more ? `<div class="more">${more}</div>` : ''}</div>`;
+  const grid = (cols, inner, extra = '') => `<div class="grid" style="grid-template-columns:${cols};${extra}">${inner}</div>`;
+  const cols = (spec, inner, rowsSpec) => ({ spec, inner, rowsSpec });
+  const hero = (num, title, sub) => `<section class="card hero">${num ? `<div class="num">${num}</div><div class="rule"></div>` : ''}<h2>${title}</h2>${sub ? `<p>${sub}</p>` : ''}</section>`;
+  const C = (inner) => `<div class="col">${inner}</div>`;
+  const M = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+  const nf = (v) => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+  /* ================= the 29 slides (data from the HRM 2026 report only) ================= */
+  const SLIDES = [
+    { t: 'HRM Ҳисоботи 2026', hero: true, body: () => `<section class="card hero"><h2 style="font-size:calc(var(--u)*4.6)">HRM</h2><h2 style="font-weight:400">Ҳисоботи 2026</h2><div class="rule"></div><p>ADM JIZZAKH AJ · Август 2026</p></section>` },
+
+    { t: 'Ҳисобот мундарижаси', layout: 'grid-template-columns:minmax(0,.8fr) minmax(0,2.2fr)', body: () =>
+      card('', `<div style="margin:auto;text-align:center"><div style="font-size:calc(var(--u)*3.6);font-weight:900;color:var(--accent);line-height:1">HRM</div><div style="font-size:calc(var(--u)*1.6);font-weight:700">2026</div></div>`, 'grow') +
+      grid('repeat(4,minmax(0,1fr))', [['01', 'Ишга қабул ва адаптация'], ['02', 'Самарадорлик ва KPI'], ['03', 'Ўқитишлар'], ['04', 'Grading тизими'], ['05', 'Электрон ариза тизими'], ['06', 'Корпоратив маданият ва коммуникациялар'], ['07', 'Интизом бўйича']]
+        .map(([n, t]) => card('', `<div style="font-size:calc(var(--u)*1.9);font-weight:900;color:var(--accent)">${n}</div><div class="txt" style="font-size:calc(var(--u)*1)"><b>${t}</b></div>`)).join(''), 'align-content:center') },
+
+    { t: 'Ишга қабул қилиш ва адаптация', hero: true, body: () => hero('01', 'Ишга қабул қилиш ва адаптация', 'Ёллаш жараёни, баҳолаш тизими ва адаптация дастури') },
+
+    { t: 'Ходимлар статистикаси', s: 'ADM JIZZAKH AJ · Сентабр 2026', layout: 'grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)', body: () =>
+      kpis([kpi('', '3 245', 'Штат жадвали', 'acc'), kpi('', '2738', 'Амалда (штатдан −496)', 'acc'), kpi('', '510', 'Инженер-техник'),
+        kpi('', '94', 'Мастер (G/L)'), kpi('', '2 502', 'Эркаклар'), kpi('', '236', 'Аёллар'),
+        kpi('', '18', 'Имконияти чекланган (режа: 50)'), kpi('', '30', 'Ўртача ёш'), kpi('', '14', 'Бола парвариши таътилида')], 3) +
+      card('Ёш бўйича тақсимот', `<div style="display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*.6);flex:1;min-height:calc(var(--u)*9)">
+        ${[['1 595', '18–29 ёш', 8.4, 'var(--accent)'], ['940', '30–41 ёш', 6.4, '#5b77a6'], ['203', '41+', 3.2, '#9aaecb']].map(([v, l, d, c]) =>
+          `<div style="width:calc(var(--u)*${d});height:calc(var(--u)*${d});border-radius:50%;background:${c};display:grid;place-items:center;text-align:center;color:#0b1020;line-height:1.05"><div><b style="font-size:calc(var(--u)*${d / 5})">${v}</b><br><span style="font-size:calc(var(--u)*${Math.max(.55, d / 11)})">${l}</span></div></div>`).join('')}</div>
+        ${rows([['18–29 ёш', '1 556 нафар · 58,3%'], ['30–41 ёш', '932 нафар · 34,3%'], ['41 ёш ва ундан катта', '200 нафар · 7,4%']])}`, 'grow') },
+
+    { t: '2026-йил ишга қабул қилиш режаси', s: 'Бўлимлар кесимида режалаштирилган ишга қабул қилиш кўрсаткичлари', layout: 'grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)', body: () =>
+      C(kpis([kpi('Умумий режа', '855<small>нафар</small>', '', 'acc'), kpi('Бажарилди', '685<small>нафар</small>'), kpi('Бажарилиш', '80,1%'), kpi('Қолган режа', '170<small>нафар</small>'), kpi('Захира', '28<small>нафар</small>')]) +
+        card(`Ойма-ой ишга қабул қилиш режаси (нафар)`, legend(['Режа', 'Бажарилди']) + vbar(M, [{ v: [109, 130, 119, 120, 87, 11, 84, 80, 34, 73, 4, 4] }, { v: [114, 103, 91, 89, 54, 0, 77, 77, 31, 49, 0, 0], cls: 's2' }], { h: 6 }), 'grow') +
+        grid('minmax(0,1.2fr) minmax(0,1fr)', card('Бўлимлар кесимида йиллик режа (нафар)', hbar([['Пайвандлаш цехи', 320, 'hi'], ['Техник хизмат кўрсатиш', 87], ['Таъминот тизими', 87], ['SKD йиғув цехи', 50], ['CKD йиғув цехи', 47], ['Сифат назорати ва кафолати', 47], ['Бошқа бўлимлар', 189], ['Захира', 28]])) +
+          card('Захира тақсимоти (нафар)', table(['Бўлим', 'Сони'], [['Пайвандлаш цехи', 10], ['Сифат назорати ва кафолати', 4], ['SKD йиғув цехи', 14], ['Умумий', 28]], { r: [1], tot: true })))) +
+      C(card('Октябрь ойи: бўлимлар кесимида', kpis([kpi('Режа', '73'), kpi('Бажарилди', '49'), kpi('Бажарилиш', '67,1%'), kpi('Қолган', '24')]) +
+        table(['№', 'Бўлим', 'Режа', 'Бажарилди'], [[1, 'Пайвандлаш цехи', 30, 27], [2, 'Бўёқлаш цехи', 6, 6], [3, 'Пластик бўёқлаш цехи', 0, 0], [4, 'SKD йиғув цехи', 8, 3], [5, 'CKD йиғув цехи', 12, 6], [6, 'Сифат назорати ва кафолати', 10, 1], [7, 'Техник хизмат кўрсатиш', 0, 1], [8, 'R&amp;D (ME)', 2, 0], [9, 'R&amp;D (PE)', 0, 0], [10, 'Бош энергетик бошқармаси', 0, 0], [11, 'Tool Shop', 0, 1], [12, 'R&amp;D (Tooling Center)', 2, 0], [13, 'ME департаменти', 0, 0], [14, 'PE департаменти', 2, 2], [15, 'Ахборот технологиялари', 1, 2], [16, 'Таъминот тизими', 0, 0], [17, 'Таъмирлаш ва эксплуатация', 0, 0], [18, 'Корпоратив овқатланиш ва делегациялар', 0, 0], [19, 'Хавфсизлик', 0, 0], ['', 'Жами', 73, 49]], { r: [2, 3], tot: true }), 'grow')) },
+
+    { t: '2026-йил ходимларни мослаштириш (адаптация)', s: 'Янги ходимларнинг корхонага тез ва самарали мослашувини таъминлаш', layout: 'grid-template-rows:auto minmax(0,1fr) auto', body: () =>
+      kpis([kpi('Умумий жалб қилинган', '132<small>нафар</small>', '', 'acc'), kpi('Бошланғич ҳафтада', '44<small>нафар</small>', '33%'), kpi('1 ойлик кузатувда', '51<small>нафар</small>', '39%'), kpi('2 ойлик кузатувда', '37<small>нафар</small>', '28%'), kpi('Адаптация даврида ишдан бўшаган', '7<small>нафар</small>', '', 'hot')]) +
+      grid('minmax(0,1fr) minmax(0,1.15fr)', card('Адаптация босқичлари бўйича ходимлар сони (нафар)', vbar(['Бошланғич ҳафта', '1 ойлик кузатув', '2 ойлик кузатув'], [{ v: [44, 51, 37] }], { hi: [1], h: 5 }), 'grow') +
+        card('Адаптация даврида ишдан бўшаш сабаблари', `<div style="display:flex;gap:calc(var(--u)*.8);align-items:center"><div style="text-align:center;flex:none"><div style="font-size:calc(var(--u)*2.6);font-weight:900;color:var(--hot);line-height:1">7</div><div class="note">нафар<br>жами ишдан бўшаган</div></div>${table(['Сабаб', 'Сони (нафар)', 'Улуши'], [['Оилавий шароит', 4, '57%'], ['Соғлиқ туфайли', 1, '14%'], ['Бошқа сабаблар', 2, '29%'], ['Жами', 7, '100%']], { r: [1, 2], tot: true })}</div>`, 'grow'), 'min-height:0') +
+      card('Адаптация жараёнида амалга оширилган ишлар', `<div class="ph" style="grid-template-columns:repeat(4,minmax(0,1fr))">${[['ad1', 'Ўқитиш ва таништириш', 'Янги ходимларга дастлабки маълумот ва йўриқномалар бериш'], ['ad2', 'Иш жойи билан танишув', 'Ишлаб чиқариш ҳудуди ва иш жараёнлари билан таништириш'], ['ad3', 'Ментор билан суҳбат', 'Ходимнинг мослашуви ва юзага келаётган масалаларни муҳокама қилиш'], ['ad4', 'Амалий иш жараёни', 'Ходимнинг бевосита иш жараёнидаги кўникмаларини кузатиш']]
+        .map(([k, h, d], i) => `<figure><figcaption><b style="font-size:1.6em">0${i + 1}</b><br><b style="color:#fff">${h}</b><br>${d}</figcaption></figure>`).join('')}</div>`) },
+
+    { t: '2026-йил ишдан бўшаш таҳлили', s: 'Ходимлар бўшашининг асосий кўрсаткичлари ва сабаблари', badge: `<div class="badge"><b>494</b><span>нафар бўшади<em>01.01–1.10.2026</em></span></div>`,
+      layout: 'grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:auto minmax(0,1fr) minmax(0,1fr)', body: () =>
+      card('Лавозим бўйича (нафар)', hbar([['Пайвандчи', 106, 'hi'], ['SKD Чилангар', 63], ['Механик йиғувчилар чилангари', 31], ['Амалиётчи', 15], ['Сифат назорати инспектори', 12], ['Бутловчи', 14], ['Инспектор', 15], ['Бўёқчи', 6]]), '', 'grid-column:span 3') +
+      card('Яшаш жойи бўйича (нафар)', hbar([['Жиззах в., Шароф Рашидов т.', 140, 'hi'], ['Жиззах в., Жиззах шаҳри', 62], ['Жиззах в., Ғаллаорол т.', 33], ['Жиззах в., Пахтакор т.', 26], ['Андижон в., Асака т.', 7], ['Андижон в., Шаҳрихон т.', 9]]), '', 'grid-column:span 3') +
+      card('Ёши бўйича (нафар, ёш)', vbar(['18', '19', '20', '21', '22', '23', '25', '26', '27', '29', '30', '31', '32', '34', '44', '54'], [{ v: [10, 25, 43, 49, 56, 61, 60, 47, 37, 33, 26, 13, 21, 10, 1, 2] }], { hi: [4], h: 4.5 }), '', 'grid-column:span 3') +
+      card('Категория бўйича (нафар)', vbar(['E-1', 'E-2', 'E-3', 'E-4', 'I-1', 'I-2', 'I-3', 'I-4', 'I-5', 'I-6', 'IA-1', 'IA-2', 'IM-2', 'IM-3', 'IM-4', 'S1', 'S-1', 'S-2', 'S-3', 'S-4'], [{ v: [2, 4, 2, 6, 3, 185, 126, 35, 43, 6, 15, 10, 1, 2, 2, 3, 12, 13, 7, 17] }], { hi: [5], h: 4.5, rot: true }), '', 'grid-column:span 3') +
+      card('Ишлаган муддати бўйича (нафар, ой)', vbar(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], [{ v: [33, 27, 26, 28, 28, 26, 17, 19, 13, 21, 19, 12, 13] }], { hi: [0], h: 4.5 }), '', 'grid-column:span 2') +
+      card('Ишдан кетиш сабаблари', hbar([['Ойлик маош етишмаганлиги', 96, 'hi'], ['Бошқа иш топганлиги', 2], ['Ишга келмаганлиги', 1], ['Соғлиғига тўғри келмаганлиги', 1]], { suf: '%' }), '', 'grid-column:span 2') +
+      card('Ишдан бўшаш ойлари (улуш)', vbar(M.slice(0, 9), [{ v: [4, 16, 11, 9, 1, 3, 23, 11, 21] }], { hi: [6], suf: '%', h: 4.5 }), '', 'grid-column:span 2') },
+
+    { t: 'Ходимлар чиқиш суҳбатлари', s: 'Дашборд: 2026-йил, амалдаги ҳолат · Ҳисобот даври: 01.01.2026 – 01.09.2026', layout: 'grid-template-columns:repeat(3,minmax(0,1fr))', body: () =>
+      C(kpis([kpi('Жами чиқишлар (ёзувлар)', '104<small>нафар</small>', '', 'acc'), kpi('Ўртача умумий баҳо', '4,45<small>/ 5</small>')], 2) +
+        card('Кетиш сабаблари <small>(жами 104 нафар)</small>', hbar([['Билдирги билан', 27, 'hi'], ['Юқори маошли иш таклифи', 23], ['Шахсий (оилавий) сабаблар', 19], ['Бошқа сабаб', 11], ['Карьера ўсиши чекланган', 6], ['Иш юкламаси / стресс', 6], ['Соғлиқ', 1], ['Олий таълим талабалиги', 1], ['Кореяда ўқиш', 1]]), 'grow') +
+        card('Иш жараёнига берилган баҳолар <small>(5 баллдан)</small>', hbar([['Иш шароитлари ва жиҳозлар', 4.75], ['Жамоа муҳити ва ҳамкорлик', 4.73], ['Раҳбарнинг бошқарув услуби', 4.65], ['Ички коммуникация', 4.65], ['Иш юкламаси ва вазифалар', 4.51], ['Карьера ўсиши ва ривожланиш', 4.27], ['Маош ва мукофотлар тизими', 3.57, 'hot']], { max: 5, f: (v) => v.toFixed(2).replace('.', ',') }))) +
+      C(kpis([kpi('Ўртача иш стажи', '409,1<small>кун</small>')], 1) +
+        card('Бўлимлар бўйича чиқишлар (нафар)', hbar([['Пайвандлаш', 29, 'hi'], ['SKD йиғув', 25, 'hi'], ['Таъминот', 13], ['Бўёқлаш', 9], ['Сифат назорати ва кафолати', 9], ['CKD йиғув', 8], ['Маъмурий хизмат', 3], ['Хавфсизлик', 2], ['Техник хизмат', 2], ['Технология бўлими', 2], ['Бошқа бўлимлар', 10]]), 'grow') +
+        card('Ойлар бўйича чиқишлар (нафар)', vbar(M, [{ v: [0, 0, 0, 0, 1, 0, 0, 7, 72, 24, 0, 0] }], { hi: [8], h: 4 }))) +
+      C(card('Қайта ишлаш истаги <small>(n = 57)</small>', table(['Жавоб', 'Сони', 'Улуши'], [['Ҳа, истар эдим', 36, '63,2%'], ['Эҳтимол', 15, '26,3%'], ['Йўқ', 4, '7,0%'], ['Билмайман', 2, '3,5%'], ['Жами', 57, '100%']], { r: [1, 2], tot: true })) +
+        card('Асосий хулосалар', list([{ t: 'Асосий сабаблар: билдирги билан кетиш (27), юқори маошли иш таклифи (23), оилавий сабаблар (19); жами 69 та (66,3%)' }, { t: 'Энг кўп чиқиш: Пайвандлаш (29) ва SKD йиғув (25), жами 54 та (51,9%)' }, { t: 'Сентябрда 72 та чиқиш қайд этилган: йилдаги энг юқори кўрсаткич (69,2%)' }, { t: 'Энг паст баҳоланган йўналиш: маош ва мукофотлар тизими (3,57/5)' }, { t: 'Қайта ишлашга тайёрлар: 51 нафар (57 жавобнинг 89,5%), бу ходимлар захирасини шакллантириш имконини беради' }]), 'grow')) },
+
+    { t: 'Лавозим турлари бўйича бошқа лавозимга ўтиш', s: 'Жами: 341 нафар, 90 хил лавозим', layout: 'grid-template-columns:repeat(4,minmax(0,1fr))', body: () =>
+      [['Ишлаб чиқариш ходимлари', '261', 'нафар · жамининг 76,5%', '45 хил лавозим', [['Контактли пайвандлаш машиналари пайвандчиси', 44], ['Сифат назорати инспектори', 32], ['Бригадир', 29], ['Бутловчи', 26], ['Омборчи', 17], ['Мастер', 14]], 'Қолган 39 лавозим — 99 нафар', 'acc'],
+        ['Мутахассислар', '43', 'нафар · жамининг 12,6%', '27 хил лавозим', [['Харид бўйича муҳандис', 4], ['Муҳандис', 4], ['Таъминот омбори мудири', 4], ['Омбор мудири', 3], ['Муҳандис технолог', 3], ['Табел юритувчи', 2]], 'Қолган 21 лавозим — 23 нафар'],
+        ['Бошқарув ходимлари', '25', 'нафар · жамининг 7,3%', '8 хил лавозим', [['Бўлинма бошлиғи', 14], ['Бўлим бошлиғи', 3], ['Бўлим бошлиғи ўринбосари', 2], ['Хизмат бошлиғи', 2], ['Директор', 1], ['Бош директор', 1]], 'Қолган 2 лавозим — 2 нафар'],
+        ['Техник ходимлар', '12', 'нафар · жамининг 3,5%', '10 хил лавозим', [['Ҳайдовчи', 2], ['Ошхона ишчиси', 2], ['Оператор (видеокузатув)', 1], ['Ёнғин ўчирувчи', 1], ['Электрчи', 1], ['Офис тозаловчи', 1]], 'Қолган 4 лавозим — 4 нафар']]
+        .map(([h, v, a, b, r, more, cls]) => card('', `<span class="cap">${h}</span><div style="font-size:calc(var(--u)*3);font-weight:900;line-height:1;${cls ? 'color:var(--accent)' : ''}">${v}</div><div class="note">${a}<br>${b}</div>${rows(r, more)}`, 'grow')).join('') },
+
+    { t: 'Бошқа лавозимга ўтган ходимлар', s: 'Жами: 341 нафар, 90 хил лавозим', layout: 'grid-template-rows:auto minmax(0,1fr) auto', body: () =>
+      grid('repeat(4,minmax(0,1fr))', [['Ишлаб чиқариш ходимлари', '261', '76,5% · 45 хил лавозим', [['Пресс пайвандчиси', 44], ['Сифат назорати инспектори', 32], ['Бригадир', 29]]], ['Мутахассислар', '43', '12,6% · 27 хил лавозим', [['Харид бўйича муҳандис', 4], ['Муҳандис', 4], ['Таъминот омбори мудири', 4]]], ['Бошқарув ходимлари', '25', '7,3% · 8 хил лавозим', [['Бўлинма бошлиғи', 14], ['Бўлим бошлиғи', 3], ['Бўлим бошлиғи ўринбосари', 2]]], ['Техник ходимлар', '12', '3,5% · 10 хил лавозим', [['Ҳайдовчи', 2], ['Ошхона ишчиси', 2], ['Оператор (видеокузатув)', 1]]]]
+        .map(([h, v, a, r], i) => card('', `<span class="cap">${h}</span><div style="display:flex;align-items:baseline;gap:.5em"><b style="font-size:calc(var(--u)*2.2);font-weight:900;${i ? '' : 'color:var(--accent)'}">${v}</b><span class="note">${a}</span></div>${rows(r)}`)).join('')) +
+      grid('minmax(0,1.7fr) minmax(0,1fr)', card('Энг кўп ўтилган лавозимлар, нафар', hbar([['Пайвандчиси', 44, 'hi'], ['Сифат назорати инспектори', 32], ['Бригадир', 29], ['Бутловчи', 26], ['Омборчи', 17], ['Мастер', 14], ['Бўлинма бошлиғи', 14], ['Малакали электр монтёр', 11], ['Механик йиғув ишлари чилангари (ТМ)', 7]]), 'grow') +
+        card('Қолган 81 лавозим: 147 нафар (43%)', `<div class="note">Ҳар бир лавозимдан ўтганлар:</div>${rows([['1 нафардан', '49 лавозим'], ['2 нафардан', '16 лавозим'], ['3 нафардан', '6 лавозим'], ['4 нафардан', '5 лавозим'], ['5 нафардан', '2 лавозим'], ['6 нафардан', '3 лавозим']])}`, 'grow'), 'min-height:0') +
+      `<p class="note">Манба: Ходимлар рўйхати. Бошқа лавозимга ўтган — ҳозирги лавозимга ўтган санаси ишга қабул санасидан кейин бўлган ходим; 2026 йил октябрь ойи ҳисобга олинмаган.</p>` },
+
+    { t: 'Самарадорлик ва KPI', hero: true, body: () => hero('02', 'Самарадорлик ва KPI', 'Қўшимча иш соатлари, HPV ишлаб чиқариш самарадорлиги ва ишчи-ходимлар KPI таҳлили') },
+
+    { t: 'Қўшимча иш соатлари ва HPV самарадорлиги', s: 'Қўшимча соатлар: 2026 январь–сентябрь · HPV: август ойи, паст кўрсаткич = юқори самарадорлик', layout: 'grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)', body: () =>
+      C(`<span class="cap">Қўшимча иш соатлари</span>` + card('Энг кўп қўшимча соат ишлаган бўлимлар', hbar([['Пайвандлаш цехи', 66874, 'hi'], ['Харид ва таъминот', 57069], ['Бўёқлаш цехи', 38567], ['Сифат назорати', 29852], ['Йиғув цехи', 29443]], { f: (v) => nf(v) + ' соат' })) +
+        card('Ойлар кесимида', table(['Ой', 'Соат', 'Сумма, сўм'], [['Январь', '62 463', '3 516 876 029'], ['Февраль', '39 538', '2 048 147 543'], ['Март', '36 519', '2 104 087 894'], ['Апрель', '83 670', '4 512 395 252'], ['Май', '24 857', '2 884 260 424'], ['Июнь', '0', '0'], ['Июль', '1 546', '71 263 167'], ['Август', '1 546', '399 693 155'], ['Сентабр', '10 810', '665 395 786']], { r: [1, 2] }), 'grow')) +
+      C(`<span class="cap">Ишлаб чиқариш самарадорлиги — HPV</span>` + grid('1fr 1fr', kpi('CKD цехи · август HPV', '119,6<small>режа</small> 100<small>факт</small>', '19,6% га яхши', 'acc') + kpi('SKD цехи · август HPV', '23,8<small>режа</small> 21,2<small>факт</small>', '12,2% га яхши', 'acc')) +
+        grid('1fr 1fr', card('CKD цехи, июль–сентябрь', legend(['режа', 'факт']) + vbar(['Июль', 'Август', 'Сентябрь'], [{ v: [118.8, 112.0, 119.6] }, { v: [93.7, 98.3, 100.0], cls: 's2' }], { h: 4.2 })) +
+          card('SKD цехи, июль–сентябрь', legend(['режа', 'факт']) + vbar(['Июль', 'Август', 'Сентябрь'], [{ v: [25.9, 19.0, 23.8] }, { v: [18.6, 19.4, 21.2], cls: 's2' }], { h: 4.2 }))) +
+        card('', table(['Август ойи HPV (14 UPH)', 'Режа', 'Факт', 'Ҳолат'], [['Welding shop', '26,89', '26,9', 'Режадан яхши'], ['Paint shop', '14,57', '14,6', 'Режадан яхши'], ['GA shop', '13,7', '13,7', 'Режадан яхши'], ['ME', '1,15', '5,9', { t: 'Режадан юқори', cls: 'hot' }], ['Terminal', '2,26', '2,2', 'Режадан яхши'], ['Supply chain', '30,44', '23,8', 'Режадан яхши'], ['Maintenance', '6,46', '5,9', 'Режадан яхши'], ['Quality', '18,72', '11,3', 'Режадан яхши']], { r: [1, 2] }), 'grow')) },
+
+    { t: 'Ишчи-ходимлар KPI таҳлили', s: 'АДМ Жиззах · 2026 йил январь – сентябрь (9 ой) · ўртача ~1 930 ходим/ой', layout: 'grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto', body: () =>
+      `<div style="grid-column:1/-1">${kpis([kpi('Ўртача KPI (сентябрь)', '19,7%', 'Январь 20,1%, август 20,4%', 'acc'), kpi('Мақсадга эришиш', '87,9%', 'Режага нисбатан, март–сентябрь'), kpi('Ходимлар сони', '2 002', 'Январда 1 864 эди (+138)'), kpi('Доимий паст натижа', '28 киши', '9 ойлик ўртача KPI 8% дан паст', 'hot')])}</div>` +
+      C(card('Ойлик ўртача KPI динамикаси, %', line(M.slice(0, 9), [20.08, 19.51, 19.42, 19.65, 19.68, 19.32, 19.57, 20.41, 19.67], { f: (v) => v.toFixed(1).replace('.', ','), min: 18.8, max: 20.8, H: 100 })) +
+        card('Ходимлар сони, ой охирига', vbar(M.slice(0, 9), [{ v: [1864, 1908, 1953, 1965, 1963, 1928, 1847, 1999, 2002] }], { f: nf, h: 4, hi: [8] }), 'grow')) +
+      card('Лавозимлар бўйича ўртача KPI, % <small>(энг юқори ва энг паст)</small>', hbar([['Автобус ҳайдовчиси', 29.5, 'hi'], ['Оператор', 23.5], ['Чиқинди саралаш ишчиси', 23.2], ['Герметизаторчи', 23.2], ['Ҳисобчи', 23.1], ['Сифат назорати инспектори', 19.3], ['Йиғув ишлари чилангари', 14.9], ['Ҳайдовчи', 14.6], ['Қўриқчи', 14.2], ['Ошхона ишчиси', 12.8, 'hot']]), 'grow') +
+      card('', `<p class="txt"><b>Хулоса:</b> KPI 9 ой давомида барқарор (~19–20%), мақсадга эришиш ўртача 87,9%, лекин ҳар ойда ходимларнинг ~11–18% и режанинг ярмига ҳам етмаяпти. Ходимлар сони 9 ойда +138 нафарга кўпайди (285 нафар кетди, 423 нафар қабул қилинди). Энг паст натижа хизмат кўрсатиш ва ҳайдовчилик лавозимларида, энг юқориси автобус ҳайдовчиси, оператор ва омбор лавозимларида.</p>`, '', 'grid-column:1/-1') },
+
+    { t: 'Хронометраж: 13 штат бирлигидан 9 таси камаювчи', s: 'Бўёқлаш, Пайвандлаш, Йиғув цехлари ва Таъминот тизими · бандлик 460 дақиқалик иш кунига нисбатан', layout: 'grid-template-rows:auto minmax(0,1fr) auto', body: () => {
+      const H = (t) => ({ t, cls: 'hot' });
+      return kpis([kpi('', '13', 'штат бирлиги хронометраж қилинди'), kpi('', '9', 'камаювчи · бандлиги 70% дан паст', 'hot hotb'), kpi('', '4', 'сақланади · бандлиги 70% ва юқори'), kpi('', '322 дақ.', 'чегара: 460 дақиқанинг 70%и', 'acc')]) +
+        card('', table(['Цех', 'Штат бирлиги', 'Бандлик'], [
+          [{ t: 'Бўёқлаш цехи', rs: 4, cls: 'grp' }, 'Материаллар бўйича муҳандис', H('30,6% (141 дақ.)')], [null, 'Материаллар бўйича муҳандис', H('42,1% (194 дақ.)')], [null, 'Омбор мудири', H('30,6% (141 дақ.)')], [null, 'Омбор мудири', H('42,1% (194 дақ.)')],
+          [{ t: 'Пайвандлаш цехи', rs: 4, cls: 'grp' }, 'Ҳужжатлар регистратори', H('43,5% (200 дақ.)')], [null, 'Муҳандис ЖИГ', H('30,8% (142 дақ.)')], [null, 'Комплектация бўйича муҳандис', H('47,8% (220 дақ.)')], [null, 'Комплектация бўйича муҳандис', H('29,5% (136 дақ.)')],
+          [{ t: 'Йиғув цехи', rs: 2, cls: 'grp' }, 'Жиҳоз устаси', H('39,6% (190 дақ.)')], [null, 'Комплектация бўйича муҳандис', '71,3% (328 дақ.)'],
+          [{ t: 'Таъминот тизими', rs: 4, cls: 'grp' }, 'КД деталлари моддий оқимини таҳлил қилиш муҳандиси', '81,4% (374 дақ.)'], [null, 'Харид бўйича муҳандис', '81,4% (374 дақ.)'], [null, 'КД деталлари моддий оқимини таҳлил қилиш муҳандиси', '79,1% (364 дақ.)'], [null, 'Харид бўйича муҳандис', '91,0% (419 дақ.)']], { r: [2] }), 'grow') +
+        `<p class="note">Камаювчи — бандлиги 70% дан (322 дақиқадан) паст штат бирликлари; қисқартириш ёки вазифаларни бирлаштириш учун номзод.</p>`;
+    } },
+
+    { t: 'Ўқитишлар', hero: true, body: () => hero('03', 'Ўқитишлар', 'АДМ Академия, ички ўқитиш ижроси ва ходимларни баҳолаш тизими') },
+
+    { t: '6 ойлик ўқитиш ва компетенция натижалари', s: 'Қамров юқори, аммо сентябрда давомат пасайди ва Сифат йўналишида компетенция пастроқ', layout: 'grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)', body: () =>
+      C(kpis([kpi('', '94,5%', '<b>Бригадирлар ўқитилди</b><br>165 нафардан 156 нафари камида бир марта', 'acc'), kpi('', '23 нафар <small style="color:var(--hot)">73,9% · режа: 90%+</small>', '<b>Сентябрда дарсга келмаган</b><br>Апрелда 5 нафар эди; қамров 85,0%гача тушди', 'hot hotb')], 2) +
+        grid('minmax(0,1fr) minmax(0,1fr)', card('Компетенция ва: Сифат йўналиши устувор <small><br>341 ходимнинг баҳолаш натижалари</small>', table(['Йўналиш', 'Ходим', 'Ўртача'], [['Сифат', 130, '66,8%'], ['Йиғув', 118, '81,4%'], ['Бўёқлаш', 43, '86,5%'], ['СКД', 18, '83,2%'], ['Таъмирлаш', 17, '79,9%'], ['Ускуналар', 15, '88,4%']], { r: [1, 2], hotRows: [0, 1] }), 'grow') +
+          C(kpi('', '76,8%', '<b>Ўртача компетенция бали</b><br>341 ходим баҳоланди (585 максимал баллга нисбатан)') + kpi('', '108 нафар', '<b>70%дан паст натижа</b><br>Сифат 78, Йиғув 28 нафар · уларнинг 72,2%и Сифатда', 'hot hotb')), 'flex:1')) +
+      card('Таклиф', list([{ n: '✓', t: '<b>Давоматни тиклаш</b>', d: 'Таътил ва сменага мос қўшимча дарслар. Пайвандлаш (7) ва Таъминот (5) биринчи навбатда.' }, { n: '◎', t: '<b>106 ходимни қайта ўқитиш</b>', d: 'Сифат 78 + Йиғув 28: ADM MS, йўқотишлар, WPO. 30 кунда қайта баҳо.' }, { n: '≡', t: '<b>Ягона натижалар реестри</b>', d: 'Давомат, баҳо, OJT, сертификат ва харажат битта тизимда (Академия, HR, Молия).' }]) + `<p class="note" style="margin-top:auto;text-align:center;border:1px solid var(--line);border-radius:6px;padding:.3em;font-style:italic">Таҳлилий таклиф · ҳали тасдиқланмаган</p>`, 'grow') },
+
+    { t: 'Давомат сентябрда пасайди, энг пасти Ускуналарда', s: 'Бригадирлар: 2 865 қатнашув · раҳбарлар: 455 имкониятдан 208 қайд (45,7%)', layout: 'grid-template-columns:minmax(0,1fr) minmax(0,1fr)', body: () =>
+      C(card('Ойда камида 1 дарсга қатнашганлар, %', line(M.slice(3, 9), [96.6, 94.7, 96.7, 95.3, 91.2, 85.0], { min: 83, max: 98, H: 105 })) +
+        card('Дарсга қатнашмаган бригадирлар', vbar(M.slice(3, 9), [{ v: [5, 8, 5, 7, 13, 23] }], { hot: [4, 5], h: 4.5 }), 'grow')) +
+      C(card('Бўлимлар: ўртача қатнашув, % <small>(6 ой)</small>', hbar([['Бўёқлаш', 97.7], ['Сифат назорати', 95.5], ['Йиғув', 94.3], ['Таъминот', 94.3], ['Маъмурий хизмат', 91.7], ['Пайвандлаш', 91.0], ['СКД', 89.4], ['Ускуналар', 66.7, 'hot']], { max: 100 }), 'grow') +
+        kpis([kpi('Қамров июндан сентябргача', '−11,7 п.п.', '96,7% → 85,0%', 'hot hotb'), kpi('Ускуналарда', '3 бригадир', 'Ш. Икрамов: июль–август йўқ'), kpi('Раҳбарлар: қайд улуши', '45,7%', 'режа бажарилиши фоизи эмас')], 3)) },
+
+    { t: 'Grading тизими', hero: true, body: () => hero('04', 'Grading тизими', '') },
+
+    { t: 'Grading тизими: рол, баҳолаш ва тўлов ягона тизимда', s: 'Тўғри одам тўғри ролда, тўғри тўлов ва ўсиш имкониятлари билан', layout: 'grid-template-columns:minmax(0,.8fr) minmax(0,2fr);grid-template-rows:minmax(0,1fr) auto', body: () =>
+      card('<span class="cap">Карьера зинапояси</span>', `<div class="stair">${[['HiPo', 'Young · HiPo · Key', 100], ['Senior', 'A · B · C', 88], ['Middle', 'A · B · C', 76], ['Junior', 'A · B · C', 64]].map(([a, b, w], i) => `<div style="margin-left:${(100 - w)}%;${i ? '' : 'background:color-mix(in srgb,var(--accent) 45%,transparent)'}"><b>${a}</b><span>${b}</span></div>`).join('')}</div><p class="note">↑ Junior → HiPo; ҳар даража ичида A → B → C</p>`, 'grow') +
+      card('<span class="cap">Ягона тизимнинг 4 таркибий қисми</span>', grid('1fr 1fr', [['1', 'Рол', 'Аниқ роллар ва кутишлар', ['Рол ва масъулият тавсифи', 'Талаб қилинадиган компетенциялар', 'Таъсир даражаси ва мураккаблик']], ['2', 'Баҳолаш', 'Объектив баҳолаш', ['Шаффоф мезонлар', 'Мунтазам тескари алоқа', 'Натижалар ва компетенцияларни баҳолаш']], ['3', 'Ривожланиш', 'Ўсиш ва ривожланиш', ['Индивидуал ривожланиш режалари', 'Ўқитиш ва ўсиш имкониятлари', 'Карьера траекториялари']], ['4', 'Тўлов', 'Адолатли тўлов', ['Рол қиймати ва натижалар асосида тўлов', 'Рақобатбардош бозор маълумотлари', 'Шаффоф диапазонлар ва қоидалар']]]
+        .map(([n, c, h, items]) => `<div class="kpi" style="flex-direction:row;gap:calc(var(--u)*.6)"><span class="n" style="flex:none;width:calc(var(--u)*1.6);height:calc(var(--u)*1.6);border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#0b1020;font-weight:900">${n}</span><div><span class="l">${c}</span><div style="font-weight:800;font-size:calc(var(--u)*.95)">${h}</div><div class="s">${items.map((x) => '· ' + x).join('<br>')}</div></div></div>`).join('')), 'grow') +
+      `<div style="grid-column:1/-1">${kpis([['Шаффофлик', 'Тушунарли қоидалар, мезон ва жараёнлар'], ['Автоматлаштириш', 'Баҳолаш ва қарор учун рақамли воситалар'], ['Ривожланиш', 'Компетенция ва салоҳиятни ошириш'], ['Маълумотли қарор', 'Объектив кадрлар қарори учун таҳлил']].map(([a, b]) => kpi('', `<span style="font-size:calc(var(--u)*1)">${a}</span>`, b, 'acc')))}</div>` },
+
+    { t: 'Грейдлар ва даражани белгилаш мезонлари', s: 'Лавозимлар G1 дан G14 гача · даража 4 блок бўйича балл билан аниқланади (Мастер G6 мисолида)', layout: 'grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)', body: () =>
+      card('<span class="cap">Лавозимлар рўйхати (грейдлар)</span>', grid('repeat(6,minmax(0,1fr))', [['G1', 'Асосий ходимлар', 'Тозаловчи, боғбон, оператор, ёрдамчи ишчи, ошхона'], ['G2', 'Техник ходимлар', 'Чилангар, ҳайдовчи, омборчи, электрик, курьер, сантехник'], ['G3', 'Малакали ишчи', 'Сифат инспектори, электромонтёр, пайвандчи, техника ҳайдовчиси'], ['G4', 'Катта ишчилар', 'Бригадир, диспетчер, ассистент, бухгалтерия кўмаги'], ['G6', 'Мастер', 'Ишлаб чиқариш участкаси мастери'], ['G7', 'Мутахассис', 'Муҳандис, бухгалтер, HR, технолог, IT-админ'], ['G8', 'Катта мутахассис', 'Инвестиция мутахассиси, технадзор ва ПТО муҳандиси'], ['G9', 'Секция раҳбари', 'Секция бошлиғи, бош бухгалтер ўринбосари, линия бошлиғи'], ['G10', 'Секция раҳбари', 'Локализация, бухгалтерия, R&amp;D, режалаштириш'], ['G11', 'Олий тоифали', 'Инвестиция, техназорат ва ПТО бош мутахассиси'], ['G12', 'Бўлим бошлиғи', 'Бўлим бошлиқлари'], ['G13–14', 'Топ-даража', 'Ўринбосар ва бўлим директори']]
+        .map(([g, h, d]) => `<div class="kpi" style="padding:calc(var(--u)*.4) calc(var(--u)*.5)"><b style="font-size:calc(var(--u)*1.05);color:var(--accent)">${g}</b><span style="font-weight:700;font-size:calc(var(--u)*.72)">${h}</span><span class="s" style="font-size:calc(var(--u)*.6)">${d}</span></div>`).join('')), '', 'grid-column:1/-1') +
+      card('<span class="cap">Даражани белгилаш: 4 блок</span>', list([{ t: '<b>Awareness</b> · Илова №1', d: 'NT—1, A—2, K—3, D—4, T—5 балл' }, { t: '<b>Корпоратив қадриятлар</b> · Илова №2', d: 'Стаж: 1 йил—5, 2—10, 3—25, 4—40 балл; интизомий жазо −20' }, { t: '<b>Аттестация ва «360»</b> · Илова №3–4', d: '65 савол × 2 балл; «360»: 1—40, 2—70, 3—100, 4—115, 5—130' }, { t: '<b>Лойиҳа тақдимоти</b> · KEY учун', d: 'Фақат KEY (HiPo) даражаси учун талаб қилинади' }]) + `<p class="txt" style="margin-top:auto"><b>Мисол:</b> балл 85, стаж 2 йил, жазо 0, тўғри жавоб 40, «360» — 3 → якуний 466,25 → <b style="color:var(--accent)">MIDDLE B</b></p>`, 'grow') +
+      card('<span class="cap">Якуний балл бўйича даража</span>', table(['Даража', 'A', 'B', 'C'], [['Junior', 292, 325, 357], ['Middle', 422, 455, 487], ['Senior', 552, 585, 620], ['HiPo', '—', { t: 'KEY: 650 + лойиҳа' }, '']], { r: [1, 2, 3] }), 'grow') },
+
+    { t: 'Электрон ариза тизими', hero: true, body: () => hero('05', 'Электрон ариза тизими', '') },
+
+    { t: 'Электрон ариза тизимини жорий этилди ва ходимларни ишга қабул қилиш ҳамда мослаштириш бўйича иккита муҳим стандарт тасдиқланди.', long: true, layout: 'grid-template-columns:minmax(0,.8fr) minmax(0,2fr);grid-template-rows:minmax(0,1fr) auto', body: () =>
+      C(kpis([kpi('', '8', 'электронлаштирилган ариза тури', 'acc'), kpi('', '1', 'янги модул (йиллик таътил)'), kpi('', '100%', 'электрон кузатиш'), kpi('', '0 сўм', 'киоск харидига сарфланган маблағ')], 1)) +
+      card('Электрон шаклга ўтказилган аризалар', grid('1fr 1fr', ['Бола туғилиши муносабати билан таътил', 'Никоҳ тўйи муносабати билан таътил', 'Яқин қариндош вафоти муносабати билан таътил', 'Иш ҳақи сақланмаган ҳолда таътил', 'Ўқув таътили бериш', 'Отгул бериш', 'Ҳарбий хизматга чақириш бўйича ариза', 'Иш вақтида ташқарига чиқиш учун рухсатнома']
+        .map((t, i) => `<div class="ls"><li><span class="n">${i + 1}</span><span>${t}</span></li></div>`).join(''), 'row-gap:calc(var(--u)*.7)'), 'grow') +
+      `<div style="grid-column:1/-1" class="col"><span class="cap">Тасдиқланган стандартлар · ходимларни бошқариш жараёнлари бўйича</span>${grid('1fr 1fr', [['KSt-205000-006:2026', 'Ишга қабул қилиш тартиби', 'Тасдиқланди 03.09.2026 · амал қилади 02.09.2029'], ['KSt-205000-020:2026', 'Мослаштириш тартиби', 'Тасдиқланди 09.09.2026 · амал қилади 08.09.2029']]
+        .map(([c, h, d]) => card('', `<div style="display:flex;justify-content:space-between;gap:1em;align-items:center"><div><div class="note">${c}</div><div style="font-weight:800;font-size:calc(var(--u)*1.05)">${h}</div><div class="note">${d}</div></div><span class="tag">ТАСДИҚЛАНДИ</span></div>`)).join(''))}</div>` },
+
+    { t: 'Электрон ариза: жараён ва фойда', layout: 'grid-template-rows:auto auto auto', body: () =>
+      grid('minmax(0,1fr) auto minmax(0,1fr)', card('Аввалги жараён (қоғоз)', `<p class="flow">Ёзиш → чоп этиш → имзо → раҳбарга топшириш → келишиш → HR'га етказиш → архивлаш</p>`, 'grow') + `<div style="align-self:center;font-size:calc(var(--u)*2.4);color:var(--accent);font-weight:900">→</div>` + card('Янги жараён (электрон)', `<p class="flow">Ариза турини танлаш → маълумот киритиш → электрон юбориш → раҳбар кўриб чиқади → автоматик йўналтириш → электрон тарихда сақлаш</p>`, 'grow', 'border-color:var(--accent)')) +
+      grid('repeat(3,minmax(0,1fr))', [['Ходим ва раҳбар вақти', 'Ариза тезкор шакллантирилади, қўлда етказиш ва излаш йўқолади'], ['Канцелярия харажати', 'Қоғоз, сиёҳ ва бланкалар сарфи қисқаради'], ['Назорат ва шаффофлик', 'Ариза ҳолатини кузатиш, ягона электрон маълумотлар базаси']].map(([h, d], i) => card('', list([{ n: i + 1, t: `<b>${h}</b>`, d }]))).join('')) +
+      grid('1fr', card('', `<p class="txt">★ Touch Screen киоск қурилмалари сотиб олинмади — мавжуд участка мастерлари компьютерларидан фойдаланилди. Натижада <b>96 000 000 сўм</b> қўшимча капитал харажат ва техник хизмат заруратининг олди олинди.</p>`) + card('', `<p class="txt"><b style="color:var(--accent)">Кейинги босқич:</b> йиллик меҳнат таътили бўйича аризаларни электронлаштириш жараёни ишлаб чиқилмоқда — тизим қамрови янада кенгайтирилади.</p>`)) },
+
+    { t: 'Грейдлар бўйича маош жадвали', s: 'сўмда · G1–G5: ҳар substep +8% (1,08 … 1,72) · G6: ҳар substep +15% (1,15 … 2,35)', layout: 'grid-template-rows:minmax(0,1fr) auto', body: () =>
+      card('', table(['Грейд', 'T', 'Jun A', 'Jun B', 'Jun C', 'Mid A', 'Mid B', 'Mid C', 'Sen A', 'Sen B', 'Sen C'], [
+        ['G1', '2 465 217', '2 662 435', '2 859 652', '3 056 870', '3 254 087', '3 451 304', '3 648 522', '3 845 739', '4 042 957', '4 240 174'],
+        ['G2', '3 574 565', '3 860 530', '4 146 496', '4 432 461', '4 718 426', '5 004 391', '5 290 357', '5 576 322', '5 862 287', '6 148 252'],
+        ['G3', '4 000 000', '4 320 000', '4 640 000', '4 960 000', '5 280 000', '5 600 000', '5 920 000', '6 240 000', '6 560 000', '6 880 000'],
+        ['G4', '5 423 478', '5 857 357', '6 291 235', '6 725 113', '7 158 991', '7 592 870', '8 026 748', '8 460 626', '8 894 504', '9 328 383'],
+        ['G5', '6 163 043', '6 656 087', '7 149 130', '7 642 174', '8 135 217', '8 628 261', '9 121 304', '9 614 348', '10 107 391', '10 600 435'],
+        ['G6 Мастер', '7 149 130', '8 221 500', '9 293 870', '10 366 239', '11 438 609', '12 510 978', '13 583 348', '14 655 717', '15 728 087', '16 800 457']].map((r) => [{ t: `<b style="color:var(--accent)">${r[0]}</b>` }, ...r.slice(1)]), { r: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }).replace('class="tb"', 'class="tb" style="font-size:calc(var(--u)*.95)"').replace(/<td /g, '<td style="padding:calc(var(--u)*.55) calc(var(--u)*.45)" '), 'grow') +
+      card('', `<p class="txt"><b>G1:</b> фаррош, ҳудуд тозаловчиси, боғбон, оператор, ёрдамчи ишчи, ҳайдовчи, қозонхона оператори, ошхона ишчиси. <b>G2–G3:</b> механик йиғув чилангари, автокар ва юк кўтаргич ҳайдовчиси, омборчи, қоровул, электрик, курьер, пайвандчи, маляр ва б. <b>G4:</b> сифат инспектори, ҳисобчи, электромонтёр, кран машинисти, токарь ва б. <b>G5:</b> бухгалтер ёрдамчиси, омбор мудири, бригадир, диспетчер, ассистент, су-шеф ва б.</p>`) },
+
+    { t: 'Корпоратив маданият ва коммуникациялар', hero: true, body: () => hero('06', 'Корпоратив маданият ва коммуникациялар', 'Байрам тадбирлари, спорт, ижтимоий лойиҳалар ва ички канал') },
+
+    { t: 'Корпоратив маданият: тадбирлар ва Табель сўровномаси', s: 'ADM Jizzakh Communication · 5 та тадбир ва Табель бўйича сўровнома натижасида 6 та чора-тадбир', layout: 'grid-template-columns:minmax(0,1fr) minmax(0,1.9fr)', body: () =>
+      card('<span class="cap">Сентябрь тадбирлари</span>', list([{ t: '<b>ADM MS бўйича викторина</b>', d: 'ғолиб тақдирланди (25.09.2026)' }, { t: '<b>Табель бўйича сўровнома</b>', d: 'натижалари ва чоралар — ёнда →' }, { t: '<b>«Менинг мактабим»</b>', d: '4 ходим мактабида тақдирланди' }, { t: '<b>«Раҳмат Day»</b>', d: 'ходимларга миннатдорлик тадбири' }, { t: '<b>Ички акциялар</b>', d: '1 ходим Ишонч савдода Sonet автомобилини ютди' }]) +
+        `<div style="display:flex;flex-wrap:wrap;gap:calc(var(--u)*.4);margin-top:auto">${['«Менинг мактабим»', '«Раҳмат Day»', 'Sonet автомобили'].map((c) => `<span class="tag" style="font-size:calc(var(--u)*.68);letter-spacing:0">${c}</span>`).join('')}</div>`, 'grow') +
+      card('<span class="cap">Табель сўровномаси: натижа → чора-тадбир</span>', table(['№', 'Сўровнома натижаси', 'Чора-тадбир', 'Масъул', 'Муддат'], [
+        ['01', '<b>14%</b> қониқмаган (25% қисман)', 'Норози ходимларни бўлим ва цех кесимида аниқлаб, сабабини бартараф этиш', 'Табель юритувчилар', '5 иш куни'],
+        ['02', '<b>13%</b> тартибни тушунмаган (28% тушунтириш сўраган)', '«Табель ҳисобини юритиш тартиби» бўйича бригадир, сўнг ходимларни каскад ўқитиш', 'Етакчи табелчи', '15 иш куни'],
+        ['03', '<b>24%</b> жавобни кечикиб олган (13% олмаган)', 'Табелчилар цехларга бориб, мурожаатни жойида ҳал қилади', 'Табель юритувчилар', 'Доимий'],
+        ['04', '<b>26%</b> ёпилган табель билан танишмаган', 'ADM Ҳақнома бот ва бўлимлардаги [GL…] орқали ёпилган табелни етказиш', 'Табелчилар, раҳбарлар, HR', 'Ҳар ой, ёпилгач 3 кунда'],
+        ['05', '<b>92%</b> Telegram ботни қулай деган', 'IT билан бот: ходим ўз табели ва KPI ни кўради; аввал битта бўлинмада синов', 'IT бўлими, МЕТИҲ', 'ТТ тайёр; бот 30 кунда'],
+        ['06', 'Самарадорликни текшириш', 'Ижро ва мурожаат статистикаси ҳар ҳафта; якунда қайта сўровнома', 'МЕТИҲ бўлинмаси', 'Ҳар ҳафта; якун 2 ойда']]) + `<p class="note" style="margin-top:auto">МЕТИҲ — Меҳнатни ташкил этиш ва иш ҳақи бўлинмаси · ТТ — техник топшириқ</p>`, 'grow') },
+
+    { t: 'Интизом бўйича', hero: true, body: () => hero('07', 'Интизом бўйича', '') },
+
+    { t: 'Интизом бўйича: 2025 ва 2026-йил', s: '2026 — 9,5 ой (14-октябргача) · интизомий ҳолатлар 2025 йил билан солиштирилди', layout: 'grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto minmax(0,1fr) minmax(0,1fr)', body: () => {
+      const yy = (a, b, o = {}) => vbar(o.c || ['2025', '2026'], [{ v: [a, b, ...(o.more || [])] }], { hi: o.hi || [1], h: 3.6, hot: o.hot || [] });
+      return `<div style="grid-column:1/-1">${kpis([kpi('ЙТҲ (ходим)', '5 → 10 <span class="tag">2 баравар</span>', '2 та шартнома тугатилди', 'acc'), kpi('Масъулиятсизлик (ҳолат)', '46 → 24 <span class="tag">-52%</span>', '2025: 17 ходим', 'acc'), kpi('Муштлашув (ходим)', '2 → 6 <span class="tag">3 баравар</span>', '1 → 3 ҳолат', 'acc'), kpi('Талон-торож (ҳолат)', '1 → 2 <span class="tag">Ошган</span>', '5 ходим, 1 та шартномаси бекор қилинди бекор', 'acc')])}</div>` +
+        card('Интизомий жазо олган ходимлар', yy(76, 50)) + card('ЙТХ, ходимлар сони', yy(5, 10)) +
+        card('Муштлашув, 2025 ва 2026', yy(2, 6, { c: ['Ходим 2025', 'Ходим 2026', 'Ҳолат 2025', 'Ҳолат 2026'], more: [1, 3], hi: [1, 3] })) +
+        card('Талон-торож', yy(1, 5)) + card('Масъулиятсизлик ҳолатлари', yy(24, 46)) +
+        card('Ишга сабабсиз чиқмаслик', `<p class="note">10 дан 1 га: ҳақиқий пасайиш эмас, 1 кунлик прагулар жазо тури таъсир чораларига ўзгартирилган. 2026-йилда 69 ходим ишга сабабсиз келмаганлиги учун ишдан бўшаган</p>` + vbar(['2025', '2026', '2026'], [{ v: [10, 1, 69] }], { hi: [1], h: 3 }));
+    } },
+
+    { t: 'Интизом: 2026-йилдаги ўзгаришлар', s: 'Интизомий жазолар қайта кўриб чиқилди ва ички меҳнат тартиби қоидалари янгиланди', layout: 'grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)', body: () =>
+      C(card('', `<div style="display:flex;gap:calc(var(--u)*1.4);align-items:center"><b style="font-size:calc(var(--u)*4.4);font-weight:900;color:var(--accent);line-height:1">29</b><div><span class="cap">Нафар ходим</span><div style="font-size:calc(var(--u)*1.35);font-weight:800;line-height:1.2">Интизомий жазо чорасининг таъсири муддатидан олдин тугатилди</div></div></div>`, 'grow', 'justify-content:center') +
+        card('', `<div style="display:flex;gap:calc(var(--u)*1.4);align-items:center"><b style="font-size:calc(var(--u)*3.6);color:var(--accent);line-height:1">✓</b><div><span class="cap">Янги таҳрир</span><div style="font-size:calc(var(--u)*1.35);font-weight:800;line-height:1.2">Ички меҳнат тартиби қоидалари тасдиқланди (ҳужжат ўнгда)</div></div></div>`, 'grow', 'justify-content:center')) +
+      `<div class="doc"><svg viewBox="0 0 200 270" style="height:100%;max-width:100%" aria-hidden="true"><rect x="8" y="8" width="184" height="254" rx="6" fill="#f4f6fb"/><rect x="8" y="8" width="184" height="254" rx="6" fill="none" stroke="var(--accent)" stroke-width="3"/><line x1="100" y1="22" x2="100" y2="210" stroke="#c9d1de" stroke-width="2"/><g stroke="#9aa6b8" stroke-width="5" stroke-linecap="round">${[30, 42, 54, 66, 100, 112, 124, 136, 170, 182].map((y) => `<line x1="20" y1="${y}" x2="88" y2="${y}"/><line x1="112" y1="${y}" x2="180" y2="${y}"/>`).join('')}</g><circle cx="150" cy="215" r="22" fill="none" stroke="#3b6fd8" stroke-width="3" opacity=".7"/><path d="M118 214 q14 -16 26 0 t26 0" fill="none" stroke="#2a4a9a" stroke-width="2.5"/></svg></div>` },
+  ];
+
+  /* ================= factory scene ================= */
+  const BAY = 1600, CAR_W = 520, CAR_SCALE = 0.9, GROUND = 720, N = SLIDES.length;
+  const BAYS = [[0, 10], [10, 20], [20, N]];
+  const ACCENT = ['#ff8a3d', '#2ec4d6', '#3ddc97'];
+  const bayOf = (i) => (i < 10 ? 0 : i < 20 ? 1 : 2);
+  function stopX(i) { const b = bayOf(i), [a, z] = BAYS[b]; return b * BAY + 250 + (i - a) * 1100 / (z - a - 1); }
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const bounce = (t) => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375; return n * (t -= 2.625 / d) * t + 0.984375; };
+
+  (function buildBackground() {
+    let d = '';
+    for (let x = -1600; x < 6400; x += 160) d += `M${x} 40 L${x + 80} 120 L${x + 160} 40 M${x} 40 L${x + 160} 40 M${x} 120 L${x + 160} 120 `;
+    $('truss').setAttribute('d', d);
+    const mk = (parent, tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+    for (let x = -1500; x < 6400; x += 400) mk($('skylights'), 'rect', { x, y: 132, width: 240, height: 110, rx: 6 });
+    for (let x = -1600; x < 6400; x += 200) mk($('panels'), 'line', { x1: x, x2: x, y1: 260, y2: 720 });
+    for (let x = -1600; x < 6400; x += 60) mk($('rollers'), 'circle', { cx: x, cy: 748, r: 6 });
+    [0, 1600, 3200, 4800].forEach((x) => {
+      const g = mk($('dividers'), 'g', {});
+      g.innerHTML = `<rect x="${x - 26}" y="250" width="52" height="470" fill="#232a3b"/><rect x="${x - 34}" y="250" width="68" height="26" fill="#2f3850"/>
+        ${Array.from({ length: 5 }, (_, k) => `<rect x="${x - 24 + k * 10}" y="276" width="8" height="${300 + (k % 2) * 30}" fill="rgba(180,210,255,.10)"/>`).join('')}
+        <circle cx="${x}" cy="300" r="6" fill="#ffd166" class="blink ${x % 3200 ? 'b2' : ''}"/>`;
+    });
+    [1590, 3190, 4790].forEach((x) => mk($('frontCols'), 'rect', { x: x - 10, y: 0, width: 20, height: 250, fill: '#1b2133' }));
+  })();
+
+  function makeRobot(host, flip) {
+    host.innerHTML = `<rect x="-46" y="-40" width="92" height="40" rx="6" fill="#3b2f52"/><rect x="-30" y="-70" width="60" height="34" rx="6" fill="#ff8a3d"/>
+      <g class="shoulder" transform="translate(0,-62)"><rect x="-14" y="-170" width="28" height="176" rx="12" fill="#ff8a3d"/><circle r="18" fill="#ffb27a" stroke="#b85a1f" stroke-width="4"/>
+        <g class="elbow" transform="translate(0,-160)"><circle r="14" fill="#ffb27a" stroke="#b85a1f" stroke-width="4"/><rect x="${flip ? -150 : 0}" y="-10" width="150" height="20" rx="10" fill="#ff9a52"/>
+          <g transform="translate(${flip ? -150 : 150},0)"><rect x="-9" y="-6" width="18" height="40" rx="4" fill="#5a4a73"/><circle cy="38" r="5" fill="#ffd166" class="torch" opacity=".9"/></g></g></g>`;
+    return { shoulder: host.querySelector('.shoulder'), elbow: host.querySelector('.elbow'), torch: host.querySelector('.torch'), flip };
+  }
+  const robots = [makeRobot($('robotL'), false), makeRobot($('robotR'), true)];
+
+  /* background machinery with moving parts: gears, presses, fans, an overhead hook chain */
+  const gears = [], presses = [], fans = [];
+  (function buildMachines() {
+    const host = $('machines');
+    const gearPath = (r, n) => { let d = ''; for (let i = 0; i < n * 2; i++) { const a = Math.PI * i / n, rr = i % 2 ? r * 0.8 : r;
+      const a1 = a - Math.PI / (n * 2) * 0.6, a2 = a + Math.PI / (n * 2) * 0.6;
+      d += `${i ? 'L' : 'M'}${(Math.cos(a1) * rr).toFixed(1)} ${(Math.sin(a1) * rr).toFixed(1)} L${(Math.cos(a2) * rr).toFixed(1)} ${(Math.sin(a2) * rr).toFixed(1)} `; } return d + 'Z'; };
+    const gear = (x, y, r, n, col, dir) => { const g = document.createElementNS(NS, 'g'); g.setAttribute('transform', `translate(${x},${y})`);
+      g.innerHTML = `<g><path d="${gearPath(r, n)}" fill="${col}"/><circle r="${r * 0.42}" fill="#1d2436"/><circle r="${r * 0.16}" fill="${col}"/>${[0, 60, 120].map((a) => `<rect x="${-r * 0.06}" y="${-r * 0.62}" width="${r * 0.12}" height="${r * 1.24}" fill="${col}" transform="rotate(${a})"/>`).join('')}</g>`;
+      host.appendChild(g); gears.push({ el: g.firstChild, sp: dir * 60 / r }); };
+    const press = (x) => { const g = document.createElementNS(NS, 'g'); g.setAttribute('transform', `translate(${x},720)`);
+      g.innerHTML = `<rect x="-42" y="-200" width="14" height="200" fill="#3a4560"/><rect x="28" y="-200" width="14" height="200" fill="#3a4560"/><rect x="-50" y="-214" width="100" height="22" rx="4" fill="#4a5675"/>
+        <rect x="-30" y="-30" width="60" height="30" fill="#2b3348"/><g class="ram"><rect x="-6" y="-194" width="12" height="60" fill="#9aa6bd"/><rect x="-30" y="-136" width="60" height="26" rx="3" fill="#ffd166"/><rect x="-30" y="-118" width="60" height="6" fill="#1b2133" opacity=".5"/></g>
+        <circle cx="0" cy="-203" r="4" fill="#ff6b7a" class="blink"/>`;
+      host.appendChild(g); presses.push({ ram: g.querySelector('.ram'), ph: x * 0.01 }); };
+    const fan = (x, y) => { const g = document.createElementNS(NS, 'g'); g.setAttribute('transform', `translate(${x},${y})`);
+      g.innerHTML = `<circle r="40" fill="#1b2236" stroke="#3a4560" stroke-width="6"/><g class="bl">${[0, 90, 180, 270].map((a) => `<path d="M0 0 Q12 -14 0 -34 Q-12 -14 0 0Z" fill="#6f7d99" transform="rotate(${a})"/>`).join('')}</g><circle r="6" fill="#9aa6bd"/>`;
+      host.appendChild(g); fans.push(g.querySelector('.bl')); };
+    gear(380, 640, 40, 12, '#58657f', 1); gear(330, 590, 24, 8, '#7a879f', -1);
+    press(1500); fan(1000, 330);
+    gear(1985, 655, 34, 10, '#4f6a7a', 1); gear(1985, 595, 20, 7, '#6e8c9c', -1);
+    press(2840); fan(2400, 230);
+    gear(4300, 630, 40, 12, '#4f6d6a', -1); gear(4350, 580, 24, 8, '#6e8f8a', 1);
+    fan(3700, 560); press(4700);
+    // overhead hook chain running along the whole line
+    const chain = document.createElementNS(NS, 'g');
+    chain.innerHTML = `<line x1="-1600" y1="520" x2="6400" y2="520" stroke="#3a4560" stroke-width="6"/><line class="belt" x1="-1600" y1="520" x2="6400" y2="520" stroke="#8090ad" stroke-width="2" stroke-dasharray="6 18"/><g id="hooks"></g>`;
+    host.appendChild(chain);
+    for (let x = -1600; x < 6400; x += 160) { const h = document.createElementNS(NS, 'path'); h.setAttribute('d', `M${x} 520 v26 q0 10 -9 10 q-8 0 -8 -8`); h.setAttribute('fill', 'none'); h.setAttribute('stroke', '#7d8aa5'); h.setAttribute('stroke-width', 3); $('hooks').appendChild(h); }
+  })();
+
+  /* exhaust smoke (world space, so it trails behind the moving car) */
+  const SMOKE_N = 26, smoke = [], smokeEls = [];
+  for (let i = 0; i < SMOKE_N; i++) { const c = document.createElementNS(NS, 'circle'); c.setAttribute('fill', '#c9d0dc'); c.setAttribute('opacity', 0); $('smoke').appendChild(c); smokeEls.push(c); smoke.push({ life: 0 }); }
+  let smokeCursor = 0, smokeAcc = 0;
+
+  const WELD_POINTS = [[160, 94], [204, 54], [276, 46], [354, 54], [402, 94], [276, 96], [276, 150], [176, 100], [176, 148], [392, 98], [392, 148], [430, 100], [80, 104], [240, 94], [330, 94]];
+  const weldDotEls = WELD_POINTS.map(([x, y]) => { const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 3.2); c.setAttribute('opacity', 0); $('weldDots').appendChild(c); return c; });
+
+  const SPARK_N = 90, sparks = [], sparkEls = [];
+  for (let i = 0; i < SPARK_N; i++) { const l = document.createElementNS(NS, 'line'); l.setAttribute('stroke-width', 2.4); l.setAttribute('opacity', 0); $('sparks').appendChild(l); sparkEls.push(l); sparks.push({ life: 0 }); }
+  let sparkCursor = 0;
+  function burst(x, y, n, hot) {
+    if (reduce) return;
+    for (let k = 0; k < n; k++) { const p = sparks[sparkCursor]; sparkCursor = (sparkCursor + 1) % SPARK_N; const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.6, v = 120 + Math.random() * 220;
+      Object.assign(p, { x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.35 + Math.random() * 0.35, col: hot ? (Math.random() < 0.5 ? '#ffd166' : '#ffffff') : '#ff8a3d' }); }
+  }
+  const carTop = GROUND - 184 * CAR_SCALE + 6;
+  function burstWorld(wx, wy, n, hot) { const carLeft = S.carX - (CAR_W / 2) * CAR_SCALE; burst((wx - carLeft) / CAR_SCALE, (wy - carTop) / CAR_SCALE, n, hot); }
+
+  const S = { cur: -1, carX: -500, from: -500, to: 250, t0: 0, dur: 1, moving: false, arrived: 0 };
+  const car = $('car'), cam = $('cam');
+  const P = { weldCabin: $('weldCabin'), weldSeams: $('weldSeams'), openings: $('openings'), po: $('paintedOpenings'), glass: $('glassParts'), trim: $('trimParts'),
+    lights: $('lightParts'), wheels: $('wheels'), skid: $('skid'), beam: $('headBeam') };
+  const wheelEls = [...document.querySelectorAll('#wheels .wheel')];
+  const progress = (x) => ({ w: clamp((x - 250) / 1100), p: clamp((x - 1850) / 1100), a: clamp((x - 3450) / 1100) });
+
+  function render(t) {
+    const x = S.carX, { w, p, a } = progress(x), k = reduce ? 0 : 1;
+    const camX = x - 800;
+    cam.setAttribute('transform', `translate(${(-camX).toFixed(2)},0)`);
+    car.setAttribute('transform', `translate(${(x - (CAR_W / 2) * CAR_SCALE).toFixed(2)},${carTop.toFixed(2)}) scale(${CAR_SCALE})`);
+    const busy = S.moving || t - S.arrived < 1.4;
+    const inWeld = x > 150 && x < 1450, inPaint = x > 1750 && x < 3050;
+    P.weldCabin.setAttribute('opacity', clamp(w / 0.5).toFixed(3));
+    P.weldSeams.setAttribute('opacity', clamp((w - 0.45) / 0.35).toFixed(3));
+    P.openings.setAttribute('opacity', clamp((w - 0.3) / 0.3).toFixed(3));
+    weldDotEls.forEach((c, i) => { const th = (i + 1) / (WELD_POINTS.length + 1), on = w >= th, hot = inWeld && busy && w - th < 0.12 && on;
+      c.setAttribute('opacity', on ? (hot ? 1 : 0.55) : 0); c.setAttribute('fill', hot ? '#ffd166' : '#6b7480'); });
+    $('primerRect').setAttribute('width', (clamp(p / 0.45) * 560).toFixed(1));
+    $('colorRect').setAttribute('width', (clamp((p - 0.4) / 0.6) * 560).toFixed(1));
+    P.po.setAttribute('opacity', p > 0 ? 1 : 0);
+    P.wheels.setAttribute('opacity', clamp(a * 8).toFixed(3));
+    P.wheels.setAttribute('transform', `translate(0,${((1 - bounce(clamp(a / 0.3))) * -230).toFixed(2)})`);
+    P.skid.setAttribute('opacity', (1 - clamp((a - 0.25) / 0.1)).toFixed(3));
+    P.glass.setAttribute('opacity', clamp((a - 0.3) / 0.22).toFixed(3));
+    P.trim.setAttribute('opacity', clamp((a - 0.55) / 0.2).toFixed(3));
+    P.lights.setAttribute('opacity', clamp((a - 0.72) / 0.15).toFixed(3));
+    P.beam.setAttribute('opacity', (clamp((a - 0.88) / 0.12) * 0.9).toFixed(3));
+    const ang = ((x / (34 * CAR_SCALE)) * 180 / Math.PI) % 360;
+    wheelEls.forEach((g) => g.querySelector('.spokes').setAttribute('transform', `rotate(${ang.toFixed(1)} ${g.dataset.cx} ${g.dataset.cy})`));
+    // robots reach toward the car while it is in the first bay
+    robots.forEach((r, i) => { const act = inWeld && busy ? 1 : 0;
+      const sh = (r.flip ? -1 : 1) * (18 + 10 * act) + Math.sin(t * (0.7 + act * 2.2) + i) * (6 + 10 * act) * k;
+      const e2 = (r.flip ? 1 : -1) * 40 + Math.sin(t * (0.9 + act * 2.6) + i * 2) * (8 + 12 * act) * k;
+      r.shoulder.setAttribute('transform', `translate(0,-62) rotate(${sh.toFixed(2)})`); r.elbow.setAttribute('transform', `translate(0,-160) rotate(${e2.toFixed(2)})`);
+      r.torch.setAttribute('opacity', act ? (0.6 + 0.4 * Math.random()).toFixed(2) : 0.5); });
+    // spray gantry follows the car through the second bay
+    const nx = inPaint ? clamp(x + Math.sin(t * 1.8) * 120 * k, 2110, 2690) : 2400 + Math.sin(t * 0.4) * 160 * k;
+    $('nozzle').setAttribute('transform', `translate(${nx.toFixed(1)},362)`);
+    const spraying = inPaint && busy && x > 2050 && x < 2750;
+    $('sprayCone').setAttribute('opacity', spraying ? (0.25 + 0.1 * Math.sin(t * 20) * k).toFixed(2) : 0);
+    $('paintMist').setAttribute('opacity', spraying ? 0.35 : 0); $('paintMist').setAttribute('cx', nx.toFixed(1));
+    const hb = 150 + Math.sin(t * 0.8) * 18 * k;
+    $('hoistCable').setAttribute('y2', hb.toFixed(1)); $('hoistLoad').setAttribute('transform', `translate(0,${hb.toFixed(1)})`);
+    gears.forEach((g) => g.el.setAttribute('transform', `rotate(${((t * g.sp * 20 * k) % 360).toFixed(1)})`));
+    presses.forEach((p) => { const y = (Math.max(0, Math.sin(t * 1.6 + p.ph)) ** 3) * 80 * k; p.ram.setAttribute('transform', `translate(0,${y.toFixed(1)})`); });
+    fans.forEach((f, i) => f.setAttribute('transform', `rotate(${((t * (220 + i * 40) * k) % 360).toFixed(1)})`));
+    $('hooks').setAttribute('transform', `translate(${((t * 40 * k) % 160).toFixed(1)},0)`);
+    $('archLight').setAttribute('opacity', a > 0.99 ? (0.75 + 0.25 * Math.sin(t * 3) * k).toFixed(2) : 0.25);
+    if (!reduce) {
+      if (Math.random() < 0.05) burstWorld(1350 + Math.random() * 20, 500, 4, false);
+      if (inWeld && busy && Math.random() < 0.5) { const [px, py] = WELD_POINTS[Math.floor(Math.random() * WELD_POINTS.length)]; burst(px, py, 3, true); }
+    }
+  }
+
+  let last = performance.now();
+  function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (S.moving) { const q = clamp((now - S.t0) / (S.dur * 1000)); S.carX = S.from + (S.to - S.from) * easeInOut(q); if (q >= 1) { S.moving = false; S.arrived = now / 1000; } }
+    if (!reduce) {
+      smokeAcc += dt;
+      const rate = S.moving ? 0.07 : 0.16;
+      while (smokeAcc > rate) { smokeAcc -= rate; const p = smoke[smokeCursor]; smokeCursor = (smokeCursor + 1) % SMOKE_N;
+        const cl = S.carX - (CAR_W / 2) * CAR_SCALE;
+        Object.assign(p, { x: cl + 10 * CAR_SCALE, y: carTop + 143 * CAR_SCALE, vx: -40 - Math.random() * 30, vy: -14 - Math.random() * 14, life: 1.8, max: 1.8 }); }
+    }
+    smoke.forEach((p, i) => { const c = smokeEls[i];
+      if (p.life <= 0) { if (c.getAttribute('opacity') !== '0') c.setAttribute('opacity', 0); return; }
+      p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy -= 4 * dt; const q = 1 - p.life / p.max;
+      c.setAttribute('cx', p.x.toFixed(1)); c.setAttribute('cy', p.y.toFixed(1)); c.setAttribute('r', (6 + q * 26).toFixed(1));
+      c.setAttribute('opacity', (Math.max(0, 0.5 * (1 - q))).toFixed(2)); });
+    sparks.forEach((p, i) => { const l = sparkEls[i];
+      if (p.life <= 0) { if (l.getAttribute('opacity') !== '0') l.setAttribute('opacity', 0); return; }
+      p.life -= dt; p.vy += 520 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+      l.setAttribute('x1', p.x.toFixed(1)); l.setAttribute('y1', p.y.toFixed(1)); l.setAttribute('x2', (p.x - p.vx * 0.03).toFixed(1)); l.setAttribute('y2', (p.y - p.vy * 0.03).toFixed(1));
+      l.setAttribute('stroke', p.col); l.setAttribute('opacity', clamp(p.life / 0.35).toFixed(2)); });
+    render(now / 1000);
+    requestAnimationFrame(loop);
+  }
+
+  /* ================= panel rendering + fit-to-slide ================= */
+  const panel = $('panel');
+  function fit() {
+    let k = 1; panel.style.setProperty('--k', k);
+    const over = () => panel.scrollHeight > panel.clientHeight + 1 || panel.scrollWidth > panel.clientWidth + 1;
+    while (over() && k > 0.5) { k -= 0.025; panel.style.setProperty('--k', k.toFixed(3)); }
+  }
+  function fill(i) {
+    const s = SLIDES[i];
+    const head = s.hero ? '' : `<header class="head"><div><div class="step">${String(i + 1).padStart(2, '0')} / ${N}</div><h1 class="${s.long ? 'long' : ''}">${s.t}</h1>${s.s ? `<p class="sub">${s.s}</p>` : ''}</div>${s.badge || ''}</header>`;
+    panel.innerHTML = `${head}<div class="body" style="${s.layout || (s.hero ? 'align-content:center' : '')}">${s.body()}</div>`;
+    fit();
+  }
+
+  const dots = $('dots');
+  SLIDES.forEach((s, i) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<i aria-hidden="true"></i>';
+    b.setAttribute('aria-label', `${i + 1}-слайд: ${s.t}`); b.addEventListener('click', () => go(i)); dots.appendChild(b); });
+  const dotEls = [...dots.children];
+
+  let swapTimer = 0;
+  function go(i) {
+    i = clamp(i, 0, N - 1);
+    if (i === S.cur) return;
+    S.cur = i;
+    document.documentElement.style.setProperty('--accent', ACCENT[bayOf(i)]);
+    dotEls.forEach((b, k) => { b.setAttribute('aria-current', k === i ? 'true' : 'false'); b.classList.toggle('done', k < i); });
+    $('prev').disabled = i === 0; $('next').disabled = i === N - 1;
+    $('count').textContent = `${String(i + 1).padStart(2, '0')} / ${N}`;
+    $('live').textContent = `${i + 1}-слайд, ${N} тадан: ${SLIDES[i].t}`;
+    clearTimeout(swapTimer);
+    panel.classList.remove('in');
+    const swap = () => { fill(i); panel.classList.remove('out'); requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('in'))); };
+    if (reduce || !panel.innerHTML) swap(); else { panel.classList.add('out'); swapTimer = setTimeout(swap, 300); }
+    S.from = S.carX; S.to = stopX(i); S.t0 = performance.now();
+    S.dur = reduce ? 0.001 : clamp(0.9 + Math.abs(S.to - S.from) / 1100 * 1.1, 1.0, 3.4);
+    S.moving = true;
+  }
+
+  $('prev').addEventListener('click', () => go(S.cur - 1));
+  $('next').addEventListener('click', () => go(S.cur + 1));
+  $('fs').addEventListener('click', () => { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); });
+  addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(S.cur + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(S.cur - 1); }
+    else if (e.key === 'Home') go(0); else if (e.key === 'End') go(N - 1);
+    else if (e.key === 'f' || e.key === 'F') $('fs').click();
+  });
+  let sx = null, sy = null;
+  const stage = $('stage');
+  stage.addEventListener('pointerdown', (e) => { if (e.target.closest('.nav')) return; sx = e.clientX; sy = e.clientY; });
+  stage.addEventListener('pointerup', (e) => { if (sx === null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) go(S.cur + (dx < 0 ? 1 : -1)); });
+  let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(fit, 120); });
+
+  go(0);
+  requestAnimationFrame((t) => { last = t; requestAnimationFrame(loop); });
+})();
+</script>
+</body>
+</html>

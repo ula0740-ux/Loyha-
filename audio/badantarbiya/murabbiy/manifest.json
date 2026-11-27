@@ -1,0 +1,233 @@
+{
+ "lines": {
+  "f0": {
+   "sim": 0.995,
+   "adm": true
+  },
+  "m0": {
+   "sim": 1,
+   "adm": true
+  },
+  "m1": {
+   "sim": 1,
+   "adm": true
+  },
+  "f1": {
+   "sim": 1,
+   "adm": true
+  },
+  "m2": {
+   "sim": 1,
+   "adm": true
+  },
+  "m3": {
+   "sim": 1,
+   "adm": true
+  },
+  "f2": {
+   "sim": 1,
+   "adm": true
+  },
+  "m4": {
+   "sim": 1,
+   "adm": true
+  },
+  "m5": {
+   "sim": 1,
+   "adm": true
+  },
+  "f3": {
+   "sim": 1,
+   "adm": true
+  },
+  "m6": {
+   "sim": 1,
+   "adm": true
+  },
+  "m7": {
+   "sim": 1,
+   "adm": true
+  },
+  "f4": {
+   "sim": 1,
+   "adm": true
+  },
+  "f5": {
+   "sim": 1,
+   "adm": true
+  }
+ },
+ "counts": [
+  {
+   "file": "counts/c1.mp3",
+   "words": [
+    {
+     "text": "Bir!",
+     "start": 0.16,
+     "end": 0.68
+    },
+    {
+     "text": "Ikki!",
+     "start": 0.88,
+     "end": 1.56
+    },
+    {
+     "text": "Uch!",
+     "start": 1.76,
+     "end": 2.32
+    },
+    {
+     "text": "Toʻrt!",
+     "start": 2.48,
+     "end": 3.28
+    }
+   ]
+  },
+  {
+   "file": "counts/c2.mp3",
+   "words": [
+    {
+     "text": "Bir!",
+     "start": 0.16,
+     "end": 0.68
+    },
+    {
+     "text": "Ikki!",
+     "start": 0.88,
+     "end": 1.56
+    },
+    {
+     "text": "Uch!",
+     "start": 1.76,
+     "end": 2.32
+    },
+    {
+     "text": "Toʻrt!",
+     "start": 2.48,
+     "end": 3.28
+    }
+   ]
+  },
+  {
+   "file": "counts/c3.mp3",
+   "words": [
+    {
+     "text": "Bir!",
+     "start": 0.16,
+     "end": 0.64
+    },
+    {
+     "text": "Ikki!",
+     "start": 0.8,
+     "end": 1.48
+    },
+    {
+     "text": "Uch!",
+     "start": 1.68,
+     "end": 2.24
+    },
+    {
+     "text": "Toʻrt!",
+     "start": 2.4,
+     "end": 3.12
+    }
+   ]
+  },
+  {
+   "file": "counts/c4.mp3",
+   "words": [
+    {
+     "text": "Bir!",
+     "start": 0.16,
+     "end": 0.72
+    },
+    {
+     "text": "Ikki!",
+     "start": 0.88,
+     "end": 1.56
+    },
+    {
+     "text": "Uch!",
+     "start": 1.76,
+     "end": 2.32
+    },
+    {
+     "text": "Toʻrt!",
+     "start": 2.48,
+     "end": 3.28
+    }
+   ]
+  },
+  {
+   "file": "counts/c5.mp3",
+   "words": [
+    {
+     "text": "Bir!",
+     "start": 0.16,
+     "end": 0.68
+    },
+    {
+     "text": "Ikki!",
+     "start": 0.8,
+     "end": 1.48
+    },
+    {
+     "text": "Uch!",
+     "start": 1.68,
+     "end": 2.2
+    },
+    {
+     "text": "Toʻrt!",
+     "start": 2.4,
+     "end": 3.12
+    }
+   ]
+  }
+ ],
+ "cues": {
+  "orqaga": {
+   "file": "cues/orqaga.mp3",
+   "words": [
+    {
+     "text": "[excited]",
+     "start": 0,
+     "end": 0.067
+    },
+    {
+     "text": "Endi",
+     "start": 0.08,
+     "end": 0.48
+    },
+    {
+     "text": "orqaga!",
+     "start": 0.64,
+     "end": 1.6
+    }
+   ]
+  },
+  "tashqariga": {
+   "file": "cues/tashqariga.mp3",
+   "words": [
+    {
+     "text": "[excited]",
+     "start": 0,
+     "end": 0.067
+    },
+    {
+     "text": "Endi",
+     "start": 0.08,
+     "end": 0.4
+    },
+    {
+     "text": "tashqariga!",
+     "start": 0.44,
+     "end": 1.6
+    }
+   ]
+  },
+  "chapga": {
+   "file": "cues/chapga.mp3",
+   "from": "Uch! Toʻrt! Endi chapga!"
+  }
+ }
+}

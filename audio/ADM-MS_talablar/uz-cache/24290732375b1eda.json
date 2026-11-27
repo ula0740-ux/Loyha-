@@ -1,0 +1,17 @@
+{
+ "i": 35,
+ "text": "Global Call to Actions doirasida xodimga yetkazilgan xavfsizlik koʻrsatmalari va chora-tadbirlarning uning ish joyiga tegishli qismlari bajariladi.",
+ "tts": "Global Call to Actions doirasida khodimga yetkazilgan khavfsizlik koʻrsatmalari va chora-tadbirlarning uning ish joyiga tegishli qismlari bajariladi.",
+ "hash": "24290732375b1eda",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/24290732375b1eda.mp3",
+ "duration": 10.03102,
+ "takes": 1,
+ "similarity": 0.993103448275862,
+ "problems": [
+  {
+   "expected": "ko'rsatmalari",
+   "heard": "ko'rsatmaları"
+  }
+ ],
+ "heard": "global call to actions doirasida xodimga yetkazilgan xavfsizlik ko'rsatmaları va choratadbirlarning uning ish joyiga tegishli qismlari bajariladi"
+}

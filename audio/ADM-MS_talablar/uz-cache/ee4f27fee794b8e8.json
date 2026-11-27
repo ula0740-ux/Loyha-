@@ -1,0 +1,21 @@
+{
+ "i": 45,
+ "text": "Xodim ish vaqti, tanaffuslar, ishga kelish-ketish, topshiriqlarni bajarish va korxona hududida oʻzini tutish qoidalarini bilishi hamda ularga rioya qilishi kerak.",
+ "tts": "Khodim ish vaqti, tanaffuslar, ishga kelish-ketish, topshiriqlarni bajarish va korkhona hududida oʻzini tutish qoidalarini bilishi hamda ularga rioya qilishi kerak.",
+ "hash": "ee4f27fee794b8e8",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/ee4f27fee794b8e8.mp3",
+ "duration": 12.120816,
+ "takes": 1,
+ "similarity": 0.9745222929936306,
+ "problems": [
+  {
+   "expected": "xodim",
+   "heard": "qortim"
+  },
+  {
+   "expected": "kelishketish",
+   "heard": "ketish"
+  }
+ ],
+ "heard": "qortim ish vaqti tanaffuslar ishga kelish ketish topshiriqlarni bajarish va korxona hududida o'zini tutish qoidalarini bilishi hamda ularga rioya qilishi kerak"
+}

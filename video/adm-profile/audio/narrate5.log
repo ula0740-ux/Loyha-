@@ -1,0 +1,75 @@
+  title #1: STT 100.0%
+  title: A-De-Em Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.
+✓ title 4.83s  8/8 soʻz
+  h2020 #1: STT 100.0%
+  h2020: Ikki ming yigirmanchi yilda A-De-Em Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.
+✓ h2020 8.05s  13/10 soʻz
+  cl0 #1: STT 100.0%
+  cl0: Endi A-De-Em Jizzakh avtomobil klasteriga nazar tashlaymiz.
+✓ cl0 4.68s  7/7 soʻz
+    c_kia #1 investitsiya (ru STT): Инвестиция OK
+  c_kia #1: STT 100.0%
+  c_kia: Kia Si-Ke-Di loyihasi: investitsiya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.
+✓ c_kia 7.63s  16/11 soʻz
+    c_skd #1 investitsiya (ru STT): Инвестиция OK
+  c_skd #1: STT 100.0%
+  c_skd: Es-Ki-Di tsekhi: investitsiya oʻn ikki butun oʻndan olti million dollar, toʻrt yuz ellik ish oʻrni. Zavod faoliyatini dastlab aynan shu Es-Ki-Di tsekhida ikki yuz ellik nafar khodim bilan boshlagan. Es-Ki-Di zavodi bir yil ichida qurilgan: u yigirma besh gektar maydonni egallaydi va yiliga oltmish ming avtomobil yigʻish quvvatiga ega.
+✓ c_skd 23.41s  49/40 soʻz
+    c_lok #1 investitsiya (ru STT): инвестиции ✗ weak -ya
+  c_lok #1: STT 95.0%
+    c_lok #2 investitsiya (ru STT): Инвестиции ✗ weak -ya
+  c_lok #2: STT 94.7%  ✗ mahalliylashtirish->mahalliyilashtirish
+    c_lok #3 investitsiya (ru STT): Инвестиции ✗ weak -ya
+  c_lok #3: STT 95.0%
+    c_lok #4 investitsiya (ru STT): инвестиции ✗ weak -ya
+  c_lok #4: STT 95.0%
+  c_lok: Lokalizatsiya klasteri: investitsiya yuz ellik million dollar, uch yuz ellik ish oʻrni. Klaster oʻrindiqlar, press panellari, old va orqa bamperlar, elektr qismlari hamda interyer va eksteryerning plastik qismlarini ishlab chiqaradi. Mahalliylashtirish darajasi dastlabki bosqichdayoq oʻttiz foiz, kelgusida uni qirq foizdan qirq besh foizgacha yetkazish rejalashtirilgan.
+✓ c_lok 26.20s  45/41 soʻz
+    c_sht #1 investitsiya (ru STT): вести цели ✗ weak -ya
+  c_sht #1: STT 94.0%  ✗ panellarini->panellarni  ✗ po'latdan->polatdan
+    c_sht #2 investitsiya (ru STT): инвестиции ✗ weak -ya
+  c_sht #2: STT 94.0%  ✗ panellarini->panellarni  ✗ po'latdan->polatdan
+    c_sht #3 investitsiya (ru STT): инвестиции ✗ weak -ya
+  c_sht #3: STT 94.5%  ✗ po'latdan->polatdan
+    c_sht #4 investitsiya (ru STT): Инвестиция OK
+  c_sht #4: STT 99.5%  ✗ po'latdan->polatdan
+  c_sht: Shtamplash tsekhi: investitsiya ellik besh million dollar, yuz ellik ish oʻrni. Bu tsekh kuzov panellarini ishlab chiqaradi. Shu tariqa poʻlatdan tayyor avtomobilgacha butun ishlab chiqarish zanjiri oʻzlashtiriladi.
+✓ c_sht 15.49s  27/25 soʻz
+    c_nev #1 investitsiya (ru STT): Инвестиции ✗ weak -ya
+  c_nev #1: STT 95.0%
+    c_nev #2 investitsiya (ru STT): Инвестиции ✗ weak -ya
+  c_nev #2: STT 95.0%
+    c_nev #3 investitsiya (ru STT): Инвестиция OK
+  c_nev #3: STT 100.0%
+  c_nev: Yangi loyihalar. Si-Ke-Di, "New energy vehicle", investitsiya yuz million dollar, bir ming ikki yuz ish oʻrni.
+✓ c_nev 9.40s  16/14 soʻz
+    c_rd #1 investitsiya (ru STT): инвестиции ✗ weak -ya
+  c_rd #1: STT 93.6%  ✗ ilmiytadqiqot->tadqiqot
+    c_rd #2 investitsiya (ru STT): Инвестиция OK
+  c_rd #2: STT 98.6%  ✗ ilmiytadqiqot->tadqiqot
+  c_rd: Ilmiy-tadqiqot markazi: investitsiya yuz million dollar, besh yuz muhandis.
+✓ c_rd 6.43s  9/8 soʻz
+    c_dost #1 investitsiya (ru STT): Инвестиции ✗ weak -ya
+  c_dost #1: STT 93.9%  ✗ dost->do'st
+    c_dost #2 investitsiya (ru STT): Инвестиция OK
+  c_dost #2: STT 98.9%  ✗ dost->do'st
+  c_dost: DOST tijorat avtomobillari: investitsiya oʻttiz million dollar, bir ming ikki yuz ish oʻrni.
+✓ c_dost 7.08s  13/11 soʻz
+    dost2 #1 investitsiya (ru STT): Инвестиция OK
+  dost2 #1: STT 100.0%
+  dost2: Investitsiya oʻttiz million dollar, bir ming ikki yuz ish oʻrni. Es-Ki-Di starti ikki ming yigirma yettinchi yilning birinchi choragida.
+✓ dost2 9.48s  19/13 soʻz
+    goals #1 investitsiya (ru STT): инвестиция. OK
+  goals #1: STT 99.4%  ✗ ming->∅  ✗ ta->mingta
+  goals: Ikki ming yigirma yettinchi yildan ikki ming oʻttiz beshinchi yilgacha qoʻshimcha toʻrt yuz million dollar investitsiya va besh ming ta yangi ish oʻrni koʻzda tutilgan.
+✓ goals 10.45s  25/16 soʻz
+  eco #1: STT 100.0%
+  eco: A-De-Em ekotizimi toʻrt yoʻnalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi khizmat va yangi mobillik.
+✓ eco 9.64s  15/15 soʻz
+  outro #1: STT 100.0%
+  outro: A-De-Em Jizzakh: innovatsiyalar orqali kelajak mobilligi uchun yechimlar yaratamiz.
+✓ outro 6.03s  9/9 soʻz
+    c_lok #1 investitsiya (ru STT): инвестиция OK
+  c_lok #1: STT 100.0%
+  c_lok: Lokalizatsiya klasteri: investitsiya yuz ellik million dollar, uch yuz ellik ish oʻrni. Klaster oʻrindiqlar, press panellari, old va orqa bamperlar, elektr qismlari hamda interyer va eksteryerning plastik qismlarini ishlab chiqaradi. Mahalliylashtirish darajasi dastlabki bosqichdayoq oʻttiz foiz, kelgusida uni qirq foizdan qirq besh foizgacha yetkazish rejalashtirilgan.
+✓ c_lok 26.28s  45/41 soʻz

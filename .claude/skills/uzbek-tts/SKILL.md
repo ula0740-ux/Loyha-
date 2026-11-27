@@ -31,6 +31,11 @@ Its settings are the default for every future Uzbek voice-over, so do not change
   - A word whose spoken form ends in the deep x ("…kh") gets "!" instead of "." at the end of a sentence. With a full stop, the model swallowed the final kh ("jizzaq", "ji zzkh").
   - An abbreviation marked `pauseAfter` in the lexicon (ADM) gets a comma, i.e. a short pause, when no punctuation follows it.
   - `prepareUzbek` does both automatically; the written text and captions are unchanged.
+- **The user's choices by ear (2026-10-14/15):**
+  - 100–199 is read as plain "yuz" ("yuz yetmish ikki"), never "bir yuz" (`numbers.ts`).
+  - "Formula" alone at the start of a sentence still sounded English (even as "For-mu-la"). The user chose by ear (2026-10-15, variant C of A/B/C/D): write **"Formulasi quyidagicha: …"**. The Uzbek suffix keeps the word Uzbek.
+  - English terms the user wants read in English go in `{braces}` in the narration (`video/formulalar/narrate.mts`); they skip `prepareUzbek`. Neighbouring-sentence context is always sent through `prepareUzbek`, because English context pulled "ADM" towards an English reading.
+- **KPI (the user's choice by ear, 2026-10-19):** read in English, joined, written **"Kei-pi-ai"** in the Uzbek take (variant G). Rejected: Uzbek letter names "ka pe i", {K, P, I}, {K. P. I.}, {KPI}, "Keypiay", "Key-pi-ay".
 - **Never cut a word out of one take and splice it into another.** It was tried: the user heard "ji zzkh" (the vowel lost, the fricative cut). Fix pronunciation with the text form and by regenerating, not with audio surgery.
 
 ## 2. Preparing the text (`prepareUzbek`, always)
@@ -44,6 +49,10 @@ Its settings are the default for every future Uzbek voice-over, so do not change
 - Default model: **`eleven_v4`** with `language_code: "uz"` plus x → kh. The user picked this by ear from 6 variants (v3/v4/multilingual_v2 × x/kh/Cyrillic). STT had rated plain-x v3 as "correct", but the user heard "eks". **The user's ear decides; STT is only a helper.**
 - On v4, always send the neighbouring sentences as `previous_text`/`next_text`. Without them, short lines ("Shaffof jarayon. Barqaror jamoa.") can come out with a Persian accent; STT then writes Arabic script. `segments.ts` and `narrate.mts` already do this.
 - ADM on v4: "ADM" is read as "adiyam". The lexicon form "A-de-em" is heard as "ADM".
+- **Film-level ADM override (ADM Jizzakh profile film, the user's choice by ear 2026-11-27):** in `video/adm-profile` ADM is spoken **"A-De-Em"** (Uzbek letter names, joined, no pause: "A-De-Em Jizzakh"), set in that film's `narrate.mts` (`adeem()`). There the user rejected "Ey-di-em" (English letters) and the lexicon's "A-de-em," (with a pause). The lexicon entry is unchanged (other films keep the baseline); if a new ADM film is made, offer "A-De-Em" first and confirm by ear.
+- **Jizzakh on eleven_v4 (lesson, 2026-11-27, ADM profile film):** put "Jizzakh" at a sentence end with "!" (variant F). Mid-sentence, especially before a word starting with k ("Jizzakh, koʻp …"), it collapses to "Jizzaq"; no spelling trick fixed it (khh, kh+dash, Jizzaakh, Djizzakh, plain x were all rejected by ear). Reword minimally so Jizzakh closes an exclamation ("… boshlandi: ADM Jizzax!"), make several takes, and pick by MFCC-DTW to the approved "A-de-em, Jizzakh!" of `video/pptx-film` (`video/adm-profile/build/jz_pick.py`). Russian STT is a poor judge here: the city's Russian name is "Джизак", but a "Джазах/Джизах" result does confirm the x.
+- **Renault (the user's choice by ear, 2026-11-27):** spoken **"Renolt"** (Uzbek-style), on-screen "Renault". Rejected: French "Reno", "Re-no", "Renoʻ", "Re-na-ult".
+- **"investitsiya" on v4 (2026-11-27):** some takes end in a weak "-ya" that Uzbek STT misses; cut the word and check it with Russian STT ("инвестиция" OK, "инвестиции" = weak), regenerate if weak; keep the plain spelling (the user chose it over hyphenated forms).
 - Only send parameters the model accepts. `ttsBody()` and `MODEL_CAPS` encode the tested facts:
   - `language_code` → v4 only;
   - `previous_text`/`next_text` → v4 and multilingual_v2, not v3;

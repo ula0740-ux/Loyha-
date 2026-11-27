@@ -1,0 +1,17 @@
+{
+ "i": 18,
+ "text": "Amaliy misol: operator uskunani yoʻriqnoma asosida boshqaradi va uning ishlashini kuzatadi.",
+ "tts": "Amaliy misol: operator uskunani yoʻriqnoma asosida boshqaradi va uning ishlashini kuzatadi.",
+ "hash": "f9c6eabbf91973e1",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/f9c6eabbf91973e1.mp3",
+ "duration": 6.844082,
+ "takes": 1,
+ "similarity": 0.9775280898876404,
+ "problems": [
+  {
+   "expected": "yo'riqnoma",
+   "heard": "yo'riqnomaga"
+  }
+ ],
+ "heard": "amaliy misol operator uskunani yo'riqnomaga asosida boshqaradi va uning ishlashini kuzatadi"
+}

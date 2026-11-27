@@ -1,0 +1,49 @@
+variants8 — "Jizzakh" oxiridagi chuqur x (kh) va Renault talaffuzi (2026-11-27). Quloq bilan tanlang: masalan "Jizzakh 2, Renault 1".
+Hammasi filmdagi jumlalarning oʻzi: eleven_v4, language_code uz, Sarah, previous_text/next_text, prepareUzbek,
+ADM = "A-De-Em" (tasdiqlangan 2-variant), seed 7, har variantdan bitta take. Yozuv va ekrandagi matn oʻzgarmaydi.
+STT: scribe_v1. "kesma" = take dan soʻzning oʻzi kesib olinib uz/ru/en STT ga berilgan.
+DIQQAT: ruscha STT bu soʻzga ishonchli emas — shaharning ruscha nomi "Джизак", shuning uchun STT koʻpincha
+"Джизак" deb yozadi. Ruscha STT "Джазах/Джиззах" (х bilan) yozsa, bu x aniq eshitilganini bildiradi.
+
+=== Filmdagi hozirgi take lar (v6), "Jizzax" soʻzi kesib olinib tekshirildi ===
+title  (ADM Jizzax, koʻp …)       uz "Jizzax"   ru "Джизак"    en "Exactly"   -> q/k ga oʻxshaydi (spektrogrammada ham x oʻrniga yopilish + portlash)
+h2020  (… ADM Jizzax avtozavodi)  uz "Jizzax"   ru "Jezza"     en "Jizak"     -> oxiri yutilgan
+cl0    (Endi ADM Jizzax …)        uz "Jizzax"   ru (arabcha)   en "Jizzak"    -> k ga oʻxshaydi
+dost1  (Jizzax tijorat …)         uz "Jizzax"   ru "Джазак"    en "Jazak"     -> k ga oʻxshaydi
+geo    (… Jizzax, Toshkent …)     uz "Jizzakh"  ru "Джазах"    en "Jizak"     -> x eshitiladi
+outro  (ADM Jizzax: …)            uz "Jizzakh"  ru "Джазах"    en "Jazak"     -> x eshitiladi
+logi   (… Jizzaxdan …)            uz "Jizzaxdan" ru "Джиззахдан" en "Jizzakhdan" -> x eshitiladi
+Sabab: sarlavhada "Jizzakh" dan keyin darhol "koʻp" (k bilan boshlanadi) keladi; kh oxiri k ga qoʻshilib "Jizzaq koʻp" boʻlib eshitiladi.
+
+=== 1. Sarlavha: "ADM Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya." ===
+JIZZAKH_0_v6.mp3  v6 filmdagi take (taqqoslash uchun).
+JIZZAKH_1.mp3  ovozga: "A-De-Em Jizzakh! Koʻp brendli …"  — kh + undov (F varianti), Jizzakh dan keyin jumla tugaydi.
+               kesma uz "Jizzakh", ru "Джизак", en "Jizakh". Toʻliq 98,4% (bu take da ADM "Adem" deb yozildi).
+JIZZAKH_2.mp3  ovozga: "A-De-Em Jizzakh — koʻp brendli …"  — kh + tire (soʻzdan keyin uzunroq pauza).
+               kesma uz "Jazak", ru "Джазак", en "Jizak". Toʻliq 100%.
+JIZZAKH_3.mp3  ovozga: "A-De-Em Jizzaakh, koʻp …"  — choʻzilgan a + kh (faqat shu film uchun ogʻzaki shakl).
+               kesma uz "Jizzakh", ru "Джизак", en "Jizak". Toʻliq 100%.
+JIZZAKH_4.mp3  ovozga: "A-De-Em Jizzakhkh, koʻp …"  — ikki marta kh (kuchaytirilgan boʻgʻiz tovushi; faqat shu film uchun).
+               kesma uz "Jizzakh", ru "Джазак", en "Jazak". Toʻliq 98,4%.
+JIZZAKH_5.mp3  ovozga: "A-De-Em Djizzakh, koʻp …"  — Dj + kh (faqat shu film uchun).
+               kesma uz "Jizzakh", ru (arabcha), en "Jazak". Toʻliq 96,8% (STT "Jizak").
+
+=== 2. Gap ichida: "2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. …" (raqamlar 1-boʻlim bilan bir xil shakl) ===
+JIZZAKH_ICHIDA_0_v6.mp3  v6 filmdagi take.
+JIZZAKH_ICHIDA_1.mp3  "Jizzakh, avtozavodi" (vergul/pauza)  kesma uz "Jizzax", ru "Джазар", en "Jezzard". Toʻliq 100%.
+JIZZAKH_ICHIDA_2.mp3  "Jizzakh — avtozavodi" (tire)        kesma uz "Jizzax", ru "Джазах" (x!), en "Jazak". Toʻliq 100%.
+JIZZAKH_ICHIDA_3.mp3  "Jizzaakh avtozavodi"                 kesma uz "Jizzakh", ru/en "Jazak". Toʻliq 100%.
+JIZZAKH_ICHIDA_4.mp3  "Jizzakhkh avtozavodi"                kesma uz "Jizzax", ru/en "Jazak". Toʻliq 100%.
+JIZZAKH_ICHIDA_5.mp3  "Djizzakh avtozavodi"                 kesma uz "Jizzax", ru "Jezak", en "Jizak". Toʻliq 100%.
+
+Sinab tashlab yuborilganlar (stt_hammasi.json): oddiy "Jizzax" (x kh ga aylantirilmagan) — STT "GZAX", jumla buzildi;
+"Jizzax!" — "G-Zoom"; "Jizzakhh", "Jiz-zakh" — STT "Jazak"/"jizzaq"; "Jizzach" (nemischa ch) — 1-variantdek;
+"Jizzah" — "Jiza" (h eshitiladi, x emas; qoida boʻyicha baribir ishlatilmaydi).
+
+=== 3. Renault (foydalanuvchi tuzatishi: "Ravon" emas, Renault, 2026-11-27) ===
+Jumla: "2021-yil martda mijozlarga ilk avtomobillar yetkazildi. Birinchi bosqichda Kia, Lada va Renault avtomobillari yirik uzellardan yigʻildi."
+RENAULT_1.mp3  ovozga: "Reno"   — toʻliq STT (uz) "… Kia, Lada va Renault …" 100%.
+RENAULT_2.mp3  ovozga: "Re-no"  — toʻliq STT 100%, kesma uz/ru "Renault".
+Ekranda "Renault" yoziladi; ogʻzaki shakl faqat shu film uchun (narrate.mts → reno()).
+
+Skript: build/variants8.mts.

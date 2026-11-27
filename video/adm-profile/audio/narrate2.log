@@ -1,0 +1,43 @@
+  hist1 #1: STT 100.0%
+  hist1: Kompaniyaga ikki ming oʻn toʻrtinchi yilda asos solingan, ikki ming yigirmanchi yilda esa A-de-em, Jizzakh avtozavodi qurilishi boshlandi.
+✓ hist1 9.56s  18/11 soʻz
+  hist2 #1: STT 97.5%  ✗ ckd->sekada
+  hist2: Ikki ming yigirma toʻrtinchi yil martda se ka de tekhnologiyasida yigʻish boshlandi, ikki ming yigirma oltinchi yil aprelda esa Kia K3 uchun yangi liniya ishga tushirildi.
+✓ hist2 11.31s  26/16 soʻz
+  struct #1: STT 98.8%  ✗ uch->∅  ✗ ta->uchta
+  struct: Guruh tarkibida oʻttiz uch ta kompaniya va besh ming toʻqqiz yuz nafar khodim bor.
+✓ struct 5.72s  14/11 soʻz
+  sales #1: STT 99.2%  ✗ sotuv->sotuvi
+  sales: Ikki ming yigirma beshinchi yilda bozor ulushi oʻn bir foizga, sotuv esa qirq olti ming toʻrt yuz oʻttiz toʻqqiz taga yetdi.
+✓ sales 8.12s  21/11 soʻz
+  kpi #1: STT 100.0%
+  kpi: Ikki ming yigirma beshinchi yilda yillik aylanma bir ming yigirma toʻrt million dollarni tashkil etdi. Kompaniya avtomobil sotuvi hajmi boʻyicha ikkinchi oʻrinda.
+✓ kpi 10.68s  22/16 soʻz
+  brands #1: STT 98.3%  ✗ dost->do'st
+  brands: DOST esa Markaziy Osiyodagi birinchi milliy avtomobil brendi.
+✓ brands 4.83s  8/8 soʻz
+  cl2 #1: STT 99.4%  ✗ ckd->skd
+  cl2: Es ka de loyihasi: oʻn ikki butun oʻndan olti million dollar va toʻrt yuz ellik ish oʻrni. Kia se ka de: ikki yuz qirq ikki million dollar va ikki ming yetti yuz ish oʻrni.
+✓ cl2 12.12s  34/19 soʻz
+  cl3 #1: STT 92.0%  ✗ ckd->sekade  ✗ nev->nv  ✗ dost->do'st
+  cl3 #2: STT 88.0%  ✗ ckd->enive  ✗ nev->ilmiy  ✗ ilmiytadqiqot->tadqiqot  ✗ dost->do'st
+  cl3 #3: STT 90.7%  ✗ ckd->nv  ✗ nev->ilmiy  ✗ ilmiytadqiqot->tadqiqot  ✗ dost->do'st
+  cl3: Yangi loyihalar: se ka de en e ve, ilmiy-tadqiqot markazi va DOST tijorat avtomobillari.
+✓ cl3 7.31s  14/10 soʻz
+  cl4 #1: STT 92.9%  ✗ ckd->secada
+  cl4 #2: STT 92.9%  ✗ ckd->secada
+  cl4 #3: STT 92.9%  ✗ ckd->secada
+  cl4: Se ka de loyihalari yiliga yuz ming avtomobilga moʻljallangan.
+✓ cl4 4.60s  9/7 soʻz
+  logi #1: STT 97.8%  ✗ kd->kadi
+  logi: United Auto Alliance ka de toʻplamlar va tayyor mahsulotni Jizzakhdan har bir hududga yetkazadi.
+✓ logi 6.92s  14/13 soʻz
+  dost2 #1: STT 100.0%
+  dost2: Investitsiya oʻttiz million dollar, bir ming ikki yuz ish oʻrni. Es ka de starti ikki ming yigirma yettinchi yilning birinchi choragida.
+✓ dost2 8.75s  21/13 soʻz
+  goals #1: STT 99.4%  ✗ ming->∅  ✗ ta->mingta
+  goals: Ikki ming yigirma yettinchi yildan ikki ming oʻttiz beshinchi yilgacha qoʻshimcha toʻrt yuz million dollar investitsiya va besh ming ta yangi ish oʻrni koʻzda tutilgan.
+✓ goals 10.19s  25/16 soʻz
+  eco #1: STT 99.2%  ✗ adm->adam
+  eco: A-de-em, ekotizimi toʻrt yoʻnalishni birlashtiradi: avtomobil ishlab chiqarish, savdo, sotuvdan keyingi khizmat va yangi mobillik.
+✓ eco 10.03s  15/15 soʻz

@@ -1,0 +1,25 @@
+{
+ "i": 2,
+ "text": "Korxonaning madaniy qadriyatlari, missiyasi va strategik maqsadlarini faoliyatida tatbiq qiladi, talab — Pi Ay bir.",
+ "tts": "Korkhonaning madaniy qadriyatlari, missiyasi va strategik maqsadlarini faoliyatida tatbiq qiladi, talab — Pi Ay bir.",
+ "hash": "75925d6ee5ac3eac",
+ "file": "/home/user/Loyha-/audio/ADM-MS_talablar/uz-cache/75925d6ee5ac3eac.mp3",
+ "duration": 9.090612,
+ "takes": 3,
+ "similarity": 0.9363636363636364,
+ "problems": [
+  {
+   "expected": "pi",
+   "heard": "∅"
+  },
+  {
+   "expected": "ay",
+   "heard": "∅"
+  },
+  {
+   "expected": "bir",
+   "heard": "pi1"
+  }
+ ],
+ "heard": "korxonaning madaniy qadriyatlari missiyasi va strategik maqsadlarini faoliyatida tatbiq qiladi talab pi1"
+}

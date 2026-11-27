@@ -1,0 +1,6 @@
+{
+  "name": "loyha-rea",
+  "private": true,
+  "description": "REA (Reverse Engineer Anything, MIT, morluto/rea) — CLI va MCP server. node_modules commit qilinmaydi: npm ci",
+  "dependencies": { "rea-agents": "6.7.0" }
+}

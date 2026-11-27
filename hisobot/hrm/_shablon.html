@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="uz-Cyrl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRM Ҳисоботи 2026</title>
+<style>
+  :root{--navy:#36486b;--navy2:#26344f;--sky:#9aaecb;--paper:#f9f9f9;--ink:#f4f6fb;--ease:cubic-bezier(.65,0,.35,1)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#1b2438;color:var(--ink);
+    font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;-webkit-font-smoothing:antialiased}
+  body{display:grid;place-items:center;height:100dvh;width:100vw}
+  .deck{position:relative;width:min(100vw,calc(100dvh*16/10.5));aspect-ratio:16/10.5;container-type:inline-size;
+    display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.45);background:var(--navy2)}
+  @supports not (height:100dvh){body{height:100vh}.deck{width:min(100vw,calc(100vh*16/10.5))}}
+
+  /* ---------- slides (the report itself, unchanged) ---------- */
+  .slides{position:relative;width:100%;aspect-ratio:16/9;background:var(--paper);overflow:hidden;touch-action:pan-y}
+  .slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;
+    opacity:0;transform:translateX(1.5%);transition:opacity .55s var(--ease),transform .55s var(--ease);user-select:none;-webkit-user-drag:none}
+  .slides img.on{opacity:1;transform:none}
+  .slides img.left{transform:translateX(-1.5%)}
+
+  /* ---------- production line band ---------- */
+  .band{position:relative;flex:1;min-height:0;background:linear-gradient(#2c3b59,#1f2a40)}
+  #line{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .stops{position:absolute;left:0;right:0;bottom:4%;height:24%}
+  .stops button{position:absolute;top:50%;width:2.2cqw;height:2.2cqw;min-width:14px;min-height:14px;transform:translate(-50%,-50%);
+    border:0;background:transparent;cursor:pointer;display:grid;place-items:center;border-radius:50%}
+  .stops button i{width:.55cqw;height:.55cqw;min-width:5px;min-height:5px;border-radius:50%;background:rgba(154,174,203,.45);transition:background .3s,transform .3s}
+  .stops button.done i{background:rgba(154,174,203,.9)}
+  .stops button[aria-current="true"] i{background:#fff;transform:scale(1.7);box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+  .stops button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+
+  .ctrl{position:absolute;top:7%;right:1.2cqw;padding:.3cqw;border-radius:999px;background:rgba(15,21,34,.55);display:flex;align-items:center;gap:.6cqw}
+  .ctrl button{appearance:none;border:0;cursor:pointer;color:var(--ink);background:rgba(255,255,255,.1);border-radius:50%;
+    width:2.6cqw;height:2.6cqw;min-width:30px;min-height:30px;display:grid;place-items:center;transition:background .2s,transform .2s}
+  .ctrl button:hover{background:rgba(255,255,255,.2)} .ctrl button:active{transform:scale(.94)}
+  .ctrl button[disabled]{opacity:.35;cursor:default}
+  .ctrl button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .ctrl svg{width:48%;height:48%}
+  .count{font-size:max(11px,1.05cqw);font-weight:700;letter-spacing:.08em;font-variant-numeric:tabular-nums;color:#dfe6f2;min-width:4.6em;text-align:center}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  .blink{animation:blink 2.4s ease-in-out infinite}.blink.b2{animation-delay:.8s}.blink.b3{animation-delay:1.6s}
+  @keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+  .belt{animation:belt 1.6s linear infinite}@keyframes belt{to{stroke-dashoffset:-36}}
+  .mist{animation:mist 7s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .mist.m2{animation-duration:9s;animation-delay:-3s}
+  @keyframes mist{0%,100%{transform:translate(0,0) scale(1);opacity:.16}50%{transform:translate(18px,-6px) scale(1.25);opacity:.3}}
+  /* portrait phones: controls move below the deck so the line stays clear */
+  @media (max-aspect-ratio: 3/4){
+    .deck{overflow:visible;box-shadow:none}
+    .ctrl{top:calc(100% + 18px);right:auto;left:50%;transform:translateX(-50%);gap:10px;padding:6px}
+    .ctrl button{width:44px;height:44px}
+    .count{font-size:15px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .blink,.belt,.mist{animation:none!important}.mist{opacity:.2}
+    .slides img{transition:none}
+  }
+</style>
+</head>
+<body>
+<main class="deck" id="deck" aria-roledescription="taqdimot" aria-label="HRM Ҳисоботи 2026">
+  <section class="slides" id="slides" aria-live="polite">
+__IMGS__
+  </section>
+
+  <div class="band" id="band">
+    <svg viewBox="0 0 1600 150" preserveAspectRatio="none" aria-hidden="true" id="line">
+      <defs>
+        <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6eaf0"/><stop offset=".55" stop-color="#aeb6c2"/><stop offset="1" stop-color="#7d8796"/></linearGradient>
+        <linearGradient id="primer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe7ee"/><stop offset="1" stop-color="#9fb0bf"/></linearGradient>
+        <linearGradient id="paintCol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5d6c"/><stop offset=".5" stop-color="#e3263c"/><stop offset="1" stop-color="#8f1022"/></linearGradient>
+        <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfefff"/><stop offset=".5" stop-color="#6fb7d9"/><stop offset="1" stop-color="#2f6f93"/></linearGradient>
+        <radialGradient id="beam" cx="0" cy=".5" r="1"><stop offset="0" stop-color="#fff6c8" stop-opacity=".8"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient>
+        <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+        <clipPath id="clipPrimer"><rect id="primerRect" x="-20" y="0" width="0" height="220"/></clipPath>
+        <clipPath id="clipColor"><rect id="colorRect" x="-20" y="0" width="0" height="220"/></clipPath>
+        <path id="lowerBody" d="M26 150 L26 120 Q28 106 48 102 L152 94 L404 94 L456 100 Q490 106 496 124 L496 150 Q496 154 490 154 L432 154 A42 42 0 0 0 348 154 L172 154 A42 42 0 0 0 88 154 L32 154 Q26 154 26 150 Z"/>
+        <path id="cabin" d="M152 94 L204 52 Q214 44 232 44 L330 44 Q346 44 358 54 L404 94 Z"/>
+        <path id="winRear" d="M170 92 L210 57 Q216 52 228 52 L272 52 L272 92 Z"/>
+        <path id="winFront" d="M286 52 L328 52 Q340 52 350 60 L386 92 L286 92 Z"/>
+      </defs>
+      <!-- zone tints only: no workshop names on the line -->
+      <rect x="0" y="0" width="575" height="150" fill="#ff8a3d" opacity=".05"/>
+      <rect x="575" y="0" width="515" height="150" fill="#2ec4d6" opacity=".06"/>
+      <rect x="1090" y="0" width="510" height="150" fill="#3ddc97" opacity=".05"/>
+      <g stroke="rgba(255,255,255,.08)" stroke-width="2"><line x1="575" y1="6" x2="575" y2="112"/><line x1="1090" y1="6" x2="1090" y2="112"/></g>
+
+      <!-- welding: two robot arms -->
+      <g id="robots"></g>
+      <!-- paint: booth, gantry, nozzle, mist -->
+      <rect x="600" y="14" width="470" height="98" rx="6" fill="rgba(142,240,255,.05)" stroke="rgba(142,240,255,.28)" stroke-width="2"/>
+      <rect x="612" y="20" width="446" height="5" rx="2.5" fill="#2b5566"/>
+      <g fill="#8ef0ff"><circle cx="620" cy="34" r="2.6" class="blink"/><circle cx="630" cy="34" r="2.6" class="blink b2"/><circle cx="640" cy="34" r="2.6" class="blink b3"/></g>
+      <g id="nozzle" transform="translate(830,25)">
+        <rect x="-8" y="0" width="16" height="10" rx="2" fill="#3a7487"/><rect x="-2.5" y="10" width="5" height="18" fill="#5aa3b8"/>
+        <path id="spray" d="M0 28 L-22 72 L22 72 Z" fill="#ff5d6c" opacity="0"/>
+      </g>
+      <g filter="url(#soft)">
+        <circle class="mist" cx="700" cy="80" r="26" fill="#2ec4d6"/><circle class="mist m2" cx="980" cy="70" r="30" fill="#8ef0ff"/>
+        <circle id="paintMist" cx="830" cy="86" r="34" fill="#ff5d6c" opacity="0"/>
+      </g>
+      <!-- assembly: overhead rail + hoist + inspection arch -->
+      <rect x="1110" y="12" width="170" height="5" rx="2.5" fill="#2b4f5e"/>
+      <g id="hoist" transform="translate(1180,17)">
+        <rect x="-9" y="0" width="18" height="8" rx="2" fill="#3ddc97"/>
+        <line id="hoistCable" x1="0" y1="8" x2="0" y2="40" stroke="#9fb3c2" stroke-width="1.5"/>
+        <g id="hoistLoad" transform="translate(0,40)"><circle r="9" fill="#1b1f27" stroke="#3b4250" stroke-width="2.5"/><circle r="3.5" fill="#c7d0db"/></g>
+      </g>
+      <g transform="translate(1330,0)">
+        <path d="M-46 112 L-46 34 Q-46 20 -32 20 L32 20 Q46 20 46 34 L46 112" fill="none" stroke="#24485a" stroke-width="8" stroke-linecap="round"/>
+        <path id="archLight" d="M-46 112 L-46 34 Q-46 20 -32 20 L32 20 Q46 20 46 34 L46 112" fill="none" stroke="#9ff0c9" stroke-width="2.5" stroke-linecap="round" opacity=".25"/>
+      </g>
+      <circle cx="1395" cy="40" r="3" fill="#3ddc97" class="blink b2"/>
+
+      <!-- conveyor -->
+      <rect x="0" y="112" width="1600" height="12" fill="#3a4766"/>
+      <line class="belt" x1="0" y1="118" x2="1600" y2="118" stroke="#5b6888" stroke-width="4" stroke-dasharray="6 30"/>
+      <rect x="0" y="124" width="1600" height="26" fill="#1a2234"/>
+
+      <!-- the car (local 0..520, scaled) -->
+      <g id="car">
+        <ellipse cx="260" cy="188" rx="250" ry="9" fill="rgba(0,0,0,.4)"/>
+        <g id="skid"><rect x="70" y="154" width="380" height="14" rx="3" fill="#ffd166"/>
+          <rect x="90" y="168" width="22" height="16" fill="#c9a043"/><rect x="250" y="168" width="22" height="16" fill="#c9a043"/><rect x="408" y="168" width="22" height="16" fill="#c9a043"/></g>
+        <use href="#lowerBody" fill="url(#metal)" stroke="#5d6676" stroke-width="3"/>
+        <use href="#cabin" fill="none" stroke="#aeb6c2" stroke-width="4" stroke-dasharray="10 8"/>
+        <g id="weldCabin" opacity="0"><use href="#cabin" fill="url(#metal)" stroke="#5d6676" stroke-width="3"/></g>
+        <g id="openings" opacity="0" fill="#1d222c"><use href="#winRear"/><use href="#winFront"/></g>
+        <g clip-path="url(#clipPrimer)"><use href="#lowerBody" fill="url(#primer)" stroke="#7b8b99" stroke-width="3"/><use href="#cabin" fill="url(#primer)" stroke="#7b8b99" stroke-width="3"/></g>
+        <g clip-path="url(#clipColor)">
+          <use href="#lowerBody" fill="url(#paintCol)" stroke="#6e0b18" stroke-width="3"/><use href="#cabin" fill="url(#paintCol)" stroke="#6e0b18" stroke-width="3"/>
+          <path d="M60 112 Q260 100 470 112" stroke="#fff" stroke-opacity=".45" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </g>
+        <g id="paintedOpenings" fill="#1d222c" opacity="0"><use href="#winRear"/><use href="#winFront"/></g>
+        <g id="glassParts" opacity="0"><use href="#winRear" fill="url(#glass)"/><use href="#winFront" fill="url(#glass)"/></g>
+        <g id="trimParts" opacity="0"><rect x="22" y="128" width="30" height="16" rx="6" fill="#2b2f38"/><rect x="470" y="128" width="30" height="16" rx="6" fill="#2b2f38"/>
+          <rect x="236" y="116" width="26" height="7" rx="3" fill="#e9eef4"/><rect x="336" y="116" width="26" height="7" rx="3" fill="#e9eef4"/></g>
+        <g id="lightParts" opacity="0"><path d="M478 108 Q494 110 495 122 L476 120 Z" fill="#fff6c8"/><path d="M28 112 L42 110 L42 124 L27 124 Z" fill="#ff3347"/>
+          <ellipse id="headBeam" cx="580" cy="118" rx="110" ry="30" fill="url(#beam)" opacity="0"/></g>
+        <g id="wheels" opacity="0">
+          <g><circle cx="130" cy="150" r="34" fill="#15181e"/><circle cx="130" cy="150" r="19" fill="#c7d0db"/><path class="spk" data-c="130" d="M130 133 L130 167 M113 150 L147 150" stroke="#8a95a5" stroke-width="6"/></g>
+          <g><circle cx="390" cy="150" r="34" fill="#15181e"/><circle cx="390" cy="150" r="19" fill="#c7d0db"/><path class="spk" data-c="390" d="M390 133 L390 167 M373 150 L407 150" stroke="#8a95a5" stroke-width="6"/></g>
+        </g>
+      </g>
+      <g id="sparks" stroke-linecap="round"></g>
+    </svg>
+
+    <div class="stops" id="stops" role="group" aria-label="Слайдлар"></div>
+
+    <div class="ctrl">
+      <button id="prev" type="button" aria-label="Олдинги слайд"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button>
+      <span class="count" id="count" aria-hidden="true">01 / 29</span>
+      <button id="next" type="button" aria-label="Кейинги слайд"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
+      <button id="fs" type="button" aria-label="Тўлиқ экран"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+    <p class="sr" id="live" aria-live="polite"></p>
+  </div>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (id) => document.getElementById(id);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const imgs = [...document.querySelectorAll('#slides img')];
+  const N = imgs.length;
+  const X0 = 60, X1 = 1540, stopX = (i) => X0 + (X1 - X0) * i / (N - 1);
+  const WELD = [X0, 536], PAINT = [600, 1062], ASM = [1117, X1];
+  const CAR_S = 0.2, CAR_W = 520;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const bounce = (t) => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375; return n * (t -= 2.625 / d) * t + 0.984375; };
+
+  /* robots */
+  const robots = [[200, 1], [430, -1]].map(([x, f]) => {
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('transform', `translate(${x},112)`);
+    g.innerHTML = `<rect x="-14" y="-10" width="28" height="10" rx="2" fill="#3b2f52"/><rect x="-9" y="-18" width="18" height="9" rx="2" fill="#ff8a3d"/>
+      <g class="sh" transform="translate(0,-16)"><rect x="-4" y="-46" width="8" height="48" rx="4" fill="#ff8a3d"/><circle r="5" fill="#ffb27a"/>
+        <g class="el" transform="translate(0,-44)"><circle r="4" fill="#ffb27a"/><rect x="${f > 0 ? 0 : -40}" y="-3" width="40" height="6" rx="3" fill="#ff9a52"/>
+          <g transform="translate(${f > 0 ? 40 : -40},0)"><rect x="-3" y="-2" width="6" height="12" rx="1.5" fill="#5a4a73"/><circle class="tc" cy="11" r="2" fill="#ffd166"/></g></g></g>`;
+    $('robots').appendChild(g);
+    return { x, f, sh: g.querySelector('.sh'), el: g.querySelector('.el'), tc: g.querySelector('.tc') };
+  });
+
+  /* sparks */
+  const SP = 50, sparks = [], spEls = [];
+  for (let i = 0; i < SP; i++) { const l = document.createElementNS(NS, 'line'); l.setAttribute('stroke-width', 1.4); l.setAttribute('opacity', 0); $('sparks').appendChild(l); spEls.push(l); sparks.push({ life: 0 }); }
+  let spc = 0;
+  function burst(x, y, n) {
+    if (reduce) return;
+    for (let k = 0; k < n; k++) { const p = sparks[spc]; spc = (spc + 1) % SP; const a = -Math.PI / 2 + (Math.random() - .5) * 2.4, v = 40 + Math.random() * 70;
+      Object.assign(p, { x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: .3 + Math.random() * .3, c: Math.random() < .5 ? '#ffd166' : '#fff' }); }
+  }
+
+  /* stops = slide indicators placed along the line */
+  const stops = $('stops');
+  imgs.forEach((im, i) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.style.left = (stopX(i) / 1600 * 100) + '%';
+    b.setAttribute('aria-label', `${i + 1}-слайд: ${im.alt}`);
+    b.innerHTML = '<i aria-hidden="true"></i>';
+    b.addEventListener('click', () => go(i));
+    stops.appendChild(b);
+  });
+  const stopEls = [...stops.children];
+
+  /* state + render */
+  const S = { cur: 0, x: X0 - 90, from: X0 - 90, to: X0, t0: 0, dur: 1, moving: true };
+  const el = (id) => $(id);
+  const P = { weldCabin: el('weldCabin'), openings: el('openings'), po: el('paintedOpenings'), glass: el('glassParts'), trim: el('trimParts'),
+    lights: el('lightParts'), wheels: el('wheels'), skid: el('skid'), beam: el('headBeam'), car: el('car') };
+  const spk = [...document.querySelectorAll('#wheels .spk')];
+  function stage(x) {
+    return { weld: clamp((x - WELD[0]) / (WELD[1] - WELD[0])), paint: clamp((x - PAINT[0]) / (PAINT[1] - PAINT[0])), asm: clamp((x - ASM[0]) / (ASM[1] - ASM[0])) };
+  }
+  function render(t) {
+    const x = S.x, st = stage(x);
+    P.car.setAttribute('transform', `translate(${(x - CAR_W / 2 * CAR_S).toFixed(2)},${(112 - 184 * CAR_S).toFixed(2)}) scale(${CAR_S})`);
+    P.weldCabin.setAttribute('opacity', clamp(st.weld / .6).toFixed(3));
+    P.openings.setAttribute('opacity', clamp((st.weld - .4) / .4).toFixed(3));
+    $('primerRect').setAttribute('width', (clamp(st.paint / .45) * 560).toFixed(1));
+    $('colorRect').setAttribute('width', (clamp((st.paint - .4) / .6) * 560).toFixed(1));
+    P.po.setAttribute('opacity', st.paint > 0 ? 1 : 0);
+    const a = st.asm;
+    P.wheels.setAttribute('opacity', clamp(a * 10).toFixed(3));
+    P.wheels.setAttribute('transform', `translate(0,${((1 - bounce(clamp(a / .3))) * -200).toFixed(1)})`);
+    P.skid.setAttribute('opacity', (1 - clamp((a - .25) / .1)).toFixed(3));
+    P.glass.setAttribute('opacity', clamp((a - .3) / .25).toFixed(3));
+    P.trim.setAttribute('opacity', clamp((a - .55) / .2).toFixed(3));
+    P.lights.setAttribute('opacity', clamp((a - .75) / .15).toFixed(3));
+    P.beam.setAttribute('opacity', (clamp((a - .9) / .1) * .9).toFixed(3));
+    const ang = (x / (34 * CAR_S) * 180 / Math.PI) % 360;
+    spk.forEach((s) => s.setAttribute('transform', `rotate(${ang.toFixed(1)} ${s.dataset.c} 150)`));
+
+    const k = reduce ? 0 : 1, inWeld = x < 575, inPaint = x >= 575 && x < 1090;
+    robots.forEach((r, i) => {
+      const near = inWeld && Math.abs(x - r.x) < 160 ? 1 : 0;
+      const sh = r.f * (14 + 10 * near) + Math.sin(t * (.7 + near * 2) + i) * (5 + 6 * near) * k;
+      const e2 = -r.f * (30 - 20 * near) + Math.sin(t * (.9 + near * 2.4) + i * 2) * (6 + 8 * near) * k;
+      r.sh.setAttribute('transform', `translate(0,-16) rotate(${sh.toFixed(2)})`);
+      r.el.setAttribute('transform', `translate(0,-44) rotate(${e2.toFixed(2)})`);
+      r.tc.setAttribute('opacity', near ? (.5 + .5 * Math.random()).toFixed(2) : .4);
+    });
+    const nx = inPaint ? x + Math.sin(t * 1.6) * 30 * k : 830 + Math.sin(t * .4) * 120 * k;
+    $('nozzle').setAttribute('transform', `translate(${nx.toFixed(1)},25)`);
+    const spraying = inPaint && st.paint > 0 && st.paint < 1 || (inPaint && S.moving);
+    $('spray').setAttribute('opacity', inPaint ? (spraying ? .35 : .18) + .06 * Math.sin(t * 18) * k : 0);
+    $('paintMist').setAttribute('opacity', inPaint ? .3 : 0); $('paintMist').setAttribute('cx', nx.toFixed(1));
+    const hb = 40 + Math.sin(t * .8) * 6 * k;
+    $('hoistCable').setAttribute('y2', hb.toFixed(1)); $('hoistLoad').setAttribute('transform', `translate(0,${hb.toFixed(1)})`);
+    $('archLight').setAttribute('opacity', a > .99 ? (.75 + .25 * Math.sin(t * 3) * k).toFixed(2) : .25);
+    if (!reduce && inWeld && Math.random() < .35) burst(x + (Math.random() - .5) * 60, 112 - 26 - Math.random() * 6, 2);
+    if (!reduce && Math.random() < .03) burst(robots[Math.random() < .5 ? 0 : 1].x, 100, 2);
+  }
+
+  let last = performance.now();
+  function loop(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    if (S.moving) {
+      const p = clamp((now - S.t0) / (S.dur * 1000));
+      S.x = S.from + (S.to - S.from) * ease(p);
+      if (p >= 1) S.moving = false;
+    }
+    sparks.forEach((p, i) => {
+      const l = spEls[i];
+      if (p.life <= 0) { if (l.getAttribute('opacity') !== '0') l.setAttribute('opacity', 0); return; }
+      p.life -= dt; p.vy += 220 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+      l.setAttribute('x1', p.x.toFixed(1)); l.setAttribute('y1', p.y.toFixed(1));
+      l.setAttribute('x2', (p.x - p.vx * .04).toFixed(1)); l.setAttribute('y2', (p.y - p.vy * .04).toFixed(1));
+      l.setAttribute('stroke', p.c); l.setAttribute('opacity', clamp(p.life / .3).toFixed(2));
+    });
+    render(now / 1000);
+    requestAnimationFrame(loop);
+  }
+
+  /* navigation */
+  function go(i, first) {
+    i = clamp(i, 0, N - 1);
+    if (i === S.cur && !first) return;
+    imgs.forEach((im, k) => {
+      im.classList.toggle('on', k === i);
+      im.classList.toggle('left', k < i);
+      im.setAttribute('aria-hidden', k === i ? 'false' : 'true');
+    });
+    S.cur = i;
+    stopEls.forEach((b, k) => { b.setAttribute('aria-current', k === i ? 'true' : 'false'); b.classList.toggle('done', k < i); });
+    $('prev').disabled = i === 0; $('next').disabled = i === N - 1;
+    $('count').textContent = `${String(i + 1).padStart(2, '0')} / ${N}`;
+    $('live').textContent = `${i + 1}-слайд, ${N} тадан: ${imgs[i].alt}`;
+    S.from = S.x; S.to = stopX(i); S.t0 = performance.now();
+    S.dur = reduce ? 0.001 : clamp(.6 + Math.abs(S.to - S.from) / 1480 * 2.2, .7, 2.6);
+    S.moving = true;
+  }
+  $('prev').addEventListener('click', () => go(S.cur - 1));
+  $('next').addEventListener('click', () => go(S.cur + 1));
+  $('fs').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+  });
+  addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(S.cur + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(S.cur - 1); }
+    else if (e.key === 'Home') go(0); else if (e.key === 'End') go(N - 1);
+    else if (e.key === 'f' || e.key === 'F') $('fs').click();
+  });
+  let sx = null, sy = null;
+  const sl = $('slides');
+  sl.addEventListener('pointerdown', (e) => { sx = e.clientX; sy = e.clientY; });
+  sl.addEventListener('pointerup', (e) => {
+    if (sx === null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) go(S.cur + (dx < 0 ? 1 : -1));
+  });
+
+  go(0, true);
+  requestAnimationFrame((t) => { last = t; requestAnimationFrame(loop); });
+})();
+</script>
+</body>
+</html>

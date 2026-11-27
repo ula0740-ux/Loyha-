@@ -1,0 +1,380 @@
+{
+ "TA": {
+  "line": "title",
+  "form": "Jizzakh!",
+  "how": "kh + undov belgisi (F varianti): sarlavhada jumla \"Jizzakh!\" bilan tugaydi, gap ichida vergul (pauza)",
+  "tts": "A-De-Em Jizzakh! Koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.6,
+   1.64
+  ],
+  "spanDur": 1.04,
+  "stt_full": "Adem Jizzakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 98.4,
+  "stt_span": {
+   "uz": "Jizzakh.",
+   "ru": "Джизак.",
+   "en": "Jizakh."
+  }
+ },
+ "MA": {
+  "line": "h2020",
+  "form": "Jizzakh,",
+  "how": "kh + undov belgisi (F varianti): sarlavhada jumla \"Jizzakh!\" bilan tugaydi, gap ichida vergul (pauza)",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzakh, avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.4,
+   3.32
+  ],
+  "spanDur": 0.92,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzax.",
+   "ru": "Джазар.",
+   "en": "Jezzard."
+  }
+ },
+ "TB": {
+  "line": "title",
+  "form": "Jizzax,",
+  "how": "oddiy oʻzbekcha x (kh ga aylantirilmagan), language_code uz",
+  "tts": "A-De-Em Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.6,
+   1.72
+  ],
+  "spanDur": 1.12,
+  "stt_full": "ADM GZAX — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 95.2,
+  "stt_span": {
+   "uz": "Jizax.",
+   "ru": "Jesus.",
+   "en": "Jesus."
+  }
+ },
+ "MB": {
+  "line": "h2020",
+  "form": "Jizzax",
+  "how": "oddiy oʻzbekcha x (kh ga aylantirilmagan), language_code uz",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.44,
+   3.08
+  ],
+  "spanDur": 0.64,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzax",
+   "ru": "جزاک الله.",
+   "en": "Jazak Allah"
+  }
+ },
+ "TC": {
+  "line": "title",
+  "form": "Jizzakhh,",
+  "how": "uzaytirilgan kh (khh) — faqat shu film uchun ogʻzaki shakl",
+  "tts": "A-De-Em Jizzakhh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.52,
+   1.56
+  ],
+  "spanDur": 1.04,
+  "stt_full": "ADM Jizzakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jazak.",
+   "ru": "Джазак.",
+   "en": "Jazak."
+  }
+ },
+ "MC": {
+  "line": "h2020",
+  "form": "Jizzakhh",
+  "how": "uzaytirilgan kh (khh) — faqat shu film uchun ogʻzaki shakl",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzakhh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.52,
+   3.16
+  ],
+  "spanDur": 0.64,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizakh",
+   "ru": "جزاك الله",
+   "en": "Jazak Allah"
+  }
+ },
+ "TD": {
+  "line": "title",
+  "form": "Jiz-zakh,",
+  "how": "boʻgʻin chizigʻi bilan (lugʻatda sinalgan \"Jiz-zax\" shakli), kh",
+  "tts": "A-De-Em Jiz-zakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.52,
+   1.64
+  ],
+  "spanDur": 1.12,
+  "stt_full": "ADAM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 98.4,
+  "stt_span": {
+   "uz": "jizzaq.",
+   "ru": "جزّاق.",
+   "en": "Jazzaq."
+  }
+ },
+ "MD": {
+  "line": "h2020",
+  "form": "Jiz-zakh",
+  "how": "boʻgʻin chizigʻi bilan (lugʻatda sinalgan \"Jiz-zax\" shakli), kh",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jiz-zakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.44,
+   3
+  ],
+  "spanDur": 0.56,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzax.",
+   "ru": "Джазак.",
+   "en": "Exactly."
+  }
+ },
+ "TE": {
+  "line": "title",
+  "form": "Jizzakh —",
+  "how": "kh + tire (soʻzdan keyin uzunroq pauza, oxirgi tovush yutilmasligi uchun)",
+  "tts": "A-De-Em Jizzakh — koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.52,
+   1.16
+  ],
+  "spanDur": 0.64,
+  "stt_full": "ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jazak.",
+   "ru": "Джазак.",
+   "en": "Jizak."
+  }
+ },
+ "ME": {
+  "line": "h2020",
+  "form": "Jizzakh —",
+  "how": "kh + tire (soʻzdan keyin uzunroq pauza, oxirgi tovush yutilmasligi uchun)",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzakh — avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.44,
+   3.32
+  ],
+  "spanDur": 0.88,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzax.",
+   "ru": "Джазах.",
+   "en": "Jazak."
+  }
+ },
+ "TF": {
+  "line": "title",
+  "form": "Jizzaakh,",
+  "how": "choʻzilgan a + kh (urgʻu oxirgi boʻgʻinda) — faqat shu film uchun ogʻzaki shakl",
+  "tts": "A-De-Em Jizzaakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.56,
+   1.64
+  ],
+  "spanDur": 1.08,
+  "stt_full": "ADM Jizzakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzakh.",
+   "ru": "Джизак.",
+   "en": "Jizak."
+  }
+ },
+ "MF": {
+  "line": "h2020",
+  "form": "Jizzaakh",
+  "how": "choʻzilgan a + kh (urgʻu oxirgi boʻgʻinda) — faqat shu film uchun ogʻzaki shakl",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzaakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.36,
+   3.08
+  ],
+  "spanDur": 0.72,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzakh",
+   "ru": "Jazak",
+   "en": "Jazak"
+  }
+ },
+ "TG": {
+  "line": "title",
+  "form": "Jizzach,",
+  "how": "nemischa ch (Bach) imlosi — faqat shu film uchun ogʻzaki shakl",
+  "tts": "A-De-Em Jizzach, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.6,
+   1.64
+  ],
+  "spanDur": 1.04,
+  "stt_full": "ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzakh.",
+   "ru": "Джизак.",
+   "en": "Jizak."
+  }
+ },
+ "TH": {
+  "line": "title",
+  "form": "Jizzah,",
+  "how": "h bilan — FAQAT taqqoslash uchun (x va h almashtirilmaydi qoidasi)",
+  "tts": "A-De-Em Jizzah, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.52,
+   1.56
+  ],
+  "spanDur": 1.04,
+  "stt_full": "ADM Jizakh – ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 98.4,
+  "stt_span": {
+   "uz": "Jizzax.",
+   "ru": "Jiza.",
+   "en": "Jiza."
+  }
+ },
+ "TI": {
+  "line": "title",
+  "form": "Jizzakhkh,",
+  "how": "ikki marta kh (kuchaytirilgan boʻgʻiz tovushi) — faqat shu film uchun",
+  "tts": "A-De-Em Jizzakhkh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.52,
+   1.56
+  ],
+  "spanDur": 1.04,
+  "stt_full": "ADN Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 98.4,
+  "stt_span": {
+   "uz": "Jizzakh.",
+   "ru": "Джазак.",
+   "en": "Jazak."
+  }
+ },
+ "TJ": {
+  "line": "title",
+  "form": "Jizzax!",
+  "how": "oddiy x + undov belgisi",
+  "tts": "A-De-Em Jizzax! Koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.6,
+   1.68
+  ],
+  "spanDur": 1.08,
+  "stt_full": "Adam Gzax ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 93.5,
+  "stt_span": {
+   "uz": "G-Zoom.",
+   "ru": "G-Zoom!",
+   "en": "G-Zoom."
+  }
+ },
+ "TK": {
+  "line": "title",
+  "form": "Djizzakh,",
+  "how": "Dj + kh (ruscha \"Джиззах\" yozilishiga yaqin) — faqat shu film uchun",
+  "tts": "A-De-Em Djizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0.48,
+   1.48
+  ],
+  "spanDur": 1,
+  "stt_full": "ADM Jizak — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 96.8,
+  "stt_span": {
+   "uz": "Jizzakh.",
+   "ru": "جزاک.",
+   "en": "Jazak."
+  }
+ },
+ "MI": {
+  "line": "h2020",
+  "form": "Jizzakhkh",
+  "how": "ikki marta kh (kuchaytirilgan boʻgʻiz tovushi) — faqat shu film uchun",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzakhkh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.44,
+   3.12
+  ],
+  "spanDur": 0.68,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzax",
+   "ru": "Jazak",
+   "en": "Jazak"
+  }
+ },
+ "MK": {
+  "line": "h2020",
+  "form": "Djizzakh",
+  "how": "Dj + kh (ruscha \"Джиззах\" yozilishiga yaqin) — faqat shu film uchun",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Djizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   2.6,
+   3.16
+  ],
+  "spanDur": 0.56,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Jizzax.",
+   "ru": "Jezak.",
+   "en": "Jizak."
+  }
+ },
+ "R1": {
+  "line": "h2021",
+  "form": "Reno",
+  "how": "fransuzcha talaffuz: Reno",
+  "tts": "Ikki ming yigirma birinchi yil martda mijozlarga ilk avtomobillar yetkazildi. Birinchi bosqichda Kia, Lada va Reno avtomobillari yirik uzellardan yigʻildi.",
+  "span": [
+   8.36,
+   8.84
+  ],
+  "spanDur": 0.48,
+  "stt_full": "2021-yil martda mijozlarga ilk avtomobillar yetkazildi. Birinchi bosqichda Kia, Lada va Renault avtomobillari yirik uzellardan yig'ildi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Prieno,",
+   "ru": "приемно-о-о.",
+   "en": "Priano"
+  }
+ },
+ "R2": {
+  "line": "h2021",
+  "form": "Re-no",
+  "how": "boʻgʻinli: Re-no (urgʻu aniqroq)",
+  "tts": "Ikki ming yigirma birinchi yil martda mijozlarga ilk avtomobillar yetkazildi. Birinchi bosqichda Kia, Lada va Re-no avtomobillari yirik uzellardan yigʻildi.",
+  "span": [
+   8.44,
+   8.92
+  ],
+  "spanDur": 0.48,
+  "stt_full": "2021-yil martda mijozlarga ilk avtomobillar yetkazildi. Birinchi bosqichda Kia, Lada va Renault avtomobillari yirik uzellardan yig'ildi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "Renault",
+   "ru": "Renault",
+   "en": "Renal"
+  }
+ }
+}

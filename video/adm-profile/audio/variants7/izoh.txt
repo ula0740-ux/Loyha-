@@ -1,0 +1,53 @@
+variants7 — v5 uchun talaffuz nomzodlari (2026-11-27). Quloq bilan tanlang: masalan "ADM 3, investitsiya 1".
+Hammasi filmdagi jumlalarning oʻzi: eleven_v4, language_code uz, Sarah, previous_text/next_text, prepareUzbek (x -> kh),
+seed 7, har variantdan bitta take. Yozma matn va ekrandagi yozuv "ADM" va "investitsiya" boʻlib qoladi; oʻzgaradigani
+faqat ovozga yuboriladigan shakl. STT: scribe_v1. "kesma" = take dan TTS vaqtlari boʻyicha kesilgan soʻz boʻlagi,
+alohida uz/ru/en STT ga berilgan. STT faqat yordamchi, oxirgi soʻz sizning qulogʻingizda.
+
+=== 1. Boshidagi sarlavha: "ADM Jizzax, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya." ===
+(v4 da "Ey-di-em Jizzakh", undan oldin "A-de-em, Jizzakh" — ikkalasi ham rad etildi)
+
+ADM_JIZZAKH_1.mp3  ovozga: "A. De. Em. Jizzakh, ..."   oʻzbekcha harf nomlari, har biri alohida, nuqta bilan.
+                   Badantarbiya audiosida (2026-10-22) siz aynan shu shaklni tanlagansiz.
+                   STT: toʻliq "ADM Jizzakh ..." 100%; kesma uz "A, D, M. Jizzakh", ru "A D M. Джизак". "ADM Jizzakh" boʻlagi 3,1 s (sekin, aniq).
+ADM_JIZZAKH_2.mp3  ovozga: "A-De-Em Jizzakh, ..."      oʻzbekcha harf nomlari, chiziqcha bilan qoʻshilgan, pauzasiz.
+                   STT: toʻliq 100%; kesma uz "ADM Jizzakh", ru "ADM Джизак". Eng tezi: "ADM Jizzakh" boʻlagi 1,6 s (v4 dagi kabi tezlik).
+ADM_JIZZAKH_3.mp3  ovozga: "Ey. Di. Em. Jizzakh, ..."  inglizcha harf nomlari, har biri alohida, nuqta bilan.
+                   STT: toʻliq 98,4%; kesma uz/ru/en "IDM. Jizzakh" (birinchi harf "ay/ey" boʻlib eshitiladi). Boʻlak 3,4 s.
+ADM_JIZZAKH_4.mp3  ovozga: "Ei-Di-Em, Jizzakh, ..."    inglizcha harf nomlari, boshqa imlo (Ei), keyin qisqa pauza.
+                   STT: toʻliq 100% "ADM, Jizzakh"; kesma uz "ADM, Jizzakh", ru "ADM, джизак". Boʻlak 2,1 s.
+
+=== 2. Gap ichida: "2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. Birinchi bosqich SKD boʻldi." ===
+Raqamlar 1-boʻlim bilan bir xil (ADM_ICHIDA_1 = ADM_JIZZAKH_1 shakli va h.k.).
+
+ADM_ICHIDA_1.mp3   "A. De. Em. Jizzakh"   STT toʻliq 100%; kesma uz "ADM. Жазах", ru/en "ADM. Jazak".
+ADM_ICHIDA_2.mp3   "A-De-Em Jizzakh"      STT toʻliq 100%; kesma uz/ru/en "ADM Jazak".
+ADM_ICHIDA_3.mp3   "Ey. Di. Em. Jizzakh"  STT toʻliq 100%; kesma uz "ADM Jizzakh", ru/en "ADM, Jazak".
+ADM_ICHIDA_4.mp3   "Ei-Di-Em, Jizzakh"    STT toʻliq 100%; kesma uz "ADM. Jizzakh", ru "ADM: Jazak".
+
+Sinalgan, lekin tashlab yuborilgan:
+- "A, De, Em," (vergul bilan) — 1-variantning oʻzi kabi eshitildi (STT ham, davomiylik ham bir xil).
+- "Adm" bitta soʻz — sarlavhada STT "Administrator Jizzakh" deb eshitdi, butun jumla buzildi (74%).
+Hammasining natijasi: stt_hammasi.json.
+
+=== 3. "investitsiya": "Kia CKD loyihasi: investitsiya 242 million dollar, 2 700 ish oʻrni." ===
+Nima notoʻgʻri ekanini tekshirish (v4 take lardan "investitsiya" soʻzi kesib olinib STT ga berildi):
+  c_kia, c_sht, dost2 -> ruscha STT "Инвестиции" (koʻplik, oxiri "-tsii"), inglizcha "Investitia"/"Investice",
+  avtomatik til aniqlash "Inwestycja"/"Investiție"; c_skd -> inglizcha "vesicia".
+  Xulosa: v4 da soʻz oxiridagi "-ya" kuchsiz/yutilib "-tsii" boʻlib eshitiladi va "ts" ham baʼzan "t"/"s" ga oʻtadi.
+  Oʻzbekcha STT buni sezmaydi (100% bergan edi), shuning uchun v4 da xato oʻtib ketgan.
+
+INVESTITSIYA_0_v4.mp3  v4 filmdagi take (taqqoslash uchun, notoʻgʻri deb topilgan).
+INVESTITSIYA_1.mp3     ovozga: "investitsiya"      oddiy yozuv, yangi take.
+                       Kesma STT uz/ru/en: "инвестиция" (birlik, oxiri "-ya" aniq). Toʻliq 100%.
+INVESTITSIYA_2.mp3     ovozga: "in-ves-ti-tsi-ya"  boʻgʻinlarga ajratilgan, "tsi" bir boʻgʻinda.
+                       Kesma uz/ru "Investitsiya", en "Investiti". Toʻliq 98,9% (CKD "CCD" eshitildi).
+INVESTITSIYA_3.mp3     ovozga: "investitsi-ya"     oxirgi "ya" boʻgʻini ajratilgan (urgʻu oxirgi boʻgʻinga tushishi uchun).
+                       Kesma uz/ru/en: "инвестиция". Toʻliq 100%.
+INVESTITSIYA_4.mp3     ovozga: "investitsiya,"     oddiy yozuv + vergul (soʻzdan keyin qisqa pauza, oxiri yutilmaydi).
+                       Kesma uz/ru/en: "инвестиция." Toʻliq 100%. Soʻz eng uzun (~1,2 s, boshqalarida ~0,9 s).
+Barcha shakllar harflarni oʻzgartirmaydi (faqat boʻgʻin chizigʻi yoki tinish belgisi) — sameLetters qoidasiga mos.
+Sinalgan, tashlab yuborilgan: "in-ves-tit-si-ya" (STT "Invested SIA" — inglizcha "invested" boʻlib ketdi),
+"investi-tsiya" (3-variant bilan bir xil eshitildi).
+
+Skript: build/variants7.mts (OUT=papka, ixtiyoriy id lar).

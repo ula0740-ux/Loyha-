@@ -1,0 +1,13 @@
+v4 (2026-11-26): ochilishdagi "ADM Jizzax" talaffuzi foydalanuvchining namunasi (src/user_ref_adm.mp4) boʻyicha.
+Namunada diktor ADM ni inglizcha harf nomlari bilan aytadi: "Ey-di-em", pauzasiz "Jizzakh" ga ulab (0:10,6; 1:45,0; 2:32,4).
+Dalil: namunaning oʻz STT si bu joylarni "EDM jizzax", "Eyziyak", "ADHD", "80M", "ADM Jazzak" deb eshitadi (oʻzbekcha "A-de-em" emas).
+ADM6_A  "Ey-di-em Jizzakh"   -> STT uz/en: "ADM Jizzakh" / "ADM Jazak" (namunaning 2:32 dagi STT si bilan aynan bir xil)  TANLANDI
+ADM6_B  "Ey-Di-Em, Jizzakh"  -> "IDM Jizzakh" (pauza namunada yoʻq, "I" eshitiladi)
+ADM6_C  "Eydiem Jizzakh"     -> "EDM" / "IDM" (beqaror)
+ADM6_D  "A. De. Em. Jizzakh" -> "A.DM", "ADAM", "ADMDizak" (oʻzbekcha harf nomlari, namunadan uzoq)
+Davomiylik: namunada "ADM" 0,34-0,54 s; filmdagi yangi take 0,48 s (v3 dagi "A-de-em," 0,96 s edi).
+Akustik DTW (build/adm_match.py, match.json): farqlar kichik va musiqa foni sabab ishonchsiz, qaror STT + davomiylik boʻyicha.
+*_span.wav — har take dan "ADM Jizzakh" boʻlagi. stt.txt — toʻliq STT.
+SHT6_* — "Shtamplash sexi" sinovlari (stt_sht.txt): A = tasdiqlangan "Shtamplash tsekhi" yangi take, B = "Shtamp-lash", C = "sekhi".
+Filmda A shakli (tasdiqlangan "tsekh") qoldi; asosiy tuzatish - jumla boshidagi musiqa/SFX niqobini olib tashlash (README, v4).
+Quloq bilan solishtirish uchun B va C ham saqlandi.

@@ -11,7 +11,7 @@
       },
       "prefer": "latin",
       "status": "approved",
-      "notes": "eleven_v4: 'ADM' -> 'adiyam'. Foydalanuvchi quloq bilan tanlagan (F varianti, 2026-10-13): 'A-de-em, Jizzakh!' — 'A-de-em' va undan keyin qisqa pauza.",
+      "notes": "eleven_v4: 'ADM' -> 'adiyam'. Foydalanuvchi quloq bilan tanlagan (F varianti, 2026-10-13): 'A-de-em, Jizzakh!' — 'A-de-em' va undan keyin qisqa pauza. Badantarbiya audiosi (2026-10-22): foydalanuvchi 4 namunadan quloq bilan 'A. De. Em.' (har harf alohida, nuqtalar bilan) shaklini tanladi; 'A-de-em' va 'Aa-de-em' unga noto'g'ri eshitildi.",
       "kind": "abbr",
       "pauseAfter": true
     },
@@ -41,6 +41,19 @@
       "score": 1,
       "testedAt": "2026-10-13T06:53:59.516Z",
       "notes": "eleven_v4 da x -> kh bilan 'Akhborot' deb yuboriladi. v3 da 'Ax-borot' sinalgan edi."
+    },
+    "ckd": {
+      "original": "CKD",
+      "latin": "CKD",
+      "cyrillic": "CКД",
+      "spoken": {
+        "latin": "Si-Ke-Di",
+        "cyrillic": "CКД"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "kind": "abbr",
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-11-24, ADM profil filmi): 'Si-Ke-Di' (namunalar: Si-Ka-De, Si-Ke-Di, Se-Ka-De, Si-Kay-Di). Undan keyingi 'sex' soʻzi film skriptida 'tsekh' deb aytiladi."
     },
     "deadline": {
       "original": "deadline",
@@ -90,6 +103,18 @@
       "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
       "prefer": "latin"
     },
+    "formula": {
+      "original": "Formula",
+      "latin": "Formula",
+      "cyrillic": "Формула",
+      "spoken": {
+        "latin": "For-mu-la",
+        "cyrillic": "Формула"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "word"
+    },
     "hr": {
       "original": "HR",
       "latin": "HR",
@@ -126,10 +151,23 @@
       },
       "prefer": "latin",
       "status": "approved",
-      "score": 1.0,
+      "score": 1,
       "notes": "Foydalanuvchi quloq bilan tanlagan (2026-10-13): eleven_v4 + language_code uz, ovozga 'Jizzakh' (x -> kh avtomatik). Avvalgi v3 sinovlari: 'Jizzax' -> 'jezaks'. Gap oxirida: 'Jizzakh!' (F varianti, foydalanuvchi tanlagan); nuqta bilan 'jizzaq'/'zzkh' boʻlib qolgan.",
       "kind": "word",
       "testedAt": "2026-10-13"
+    },
+    "kd": {
+      "original": "KD",
+      "latin": "KD",
+      "cyrillic": "КД",
+      "spoken": {
+        "latin": "Ke-Di",
+        "cyrillic": "КД"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "abbr",
+      "notes": "CKD tanloviga moslab 'Ke-Di' (2026-11-24). Avvalgi 'Ka-de' STT da 'kada'; undan oldin harf nomlari 'kabi' deb eshitilgan."
     },
     "manager": {
       "original": "manager",
@@ -142,6 +180,19 @@
       "status": "candidate",
       "notes": "Inglizcha atama oʻrniga oʻzbekcha muqobil.",
       "prefer": "latin"
+    },
+    "nev": {
+      "original": "NEV",
+      "latin": "NEV",
+      "cyrillic": "НЕВ",
+      "spoken": {
+        "latin": "En-e-ve",
+        "cyrillic": "НЕВ"
+      },
+      "prefer": "latin",
+      "status": "candidate",
+      "kind": "abbr",
+      "notes": "eleven_v4 harf nomlarini qoʻshib 'Innova' deb oʻqidi; 'En-e-ve' bilan STT 'NV' (2026-11-24). Quloq bilan tasdiqlanmagan."
     },
     "onboarding": {
       "original": "onboarding",
@@ -179,6 +230,19 @@
       "status": "candidate",
       "kind": "term",
       "notes": "R&D oʻrniga oʻzbekcha muqobil."
+    },
+    "skd": {
+      "original": "SKD",
+      "latin": "SKD",
+      "cyrillic": "СКД",
+      "spoken": {
+        "latin": "Es-Ki-Di",
+        "cyrillic": "СКД"
+      },
+      "prefer": "latin",
+      "status": "approved",
+      "kind": "abbr",
+      "notes": "Foydalanuvchi quloq bilan tanlagan (2026-11-24, ADM profil filmi): 'Es-Ki-Di'."
     },
     "team": {
       "original": "team",

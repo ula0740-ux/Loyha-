@@ -1,0 +1,326 @@
+{
+ "TA": {
+  "line": "title",
+  "form": "A. De. Em. ",
+  "how": "oʻzbekcha harf nomlari, har biri nuqta bilan (badantarbiya audiosida foydalanuvchi tanlagan shakl)",
+  "tts": "A. De. Em. Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0,
+   3.06
+  ],
+  "spanDur": 3.06,
+  "stt_full": "ADМ Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "A, D, M. Jizzakh.",
+   "ru": "A D M. Джизак.",
+   "en": "A, D, M. Jazak."
+  }
+ },
+ "MA": {
+  "line": "h2020",
+  "form": "A. De. Em. ",
+  "how": "oʻzbekcha harf nomlari, har biri nuqta bilan (badantarbiya audiosida foydalanuvchi tanlagan shakl)",
+  "tts": "Ikki ming yigirmanchi yilda A. De. Em. Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   1.72,
+   3.5
+  ],
+  "spanDur": 1.78,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM. Жазах",
+   "ru": "ADM. Jazak",
+   "en": "ADM. Jazak"
+  }
+ },
+ "TB": {
+  "line": "title",
+  "form": "A, De, Em, ",
+  "how": "oʻzbekcha harf nomlari, vergul bilan (sekinroq, har harf aniq)",
+  "tts": "A, De, Em, Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0,
+   3.1
+  ],
+  "spanDur": 3.1,
+  "stt_full": "ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "A, D, M, Jizak.",
+   "ru": "A, D, M, джазак.",
+   "en": "A, D, M, Jazak."
+  }
+ },
+ "MB": {
+  "line": "h2020",
+  "form": "A, De, Em, ",
+  "how": "oʻzbekcha harf nomlari, vergul bilan (sekinroq, har harf aniq)",
+  "tts": "Ikki ming yigirmanchi yilda A, De, Em, Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   1.8,
+   4.06
+  ],
+  "spanDur": 2.26,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "A, D, M, Jizzax",
+   "ru": "А, Д, М, джазах",
+   "en": "A, D, M, Jazak"
+  }
+ },
+ "TC": {
+  "line": "title",
+  "form": "A-De-Em ",
+  "how": "oʻzbekcha harf nomlari, chiziqcha, pauzasiz Jizzakh ga ulanadi",
+  "tts": "A-De-Em Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0,
+   1.58
+  ],
+  "spanDur": 1.58,
+  "stt_full": "ADM Jizzakh — ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM Jizzakh.",
+   "ru": "ADM «Джизак».",
+   "en": "ADM Giza."
+  }
+ },
+ "MC": {
+  "line": "h2020",
+  "form": "A-De-Em ",
+  "how": "oʻzbekcha harf nomlari, chiziqcha, pauzasiz Jizzakh ga ulanadi",
+  "tts": "Ikki ming yigirmanchi yilda A-De-Em Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   1.72,
+   3.02
+  ],
+  "spanDur": 1.3,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM Jazak",
+   "ru": "ADM, Jazak",
+   "en": "ADM, Jazak"
+  }
+ },
+ "TD": {
+  "line": "title",
+  "form": "Adm ",
+  "how": "bitta soʻz qilib, oʻzbekcha oʻqilishi",
+  "tts": "Adm Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0,
+   1.82
+  ],
+  "spanDur": 1.82,
+  "stt_full": "Administrator Jizzakh. Coop Bentley avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 74.2,
+  "stt_span": {
+   "uz": "Administrator Jizak.",
+   "ru": "Administrator Jizak.",
+   "en": "Administrator Jizak."
+  }
+ },
+ "MD": {
+  "line": "h2020",
+  "form": "Adm ",
+  "how": "bitta soʻz qilib, oʻzbekcha oʻqilishi",
+  "tts": "Ikki ming yigirmanchi yilda Adm Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   1.72,
+   2.94
+  ],
+  "spanDur": 1.22,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM: Jizzakh",
+   "ru": "ADM, джазах-",
+   "en": "ADM Jazak"
+  }
+ },
+ "TE": {
+  "line": "title",
+  "form": "Ey. Di. Em. ",
+  "how": "inglizcha harf nomlari, har biri alohida nuqta bilan",
+  "tts": "Ey. Di. Em. Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0,
+   3.38
+  ],
+  "spanDur": 3.38,
+  "stt_full": "IDM. Jizzakh. Ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 98.4,
+  "stt_span": {
+   "uz": "IDM. Jizzakh.",
+   "ru": "IDM. Джазак.",
+   "en": "IDM. Jazak."
+  }
+ },
+ "ME": {
+  "line": "h2020",
+  "form": "Ey. Di. Em. ",
+  "how": "inglizcha harf nomlari, har biri alohida nuqta bilan",
+  "tts": "Ikki ming yigirmanchi yilda Ey. Di. Em. Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   1.72,
+   3.18
+  ],
+  "spanDur": 1.46,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM Jizzakh",
+   "ru": "ADM, Jazak",
+   "en": "ADM, Jazak"
+  }
+ },
+ "TF": {
+  "line": "title",
+  "form": "Ei-Di-Em, ",
+  "how": "inglizcha harf nomlari, boshqa imlo (Ei), keyin qisqa pauza",
+  "tts": "Ei-Di-Em, Jizzakh, koʻp brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "span": [
+   0,
+   2.06
+  ],
+  "spanDur": 2.06,
+  "stt_full": "ADM, Jizzakh. Ko'p brendli avtomobil ishlab chiqaruvchi kompaniya.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM, Jizzakh.",
+   "ru": "ADM, джизак.",
+   "en": "ADM, Giza."
+  }
+ },
+ "MF": {
+  "line": "h2020",
+  "form": "Ei-Di-Em, ",
+  "how": "inglizcha harf nomlari, boshqa imlo (Ei), keyin qisqa pauza",
+  "tts": "Ikki ming yigirmanchi yilda Ei-Di-Em, Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich Es-Ki-Di boʻldi.",
+  "span": [
+   1.56,
+   3.18
+  ],
+  "spanDur": 1.62,
+  "stt_full": "2020-yilda ADM Jizzakh avtozavodi qurilishi boshlandi. Birinchi bosqich SKD bo'ldi.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "ADM. Jizzakh",
+   "ru": "ADM: Jazak",
+   "en": "ADM. Jazak"
+  }
+ },
+ "IA": {
+  "line": "c_kia",
+  "form": "investitsiya",
+  "how": "oddiy yozuv (v4 dagi kabi), nazorat uchun yangi take",
+  "tts": "Kia Si-Ke-Di loyihasi: investitsiya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.",
+  "span": [
+   2.12,
+   3.1
+  ],
+  "spanDur": 0.98,
+  "stt_full": "Kia CKD loyihasi. Investitsiya 242 million dollar, 2700 ish o'rni.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "инвестиция",
+   "ru": "инвестиция",
+   "en": "инвестиция"
+  }
+ },
+ "IB": {
+  "line": "c_kia",
+  "form": "in-ves-ti-tsi-ya",
+  "how": "boʻgʻinlarga ajratilgan, ts bir boʻgʻinda (tsi)",
+  "tts": "Kia Si-Ke-Di loyihasi: in-ves-ti-tsi-ya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.",
+  "span": [
+   2.12,
+   3.1
+  ],
+  "spanDur": 0.98,
+  "stt_full": "Kia CCD loyihasi. Investitsiya 242 million dollar, 2700 ish o'rni.",
+  "similarity": 98.9,
+  "stt_span": {
+   "uz": "Investitsiya",
+   "ru": "Investitsiya",
+   "en": "Investiti"
+  }
+ },
+ "IC": {
+  "line": "c_kia",
+  "form": "in-ves-tit-si-ya",
+  "how": "boʻgʻinlarga ajratilgan, oʻzbek imlo boʻgʻini (tit-si)",
+  "tts": "Kia Si-Ke-Di loyihasi: in-ves-tit-si-ya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.",
+  "span": [
+   2.12,
+   3.18
+  ],
+  "spanDur": 1.06,
+  "stt_full": "Kia CCD loyihasi. Investitsiya 242 million dollar, 2700 ish o'rni.",
+  "similarity": 98.9,
+  "stt_span": {
+   "uz": "Invested SIA",
+   "ru": "Invested SIA",
+   "en": "Invested SIA"
+  }
+ },
+ "ID": {
+  "line": "c_kia",
+  "form": "investitsi-ya",
+  "how": "oxirgi \"ya\" boʻgʻini ajratilgan (oxirgi boʻgʻin urgʻusi uchun)",
+  "tts": "Kia Si-Ke-Di loyihasi: investitsi-ya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.",
+  "span": [
+   2.12,
+   3.1
+  ],
+  "spanDur": 0.98,
+  "stt_full": "Kia CKD loyihasi: investitsiya 242 million dollar, 2700 ish o'rni.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "инвестиция",
+   "ru": "инвестиция",
+   "en": "инвестиция"
+  }
+ },
+ "IE": {
+  "line": "c_kia",
+  "form": "investi-tsiya",
+  "how": "ikki boʻlak: investi + tsiya (\"ts\" aniq chiqishi uchun)",
+  "tts": "Kia Si-Ke-Di loyihasi: investi-tsiya ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.",
+  "span": [
+   2.12,
+   3.18
+  ],
+  "spanDur": 1.06,
+  "stt_full": "Kia CKD loyihasi. Investitsiya 242 million dollar, 2700 ish o'rni.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "инвестиция",
+   "ru": "Инвестиция",
+   "en": "инвестиция"
+  }
+ },
+ "IF": {
+  "line": "c_kia",
+  "form": "investitsiya,",
+  "how": "oddiy yozuv + vergul (soʻz oxiri yutilmasligi uchun qisqa pauza)",
+  "tts": "Kia Si-Ke-Di loyihasi: investitsiya, ikki yuz qirq ikki million dollar, ikki ming yetti yuz ish oʻrni.",
+  "span": [
+   2.2,
+   3.5
+  ],
+  "spanDur": 1.3,
+  "stt_full": "Kia CKD loyihasi. Investitsiya: 242 million dollar, 2700 ish o'rni.",
+  "similarity": 100,
+  "stt_span": {
+   "uz": "инвестиция.",
+   "ru": "инвестиция.",
+   "en": "инвестиция."
+  }
+ }
+}

@@ -1,0 +1,342 @@
+{
+ "s1": {
+  "duration": 4.205714,
+  "words": [
+   {
+    "text": "Tabel,",
+    "start": 0,
+    "end": 0.8
+   },
+   {
+    "text": "davomat,",
+    "start": 0.88,
+    "end": 1.84
+   },
+   {
+    "text": "oylik",
+    "start": 1.92,
+    "end": 2.4
+   },
+   {
+    "text": "—",
+    "start": 2.8,
+    "end": 2.84
+   },
+   {
+    "text": "hali",
+    "start": 2.88,
+    "end": 3.12
+   },
+   {
+    "text": "ham",
+    "start": 3.2,
+    "end": 3.28
+   },
+   {
+    "text": "tarqoqmi?",
+    "start": 3.4,
+    "end": 4.16
+   }
+  ]
+ },
+ "s2": {
+  "duration": 2.272653,
+  "words": [
+   {
+    "text": "Har",
+    "start": 0,
+    "end": 0.16
+   },
+   {
+    "text": "biri",
+    "start": 0.24,
+    "end": 0.56
+   },
+   {
+    "text": "—",
+    "start": 0.8,
+    "end": 0.853
+   },
+   {
+    "text": "alohida",
+    "start": 0.907,
+    "end": 1.28
+   },
+   {
+    "text": "faylda.",
+    "start": 1.32,
+    "end": 2.24
+   }
+  ]
+ },
+ "s3": {
+  "duration": 2.690612,
+  "words": [
+   {
+    "text": "Endi",
+    "start": 0,
+    "end": 0.48
+   },
+   {
+    "text": "—",
+    "start": 0.96,
+    "end": 1
+   },
+   {
+    "text": "bitta",
+    "start": 1.04,
+    "end": 1.28
+   },
+   {
+    "text": "dasturda.",
+    "start": 1.36,
+    "end": 2.64
+   }
+  ]
+ },
+ "s4": {
+  "duration": 3.474286,
+  "words": [
+   {
+    "text": "Ikki",
+    "start": 0,
+    "end": 0.24
+   },
+   {
+    "text": "ming",
+    "start": 0.32,
+    "end": 0.4
+   },
+   {
+    "text": "sakkiz",
+    "start": 0.48,
+    "end": 0.88
+   },
+   {
+    "text": "yuz",
+    "start": 0.92,
+    "end": 1.12
+   },
+   {
+    "text": "toʻrt",
+    "start": 1.2,
+    "end": 1.36
+   },
+   {
+    "text": "xodim",
+    "start": 1.44,
+    "end": 1.84
+   },
+   {
+    "text": "—",
+    "start": 2.24,
+    "end": 2.28
+   },
+   {
+    "text": "bir",
+    "start": 2.32,
+    "end": 2.48
+   },
+   {
+    "text": "joyda.",
+    "start": 2.64,
+    "end": 3.44
+   }
+  ]
+ },
+ "s5": {
+  "duration": 6.60898,
+  "words": [
+   {
+    "text": "Toʻqqiz",
+    "start": 0,
+    "end": 0.4
+   },
+   {
+    "text": "modul:",
+    "start": 0.48,
+    "end": 1.28
+   },
+   {
+    "text": "tabel,",
+    "start": 1.36,
+    "end": 2.08
+   },
+   {
+    "text": "grafiklar,",
+    "start": 2.16,
+    "end": 3
+   },
+   {
+    "text": "xodimlar,",
+    "start": 3.04,
+    "end": 3.96
+   },
+   {
+    "text": "ish",
+    "start": 4,
+    "end": 4.16
+   },
+   {
+    "text": "haqi",
+    "start": 4.24,
+    "end": 4.8
+   },
+   {
+    "text": "va",
+    "start": 4.88,
+    "end": 5.2
+   },
+   {
+    "text": "KPI.",
+    "start": 5.28,
+    "end": 6.64
+   }
+  ]
+ },
+ "s6": {
+  "duration": 2.847347,
+  "words": [
+   {
+    "text": "Tabelchi",
+    "start": 0,
+    "end": 0.64
+   },
+   {
+    "text": "standartni",
+    "start": 0.72,
+    "end": 1.36
+   },
+   {
+    "text": "oʻzi",
+    "start": 1.44,
+    "end": 1.68
+   },
+   {
+    "text": "tekshiradi.",
+    "start": 1.8,
+    "end": 2.8
+   }
+  ]
+ },
+ "s7": {
+  "duration": 3.004082,
+  "words": [
+   {
+    "text": "Struktura",
+    "start": 0,
+    "end": 0.64
+   },
+   {
+    "text": "kod",
+    "start": 0.72,
+    "end": 0.96
+   },
+   {
+    "text": "boʻyicha",
+    "start": 1.04,
+    "end": 1.52
+   },
+   {
+    "text": "oʻzi",
+    "start": 1.68,
+    "end": 1.92
+   },
+   {
+    "text": "quriladi.",
+    "start": 1.96,
+    "end": 2.96
+   }
+  ]
+ },
+ "s8": {
+  "duration": 3.239184,
+  "words": [
+   {
+    "text": "Tabeldan",
+    "start": 0,
+    "end": 0.56
+   },
+   {
+    "text": "oylikka",
+    "start": 0.64,
+    "end": 1.2
+   },
+   {
+    "text": "—",
+    "start": 1.6,
+    "end": 1.627
+   },
+   {
+    "text": "bitta",
+    "start": 1.653,
+    "end": 2
+   },
+   {
+    "text": "zanjirda.",
+    "start": 2.12,
+    "end": 3.2
+   }
+  ]
+ },
+ "s9": {
+  "duration": 2.429388,
+  "words": [
+   {
+    "text": "Maʼlumot",
+    "start": 0,
+    "end": 0.64
+   },
+   {
+    "text": "kompyuterdan",
+    "start": 0.76,
+    "end": 1.36
+   },
+   {
+    "text": "chiqmaydi.",
+    "start": 1.44,
+    "end": 2.48
+   }
+  ]
+ },
+ "s10": {
+  "duration": 4.284082,
+  "words": [
+   {
+    "text": "HR",
+    "start": 0,
+    "end": 0.56
+   },
+   {
+    "text": "Hisobchi",
+    "start": 0.96,
+    "end": 1.6
+   },
+   {
+    "text": "—",
+    "start": 2,
+    "end": 2.04
+   },
+   {
+    "text": "xodimlar",
+    "start": 2.08,
+    "end": 2.56
+   },
+   {
+    "text": "boʻlimining",
+    "start": 2.64,
+    "end": 3.2
+   },
+   {
+    "text": "ish",
+    "start": 3.28,
+    "end": 3.44
+   },
+   {
+    "text": "quroli.",
+    "start": 3.52,
+    "end": 4.32
+   }
+  ]
+ }
+}
