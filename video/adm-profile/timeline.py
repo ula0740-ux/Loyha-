@@ -77,7 +77,24 @@ seg1_end = f72 * P
 segs.append({"film": round(seg1_end, 3), "track": TB[REPEAT_FROM], "dur": round(flash - seg1_end, 3)})   # section A again, through the breakdown into the climax
 segs.append({"film": round(flash, 3), "track": TB[ACCENT_BAR], "dur": round(total - flash + .3, 3)})     # final accent on the flash
 music = {"bar": P, "s0": round(s0, 3), "pad": pad, "segments": segs}
-(HERE / "audio/timeline.json").write_text(json.dumps({"total": total, "tempo": TEMPO, "flash": round(flash, 3), "music": music, "scenes": scenes, "lines": lines}, ensure_ascii=False, indent=1))
+# v5: real model footage inside the history tunnel (src/footage/<clip>/f_*.jpg from build/prep_clips.sh, 24 fps, 10 s).
+# Cue times come from the spoken words so picture and SFX (audio.py) stay in sync if a line is re-recorded.
+import re
+def wt(lid, pat, end=False):
+    for w in lines[lid]["words"]:
+        if re.search(pat, w["text"], re.I): return w["e" if end else "t"]
+    raise SystemExit(f"no word {pat} in {lid}")
+SONET_CAR = 4.6    # clip second where the Sonet stands fully assembled (logo melt -> chassis -> body)
+clips = {
+    # Sonet: diagonal light-sweep reveal on "martda", the car materialises on the word "Sonet", the frame pulls back
+    # beside the 2024 card when "Ikkinchi bosqich" starts, slow-motion while the second sentence is read, out before the fly-on
+    "sonet": {"reveal": wt("h2024", r"^martda"), "c0": round(wt("h2024", r"^sonet") + .2 - SONET_CAR, 3), "car": round(wt("h2024", r"^sonet") + .2, 3),
+              "label": wt("h2024", r"^kia"), "pull": round(wt("h2024", r"^ikkinchi") - .35, 3), "out": round(lines["h2026"]["vo"] - 1.35, 3)},
+    # K3: anamorphic slit opens on "aprelda" (clip from 0), flash + punch on "K3", holds to the end of the act (slows down)
+    "k3": {"reveal": wt("h2026", r"^aprelda"), "c0": wt("h2026", r"^aprelda"), "car": wt("h2026", r"^k3"), "label": wt("h2026", r"^kia"),
+           "end": round(next(x["end"] for x in scenes if x["id"] == "hist"), 3)},
+}
+(HERE / "audio/timeline.json").write_text(json.dumps({"total": total, "tempo": TEMPO, "flash": round(flash, 3), "music": music, "clips": clips, "scenes": scenes, "lines": lines}, ensure_ascii=False, indent=1))
 print("music", music)
 print(f"total {total:.2f}s")
 for s in scenes: print(f"  {s['id']:8s} {s['start']:7.2f} -> {s['end']:7.2f}  {' '.join(s['lines'])}")

@@ -1,4 +1,4 @@
-# ADM Jizzakh — korporativ profil filmi (v4)
+# ADM Jizzakh — korporativ profil filmi (v4; v5 ishlanmoqda)
 
 - **Fayl:** `ADM_Global_Profile_v4.mp4` — 1920×1080, 30 fps, H.264 + AAC, 5:43 (342,6 s), 85,3 MB, ovoz −16,0 LUFS, true peak −1,75 dBFS. Oldingi versiyalar (`…_v1.mp4` … `…_v3.mp4`) taqqoslash uchun saqlangan.
 - **Manba:** `src/ADM_Global_Company_Profile_UZB.pptx` (12 slayd) — asosiy faktlar manbai. v4 dan qoʻshimcha manba: foydalanuvchining videosi `src/user_ref_adm.mp4` (165 s) — undan faqat aniq aytilgan faktlar olindi, har biri vaqt belgisi bilan quyida ("v4: namuna videodan olingan faktlar"). Uslub uchun namunalar: `src/reference.mp4` (umumiy uslub) va `src/reference_map.mp4` (klaster xaritasi). `src/` papkasi repoga kirmaydi.
@@ -220,6 +220,25 @@ Namunadagi, pptx bilan mos keladigan (yangi emas) faktlar: SKD investitsiyasi 12
 4. "Kompleks faoliyatini **2021-yilda** boshlagan" (0:10,6). pptx da 2014 asos solingan, 2020 qurilish, 2021-yil mart ilk avtomobillar. Bu ikkinchisi bilan mos boʻlishi mumkin; alohida qoʻshilmadi.
 5. "2024-yil oxirigacha model qatorini yangilash va gibrid avtomobillarni yigʻish rejalashtirilgan" (0:42,4) va "2025-yilda presslash zavodi ish boshlaydi" (1:01,5). Bular eski rejalar. pptx da Shtamplash sexi 2024–2026. Sana qoʻshilmadi.
 6. Namunaning yakuniy shiori "ADM Jizzakh. Yangi imkoniyatlarni yaratmoqdamiz" (2:32,4). Filmda pptx shiori qoldi.
+
+## v5 — 1-bosqich (2026-11-27, yakuniy render hali qilinmagan)
+Foydalanuvchining v4 haqidagi fikri: boshidagi "ADM Jizzakh" notoʻgʻri; "investitsiya" notoʻgʻri; "ADM" koʻp joyda butunlay notoʻgʻri ("Ey-di-em" ham, "A-de-em" ham qabul qilinmadi); Kia K3 (2026) va Kia Sonet (2024) videolari ishlab chiqarish boshlangan yilda chiroyli koʻrsatilsin.
+
+### Talaffuz nomzodlari — `audio/variants7/` (izoh: `audio/variants7/izoh.txt`)
+- `ADM_JIZZAKH_1…4` (sarlavha jumlasi) va `ADM_ICHIDA_1…4` (h2020 jumlasi), raqamlari bir xil shakl: 1 "A. De. Em." (oʻzbekcha harflar alohida), 2 "A-De-Em" (oʻzbekcha, qoʻshilgan, pauzasiz), 3 "Ey. Di. Em." (inglizcha harflar alohida), 4 "Ei-Di-Em," (inglizcha, boshqa imlo, pauza bilan).
+- `INVESTITSIYA_0_v4` (v4 take, taqqoslash uchun) va `INVESTITSIYA_1…4` (c_kia jumlasi): 1 oddiy, 2 "in-ves-ti-tsi-ya", 3 "investitsi-ya", 4 "investitsiya," (vergul).
+- **Tashxis:** v4 take lardan kesilgan "investitsiya" ni ruscha STT "Инвестиции" (oxiri "-tsii"), inglizcha "Investitia/Investice" deb eshitdi: soʻz oxiridagi "-ya" kuchsiz. Oʻzbekcha STT buni sezmagan (100%).
+- Skript: `build/variants7.mts` (bitta take, seed 7; STT toʻliq take + kesilgan soʻz boʻlagi uz/ru/en). Foydalanuvchi tanlagach, shakl `narrate.mts` ga (film-only override) yoziladi va ADM / investitsiya bor jumlalar qayta yoziladi.
+
+### K3 va Sonet lavhalari (tarix akti ichida)
+- Kliplar `src/sonet_clip.mp4`, `src/k3_clip.mp4` (repoga kirmaydi). `build/prep_clips.sh` ularni `src/footage/<klip>/f_*.jpg` kadrlariga aylantiradi (24 fps, 1920×1080). Sonet klipi chap-yuqori 1120×630 qismiga kesiladi, shuning uchun "JN0942" belgisi kadrga umuman tushmaydi.
+- `film.html` har `seek(t)` da kerakli kadrni yuklab, `decode()` tugashini kutadi (`PEND`), shuning uchun render deterministik.
+- Vaqtlar soʻzlardan hisoblanadi (`timeline.py` → `timeline.json` → `clips`), sahna va jumla vaqtlari oʻzgarmagan:
+  - **Sonet (2024):** "martda" soʻzida diagonal yorugʻlik nuri kadrni ochadi (KIA logosi eriydi → shassi → kuzov). Avtomobil "Sonet" soʻzida toʻliq paydo boʻladi: chaqnash va punch. Pastda shisha yorliq "2024 · MART / KIA SONET / CKD toʻliq siklli yigʻish". "Ikkinchi bosqich" boshlanganda kadr 2024 kartochkasi yonidagi qiya shisha ramkaga qaytadi va sekinlashadi (speed ramp ×0,5). Kamera 2026 ga uchishidan oldin kadr kamera yonidan oʻtib ketadi.
+  - **K3 (2026):** "aprelda" soʻzida anamorf yorugʻlik tirqishi chiziladi va kadrga ochiladi. "K3" soʻzida chaqnash, punch-in va konturli katta "K3" chiqadi. Yorliq "2026 · APREL / KIA K3 / CKD yangi ishlab chiqarish liniyasi". Kadr parallaks bilan siljiydi va akt oxirida sekinlashadi.
+  - Toʻliq ekranli qismlarda letterbox chiqadi, sarlavha ("Rivojlanish bosqichlari") yashirinadi, grade filmning apelsin/qorongʻi palitrasiga moslangan.
+- SFX (`audio.py`): Sonet uchun whoosh, impact va yana whoosh; K3 uchun rise va impact (ducking ostida).
+- QA kadrlari: `out/v5_phase1/s_*.jpg`. Ikki lavhaning qisqa preview si (v4 ovozi bilan): `out/v5_phase1/preview_sonet_k3.mp4`.
 
 ## Musiqa va SFX
 - **Musiqa (v3):** foydalanuvchining treki: **AShamaluev Music — "Epic Motivational Music"** (`src/music_user.m4a`, 200 s). Fayl repoga kiritilmaydi; litsenziya va ishlatish huquqi foydalanuvchida.

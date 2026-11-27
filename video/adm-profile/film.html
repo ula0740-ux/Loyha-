@@ -75,6 +75,25 @@ img { display: block; }
 .tile { position: absolute; left: 50%; top: 50%; width: 1000px; height: 562px; padding: 10px; border-radius: 22px; }
 .tile img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; filter: saturate(.75) brightness(.9); }
 .wall { position: absolute; left: 50%; top: 50%; border: 1px solid rgba(255,255,255,.08); }
+/* v5: model footage (Kia Sonet 2024, Kia K3 2026) inside the history act */
+.hv { position: absolute; inset: 0; z-index: 4; pointer-events: none; perspective: 1400px; }
+.hv-fr { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 50% 50%; overflow: hidden; background: #050506; }
+.hv-fr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 55%; filter: contrast(1.07) saturate(.84) brightness(.94); }
+.hv-tint { position: absolute; inset: 0; mix-blend-mode: soft-light; background: linear-gradient(180deg, rgba(18,26,36,.55), rgba(233,113,50,.30) 92%); }
+.hv-vig { position: absolute; inset: 0; background: radial-gradient(75% 70% at 50% 48%, transparent 55%, rgba(0,0,0,.55)); }
+.hv-edge { position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.22), inset 0 0 60px rgba(233,113,50,.25); }
+.hv-beam { position: absolute; top: -20%; height: 140%; width: 46px; left: 0; background: linear-gradient(90deg, transparent, rgba(255,226,196,.95) 45%, #fff 50%, rgba(255,226,196,.95) 55%, transparent);
+  box-shadow: 0 0 60px 26px rgba(233,113,50,.55); mix-blend-mode: screen; transform-origin: 50% 50%; }
+.hv-slit { position: absolute; left: 0; right: 0; height: 3px; top: 50%; margin-top: -1.5px; background: linear-gradient(90deg, transparent, #ffd9b8 15%, #fff 50%, #ffd9b8 85%, transparent);
+  box-shadow: 0 0 40px 14px rgba(233,113,50,.6); mix-blend-mode: screen; }
+.hv-lab { position: absolute; padding: 22px 30px 24px 34px; min-width: 470px; border-left: 4px solid var(--o) !important; }
+.hv-lab .k { font: 600 24px/1 'Montserrat'; letter-spacing: .3em; color: var(--o2); }
+.hv-lab .n { font: 800 74px/1 'Montserrat'; letter-spacing: .03em; margin-top: 12px; text-shadow: 0 4px 30px rgba(0,0,0,.6); }
+.hv-lab .c { display: inline-block; margin-top: 16px; padding: 8px 14px; border-radius: 8px; font: 700 22px/1 'Montserrat'; letter-spacing: .2em;
+  background: rgba(233,113,50,.2); border: 1px solid rgba(233,113,50,.7); }
+.hv-lab .c i { font-style: normal; font-weight: 500; letter-spacing: .06em; color: var(--t); margin-left: 10px; }
+.hv-big { position: absolute; font: 700 400px/1 'Oswald'; color: transparent; -webkit-text-stroke: 3px rgba(255,170,110,.75); letter-spacing: -.02em; mix-blend-mode: screen;
+  text-shadow: 0 0 60px rgba(233,113,50,.35); }
 
 /* --- structure / sales --- */
 .node { position: absolute; width: 520px; padding: 22px 28px; }
@@ -243,6 +262,12 @@ img { display: block; }
     <div class="full" id="h-world" style="perspective:1100px;perspective-origin:50% 50%">
       <div class="plane3d" id="h-cam"></div>
     </div>
+    <div class="hv" id="hv-sonet"><div class="hv-fr"><img alt=""><div class="hv-tint"></div><div class="hv-vig"></div><div class="sweep"></div><div class="hv-edge"></div></div>
+      <div class="hv-beam"></div>
+      <div class="hv-lab dark"><div class="k">2024 · MART</div><div class="n">KIA SONET</div><div class="c">CKD<i>toʻliq siklli yigʻish</i></div></div></div>
+    <div class="hv" id="hv-k3"><div class="hv-fr"><img alt=""><div class="hv-tint"></div><div class="hv-vig"></div><div class="sweep"></div><div class="hv-edge"></div></div>
+      <div class="hv-big">K3</div><div class="hv-slit"></div>
+      <div class="hv-lab dark"><div class="k">2026 · APREL</div><div class="n">KIA K3</div><div class="c">CKD<i>yangi ishlab chiqarish liniyasi</i></div></div></div>
   </section>
 
   <!-- 3. STRUCTURE + SALES (slide 2) -->
@@ -726,6 +751,79 @@ SCN.title = (t, s) => {
   return { grain: .05, leak: .25 * pin, flash: fl, vignette: lt < INTRO ? .9 : .75,
     flare: lt < 2.2 ? { x: lerp(18, 82, clamp(lt / 1.9)), y: 50, a: .45 * ramp01(lt, .2, .4) * (1 - ramp01(lt, 1.8, .4)) } : null };
 };
+// ---------- v5: model footage (pre-extracted frames, decoded per seek -> deterministic render) ----------
+// src/footage/<clip>/f_000001.jpg … (build/prep_clips.sh: 24 fps, 1920x1080; the Sonet clip is cropped so its JN0942 watermark is gone)
+const CLIPF = { sonet: { dir: 'src/footage/sonet', n: 240, fps: 24 }, k3: { dir: 'src/footage/k3', n: 240, fps: 24 } };
+let PEND = [];
+function clipFrame(img, c, ct) {
+  const i = clamp(Math.floor(ct * c.fps), 0, c.n - 1);
+  if (img._i === i) return; img._i = i;
+  img.src = `${c.dir}/f_${String(i + 1).padStart(6, '0')}.jpg`;
+  PEND.push(img.decode().catch(() => {}));
+}
+// clip time with a speed ramp: real time until t1, eases (smoothstep) to speed v at t2, then v (closed form, deterministic)
+function clipT(t, c0, t1, t2, v) {
+  if (t <= t1) return t - c0;
+  const base = t1 - c0, d = t2 - t1;
+  if (t <= t2) { const x = (t - t1) / d; return base + d * (x + (v - 1) * (x ** 3 - x ** 4 / 2)); }
+  return base + d * (1 + (v - 1) * .5) + (t - t2) * v;
+}
+const sonetPull = (t) => TL.clips ? E.io(clamp((t - TL.clips.sonet.pull) / 1.1)) : 0;
+// Sonet (2024): a diagonal light beam wipes the footage in over the tunnel on "martda"; the car materialises on "Sonet"
+// (flash + punch); on "Ikkinchi bosqich" the shot pulls back into a tilted glass frame beside the 2024 card (slow motion)
+function hvSonet(t) {
+  const C = TL.clips.sonet, root = $('hv-sonet');
+  const on = t >= C.reveal - .05 && t < C.out + .7;
+  root.style.display = on ? 'block' : 'none'; if (!on) return null;
+  const fr = root.querySelector('.hv-fr'), img = fr.querySelector('img'), beam = root.querySelector('.hv-beam'), lab = root.querySelector('.hv-lab');
+  clipFrame(img, CLIPF.sonet, clipT(t, C.c0, C.pull, C.pull + 1.6, .5));
+  const k = clamp((t - C.reveal) / .95), X = lerp(-360, 2280, E.io(k));
+  fr.style.clipPath = k < 1 ? `polygon(0 0, ${(X + 155).toFixed(1)}px 0, ${(X - 155).toFixed(1)}px 1080px, 0 1080px)` : 'none';
+  beam.style.left = (X - 23).toFixed(1) + 'px'; beam.style.transform = 'rotate(16deg)'; beam.style.opacity = (Math.sin(Math.PI * k) * (k > 0 ? 1 : 0)).toFixed(3);
+  const p = sonetPull(t);
+  const L0 = lerp(0, 1070, p), T0 = lerp(0, 250, p), Wd = lerp(1920, 790, p), Ht = Wd * 9 / 16;
+  fr.style.left = L0.toFixed(1) + 'px'; fr.style.top = T0.toFixed(1) + 'px'; fr.style.width = Wd.toFixed(1) + 'px'; fr.style.height = Ht.toFixed(1) + 'px';
+  fr.style.borderRadius = (16 * p).toFixed(1) + 'px';
+  fr.style.boxShadow = p > 0 ? `0 40px 110px rgba(0,0,0,${(.8 * p).toFixed(2)}), 0 0 ${(90 * p).toFixed(0)}px rgba(233,113,50,${(.28 * p).toFixed(2)})` : 'none';
+  const o = clamp((t - C.out) / .6);                                   // leaves past the camera before the fly-on to 2026
+  const pu = t > C.car ? .045 * Math.exp(-(t - C.car) * 3) * Math.cos((t - C.car) * 9) : 0;
+  fr.style.transform = `translateZ(${(o * 420).toFixed(1)}px) rotateY(${(lerp(0, -9, p) + 2 * Math.sin(t * .4) * p).toFixed(2)}deg) rotateX(${(1.5 * p * Math.sin(t * .3)).toFixed(2)}deg)`;
+  img.style.transform = `scale(${(lerp(1.03, 1.11, E.io(clamp((t - C.reveal) / (C.pull + 1 - C.reveal)))) * (1 - .05 * p) + pu).toFixed(4)})`;
+  sweep(fr.querySelector('.sweep'), t, 6.5, 1);
+  root.style.opacity = (1 - o).toFixed(3); root.style.filter = o > .01 ? `blur(${(o * 14).toFixed(1)}px)` : 'none';
+  // label: lower left over the full shot, then docks under the frame
+  const la = pop(lab, t, C.label, { y: 30, s: .94, base: '' });
+  const lx = lerp(110, 1070, p), ly = lerp(700, 250 + 444 + 30, p), ls = lerp(1, .78, p);
+  lab.style.left = '0px'; lab.style.top = '0px'; lab.style.transformOrigin = '0 0';
+  lab.style.transform = `translate(${lx.toFixed(1)}px,${ly.toFixed(1)}px) scale(${ls.toFixed(4)}) ` + lab.style.transform;
+  const full = k * (1 - p);
+  return { full, letterbox: .5 * full, flash: F.flash(t, C.car, .22) * .4,
+    flare: k > 0 && k < 1 ? { x: X / 19.2, y: 42, a: .55 * Math.sin(Math.PI * k) } : null };
+}
+// K3 (2026): an anamorphic slit of light draws across the frame and opens into the shot on "aprelda"; on "K3" a flash,
+// a punch-in and the outlined giant "K3"; the shot drifts (parallax) and slows down for the hold at the end of the act
+function hvK3(t) {
+  const C = TL.clips.k3, root = $('hv-k3');
+  const on = t >= C.reveal - .4;
+  root.style.display = on ? 'block' : 'none'; if (!on) return null;
+  const fr = root.querySelector('.hv-fr'), img = fr.querySelector('img'), slit = root.querySelector('.hv-slit'), lab = root.querySelector('.hv-lab'), big = root.querySelector('.hv-big');
+  clipFrame(img, CLIPF.k3, Math.max(0, clipT(t, C.c0, C.end - 2.6, C.end, .55)));
+  const d = clamp((t - (C.reveal - .4)) / .4), k = E.io(clamp((t - C.reveal) / 1.0)), h = lerp(3, 1080, k);
+  fr.style.clipPath = k < 1 ? `inset(${((1080 - h) / 2).toFixed(1)}px 0)` : 'none';
+  slit.style.transform = `scaleX(${E.out(d).toFixed(3)})`; slit.style.opacity = ((1 - k) * d).toFixed(3);
+  const lt = t - C.reveal, pu = t > C.car ? .06 * Math.exp(-(t - C.car) * 3.2) * Math.cos((t - C.car) * 8) : 0;
+  img.style.transform = `translate(${lerp(26, -26, clamp(lt / 9)).toFixed(1)}px,0) scale(${(lerp(1.1, 1.02, E.out(clamp(lt / 3))) + .03 * clamp((lt - 3) / 6) + pu).toFixed(4)})`;
+  sweep(fr.querySelector('.sweep'), t, 7, 3);
+  const ba = clamp((t - C.car) / .5), be = E.out(ba);
+  big.style.left = (1400 - 40 * clamp((t - C.car) / 8)).toFixed(1) + 'px'; big.style.top = '90px';
+  big.style.opacity = (.85 * be).toFixed(3); big.style.transform = `translateY(${((1 - be) * 60).toFixed(1)}px) scale(${lerp(1.12, 1, be).toFixed(4)})`;
+  big.style.filter = ba < 1 ? `blur(${((1 - be) * 14).toFixed(1)}px)` : 'none';
+  pop(lab, t, C.label, { y: 30, s: .94, base: '' });
+  lab.style.left = '0px'; lab.style.top = '0px'; lab.style.transformOrigin = '0 0';
+  lab.style.transform = `translate(110px,700px) ` + lab.style.transform;
+  return { full: k, letterbox: .5 * k, flash: F.flash(t, C.car, .2) * .5,
+    flare: d > 0 && k < 1 ? { x: 50, y: 50, a: .6 * Math.sin(Math.PI * Math.max(d * .5, k)) } : null };
+}
 // history: camera dollies down a corridor of milestone cards
 SCN.hist = (t, s) => {
   // focus time per card (spoken years on the word; the two unspoken ones in between)
@@ -742,9 +840,10 @@ SCN.hist = (t, s) => {
   $('h-cam').style.transform = `translateZ(${cz.toFixed(1)}px) rotateY(${(3 * Math.sin(lt * .25)).toFixed(2)}deg)`;
   HIST.forEach((_, i) => {
     const el = $('hc' + i), side = i === 5 ? 0 : i % 2 ? 1 : -1, zz = -i * HZ;   // the last milestone ends centred
+    const sx = i === 4 ? -240 * sonetPull(t) : 0;   // v5: 2024 card makes room for the Sonet frame
     const dist = cz - i * HZ;                              // 0 = in focus
     const a = clamp(1 - Math.abs(dist) / (HZ * 1.15)) * (dist > 520 ? clamp(1 - (dist - 520) / 300) : 1);
-    el.style.transform = `translate(-50%,-50%) translate3d(${side * 230}px, ${-40 + 10 * Math.sin(lt * .5 + i)}px, ${zz}px) rotateY(${(-side * 14).toFixed(1)}deg)`;
+    el.style.transform = `translate(-50%,-50%) translate3d(${side * 230 + sx}px, ${-40 + 10 * Math.sin(lt * .5 + i)}px, ${zz}px) rotateY(${(-side * 14).toFixed(1)}deg)`;
     show(el, a);
     el.classList.toggle('on', Math.abs(dist) < 300);
     const [, , , tx2, lid, re] = HIST[i];       // v4: second line (user's reference video) appears on its spoken sentence
@@ -761,7 +860,13 @@ SCN.hist = (t, s) => {
     const el = $('ht' + i), dz = cz + Number(el.dataset.z);
     show(el, clamp(1 - Math.abs(dz - 300) / 5200) * (dz > 1500 ? clamp(1 - (dz - 1500) / 600) : 1) * .8);
   }
-  return { grain: .05, leak: .12, flare: null };
+  // v5 footage moments
+  const vs = hvSonet(t), vk = hvK3(t), v = vk || vs;
+  const full = Math.max(vs ? vs.full : 0, vk ? vk.full : 0);
+  s._hd = s._hd || document.querySelectorAll('#sc-hist > .kick, #sc-hist > .h2');
+  s._hd.forEach((e) => { e.style.opacity = (1 - full).toFixed(3); });
+  return { grain: .05, leak: .12 * (1 - full) + .08 * full, flare: v ? v.flare : null, letterbox: v ? v.letterbox : 0,
+    flash: Math.max(vs ? vs.flash : 0, vk ? vk.flash : 0) };
 };
 SCN.struct = (t, s) => {
   const split = L('sales').vo - .55;
@@ -1055,6 +1160,7 @@ SCN.outro = (t, s) => {
 const TRANS = { struct: 'fade', kpi: 'whip', cluster: 'fade', geo: 'fade', logi: 'fade', seg: 'whip', dost: 'fade', rnd: 'fade', goals: 'whip', eco: 'fade', outro: 'fade', hist: 'push' };
 let fadeEl = null;
 window.seek = async (t) => {
+  PEND = [];
   const post = { grain: .05, vignette: .75 };
   // background spotlight drifts like the reference
   $('spot').style.transform = `translate(${(700 + 520 * Math.sin(t * .23)).toFixed(1)}px,${(260 + 160 * Math.sin(t * .17)).toFixed(1)}px)`;
@@ -1107,6 +1213,7 @@ window.seek = async (t) => {
   fx.frame(t, { grain: (post.grain || .05) * .55, vignette: post.vignette ?? .75, letterbox: post.letterbox || 0, leak: post.leak || 0, leakHue: post.leakHue ?? 26,
     flare: post.flare || null, flash: fl, grade: 'cold', gradeAmt: .08 });
   stage.style.filter = post.fade ? `brightness(${(1 - post.fade).toFixed(3)})` : 'none';
+  if (PEND.length) await Promise.all(PEND);   // v5: footage frame decoded before the screenshot
 };
 
 (async () => {

@@ -66,6 +66,10 @@ hit("pop", W("c_skd", [w["text"] for w in L["c_skd"]["words"]].index(next(w["tex
 for i in range(4): hit("tick", S["struct"]["start"] + .8 + i * .45, .18)            # structure nodes
 for i in range(7): hit("tick", S["goals"]["start"] + 1.25 + i * .4, .14)             # goal rows
 put(sfx, S["dost"]["start"] + .2, X["car"], .22); put(sfx, S["dost"]["start"] + 1.4, X["car"], .16)   # vans drive in
+# v5: model footage in the history act (cue times from timeline.json "clips"); kept soft, the voice is speaking
+CS, CK = TL["clips"]["sonet"], TL["clips"]["k3"]
+hit("whoosh", CS["reveal"] + .45, .22); hit("impact", CS["car"], .2); hit("whoosh", CS["pull"] + .5, .12)   # beam wipe, car appears, pull-back
+put(sfx, CK["reveal"] - 1.6, X["rise"], .14); hit("impact", CK["car"], .22)                                  # light slit opens, "K3"
 hit("chime", TL["flash"], .2)                                           # white logo card
 
 sfx *= 1 - (1 - duck) * (1 - 10 ** (-7 / 20)) / (1 - 10 ** (-11 / 20))   # v4: SFX dip ~7 dB under the voice too (same smooth envelope)
