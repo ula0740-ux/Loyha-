@@ -227,6 +227,8 @@ Namunadagi, pptx bilan mos keladigan (yangi emas) faktlar: SKD investitsiyasi 12
 - Foydalanuvchi: "JIZZAKH yana JIZZAQ deb aytilyapti". Filmdagi barcha "Jizzax" soʻzlari kesib tekshirildi. title, h2020, cl0 va dost1 da oxiri q/k ga oʻxshaydi. Sarlavhada sabab: "Jizzakh" dan keyin darhol "koʻp" keladi. geo, outro va logi da x eshitiladi. Nomzodlar: `audio/variants8/` (`izoh.txt`), skript `build/variants8.mts`.
 - **Renault:** foydalanuvchi tuzatdi (2026-11-27): 1-bosqichda **Ravon emas, Renault** yigʻilgan. Namuna video (0:14,9) va filmdagi "Ravon" Renault ga almashtirildi: h2021 jumlasi va 2021 kartochkasi. Ovozda "Reno" deyiladi (`narrate.mts` → `reno()`), yozuvda "Renault" qoladi. Nomzodlar: `audio/variants8/RENAULT_1/2`.
 
+- **variants9 (2026-11-27):** variants8 dagi barcha shakllar rad etildi. Yangi yondashuv: tasdiqlangan `video/pptx-film` (ADM_HR_2026_v5) usuli — Jizzakh jumla oxirida "!" bilan. Namuna `audio/variants9/JIZZAKH_REF_tasdiqlangan.mp3`. Bir nechta take dan namunaga MFCC-DTW boʻyicha eng yaqinlari tanlandi (`build/variants9.mts`, `build/jz_pick.py`). Gap ichidagi Jizzakh namunaga yaqinlashmadi. Renault uchun uchta oʻzbekcha shakl: "Renoʻ", "Renolt", "Re-na-ult".
+
 ## v6 (2026-11-27)
 Foydalanuvchining v5 haqidagi fikri: namuna videodan (`src/user_ref_adm.mp4`) CKD sexi haqida koʻproq maʼlumot olinsin, CKD nima ekani tushuntirilsin; boshidagi "ADM JIZZAKH" yana notoʻgʻri aytilgan.
 

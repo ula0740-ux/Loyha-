@@ -1,0 +1,38 @@
+variants9 — Jizzakh (yangi yondashuv) va Renault oʻzbekcha talaffuzi (2026-11-27). Tanlang: masalan "boshi 1, ichida 2, Renault 3".
+Hammasi: eleven_v4, language_code uz, Sarah, previous_text/next_text (prepareUzbek), ADM = "A-De-Em" (tasdiqlangan).
+Yozma matn va ekrandagi yozuv oʻzgarmaydi (MATN fayli bundan mustasno — u matn oʻzgarishi, roziligingiz kerak).
+
+=== Namuna (maqsad tovushi) ===
+JIZZAKH_REF_tasdiqlangan.mp3 — siz tasdiqlagan ADM_HR_2026_v5.mp4 filmidan (video/pptx-film, intro): "A-de-em, Jizzakh!".
+  Oʻsha filmda Jizzakh har doim JUMLA OXIRIDA, undov belgisi bilan aytilgan ("ADM Jizzax." -> "A-de-em, Jizzakh!", F varianti).
+  STT: uz "Adyam, Jizzakh", ru "Адем, джазах!" (x aniq eshitiladi).
+  Sozlamalari: eleven_v4, uz, Sarah, qoʻshni jumlalar kontekst sifatida, seed yoʻq, matn prepareUzbek orqali.
+
+=== 1. Sarlavha — oʻsha usulda: "A-De-Em Jizzakh! Koʻp brendli avtomobil ishlab chiqaruvchi kompaniya." ===
+Soʻzlar oʻsha, faqat Jizzakh dan keyin vergul oʻrniga jumla tugaydi (undov). 6 take yozildi, namunaga eng yaqin 3 tasi:
+(MFCC-DTW: namunaning ikki "Jizzakh" i orasidagi farq 3,09; kichik = yaqinroq)
+JIZZAKH_BOSHI_1.mp3  DTW 3,10 (namunaning oʻzi darajasida)  ru STT "Джизах" (x)   uz "Jizzakh"
+JIZZAKH_BOSHI_2.mp3  DTW 3,30                                ru STT "Джизах" (x)   uz "Jizzakh"
+JIZZAKH_BOSHI_3.mp3  DTW 3,45                                ru STT "Джазах!" (x)  uz "Jizzakh"
+(tashlab yuborilgan: 1 take ruscha STT da "Джизак" chiqdi.)
+
+=== 2. MATN OʻZGARISHI (roziligingiz kerak): "A-De-Em Jizzakh! Avtomobil ishlab chiqaruvchi koʻp brendli kompaniya." ===
+JIZZAKH_BOSHI_MATN.mp3  Jizzakh! dan keyin k bilan boshlanmaydigan soʻz. 3 take dan eng yaqini: DTW 3,27, ru STT "Джизааах!" (x).
+
+=== 3. Gap ichida (h2020): "2020-yilda ADM Jizzax avtozavodi qurilishi boshlandi. …" ===
+6 take, eng yaqin 3 tasi:
+JIZZAKH_ICHIDA_1.mp3  DTW 4,74  ru STT "Джазак"   uz "Jizzax"
+JIZZAKH_ICHIDA_2.mp3  DTW 4,83  ru STT "Jazak"    uz "Jizzax"
+JIZZAKH_ICHIDA_3.mp3  DTW 4,85  ru STT (arabcha)  uz "Jazak Allah"
+Xulosa: gap ichida (Jizzakh dan keyin pauzasiz soʻz kelsa) model chuqur x ni toʻliq aytmaydi — hech bir take namunaga
+yaqinlashmadi (hammasi 4,7+). Tasdiqlangan filmda ham Jizzakh faqat jumla oxirida edi. Yechim: shunday jumlalarda ham
+Jizzakh ni jumla oxiriga qoʻyish (matn oʻzgarishi), yoki shu takelardan quloq bilan eng yaxshisini tanlash.
+
+=== 4. Renault — oʻzbekcha talaffuz (h2021: "… Birinchi bosqichda Kia, Lada va Renault avtomobillari yirik uzellardan yigʻildi.") ===
+RENAULT_UZ_1.mp3  ovozga "Renoʻ"      (oʻzbekcha oʻ bilan)
+RENAULT_UZ_2.mp3  ovozga "Renolt"
+RENAULT_UZ_3.mp3  ovozga "Re-na-ult"  (yozilishicha, boʻgʻinlab)
+STT uchala variantni ham "Renault" deb yozadi (brend nomini taniydi), farqni faqat quloq aniqlaydi. Butun jumla STT 100%.
+Ekranda "Renault" yoziladi; ogʻzaki shakl faqat shu film uchun (narrate.mts → reno(), RENO_FORM).
+
+Skriptlar: build/variants9.mts (take lar), build/jz_pick.py (namunaga yaqinlik). Hammasi: jz_pick.json.
